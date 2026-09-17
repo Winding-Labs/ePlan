@@ -26,7 +26,7 @@ export const brand = {
   /** Display name — alt text, page titles, sidebar wordmark. */
   name: getAppName(),
   /** Square mark shown in the sidebar, auth pages and error pages. */
-  logo: "/brand/logo.png",
+  logo: "/brand/logo.svg",
   /** Social sharing card, 1200x630. */
   ogImage: "/brand/og-image.png",
 } as const;

@@ -72,6 +72,7 @@ export type DesiredStripeState = {
 // customer-facing display name rebrands.
 const DISPLAY_NAMES: Record<string, string> = {
   turboplan: "TurboPlan",
+  eplan: "ePlan",
 };
 
 export const displayName = (product: string): string =>
