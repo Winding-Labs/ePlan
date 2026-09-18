@@ -11,5 +11,5 @@
 # owns this file (`merge=ours` in the repo-root .gitattributes), so upstream
 # pricing changes merge cleanly without ever touching the fork's Stripe
 # identity.
-product: turboplan
-meter_event_name: turboplan_credits
+product: eplan
+meter_event_name: eplan_credits
