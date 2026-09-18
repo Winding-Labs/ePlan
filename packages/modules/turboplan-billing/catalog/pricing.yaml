@@ -59,7 +59,7 @@ billing:
         - "Upload surveys"
       price_usd: 99
       period: month
-      lookup_key: turboplan_pro_monthly
+      lookup_key: eplan_pro_monthly
       included_seats: 5
       additional_seat_price_usd: 29
       additional_seat_credits: 5000
@@ -78,7 +78,7 @@ billing:
         - "Team/contractor/citizen collaboration"
       price_usd: 199
       period: month
-      lookup_key: turboplan_max_monthly
+      lookup_key: eplan_max_monthly
       included_seats: 10
       additional_seat_price_usd: 29
       additional_seat_credits: 7500

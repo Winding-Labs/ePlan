@@ -3,7 +3,7 @@
 // Regenerate: pnpm --filter @wildfires-org/turboplan-billing generate:catalog
 
 export const CATALOG = {
-  "product": "turboplan",
+  "product": "eplan",
   "billing": {
     "credits_per_usd": 1000,
     "metered_billing": true,
@@ -14,7 +14,7 @@ export const CATALOG = {
       90,
       100
     ],
-    "meter_event_name": "turboplan_credits",
+    "meter_event_name": "eplan_credits",
     "onboarding": {
       "payment_step_skippable": true
     },
@@ -60,7 +60,7 @@ export const CATALOG = {
         ],
         "price_usd": 99,
         "period": "month",
-        "lookup_key": "turboplan_pro_monthly",
+        "lookup_key": "eplan_pro_monthly",
         "included_seats": 5,
         "additional_seat_price_usd": 29,
         "additional_seat_credits": 5000,
@@ -87,7 +87,7 @@ export const CATALOG = {
         ],
         "price_usd": 199,
         "period": "month",
-        "lookup_key": "turboplan_max_monthly",
+        "lookup_key": "eplan_max_monthly",
         "included_seats": 10,
         "additional_seat_price_usd": 29,
         "additional_seat_credits": 7500,

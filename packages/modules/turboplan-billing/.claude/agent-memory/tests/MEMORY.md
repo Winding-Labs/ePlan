@@ -1,0 +1,1 @@
+- [Fork brand divergence (ePlan vs turboplan)](fork-brand-divergence.md) — billing tests hardcoding `turboplan`/`turboplan_*` fail here; assert against catalog/brand.yaml
