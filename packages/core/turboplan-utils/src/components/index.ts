@@ -21,6 +21,7 @@ export * from "./ui/scroll-area";
 export * from "./ui/select";
 export * from "./ui/skeleton";
 export * from "./ui/suggestion-pills";
+export * from "./ui/switch";
 export * from "./ui/table";
 export * from "./ui/template-card";
 export * from "./ui/textarea";

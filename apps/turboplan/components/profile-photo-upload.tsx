@@ -21,7 +21,12 @@ import {
 
 interface ProfilePhotoUploadProps {
   currentAvatarUrl?: string | null;
-  userId: string;
+  /**
+   * Optional because the caller reads it off the session, which can be missing
+   * an id. It is only used to seed avatar initials when the profile has no
+   * name, so there is nothing to do when it is absent.
+   */
+  userId?: string;
   firstName?: string | null;
   lastName?: string | null;
 }
@@ -122,7 +127,7 @@ export function ProfilePhotoUpload({
   };
 
   const initials = useMemo(() => {
-    const userIdFallback = userId.substring(0, 2).toUpperCase();
+    const userIdFallback = userId?.substring(0, 2).toUpperCase() ?? "";
     return generateInitials({ firstName, lastName }, userIdFallback);
   }, [firstName, lastName, userId]);
 

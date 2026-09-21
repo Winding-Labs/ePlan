@@ -1,6 +1,13 @@
 "use client";
 
-import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useDeferredValue,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import {
   ArrowLeftRight,
@@ -10,11 +17,48 @@ import {
   ChevronUp,
   Search,
 } from "lucide-react";
+import { useLocalStorage } from "usehooks-ts";
 
-import { cn } from "@wildfires-org/turboplan-utils";
+import { cn, Switch } from "@wildfires-org/turboplan-utils";
 import type { OrganizationWithOffices } from "@wildfires-org/turboplan-workspace/types";
 
 import { OrgAvatar } from "../org-avatar";
+
+export const ORG_MEMBERSHIP_FILTER_STORAGE_KEY =
+  "turboplan-org-switcher-members-only";
+
+/**
+ * Narrows orgs (and their offices) to those matching a free-text query. Kept
+ * standalone so the empty state can re-run it against the unfiltered catalog.
+ */
+const filterByQuery = (
+  organizations: OrganizationWithOffices[],
+  query: string,
+) => {
+  const q = query.toLowerCase().trim();
+  if (!q) {
+    return organizations;
+  }
+
+  return organizations
+    .map((org) => {
+      const orgNameMatches =
+        org.name.toLowerCase().includes(q) ||
+        (org.shortName?.toLowerCase().includes(q) ?? false);
+      const matchingOffices = org.offices.filter((office) =>
+        office.name.toLowerCase().includes(q),
+      );
+
+      if (orgNameMatches) {
+        return org;
+      }
+      if (matchingOffices.length > 0) {
+        return { ...org, offices: matchingOffices };
+      }
+      return null;
+    })
+    .filter(Boolean) as OrganizationWithOffices[];
+};
 
 interface SidebarOrgOfficeSearchProps {
   organizations: OrganizationWithOffices[];
@@ -30,6 +74,14 @@ interface SidebarOrgOfficeSearchProps {
    * Defaults to false so sidebar navigation can still switch to office-less orgs.
    */
   requireOffice?: boolean;
+  /**
+   * When true, renders an "Only my organizations" toggle that hides orgs the
+   * user has no RBAC membership in. Only the sidebar switcher wants this — the
+   * submit-application and add-project flows exist to pick a government agency
+   * the user is by definition *not* a member of, so they keep the full catalog.
+   * Defaults to false.
+   */
+  showMembershipFilter?: boolean;
 }
 
 export function SidebarOrgOfficeSearch({
@@ -40,10 +92,25 @@ export function SidebarOrgOfficeSearch({
   onOrgSelect,
   listClassName,
   requireOffice = false,
+  showMembershipFilter = false,
 }: SidebarOrgOfficeSearchProps) {
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query);
   const inputRef = useRef<HTMLInputElement>(null);
+  const membershipFilterId = useId();
+
+  // `initializeWithValue: false` keeps the first render identical on server and
+  // client (see `components/providers/ui-scale-provider.tsx`). The cost is that
+  // the first client render reports the default — `true`, i.e. filtered — so a
+  // user who turned the filter off sees a one-tick filtered -> unfiltered
+  // settle. That direction is the safe one (we never flash orgs the user asked
+  // to hide) and the popover mounts on open, so it is not worth more machinery.
+  const [onlyMyOrgs, setOnlyMyOrgs] = useLocalStorage<boolean>(
+    ORG_MEMBERSHIP_FILTER_STORAGE_KEY,
+    true,
+    { initializeWithValue: false },
+  );
+  const isMembershipFilterActive = showMembershipFilter && onlyMyOrgs;
 
   // Expand current org by default
   const [expandedOrgs, setExpandedOrgs] = useState<Set<string>>(() => {
@@ -85,28 +152,35 @@ export function SidebarOrgOfficeSearch({
     [organizations],
   );
 
+  // Membership filter runs first, so the search box searches *within* the
+  // user's own orgs. The currently-active org always survives the filter:
+  // switching into a catalog org would otherwise make the switcher look like it
+  // had lost its own selection.
+  const membershipVisible = useMemo(() => {
+    if (!isMembershipFilterActive) {
+      return accessibleOrganizations;
+    }
+    return accessibleOrganizations.filter(
+      (org) => org.isMember || org.slug === currentOrgSlug,
+    );
+  }, [accessibleOrganizations, isMembershipFilterActive, currentOrgSlug]);
+
+  const hiddenCount = accessibleOrganizations.length - membershipVisible.length;
+
   // Filter organizations and offices by search query
-  const filtered = useMemo(() => {
-    const q = deferredQuery.toLowerCase().trim();
-    if (!q) return accessibleOrganizations;
+  const filtered = useMemo(
+    () => filterByQuery(membershipVisible, deferredQuery),
+    [membershipVisible, deferredQuery],
+  );
 
-    return accessibleOrganizations
-      .map((org) => {
-        const orgNameMatches =
-          org.name.toLowerCase().includes(q) ||
-          (org.shortName?.toLowerCase().includes(q) ?? false);
-        const matchingOffices = org.offices.filter((office) =>
-          office.name.toLowerCase().includes(q),
-        );
-
-        if (orgNameMatches) return org;
-        if (matchingOffices.length > 0) {
-          return { ...org, offices: matchingOffices };
-        }
-        return null;
-      })
-      .filter(Boolean) as OrganizationWithOffices[];
-  }, [accessibleOrganizations, deferredQuery]);
+  // A query that matches nothing in the user's own orgs but would match in the
+  // full catalog gets a pointer at the toggle rather than a bare "not found".
+  const catalogOnlyMatches = useMemo(() => {
+    if (filtered.length > 0 || hiddenCount === 0 || !deferredQuery.trim()) {
+      return 0;
+    }
+    return filterByQuery(accessibleOrganizations, deferredQuery).length;
+  }, [filtered.length, hiddenCount, deferredQuery, accessibleOrganizations]);
 
   // When searching, auto-expand all filtered orgs
   const effectiveExpandedOrgs = useMemo(() => {
@@ -144,9 +218,20 @@ export function SidebarOrgOfficeSearch({
         )}
       >
         {filtered.length === 0 && (
-          <p className="px-3 pr-4 py-4 text-sm text-gray-500 text-center">
-            No organizations or offices found
-          </p>
+          <div className="px-3 pr-4 py-4 text-center">
+            <p className="text-sm text-gray-500">
+              No organizations or offices found
+            </p>
+            {catalogOnlyMatches > 0 && (
+              <p className="mt-1 text-xs leading-4 text-neutral-400">
+                {catalogOnlyMatches === 1
+                  ? "1 match is outside your organizations"
+                  : `${catalogOnlyMatches} matches are outside your organizations`}{" "}
+                — turn off "Only my organizations" to see{" "}
+                {catalogOnlyMatches === 1 ? "it" : "them"}.
+              </p>
+            )}
+          </div>
         )}
 
         {filtered.map((org, index) => {
@@ -288,6 +373,42 @@ export function SidebarOrgOfficeSearch({
           );
         })}
       </div>
+
+      {/* Membership toggle — deliberately outside the scrolling list container
+          so it stays visible while the org list scrolls. */}
+      {showMembershipFilter && (
+        <>
+          <div className="py-1.5 pr-2">
+            <div className="h-px bg-gray-200" />
+          </div>
+          <div className="flex items-center gap-2 px-3 pr-4 py-1">
+            {/* `htmlFor` on a <button> is valid — buttons are labelable — and
+                avoids nesting a button inside a clickable wrapper. */}
+            <label
+              htmlFor={membershipFilterId}
+              className="flex min-w-0 flex-1 cursor-pointer items-center gap-1.5 text-xs font-medium leading-4 tracking-[0.24px] text-gray-900"
+            >
+              Only my organizations
+              {isMembershipFilterActive && hiddenCount > 0 && (
+                <span className="shrink-0 text-neutral-400">
+                  {hiddenCount} hidden
+                </span>
+              )}
+            </label>
+            <Switch
+              id={membershipFilterId}
+              checked={onlyMyOrgs}
+              onCheckedChange={setOnlyMyOrgs}
+              aria-label="Only my organizations"
+              // The shared Switch defaults to `bg-primary`, which is near-black
+              // in this app and reads as the heaviest element in a popover
+              // whose whole accent language is green. Match the "Active" label
+              // and the checked-office ticks instead.
+              className={cn(onlyMyOrgs && "bg-[#1b845c]")}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }

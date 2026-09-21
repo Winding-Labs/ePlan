@@ -1,9 +1,17 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { cookies } from "next/headers";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 
+import { getAuthCookieDomain } from "@wildfires-org/turboplan-env";
+import {
+  UI_SCALE_COOKIE_NAME,
+  uiScaleStyleFromCookie,
+} from "@wildfires-org/turboplan-utils/server";
+
 import { PostHogProvider } from "@/components/providers/posthog-provider";
+import { UiScaleProvider } from "@/components/providers/ui-scale-provider";
 import { ReleaseInfoLogger } from "@/components/release-info-logger";
 import { ThemeProvider } from "@/components/theme-provider";
 import { brand } from "@/lib/brand";
@@ -88,6 +96,17 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // `AUTH_COOKIE_DOMAIN` is server-only (no NEXT_PUBLIC_ twin), so this layout
+  // reads it and hands it to the client provider that writes the cookie.
+  // Unset in local dev — both apps already share the `localhost` host.
+  const uiScaleCookieDomain = getAuthCookieDomain();
+
+  // Rendered onto <html> so the first paint is already at the user's scale.
+  const cookieStore = await cookies();
+  const uiScaleStyle = uiScaleStyleFromCookie(
+    cookieStore.get(UI_SCALE_COOKIE_NAME)?.value,
+  );
+
   return (
     <html
       lang="en"
@@ -97,6 +116,7 @@ export default async function RootLayout({
       // https://github.com/pacocoursey/next-themes?tab=readme-ov-file#with-app
       suppressHydrationWarning
       className={`${geist.variable} ${geistMono.variable}`}
+      style={uiScaleStyle as React.CSSProperties}
     >
       <head>
         <script
@@ -114,8 +134,10 @@ export default async function RootLayout({
               enableSystem={false}
               disableTransitionOnChange
             >
-              <Toaster position="top-center" />
-              {children}
+              <UiScaleProvider cookieDomain={uiScaleCookieDomain}>
+                <Toaster position="top-center" />
+                {children}
+              </UiScaleProvider>
             </ThemeProvider>
           </NuqsAdapter>
         </PostHogProvider>
