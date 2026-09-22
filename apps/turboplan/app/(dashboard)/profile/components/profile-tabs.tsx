@@ -4,23 +4,32 @@ import { type ReactNode, useState } from "react";
 
 import { cn } from "@wildfires-org/turboplan-utils";
 
-type Tab = "profile" | "tokens";
+type Tab = "profile" | "tokens" | "appearance";
 
 interface ProfileTabsProps {
   profileContent: ReactNode;
   tokensContent: ReactNode;
+  appearanceContent: ReactNode;
 }
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "profile", label: "Profile" },
   { id: "tokens", label: "Access Tokens" },
+  { id: "appearance", label: "Appearance" },
 ];
 
 export const ProfileTabs = ({
   profileContent,
   tokensContent,
+  appearanceContent,
 }: ProfileTabsProps) => {
   const [activeTab, setActiveTab] = useState<Tab>("profile");
+
+  const contentByTab: Record<Tab, ReactNode> = {
+    profile: profileContent,
+    tokens: tokensContent,
+    appearance: appearanceContent,
+  };
 
   return (
     <div className="flex gap-8">
@@ -41,9 +50,7 @@ export const ProfileTabs = ({
           </button>
         ))}
       </nav>
-      <div className="flex-1 min-w-0">
-        {activeTab === "profile" ? profileContent : tokensContent}
-      </div>
+      <div className="flex-1 min-w-0">{contentByTab[activeTab]}</div>
     </div>
   );
 };

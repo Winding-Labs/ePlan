@@ -71,5 +71,12 @@ export type OrganizationWithOffices = {
   logoUrl: string | null;
   type: Organization["type"];
   hasAccess: boolean;
+  /**
+   * True only when the user holds an actual RBAC membership somewhere in this
+   * organization (org, office, or a project whose parent office resolves here).
+   * `hasAccess` cannot be used for this: publicly-listed org types are readable
+   * by every authenticated user, so it is true for the whole agency catalog.
+   */
+  isMember: boolean;
   offices: OfficeWithAccess[];
 };
