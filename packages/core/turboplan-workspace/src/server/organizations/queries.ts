@@ -547,6 +547,12 @@ export async function getOrganizationsWithOffices(
         })
         .sort((a, b) => a.name.localeCompare(b.name));
 
+      // Real membership, deliberately ignoring the publicly-listed default that
+      // makes `hasAccess` true for the entire agency catalog. Office roles here
+      // already include the "viewer" inherited from project memberships above.
+      const isMember =
+        hasOrgAccess || orgOffices.some((o) => officeMembershipRoles.has(o.id));
+
       return {
         id: org.id,
         slug: org.slug,
@@ -556,6 +562,7 @@ export async function getOrganizationsWithOffices(
         type: org.type,
         hasAccess:
           hasOrgAccess || officesWithAccess.some((office) => office.hasAccess),
+        isMember,
         offices: officesWithAccess,
       };
     });

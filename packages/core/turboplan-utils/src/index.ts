@@ -4,4 +4,5 @@ export * from "./email";
 export * from "./hooks";
 export * from "./slug";
 export * from "./tailwind";
+export * from "./ui-scale";
 export * from "./user";

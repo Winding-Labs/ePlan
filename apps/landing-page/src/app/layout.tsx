@@ -5,17 +5,23 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
+import { cookies } from "next/headers";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { SessionProvider } from "@wildfires-org/turboplan-auth/client";
 import { getSession } from "@wildfires-org/turboplan-auth/session";
 import { getLandingPageEnv } from "@wildfires-org/turboplan-env";
+import {
+  UI_SCALE_COOKIE_NAME,
+  uiScaleStyleFromCookie,
+} from "@wildfires-org/turboplan-utils/server";
 
 import LayoutWrapper from "@/app/layoutWrapper";
 import { Navbar } from "@/components/home-v2/navbar";
 import { SiteFooter } from "@/components/home-v2/site-footer";
 import { GoogleAnalytics } from "@/components/providers/google-analytics";
 import { PostHogProvider } from "@/components/providers/posthog-provider";
+import { UiScaleSync } from "@/components/providers/ui-scale-sync";
 import { ReleaseInfoLogger } from "@/components/release-info-logger";
 import { Toaster } from "@/components/ui/toaster";
 import AnalyticsContextProvider, {
@@ -137,6 +143,27 @@ function LayoutFallback() {
   );
 }
 
+/**
+ * Honours the interface scale the user picked in the app (Profile →
+ * Appearance), shared through a cookie scoped to the parent domain. Read-only
+ * here: the landing page offers no control of its own.
+ *
+ * The try/catch mirrors `getSession`: during static prerender (the /docs
+ * pages) there is no request, `cookies()` throws, and the page is generated at
+ * the default scale - `UiScaleSync` then applies the cookie after hydration.
+ */
+const readUiScaleStyle = async () => {
+  let rawScale: string | undefined;
+  try {
+    rawScale = (await cookies()).get(UI_SCALE_COOKIE_NAME)?.value;
+  } catch {
+    // Only the `cookies()` call is guarded, so a bug in the parsing below still
+    // surfaces instead of silently rendering the default scale.
+    return undefined;
+  }
+  return uiScaleStyleFromCookie(rawScale);
+};
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -144,12 +171,18 @@ export default async function RootLayout({
 }>) {
   // Get session server-side to pass to client components
   const session = await getSession();
+  const uiScaleStyle = await readUiScaleStyle();
   // Signup hands off to the app origin via a full navigation; warm up DNS/TLS
   // so that cross-origin jump starts faster.
   const appOrigin = new URL(getLandingPageEnv().TURBOPLAN_URL).origin;
 
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html
+      lang="en"
+      className="scroll-smooth"
+      style={uiScaleStyle as React.CSSProperties}
+      suppressHydrationWarning
+    >
       <meta name="theme-color" content="#f4f9f7" />
       <link rel="preconnect" href={appOrigin} />
       <body
@@ -160,6 +193,7 @@ export default async function RootLayout({
         )}
       >
         <ReleaseInfoLogger />
+        <UiScaleSync />
         <PostHogProvider />
         {/* RootProvider supplies Fumadocs' search context for the /docs route.
             Purely additive — it wraps the existing session/analytics stack

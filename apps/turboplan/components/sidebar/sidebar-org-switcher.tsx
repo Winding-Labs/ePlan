@@ -106,6 +106,7 @@ export function SidebarOrgSwitcher() {
           currentOfficeSlug={params.officeSlug}
           onOfficeSelect={handleOfficeSelect}
           onOrgSelect={handleOrgSelect}
+          showMembershipFilter
         />
       </PopoverContent>
     </Popover>
