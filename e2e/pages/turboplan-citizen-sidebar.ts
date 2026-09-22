@@ -5,15 +5,15 @@ import { mockGenerateTitles } from "../utils";
 
 /**
  * Page Object for the citizen sidebar in a gov office context.
- * Handles "My Drafts", "Submitted" sections, "New Application" button, and project creation dialog.
+ * Handles "My Drafts", "Submitted" sections, "New Project" button, and project creation dialog.
  */
 export class TurboplanCitizenSidebarPage {
   constructor(private readonly page: Page) {}
 
-  /** Click "New Application" button in the sidebar */
-  async clickNewApplication(): Promise<void> {
+  /** Click "New Project" button in the sidebar */
+  async clickNewProject(): Promise<void> {
     await this.page
-      .getByRole("button", { name: /New Application/i })
+      .getByRole("button", { name: /New Project/i })
       .first()
       .click();
   }
@@ -24,7 +24,7 @@ export class TurboplanCitizenSidebarPage {
     prompt: string,
     officeName: string,
   ): Promise<void> {
-    await this.clickNewApplication();
+    await this.clickNewProject();
 
     const dialog = this.page.getByRole("alertdialog", {
       name: "Add Project",

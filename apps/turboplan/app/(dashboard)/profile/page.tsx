@@ -4,6 +4,7 @@ import { Button, Input, Label } from "@wildfires-org/turboplan-utils";
 import { auth } from "@/app/(auth)/auth";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { ProfilePhotoUpload } from "@/components/profile-photo-upload";
+import { UiScaleSection } from "@/components/settings/ui-scale-section";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { updateProfileAction } from "./actions";
 import { AccessTokensSection } from "./components/access-tokens-section";
@@ -32,7 +33,7 @@ export default async function ProfilePage() {
                   <div className="mb-8 pb-6 border-b border-slate-600">
                     <ProfilePhotoUpload
                       currentAvatarUrl={userProfile?.avatarUrl}
-                      userId={session?.user?.id!}
+                      userId={session?.user?.id}
                       firstName={userProfile?.firstName}
                       lastName={userProfile?.lastName}
                     />
@@ -222,6 +223,7 @@ export default async function ProfilePage() {
               </Card>
             }
             tokensContent={<AccessTokensSection />}
+            appearanceContent={<UiScaleSection />}
           />
         </div>
       </div>

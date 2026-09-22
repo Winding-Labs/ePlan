@@ -214,6 +214,33 @@ main[class*="overflow-auto"] {
     @apply border-border;
   }
 
+  /* Global UI density. `zoom` rather than a root font-size: the codebase
+     hardcodes plenty of pixel utilities (text-[36px], h-[34px], gap-[12px]),
+     which a root font-size would leave untouched. 0.9375 = 93.75%. The
+     interface-scale setting overrides `--ui-scale` inline on <html>.
+
+     The zoom is deliberately NOT on <html>. Radix positions menus, popovers,
+     selects and tooltips with Floating UI, which measures in visual pixels
+     and then writes a transform; inside a zoomed ancestor that transform is
+     scaled again, so every popper lands off by (scale - 1) x its distance
+     from the top-left corner. At 93.75% a menu 400px down the page opens
+     ~22px too high - on top of its own trigger, where the mouse-up of the
+     opening click selects whatever item is under the cursor and closes it.
+     So: zoom everything in <body> except the popper wrappers, which stay in
+     unzoomed space where Floating UI's maths holds, and zoom the popper's
+     content instead so it still scales with the rest of the UI. */
+  :root {
+    --ui-scale: 0.9375;
+  }
+
+  body > :not([data-radix-popper-content-wrapper]) {
+    zoom: var(--ui-scale);
+  }
+
+  [data-radix-popper-content-wrapper] > * {
+    zoom: var(--ui-scale);
+  }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -344,4 +371,68 @@ main[class*="overflow-auto"] {
     overflow: visible;
     text-overflow: unset;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Interface scale (see `@wildfires-org/turboplan-utils/src/ui-scale.ts`).
+
+   `zoom` scales every unit, including the hardcoded pixel utilities this
+   codebase is full of. Viewport units are the exception: they resolve against
+   the unzoomed visual viewport and are only then scaled, so an unadjusted
+   `h-svh` renders at `--ui-scale` of the window and leaves a gap down the
+   bottom and right edges. Divide the scale back out.
+
+   `svh`/`dvh` matter as much as `vh` here: the shadcn sidebar shell is built
+   on `h-svh`, so missing them leaves the whole app short.
+
+   Unlayered on purpose: these must win over Tailwind's own utilities.
+--------------------------------------------------------------------------- */
+.h-screen {
+  height: calc(100vh / var(--ui-scale));
+}
+.min-h-screen {
+  min-height: calc(100vh / var(--ui-scale));
+}
+.max-h-screen {
+  max-height: calc(100vh / var(--ui-scale));
+}
+
+.h-svh {
+  height: calc(100svh / var(--ui-scale));
+}
+.min-h-svh {
+  min-height: calc(100svh / var(--ui-scale));
+}
+.max-h-svh {
+  max-height: calc(100svh / var(--ui-scale));
+}
+
+.h-dvh {
+  height: calc(100dvh / var(--ui-scale));
+}
+.min-h-dvh {
+  min-height: calc(100dvh / var(--ui-scale));
+}
+.max-h-dvh {
+  max-height: calc(100dvh / var(--ui-scale));
+}
+
+.h-lvh {
+  height: calc(100lvh / var(--ui-scale));
+}
+.min-h-lvh {
+  min-height: calc(100lvh / var(--ui-scale));
+}
+.max-h-lvh {
+  max-height: calc(100lvh / var(--ui-scale));
+}
+
+.w-screen {
+  width: calc(100vw / var(--ui-scale));
+}
+.min-w-screen {
+  min-width: calc(100vw / var(--ui-scale));
+}
+.max-w-screen {
+  max-width: calc(100vw / var(--ui-scale));
 }
