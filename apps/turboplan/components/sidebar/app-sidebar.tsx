@@ -95,7 +95,7 @@ export function AppSidebar({ defaultPinned = false }: AppSidebarProps) {
                 >
                   <Plus className="size-5 shrink-0" />
                   <span className="text-sm font-medium group-data-[collapsible=icon]:hidden">
-                    {isCitizen ? "New Application" : "New project"}
+                    New project
                   </span>
                 </Button>
                 <AddProjectDialog
