@@ -1,7 +1,7 @@
 import { type KeyboardEvent, useEffect, useMemo, useState } from "react";
 
 import { cx } from "class-variance-authority";
-import { Loader2, Sparkles, X } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { posthog } from "posthog-js";
 import useSWR from "swr";
@@ -47,9 +47,7 @@ import {
 
 // Agency/office are not editable fields. They are resolved in the background
 // from the template props (initialOrganizationName / initialOfficeName) and
-// passed as hidden params (by ID only); empty when no template. Once both
-// resolve, the target is surfaced read-only above the submit button with a
-// clear button, so submitting to an agency is never invisible or irreversible.
+// passed as hidden params (by ID only); empty when no template.
 
 interface Organization {
   id: string;
@@ -112,10 +110,6 @@ export const SignupModal = ({
 
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
   const [selectedOfficeId, setSelectedOfficeId] = useState<string | null>(null);
-  // Set when the user explicitly drops the resolved submission target. Without
-  // it the auto-match effects below would immediately re-derive the same target
-  // (their only guard is a null id), silently undoing the opt-out.
-  const [isTargetCleared, setIsTargetCleared] = useState(false);
   const [isError, setIsError] = useState<FormErrors | null>(null);
   // Cross-origin hand-off to the app takes several seconds (SSR auth + bundle).
   // Keep the modal locked with a visible status until the browser leaves.
@@ -165,23 +159,10 @@ export const SignupModal = ({
     [organizations],
   );
 
-  // Both ids are needed for the app to auto-submit, so the notice only shows
-  // once the resolved target is complete — that is exactly when submitting
-  // stops being a private draft and becomes a submission to an agency.
-  const submissionTargetName = useMemo(() => {
-    if (!selectedOrgId || !selectedOfficeId) {
-      return null;
-    }
-    const matchedOrg = governmentOrganizations.find(
-      (org) => org.id === selectedOrgId,
-    );
-    return matchedOrg?.name ?? null;
-  }, [governmentOrganizations, selectedOrgId, selectedOfficeId]);
-
   // Auto-match office name to existing office when offices are loaded
   // This ensures AI-generated office names use existing offices instead of creating new ones
   useEffect(() => {
-    if (isTargetCleared || selectedOfficeId || !data.officeName) {
+    if (selectedOfficeId || !data.officeName) {
       return;
     }
     const matchedOffice = offices.find(
@@ -190,7 +171,7 @@ export const SignupModal = ({
     if (matchedOffice) {
       setSelectedOfficeId(matchedOffice.id);
     }
-  }, [offices, data.officeName, selectedOfficeId, isTargetCleared]);
+  }, [offices, data.officeName, selectedOfficeId]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -237,14 +218,13 @@ export const SignupModal = ({
     }));
     setSelectedOrgId(null);
     setSelectedOfficeId(null);
-    setIsTargetCleared(false);
   }, [initialProjectTitle, initialOrganizationName, initialOfficeName]);
 
   // Match the organization name to a known government agency. Kept separate
   // from the reset above so an SWR revalidation of the org list re-runs only
-  // this (guarded) match instead of wiping a target the user just cleared.
+  // this (guarded) match instead of resetting the form.
   useEffect(() => {
-    if (isTargetCleared || selectedOrgId || !data.organizationName) {
+    if (selectedOrgId || !data.organizationName) {
       return;
     }
     const organizationName = data.organizationName.toLowerCase();
@@ -256,12 +236,7 @@ export const SignupModal = ({
     if (matchedOrg) {
       setSelectedOrgId(matchedOrg.id);
     }
-  }, [
-    data.organizationName,
-    governmentOrganizations,
-    selectedOrgId,
-    isTargetCleared,
-  ]);
+  }, [data.organizationName, governmentOrganizations, selectedOrgId]);
 
   const onSubmit = async () => {
     setIsError(null);
@@ -362,14 +337,6 @@ export const SignupModal = ({
     }
 
     onSubmit();
-  };
-
-  // Dropping the target keeps the project a private draft in the user's own
-  // workspace instead of auto-submitting it to the agency for review.
-  const handleClearSubmissionTarget = () => {
-    setSelectedOrgId(null);
-    setSelectedOfficeId(null);
-    setIsTargetCleared(true);
   };
 
   const handleEnhancePrompt = async () => {
@@ -546,24 +513,6 @@ export const SignupModal = ({
             )}
           </div>
         </div>
-
-        {submissionTargetName && (
-          <div className="mt-2 flex w-full items-center gap-2 rounded-md border-[0.75px] border-neutral-grey bg-white px-3 py-2 text-sm">
-            <span className="min-w-0 flex-1 text-neutral-grey3">
-              Will be submitted to:{" "}
-              <span className="text-neutral-black">{submissionTargetName}</span>
-            </span>
-            <button
-              type="button"
-              className="shrink-0 rounded-sm p-0.5 text-neutral-grey3 transition-colors hover:bg-neutral-light hover:text-neutral-black disabled:opacity-50"
-              onClick={handleClearSubmissionTarget}
-              disabled={isRedirecting}
-              aria-label="Clear submission target"
-            >
-              <X className="size-4" />
-            </button>
-          </div>
-        )}
 
         <Button
           onClick={onSubmit}
