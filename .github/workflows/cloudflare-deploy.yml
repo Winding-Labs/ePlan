@@ -5,6 +5,10 @@ on:
     branches: [main, develop]
   pull_request:
     types: [opened, synchronize, reopened]
+  # Manual run from the Actions tab. Deploys every service regardless of what
+  # changed — this is how a new environment gets its first deployment, since a
+  # push only deploys the services whose paths it touched.
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -38,6 +42,9 @@ jobs:
         uses: dorny/paths-filter@v3
         with:
           filters: |
+            # A change here redeploys every service. To (re)deploy a service
+            # nothing else changed — e.g. the first deploy of a new environment —
+            # use the manual "Run workflow" button (workflow_dispatch) instead.
             infra:
               - '.github/workflows/cloudflare-deploy.yml'
               - 'scripts/deploy-*.sh'
@@ -58,7 +65,8 @@ jobs:
       - name: Set change outputs
         id: changes
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
+          # PRs and manual runs deploy everything; pushes deploy only what changed.
+          if [ "${{ github.event_name }}" = "pull_request" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "landing_changed=true" >> "$GITHUB_OUTPUT"
             echo "server_changed=true" >> "$GITHUB_OUTPUT"
             echo "web_changed=true" >> "$GITHUB_OUTPUT"
@@ -864,8 +872,11 @@ jobs:
 
   deploy-map:
     runs-on: ubuntu-latest
-    needs: detect-changes
-    if: needs.detect-changes.outputs.map_changed == 'true'
+    needs: [detect-changes, code-quality]
+    # Same guard as the other deploy jobs, so a failed code-quality run blocks
+    # the map too. (The map server is Python and does not consume packages/*,
+    # which is why `shared` changes deliberately do not trigger it.)
+    if: ${{ !cancelled() && !failure() && needs.detect-changes.outputs.map_changed == 'true' }}
     environment: ${{ github.ref_name == 'main' && 'production' || github.ref_name == 'develop' && 'develop' || 'pr_preview' }}
     outputs:
       deployed: ${{ steps.deploy.outputs.deployed }}
