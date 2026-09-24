@@ -74,24 +74,58 @@ export function createGeoJsonStyle(
   };
 }
 
+/**
+ * Builds popup content as DOM nodes. Feature properties are user-uploaded, so
+ * they must only ever reach the DOM via textContent (never as an HTML string).
+ */
+export function createFeaturePopupContent(
+  properties: GeoJSON.GeoJsonProperties,
+): HTMLElement | null {
+  const entries = Object.entries(properties ?? {}).filter(
+    ([, value]) => value !== null && value !== undefined,
+  );
+  if (entries.length === 0) {
+    return null;
+  }
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "max-w-[200px]";
+  entries.forEach(([key, value], index) => {
+    if (index > 0) {
+      wrapper.appendChild(document.createElement("br"));
+    }
+    const label = document.createElement("strong");
+    label.textContent = `${key}:`;
+    wrapper.appendChild(label);
+    wrapper.appendChild(document.createTextNode(` ${String(value)}`));
+  });
+  return wrapper;
+}
+
+/**
+ * Builds tooltip content as a text-only node so user-supplied labels are
+ * never interpreted as HTML by Leaflet.
+ */
+export function createFeatureLabelContent(label: unknown): HTMLElement {
+  const element = document.createElement("span");
+  element.textContent = String(label);
+  return element;
+}
+
 // GeoJSON onEachFeature function factory - creates function per layer
 export function createOnEachFeature(
   layer: GeospatialLayer,
   labelPropertyKey?: string,
 ) {
   return (feature: GeoJSON.Feature, leafletLayer: L.Layer) => {
-    if (!feature.properties) return;
+    if (!feature.properties) {
+      return;
+    }
 
     // Create popup with all properties
-    const properties = Object.entries(feature.properties)
-      .filter(([key, value]) => value !== null && value !== undefined)
-      .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
-      .join("<br>");
-
-    if (properties) {
-      leafletLayer.bindPopup(
-        `<div style="max-width: 200px;">${properties}</div>`,
-      );
+    const popupContent = createFeaturePopupContent(feature.properties);
+    if (popupContent) {
+      leafletLayer.bindPopup(popupContent);
     }
 
     // For unit boundaries, always show name (feature_name from DB) as label if available
@@ -100,7 +134,7 @@ export function createOnEachFeature(
       const labelValue =
         feature.properties.name || feature.properties.feature_name;
       if (labelValue) {
-        leafletLayer.bindTooltip(String(labelValue), {
+        leafletLayer.bindTooltip(createFeatureLabelContent(labelValue), {
           permanent: true,
           direction: "center",
           className: "map-feature-label",
@@ -109,12 +143,14 @@ export function createOnEachFeature(
     }
     // For other layers, use labelPropertyKey if provided
     else if (labelPropertyKey && feature.properties[labelPropertyKey]) {
-      const labelValue = String(feature.properties[labelPropertyKey]);
-      leafletLayer.bindTooltip(labelValue, {
-        permanent: true,
-        direction: "center",
-        className: "map-feature-label",
-      });
+      leafletLayer.bindTooltip(
+        createFeatureLabelContent(feature.properties[labelPropertyKey]),
+        {
+          permanent: true,
+          direction: "center",
+          className: "map-feature-label",
+        },
+      );
     }
   };
 }
