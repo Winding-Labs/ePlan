@@ -58,7 +58,10 @@ import {
   projectFiltersSchema,
   updateProjectSchema,
 } from "../projects/validation";
-import { isDraftHiddenFromUser } from "../projects/visibility";
+import {
+  isDraftHiddenFromUser,
+  mergePublicAndAccessibleProjects,
+} from "../projects/visibility";
 import { projectMembersRouter } from "./project-members";
 import { projectModulesRouter } from "./project-modules";
 import { projectSubmissionsRouter } from "./project-submissions";
@@ -199,12 +202,12 @@ projectsRouter.get("/", async (c) => {
       const visiblePublicProjects = publicProjects.filter((p) =>
         isOwnershipStatusPubliclyVisible(p.ownershipStatus),
       );
-      // Merge and deduplicate by project ID
-      const seen = new Set(visiblePublicProjects.map((p) => p.id));
-      projects = [
-        ...visiblePublicProjects,
-        ...userProjects.filter((p) => !seen.has(p.id)),
-      ];
+      // Merge and deduplicate by project ID; public-only entries lose the
+      // creator's email.
+      projects = mergePublicAndAccessibleProjects(
+        visiblePublicProjects,
+        userProjects,
+      );
     } else {
       projects = await getUserAccessibleProjects(user.userId, officeRecord.id);
     }

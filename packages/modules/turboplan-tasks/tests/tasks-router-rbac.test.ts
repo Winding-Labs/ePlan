@@ -90,6 +90,8 @@ const stubGuard =
 
 mock.module("@wildfires-org/turboplan-rbac/hono", {
   namedExports: {
+    // The stub guards only ever grant through a role.
+    isMembershipGrant: (result: { allowed: boolean }) => result.allowed,
     requirePermission: stubGuard,
     requireEntityPermission: stubGuard,
     requireProjectReadOrPublicGov: (resolveProjectId: EntityIdResolver) =>

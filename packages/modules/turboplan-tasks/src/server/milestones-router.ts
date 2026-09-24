@@ -22,6 +22,7 @@ import {
 
 import { TaskStatus } from "../types";
 import {
+  assigneesVisibleTo,
   requireProjectPermission,
   requireProjectPermissionFromMilestone,
   requireProjectReadAccess,
@@ -97,7 +98,7 @@ router.get(
 
     try {
       const milestones = await milestoneService.getAllMilestones(documentId);
-      return c.json({ milestones });
+      return c.json({ milestones: assigneesVisibleTo(c, milestones) });
     } catch (_error) {
       return c.json({ error: "Failed to fetch milestones" }, 500);
     }
@@ -123,7 +124,9 @@ router.get(
         return c.json({ error: "Milestone not found" }, 404);
       }
 
-      return c.json({ milestones: milestonesWithTasks });
+      return c.json({
+        milestones: assigneesVisibleTo(c, milestonesWithTasks),
+      });
     } catch (_error) {
       return c.json({ error: "Failed to fetch milestone with tasks" }, 500);
     }
@@ -145,7 +148,7 @@ router.get(
       const milestonesWithTasks =
         await milestoneService.getMilestonesByProjectId(projectId);
 
-      return c.json(milestonesWithTasks);
+      return c.json(assigneesVisibleTo(c, milestonesWithTasks));
     } catch (error) {
       console.error("Failed to fetch milestones for project:", error);
       return c.json({ error: "Failed to fetch milestones for project" }, 500);
@@ -164,7 +167,8 @@ router.get("/:id", requireProjectReadAccessFromMilestone(), async (c) => {
       return c.json({ error: "Milestone not found" }, 404);
     }
 
-    return c.json({ milestone });
+    const [visibleMilestone] = assigneesVisibleTo(c, [milestone]);
+    return c.json({ milestone: visibleMilestone });
   } catch (_error) {
     return c.json({ error: "Failed to fetch milestone" }, 500);
   }
@@ -192,7 +196,7 @@ router.get(
         documentId,
         statusParam as TaskStatus,
       );
-      return c.json({ milestones });
+      return c.json({ milestones: assigneesVisibleTo(c, milestones) });
     } catch (_error) {
       return c.json({ error: "Failed to fetch milestones by status" }, 500);
     }

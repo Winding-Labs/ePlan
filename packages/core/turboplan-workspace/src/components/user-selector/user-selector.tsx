@@ -16,6 +16,7 @@ import {
 
 import {
   type SearchableUser,
+  type UserSearchScope,
   useUserSearch,
 } from "../../hooks/use-user-search";
 
@@ -56,6 +57,11 @@ export type UserSelectorProps = {
   value: SelectedUserValue[];
   /** Callback when selection changes */
   onChange: (value: SelectedUserValue[]) => void;
+  /**
+   * Entity the search runs for (its organization tree is searchable; anyone
+   * else only by exact email), or "admin" for the admin-only global search.
+   */
+  searchScope: UserSearchScope;
   /** Placeholder text for the input */
   placeholder?: string;
   /** Whether the selector is disabled */
@@ -107,6 +113,7 @@ function isValidEmail(value: string): boolean {
  * <UserSelector
  *   value={selected}
  *   onChange={setSelected}
+ *   searchScope={{ entityType: "project", entityId: projectId }}
  *   placeholder="Search users..."
  *   allowInvite
  * />
@@ -115,6 +122,7 @@ function isValidEmail(value: string): boolean {
 export function UserSelector({
   value,
   onChange,
+  searchScope,
   placeholder = "Search users by name or email...",
   disabled = false,
   maxSelections,
@@ -137,9 +145,11 @@ export function UserSelector({
   }, []);
 
   // Search for users
-  const { users, isLoading, shouldSearch } = useUserSearch(inputValue, {
-    enabled: open && !disabled,
-  });
+  const { users, isLoading, shouldSearch } = useUserSearch(
+    inputValue,
+    searchScope,
+    { enabled: open && !disabled },
+  );
 
   // Filter out already selected users from results
   const selectedIds = useMemo(

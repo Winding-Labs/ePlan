@@ -313,6 +313,7 @@ export function ProjectDetails({
           open={showInviteDialog}
           onOpenChange={setShowInviteDialog}
           entityName={project.name}
+          searchScope={{ entityType: EntityType.PROJECT, entityId: project.id }}
           onSendInvitations={handleSendInvitations}
           isSubmitting={isSendingInvites}
           existingEmails={existingEmails}

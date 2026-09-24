@@ -24,6 +24,7 @@ import type { FieldChange } from "@wildfires-org/turboplan-timeline-records/type
 
 import { TaskStatus } from "../types";
 import {
+  assigneesVisibleTo,
   requireProjectPermission,
   requireProjectPermissionFromTask,
   requireProjectReadAccess,
@@ -151,7 +152,7 @@ router.get(
 
     try {
       const tasks = await taskService.getAllTasks(documentId);
-      return c.json({ tasks });
+      return c.json({ tasks: assigneesVisibleTo(c, tasks) });
     } catch (_error) {
       return c.json({ error: "Failed to fetch tasks" }, 500);
     }
@@ -169,7 +170,8 @@ router.get("/:id", requireProjectReadAccessFromTask(), async (c) => {
       return c.json({ error: "Task not found" }, 404);
     }
 
-    return c.json({ task });
+    const [visibleTask] = assigneesVisibleTo(c, [task]);
+    return c.json({ task: visibleTask });
   } catch (_error) {
     return c.json({ error: "Failed to fetch task" }, 500);
   }
@@ -184,7 +186,7 @@ router.get(
 
     try {
       const tasks = await taskService.getTasksByMilestone(milestoneId);
-      return c.json({ tasks });
+      return c.json({ tasks: assigneesVisibleTo(c, tasks) });
     } catch (_error) {
       return c.json({ error: "Failed to fetch tasks by milestone" }, 500);
     }
@@ -213,7 +215,7 @@ router.get(
         documentId,
         statusParam as TaskStatus,
       );
-      return c.json({ tasks });
+      return c.json({ tasks: assigneesVisibleTo(c, tasks) });
     } catch (_error) {
       return c.json({ error: "Failed to fetch tasks by status" }, 500);
     }

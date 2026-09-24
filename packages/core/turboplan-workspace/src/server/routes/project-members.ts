@@ -15,7 +15,10 @@ import {
   projectUsers,
 } from "@wildfires-org/turboplan-db";
 import { db } from "@wildfires-org/turboplan-db/db-client";
-import { getUser } from "@wildfires-org/turboplan-db/queries";
+import {
+  getProjectAssignableUsers,
+  getUser,
+} from "@wildfires-org/turboplan-db/queries";
 import {
   Action,
   EntityType,
@@ -217,6 +220,29 @@ projectMembersRouter.get(
     } catch (error) {
       console.error("Error fetching project members:", error);
       return c.json({ error: "Failed to fetch members" }, 500);
+    }
+  },
+);
+
+// GET /:id/assignable-users - Users this project's tasks and milestones can be
+// assigned to: hierarchy members plus current assignees (RBAC: READ). Feeds the
+// task assignee picker and resolves assigneeIds to people; it replaces the old
+// global `GET /api/users` list, which exposed every account's email.
+projectMembersRouter.get(
+  "/:id/assignable-users",
+  requirePermission(EntityType.PROJECT, Action.READ, (c) => c.req.param("id")!),
+  async (c) => {
+    try {
+      const users = await getProjectAssignableUsers(c.req.param("id")!);
+      return c.json({
+        users: users.map((assignable) => ({
+          ...assignable,
+          emailVerified: null,
+        })),
+      });
+    } catch (error) {
+      console.error("Error fetching assignable users:", error);
+      return c.json({ error: "Failed to fetch assignable users" }, 500);
     }
   },
 );

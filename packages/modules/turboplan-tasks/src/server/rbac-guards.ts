@@ -16,15 +16,21 @@
  * listed organization, as long as the `tasks` module is not hidden/private.
  */
 
+import type { Context } from "hono";
+
 import { milestones, tasks } from "@wildfires-org/turboplan-db";
 import { type ActionType, EntityType } from "@wildfires-org/turboplan-rbac";
 import {
+  isMembershipGrant,
+  type RBACContext,
   requireEntityPermission,
   requireEntityReadOrPublicGov,
   requirePermission,
   requireProjectReadOrPublicGov,
   resolveProjectIdFromRow,
 } from "@wildfires-org/turboplan-rbac/hono";
+
+import { type AssigneeCarrier, withoutAssignees } from "./assignee-redaction";
 
 /** Module identifier used for hiddenModules/privateModules checks. */
 const PUBLIC_GOV_READ = { moduleName: "tasks" } as const;
@@ -85,3 +91,22 @@ export const requireProjectPermissionFromMilestone = (
 /** READ guard keyed on a milestone id, with public-government fallback. */
 export const requireProjectReadAccessFromMilestone = (paramName = "id") =>
   requireEntityReadOrPublicGov(milestoneProject(paramName), PUBLIC_GOV_READ);
+
+/**
+ * True when a READ guard let the caller in through the public-government
+ * fallback only (no role on the project). The guards leave `permissionResult`
+ * unset in that case.
+ */
+const isPublicViewer = (c: Context<RBACContext>): boolean => {
+  const permissionResult = c.get("permissionResult");
+  return !permissionResult || !isMembershipGrant(permissionResult);
+};
+
+/**
+ * Tasks/milestones as the caller may see them: unchanged for project members,
+ * with assignee identities (emails) removed for public-government readers.
+ */
+export const assigneesVisibleTo = <T extends AssigneeCarrier>(
+  c: Context<RBACContext>,
+  items: T[],
+): T[] => (isPublicViewer(c) ? items.map(withoutAssignees) : items);

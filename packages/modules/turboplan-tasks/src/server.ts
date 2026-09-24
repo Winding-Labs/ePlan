@@ -21,4 +21,3 @@ export {
 // Export services
 export { MilestoneService, TaskService } from "./server/service";
 export { default as tasksRouter } from "./server/tasks-router";
-export { default as usersRouter } from "./server/users-router";

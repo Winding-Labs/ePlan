@@ -127,13 +127,12 @@ export async function registerPrivateRoutes(router: Hono) {
   // Conditionally add tasks router if feature is enabled
   if (isTasksPackageEnabled()) {
     try {
-      const { milestonesRouter, tasksRouter, usersRouter } = await import(
+      const { milestonesRouter, tasksRouter } = await import(
         "@wildfires-org/turboplan-tasks/server"
       );
 
       router.route("/api/tasks", tasksRouter);
       router.route("/api/milestones", milestonesRouter);
-      router.route("/api/users", usersRouter);
 
       // Add project-specific endpoints that route to the appropriate task routers
       router.route("/api/projects", milestonesRouter);

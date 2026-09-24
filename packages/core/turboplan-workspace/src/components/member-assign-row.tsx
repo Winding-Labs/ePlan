@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@wildfires-org/turboplan-utils";
 
+import type { UserSearchScope } from "../hooks/use-user-search";
 import { MemberRole, type MemberRoleType } from "../types";
 import { getRoleDisplayName } from "./members-table/utils";
 import { type SelectedUserValue, UserSelector } from "./user-selector";
@@ -18,6 +19,8 @@ import { type SelectedUserValue, UserSelector } from "./user-selector";
 interface MemberAssignRowProps {
   selectedUsers: SelectedUserValue[];
   onSelectedUsersChange: (users: SelectedUserValue[]) => void;
+  /** Entity the user search runs for (see UserSelector) */
+  searchScope: UserSearchScope;
   currentRole: MemberRoleType;
   onRoleChange: (role: MemberRoleType) => void;
   onAssign: () => void;
@@ -28,6 +31,7 @@ interface MemberAssignRowProps {
 export function MemberAssignRow({
   selectedUsers,
   onSelectedUsersChange,
+  searchScope,
   currentRole,
   onRoleChange,
   onAssign,
@@ -43,6 +47,7 @@ export function MemberAssignRow({
         <UserSelector
           value={selectedUsers}
           onChange={onSelectedUsersChange}
+          searchScope={searchScope}
           placeholder="Name or email"
           allowInvite
           disabled={disabled}

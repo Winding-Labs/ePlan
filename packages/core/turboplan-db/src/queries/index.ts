@@ -22,6 +22,8 @@ export * from "./organizations";
 export * from "./personal-access-tokens";
 // Profile queries
 export * from "./profiles";
+// Users a project's tasks/milestones may be assigned to
+export * from "./project-assignable-users";
 // Project documents queries
 export * from "./project-documents";
 export * from "./prompts";

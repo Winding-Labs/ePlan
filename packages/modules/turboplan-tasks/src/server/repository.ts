@@ -25,30 +25,16 @@ import {
 
 /**
  * User repository interface - READ-ONLY for task/milestone context
- * Only allows reading users for assignee resolution and user lists
+ * Only allows reading users for assignee resolution. There is deliberately no
+ * "list every user" method: pickers use the project-scoped
+ * `getProjectAssignableUsers` instead.
  */
 export interface UserRepository {
-  findAll(): Promise<User[]>;
   findByIds(ids: string[]): Promise<User[]>;
   findByEmail(email: string): Promise<User | null>;
 }
 
 export class DrizzleUserRepository implements UserRepository {
-  async findAll(): Promise<User[]> {
-    const results = await db
-      .select({
-        id: user.id,
-        email: user.email,
-      })
-      .from(user)
-      .orderBy(asc(user.email));
-    return results.map((r) => ({
-      id: r.id,
-      email: r.email,
-      emailVerified: null,
-    }));
-  }
-
   async findByIds(ids: string[]): Promise<User[]> {
     if (ids.length === 0) return [];
 

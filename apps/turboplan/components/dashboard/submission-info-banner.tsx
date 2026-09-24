@@ -162,6 +162,7 @@ export const SubmissionInfoBanner = ({
           <ApproveProposalDialog
             open={showApproveDialog}
             onOpenChange={setShowApproveDialog}
+            projectId={projectId}
             projectName={projectName}
             onApprove={handleApprove}
             isLoading={isMutating}
