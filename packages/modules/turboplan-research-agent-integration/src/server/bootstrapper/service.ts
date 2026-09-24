@@ -51,7 +51,7 @@ import {
   getExistingTaskIds,
   getNewChatMessagesSince,
   getProjectFieldsByProjectId,
-  getResearchAgentMessageById,
+  getResearchAgentMessageByIdAndProjectId,
   insertMilestonesWithTasks,
   insertProjectFields,
   updateLastForwardedAt,
@@ -579,7 +579,10 @@ async function validateAndFilterSaveRequest<T extends { saved: boolean }>(
   itemIndices: number[],
   dataKey: string,
 ): Promise<ValidatedSaveRequest<T>> {
-  const message = await getResearchAgentMessageById(messageId);
+  const message = await getResearchAgentMessageByIdAndProjectId(
+    messageId,
+    projectId,
+  );
   if (!message) throw new SaveError("Message not found", 404);
   if (message.type !== expectedType) {
     throw new SaveError(`Message is not a ${expectedType} message`, 400);
@@ -1328,7 +1331,10 @@ export async function saveMilestonesToProject(
   selections: MilestoneTaskSelection[],
   userId: string,
 ) {
-  const message = await getResearchAgentMessageById(messageId);
+  const message = await getResearchAgentMessageByIdAndProjectId(
+    messageId,
+    projectId,
+  );
   if (!message) throw new SaveError("Message not found", 404);
   if (message.type !== ResearchAgentMessageType.MILESTONES) {
     throw new SaveError("Message is not a milestones message", 400);
