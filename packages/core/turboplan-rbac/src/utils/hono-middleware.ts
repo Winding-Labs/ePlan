@@ -4,7 +4,10 @@ import type { Context, Next } from "hono";
 
 import { db } from "@wildfires-org/turboplan-db/db-client";
 
-import { NO_PERMISSION_REASON } from "../permission-resolver";
+import {
+  isMembershipGrant,
+  NO_PERMISSION_REASON,
+} from "../permission-resolver";
 import { getRBACService } from "../services/rbac.service";
 import type { ActionType, EntityTypeType } from "../types";
 import { Action, EntityType } from "../types";
@@ -56,6 +59,7 @@ const createPermissionGuard = (
   action: ActionType,
   resolveEntityId: EntityIdResolver,
   onMissingEntityId: MissingEntityIdResponder,
+  requireMembership = false,
 ): Middleware => {
   return async (c: Context<RBACContext>, next: Next) => {
     try {
@@ -81,6 +85,10 @@ const createPermissionGuard = (
 
       if (!permissionResult.allowed) {
         return respondForbidden(c, permissionResult.reason);
+      }
+
+      if (requireMembership && !isMembershipGrant(permissionResult)) {
+        return respondUniformForbidden(c);
       }
 
       // Store permission check result in context for downstream use
@@ -176,6 +184,29 @@ export function requirePermission(
     action,
     getEntityId,
     respondBadRequest,
+  );
+}
+
+/**
+ * Like {@link requirePermission}, but the grant must come from a role on the
+ * entity itself (direct, inherited from a parent, or platform admin). READ that
+ * is only derived upward from a child membership — e.g. a project member
+ * reading its parent office — is rejected with the uniform 403.
+ *
+ * Use on endpoints that expose the entity's staff (member lists, pending
+ * invitations), which a member of a single child project must not see.
+ */
+export function requireMemberPermission(
+  entityType: EntityTypeType,
+  action: ActionType,
+  getEntityId: (c: Context<RBACContext>) => string | null,
+): Middleware {
+  return createPermissionGuard(
+    entityType,
+    action,
+    getEntityId,
+    respondBadRequest,
+    true,
   );
 }
 

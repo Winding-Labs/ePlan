@@ -23,6 +23,7 @@ import {
 } from "@wildfires-org/turboplan-rbac";
 import {
   type RBACContext,
+  requireMemberPermission,
   requirePermission,
 } from "@wildfires-org/turboplan-rbac/hono";
 import {
@@ -376,10 +377,15 @@ officesRouter.delete(
   },
 );
 
-// GET /:id/members - List members with org inheritance (RBAC: READ)
+// GET /:id/members - List members with org inheritance (RBAC: READ from a role
+// on the office or its org — upward READ from a child project does not expose staff)
 officesRouter.get(
   "/:id/members",
-  requirePermission(EntityType.OFFICE, Action.READ, (c) => c.req.param("id")!),
+  requireMemberPermission(
+    EntityType.OFFICE,
+    Action.READ,
+    (c) => c.req.param("id")!,
+  ),
   async (c) => {
     try {
       const officeId = c.req.param("id")!;

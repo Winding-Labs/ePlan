@@ -2,6 +2,7 @@ export {
   NO_PERMISSION_REASON,
   requireEntityPermission,
   requireEntityReadOrPublicGov,
+  requireMemberPermission,
   requirePermission,
   requireProjectReadOrPublicGov,
   resolveProjectIdFromRow,

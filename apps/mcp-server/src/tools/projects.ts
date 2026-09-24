@@ -10,6 +10,7 @@ import {
   runWithWorkerConnection,
 } from "@wildfires-org/turboplan-db/db-client";
 import { Action, EntityType } from "@wildfires-org/turboplan-rbac";
+import { getRBACService } from "@wildfires-org/turboplan-rbac/server";
 import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/server";
 import type { FieldChange } from "@wildfires-org/turboplan-timeline-records/types";
 import {
@@ -26,7 +27,11 @@ import {
   getProjectCatalogUrl,
   getProjectDashboardUrl,
 } from "../utils/entity-urls.js";
-import { assertEntityExists, assertPermission } from "../utils/permissions.js";
+import {
+  accessDenied,
+  assertEntityExists,
+  assertPermission,
+} from "../utils/permissions.js";
 import type { McpUserContext } from "../utils/types.js";
 import {
   descriptionSchema,
@@ -475,6 +480,24 @@ export const registerProjectTools = (
           if (ownerDenied) {
             return ownerDenied;
           }
+        }
+
+        // Publishing presents the project under its office's name, so it also
+        // needs a role on the office itself — not just ownership of this one
+        // project (e.g. a citizen application inside a government office).
+        const enablesPublicOrTemplate =
+          (validated.isPublic === true && !project!.isPublic) ||
+          (validated.isTemplate === true && !project!.isTemplate);
+        if (
+          enablesPublicOrTemplate &&
+          !(await getRBACService().hasMembershipAccess(
+            user.userId,
+            project!.officeId,
+            EntityType.OFFICE,
+            user.email ? { email: user.email } : undefined,
+          ))
+        ) {
+          return accessDenied();
         }
 
         // Billing gate on template conversion: flipping isTemplate off turns

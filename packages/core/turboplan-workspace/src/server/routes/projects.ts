@@ -2,7 +2,12 @@ import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 
 import { assertProjectCreationAllowed } from "@wildfires-org/turboplan-billing/server";
-import { OwnershipStatus, office, project } from "@wildfires-org/turboplan-db";
+import {
+  isOwnershipStatusPubliclyVisible,
+  OwnershipStatus,
+  office,
+  project,
+} from "@wildfires-org/turboplan-db";
 import {
   db,
   runWithWorkerConnection,
@@ -16,7 +21,6 @@ import {
 import {
   OrganizationType,
   PUBLICLY_LISTED_ORG_TYPES,
-  UserRole,
 } from "@wildfires-org/turboplan-db/types";
 import { getApiEnv } from "@wildfires-org/turboplan-env";
 import { Action, EntityType } from "@wildfires-org/turboplan-rbac";
@@ -35,6 +39,7 @@ import { generateUniqueSlug } from "@wildfires-org/turboplan-utils/server";
 
 import { getOfficeBySlug } from "../offices/queries";
 import { getOrganizationById } from "../organizations/queries";
+import { resolveProjectCreationFlags } from "../projects/creation-policy";
 import {
   createProject,
   deleteProject,
@@ -190,10 +195,14 @@ projectsRouter.get("/", async (c) => {
         }),
         getUserAccessibleProjects(user.userId, officeRecord.id),
       ]);
+      // Applications under review stay out of the public half of the list.
+      const visiblePublicProjects = publicProjects.filter((p) =>
+        isOwnershipStatusPubliclyVisible(p.ownershipStatus),
+      );
       // Merge and deduplicate by project ID
-      const seen = new Set(publicProjects.map((p) => p.id));
+      const seen = new Set(visiblePublicProjects.map((p) => p.id));
       projects = [
-        ...publicProjects,
+        ...visiblePublicProjects,
         ...userProjects.filter((p) => !seen.has(p.id)),
       ];
     } else {
@@ -312,20 +321,36 @@ projectsRouter.post("/", async (c) => {
       projectData.name,
     );
 
-    // Only citizen-submission flows should start as DRAFT. Projects created by
-    // government / planning users are owned work from the start, not pending
-    // submissions — default them to ACCEPTED so the draft-visibility filter
-    // doesn't hide them from other office members.
-    // Prefer userRole from the auth context (set from the API token); fall back
-    // to a profile lookup for tokens that don't carry it (e.g. e2e tests).
-    const userRole =
-      user.userRole ??
-      (await getProfileByUserId(user.userId))?.userRole ??
-      undefined;
-    const ownershipStatus =
-      userRole === UserRole.CITIZEN
-        ? OwnershipStatus.DRAFT
-        : OwnershipStatus.ACCEPTED;
+    const hasOfficeCreate = permissionResult.allowed;
+    const wantsPublicOrTemplate =
+      projectData.isPublic === true || projectData.isTemplate === true;
+    const hasOfficeManageMembers =
+      hasOfficeCreate &&
+      wantsPublicOrTemplate &&
+      (
+        await rbacService.checkPermission(
+          user.userId,
+          officeRecord.id,
+          EntityType.OFFICE,
+          Action.MANAGE_MEMBERS,
+        )
+      ).allowed;
+
+    // The role only matters for staff creations (citizen → DRAFT, others →
+    // ACCEPTED). Prefer userRole from the auth context (set from the API
+    // token); fall back to a profile lookup for tokens that don't carry it
+    // (e.g. e2e tests).
+    const userRole = hasOfficeCreate
+      ? (user.userRole ?? (await getProfileByUserId(user.userId))?.userRole)
+      : undefined;
+    const { ownershipStatus, isPublic, isTemplate } =
+      resolveProjectCreationFlags({
+        hasOfficeCreate,
+        hasOfficeManageMembers,
+        userRole,
+        requestedIsPublic: projectData.isPublic,
+        requestedIsTemplate: projectData.isTemplate,
+      });
 
     // Billing gate: the org's plan caps active projects (e.g. Starter allows
     // one). Pure count check — nothing is consumed, so there is nothing to
@@ -352,6 +377,8 @@ projectsRouter.post("/", async (c) => {
       slug,
       officeId: officeRecord.id,
       ownershipStatus,
+      isPublic,
+      isTemplate,
       // Bringing an existing project skips the AI research phase.
       ...(hasExistingProject ? { isResearchPhaseCompleted: true } : {}),
     });
@@ -481,6 +508,7 @@ projectsRouter.get("/:id", async (c) => {
       // offices (government + environmental planning).
       const isPublicListedOrgProject =
         proj.isPublic &&
+        isOwnershipStatusPubliclyVisible(proj.ownershipStatus) &&
         orgType !== null &&
         PUBLICLY_LISTED_ORG_TYPES.includes(orgType);
       if (!isPublicListedOrgProject) {
@@ -607,6 +635,32 @@ projectsRouter.put(
             403,
           );
         }
+      }
+
+      // Publishing (or listing as a template) presents the project under the
+      // office's name, so it also needs a role on the office itself. A project
+      // owner who only reached the office through that project — e.g. a citizen
+      // whose application lives in a government office — may not publish it.
+      const enablesPublicOrTemplate =
+        (changesPublicVisibility && updateData.isPublic === true) ||
+        (changesTemplateFlag && updateData.isTemplate === true);
+      if (
+        enablesPublicOrTemplate &&
+        !(await getRBACService().hasMembershipAccess(
+          user.userId,
+          projectRecord.officeId,
+          EntityType.OFFICE,
+          { email: user.email },
+        ))
+      ) {
+        return c.json(
+          {
+            error: "Forbidden",
+            reason:
+              "Publishing a project requires a role on its office or organization",
+          },
+          403,
+        );
       }
 
       // Billing gate on template conversion: flipping isTemplate off turns

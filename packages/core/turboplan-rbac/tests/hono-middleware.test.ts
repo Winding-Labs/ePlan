@@ -46,8 +46,10 @@ const {
   NO_PERMISSION_REASON,
   requireEntityPermission,
   requireEntityReadOrPublicGov,
+  requireMemberPermission,
   requirePermission,
 } = await import("../src/utils/hono-middleware");
+const { UPWARD_READ_REASON } = await import("../src/permission-resolver");
 
 const USER: RBACUserContext = {
   userId: "11111111-1111-1111-1111-111111111111",
@@ -342,5 +344,53 @@ describe("requirePermission (sync extractor)", () => {
 
     assert.strictEqual(result.status, 200);
     assert.deepStrictEqual(result.permissionResult, permissionFixture);
+  });
+});
+
+describe("requireMemberPermission", () => {
+  const guard = () =>
+    requireMemberPermission(
+      EntityType.OFFICE,
+      Action.READ,
+      (c) => c.req.param("id") ?? null,
+    );
+
+  it("allows a direct or inherited role on the entity", async () => {
+    permissionFixture = {
+      allowed: true,
+      reason: "Inherited permission from parent entity",
+      effectiveRole: "viewer",
+    };
+
+    const result = await run(guard());
+
+    assert.strictEqual(result.status, 200);
+    assert.strictEqual(result.handlerRan, true);
+  });
+
+  it("rejects READ derived only upward from a child membership", async () => {
+    permissionFixture = {
+      allowed: true,
+      reason: UPWARD_READ_REASON,
+      effectiveRole: "viewer",
+    };
+
+    const result = await run(guard());
+
+    assert.strictEqual(result.status, 403);
+    assert.deepStrictEqual(result.body, {
+      error: "Forbidden",
+      reason: NO_PERMISSION_REASON,
+    });
+    assert.strictEqual(result.handlerRan, false);
+  });
+
+  it("rejects when the check denies", async () => {
+    permissionFixture = { allowed: false, reason: NO_PERMISSION_REASON };
+
+    const result = await run(guard());
+
+    assert.strictEqual(result.status, 403);
+    assert.strictEqual(result.handlerRan, false);
   });
 });

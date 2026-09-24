@@ -22,6 +22,7 @@ import {
 } from "@wildfires-org/turboplan-rbac";
 import {
   type RBACContext,
+  requireMemberPermission,
   requirePermission,
 } from "@wildfires-org/turboplan-rbac/hono";
 import {
@@ -292,10 +293,11 @@ organizationsRouter.put(
   },
 );
 
-// GET /:id/members - List members (RBAC: READ permission)
+// GET /:id/members - List members (RBAC: READ from a role on the org itself —
+// upward READ from a child project/office membership does not expose staff)
 organizationsRouter.get(
   "/:id/members",
-  requirePermission(
+  requireMemberPermission(
     EntityType.ORGANIZATION,
     Action.READ,
     (c) => c.req.param("id")!,
