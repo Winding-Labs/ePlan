@@ -10,7 +10,6 @@ import type {
   CatalogerRun,
 } from "@wildfires-org/turboplan-db/schemas";
 import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/server";
-import { uploadFile } from "@wildfires-org/turboplan-upload/server";
 import {
   assignOrganizationOwner,
   createOffice,
@@ -20,17 +19,10 @@ import {
 } from "@wildfires-org/turboplan-workspace/server";
 
 import type { MilestoneSaveItem } from "../../types";
-import {
-  fetchWithValidatedRedirect,
-  isSafeExternalUrl,
-} from "../bootstrapper/service";
+import { downloadDocumentToStorage } from "../bootstrapper/service";
 import { getResearchAgentClient } from "../external-client";
 import { insertMilestonesWithTasks, insertProjectFields } from "../repository";
 import type { catalogerCreateEntrySchema } from "../schemas";
-import {
-  buildCatalogerDocumentFilename,
-  resolveCatalogerDocumentMimeType,
-} from "./document-utils";
 import {
   createCatalogerEntry as createCatalogerEntryRecord,
   getNonTerminalCatalogerRuns,
@@ -261,71 +253,30 @@ export const findOrCreateOffice = async (
 // Create a full catalog entry (org → office → project → docs/milestones/fields)
 // ---------------------------------------------------------------------------
 
-const MAX_DOCUMENT_SIZE = 50 * 1024 * 1024; // 50MB
-
 const processDocument = async (
   doc: { url: string; title: string; relevance: number; context: string },
   projectId: string,
   catalogerRun: CatalogerRun,
 ): Promise<void> => {
-  // Agent-supplied URLs are untrusted: public hosts only, redirects re-checked.
-  if (!(await isSafeExternalUrl(doc.url))) {
-    console.error(`[cataloger] Blocked unsafe URL: ${doc.url}`);
-    return;
-  }
-
-  const response = await fetchWithValidatedRedirect(doc.url, "cataloger");
-  if (!response) {
-    return;
-  }
-  if (!response.ok) {
-    console.error(`[cataloger] Failed to fetch ${doc.url}: ${response.status}`);
-    return;
-  }
-
-  const contentLength = response.headers.get("content-length");
-  if (contentLength && Number(contentLength) > MAX_DOCUMENT_SIZE) {
-    console.error(`[cataloger] Skipping ${doc.url}: exceeds 50MB limit`);
-    return;
-  }
-
-  const buffer = await response.arrayBuffer();
-  if (buffer.byteLength > MAX_DOCUMENT_SIZE) {
-    console.error(
-      `[cataloger] Skipping ${doc.url}: downloaded size exceeds 50MB limit`,
-    );
-    return;
-  }
-
-  const mimeType = resolveCatalogerDocumentMimeType(
-    response.headers.get("content-type"),
-    new Uint8Array(buffer, 0, Math.min(buffer.byteLength, 8)),
+  // Agent-supplied URLs are untrusted: public hosts only, redirects re-checked,
+  // body capped, and only allowlisted document types stored.
+  const stored = await downloadDocumentToStorage(
+    doc,
+    `cataloger/${projectId}`,
+    "cataloger",
   );
-  if (!mimeType) {
-    console.error(
-      `[cataloger] Skipping ${doc.url}: unsupported content type ${response.headers.get("content-type")}`,
-    );
+  if (!stored) {
     return;
   }
-
-  const originalFilename = buildCatalogerDocumentFilename(
-    doc.url,
-    doc.title,
-    mimeType,
-  );
-  const storedFilename = `${Date.now()}-${randomUUID().slice(0, 8)}-${originalFilename}`;
-  const key = `cataloger/${projectId}/${storedFilename}`;
-
-  const { url: blobUrl } = await uploadFile(key, buffer, mimeType);
 
   await createProjectDocument({
     projectId,
     userId: catalogerRun.userId,
-    filename: storedFilename,
-    originalFilename,
-    mimeType,
-    size: buffer.byteLength,
-    url: blobUrl,
+    filename: stored.storedFilename,
+    originalFilename: stored.originalFilename,
+    mimeType: stored.mimeType,
+    size: stored.size,
+    url: stored.url,
     source: "research",
     relevance: doc.relevance,
     context: doc.context,
