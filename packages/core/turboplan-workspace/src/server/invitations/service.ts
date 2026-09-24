@@ -234,6 +234,7 @@ export class InvitationService {
     if (invitation.taskAssignment) {
       await this.assignUserToTask(
         userId,
+        invitation.entityId,
         invitation.taskAssignment as TaskAssignment,
       );
     }
@@ -425,8 +426,13 @@ export class InvitationService {
     return officeRow?.organizationId ?? null;
   }
 
+  /**
+   * `projectId` is the invitation's own entity: the stored ids are only ever
+   * applied inside the project the invitation grants access to.
+   */
   private async assignUserToTask(
     userId: string,
+    projectId: string,
     taskAssignment: TaskAssignment,
   ): Promise<void> {
     const { taskId, milestoneId } = taskAssignment;
@@ -439,7 +445,12 @@ export class InvitationService {
       const { assignUserToTaskAndMilestone } = await import(
         "@wildfires-org/turboplan-db/queries"
       );
-      await assignUserToTaskAndMilestone(userId, taskId, milestoneId);
+      await assignUserToTaskAndMilestone({
+        projectId,
+        userId,
+        taskId,
+        milestoneId,
+      });
     } catch (error) {
       // Log error but don't fail the invitation acceptance
       console.error("Failed to assign user to task:", error);

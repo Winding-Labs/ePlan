@@ -14,6 +14,7 @@ import {
   DrizzleUserRepository,
   MilestoneService,
   TaskService,
+  validateTaskReferences,
 } from "@wildfires-org/turboplan-tasks/server";
 import {
   computeChanges,
@@ -314,6 +315,17 @@ export const registerTaskTools = (server: McpServer, user: McpUserContext) => {
 
         const validated = validation.data;
 
+        const referenceError = await validateTaskReferences(
+          projectId,
+          validated,
+        );
+        if (referenceError) {
+          return {
+            isError: true,
+            content: [{ type: "text" as const, text: referenceError }],
+          };
+        }
+
         const now = new Date();
         const today = new Date(now);
         today.setHours(0, 0, 0, 0);
@@ -487,6 +499,19 @@ export const registerTaskTools = (server: McpServer, user: McpUserContext) => {
         }
 
         const validated = validation.data;
+
+        // The task's own project is where every incoming id must resolve.
+        const referenceError = await validateTaskReferences(
+          projectId,
+          validated,
+        );
+        if (referenceError) {
+          return {
+            isError: true,
+            content: [{ type: "text" as const, text: referenceError }],
+          };
+        }
+
         const updateData: Record<string, unknown> = {};
 
         if (validated.title !== undefined) {

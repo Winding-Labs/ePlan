@@ -37,6 +37,8 @@ import { ROLE_LEVEL } from "../constants";
 import { sendMemberAddedNotification } from "../invitations/email";
 import { getEntityInvitationsWithInviter } from "../invitations/queries";
 import { getInvitationService } from "../invitations/service";
+import { validateTaskAssignment } from "../invitations/task-assignment";
+import { taskAssignmentSchema } from "../invitations/validation";
 import { selectMembersFrom } from "../queries";
 import { seatLimitResponse } from "./seat-gate";
 
@@ -71,13 +73,6 @@ const resolveProjectOrgRow = async (
     .limit(1);
   return row;
 };
-
-const taskAssignmentSchema = z
-  .object({
-    taskId: z.string().optional(),
-    milestoneId: z.string().optional(),
-  })
-  .optional();
 
 const addMemberSchema = z.object({
   email: z.string().email(),
@@ -254,6 +249,17 @@ projectMembersRouter.post(
 
       const { email, role, taskAssignment } = validationResult.data;
 
+      // The assignment is applied now (existing user) or at accept time
+      // (invitation), and its titles are emailed to the invitee — so both ids
+      // must name rows inside this project before anything else happens.
+      const taskAssignmentError = await validateTaskAssignment(
+        projectId,
+        taskAssignment,
+      );
+      if (taskAssignmentError) {
+        return c.json({ error: taskAssignmentError }, 400);
+      }
+
       // Look up user by email
       const users = await getUser(email);
 
@@ -312,11 +318,12 @@ projectMembersRouter.post(
             const { assignUserToTaskAndMilestone } = await import(
               "@wildfires-org/turboplan-db/queries"
             );
-            await assignUserToTaskAndMilestone(
+            await assignUserToTaskAndMilestone({
+              projectId,
               userId,
-              taskAssignment.taskId,
-              taskAssignment.milestoneId,
-            );
+              taskId: taskAssignment.taskId,
+              milestoneId: taskAssignment.milestoneId,
+            });
           } catch (error) {
             // Log but don't fail the member addition
             console.error("Failed to assign user to task:", error);
