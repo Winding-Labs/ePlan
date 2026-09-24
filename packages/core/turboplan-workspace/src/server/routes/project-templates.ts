@@ -24,6 +24,7 @@ import {
   createTemplateFromProject,
   getProjectById,
 } from "../projects/queries";
+import { getPubliclyRestrictedModules } from "../projects/template-copy-policy";
 import { createProjectFromTemplateSchema } from "../projects/validation";
 
 export const projectTemplatesRouter = new Hono<RBACContext>();
@@ -207,25 +208,32 @@ projectTemplatesRouter.post("/:id/create-from-template", async (c) => {
 
     const rbacService = getRBACService();
 
-    // Private templates require explicit READ access
-    if (!sourceTemplate.isPublic) {
-      const sourceAccessResult = await rbacService.checkPermission(
-        user.userId,
-        templateId,
-        EntityType.PROJECT,
-        Action.READ,
-      );
+    // Private templates require explicit READ access. A public template may be
+    // cloned by anyone, but without READ the caller only gets the modules the
+    // public template view shows — hidden/private module content stays behind.
+    const sourceAccessResult = await rbacService.checkPermission(
+      user.userId,
+      templateId,
+      EntityType.PROJECT,
+      Action.READ,
+    );
 
-      if (!sourceAccessResult.allowed) {
-        return c.json(
-          {
-            error: "Forbidden",
-            reason: sourceAccessResult.reason,
-          },
-          403,
-        );
-      }
+    if (!sourceAccessResult.allowed && !sourceTemplate.isPublic) {
+      return c.json(
+        {
+          error: "Forbidden",
+          reason: sourceAccessResult.reason,
+        },
+        403,
+      );
     }
+
+    const excludedModules = sourceAccessResult.allowed
+      ? []
+      : getPubliclyRestrictedModules(
+          sourceTemplate.hiddenModules,
+          sourceTemplate.privateModules,
+        );
 
     const body = await c.req.json();
     const validationResult = createProjectFromTemplateSchema.safeParse(body);
@@ -301,6 +309,7 @@ projectTemplatesRouter.post("/:id/create-from-template", async (c) => {
         {
           name,
           description,
+          excludedModules,
         },
       );
 
@@ -374,6 +383,7 @@ projectTemplatesRouter.post("/:id/create-from-template", async (c) => {
         // Save the chosen agency as the default submit target (not submitted now).
         intendedSubmissionOrganizationId: submitTo?.organizationId ?? null,
         intendedSubmissionOfficeId: submitTo?.officeId ?? null,
+        excludedModules,
       },
     );
 

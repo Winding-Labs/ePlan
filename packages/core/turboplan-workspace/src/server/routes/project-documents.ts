@@ -117,7 +117,8 @@ export const projectDocumentsRouter = new Hono<RBACContext>();
  * Query params:
  * - projectId (required): The project to get documents for
  * - source (optional): Filter by origin — "upload" (Documents page) or
- *   "research" (Context page). Omit to return all documents.
+ *   "research" (Context page). Omit to return all documents (members) or
+ *   only uploads (public-government readers without a project role).
  */
 projectDocumentsRouter.get("/", async (c) => {
   try {
@@ -160,9 +161,14 @@ projectDocumentsRouter.get("/", async (c) => {
       Action.READ,
     );
 
+    // Research docs belong to the "context" module, uploads to "documents".
+    // Public-government readers must pass that module's visibility check, and
+    // without an explicit source they only get uploads (members get all).
+    let source = sourceResult.data;
     if (!permissionResult.allowed) {
+      source = source ?? "upload";
       const allowedAsPublic = await isPublicGovProjectReadAllowed(projectId, {
-        moduleName: "documents",
+        moduleName: source === "research" ? "context" : "documents",
       });
       if (!allowedAsPublic) {
         return c.json(
@@ -172,10 +178,7 @@ projectDocumentsRouter.get("/", async (c) => {
       }
     }
 
-    const documents = await getProjectDocumentsByProjectId(
-      projectId,
-      sourceResult.data,
-    );
+    const documents = await getProjectDocumentsByProjectId(projectId, source);
 
     return c.json(documents);
   } catch (error) {
