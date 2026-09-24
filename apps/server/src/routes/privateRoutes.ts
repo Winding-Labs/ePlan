@@ -227,10 +227,12 @@ export async function registerPrivateRoutes(router: Hono) {
 
       // Proxy routers (TurboPlan Frontend → Research Agent)
       router.route("/api/ai/research-agent/bootstrapper", bootstrapperRouter);
-      router.route("/api/ai/research-agent/cataloger", catalogerRouter);
 
-      // Admin sub-route (composed into adminRouter, protected via /api/admin/*)
+      // Cataloger is platform-admin only (it creates GOVERNMENT orgs and public
+      // template projects), so both its routers are composed into adminRouter
+      // and protected via /api/admin/*. Webhook callbacks live separately.
       adminRouter.route("/cataloger", catalogerAdminRouter);
+      adminRouter.route("/cataloger", catalogerRouter);
     } catch (error) {
       throw featurePackageError(
         "Research agent",

@@ -125,7 +125,10 @@ export const catalogerCreateEntrySchema = z.object({
 // Proxy request schemas
 
 export const catalogerRunRequestSchema = z.object({
-  message: z.string().min(1, "Message is required"),
+  message: z
+    .string()
+    .min(1, "Message is required")
+    .max(10_000, "Message max 10000 chars"),
 });
 
 // Webhook request schemas

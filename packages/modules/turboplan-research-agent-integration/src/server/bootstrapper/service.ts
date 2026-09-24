@@ -878,7 +878,7 @@ function isBlockedHostname(hostname: string): boolean {
   );
 }
 
-async function isSafeExternalUrl(rawUrl: string): Promise<boolean> {
+export async function isSafeExternalUrl(rawUrl: string): Promise<boolean> {
   let parsed: URL;
   try {
     parsed = new URL(rawUrl);
@@ -918,11 +918,14 @@ async function isSafeExternalUrl(rawUrl: string): Promise<boolean> {
   }
 }
 
-async function fetchWithValidatedRedirect(
+export async function fetchWithValidatedRedirect(
   rawUrl: string,
   logPrefix: string,
 ): Promise<Response | null> {
-  const initialResponse = await fetch(rawUrl, { redirect: "manual" });
+  const initialResponse = await fetch(rawUrl, {
+    redirect: "manual",
+    signal: AbortSignal.timeout(30_000),
+  });
   if (initialResponse.status < 300 || initialResponse.status >= 400) {
     return initialResponse;
   }
