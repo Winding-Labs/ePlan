@@ -1,5 +1,6 @@
 "use server";
 
+import { createMagicLinkLoginTicket } from "@wildfires-org/turboplan-auth/server";
 import { getInvitationService } from "@wildfires-org/turboplan-workspace/server";
 
 import { signIn } from "@/app/(auth)/auth";
@@ -41,9 +42,10 @@ export async function acceptInvitationWithAutoSignup(
       };
     }
 
-    // Sign in the user (this must happen in Next.js context)
+    // Sign in the user (this must happen in Next.js context). The invitation
+    // token was validated above, so mint a signed login ticket for this user.
     await signIn("magic-link", {
-      userId: result.userId,
+      ticket: createMagicLinkLoginTicket(result.userId),
       redirect: false,
     });
 
