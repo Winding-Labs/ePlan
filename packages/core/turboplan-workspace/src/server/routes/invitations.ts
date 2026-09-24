@@ -5,6 +5,7 @@ import { Action } from "@wildfires-org/turboplan-rbac";
 import { type RBACContext } from "@wildfires-org/turboplan-rbac/hono";
 import { getRBACService } from "@wildfires-org/turboplan-rbac/server";
 
+import { InvitationEmailMismatchError } from "../invitations/policy";
 import {
   getEntityInvitationsWithInviter,
   getInvitationById,
@@ -102,6 +103,12 @@ invitationsRouter.post("/accept", async (c) => {
       role: result.role,
     });
   } catch (error) {
+    if (error instanceof InvitationEmailMismatchError) {
+      return c.json(
+        { error: error.message, code: "INVITATION_EMAIL_MISMATCH" },
+        403,
+      );
+    }
     // Seat-cap rejections are client-actionable, not server faults.
     if (error instanceof BillingError && error.code === "SEAT_LIMIT_REACHED") {
       return c.json({ error: error.message, code: error.code }, 403);

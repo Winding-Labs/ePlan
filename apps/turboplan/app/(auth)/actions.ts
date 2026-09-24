@@ -91,6 +91,14 @@ const isSafeRelativePath = (path: string): boolean => {
   }
 };
 
+/** Optional post-login target from the login form; only safe paths pass. */
+const redirectToFromFormData = (formData: FormData): string | undefined => {
+  const value = formData.get("callbackUrl");
+  return typeof value === "string" && isSafeRelativePath(value)
+    ? value
+    : undefined;
+};
+
 const attributionFromFormData = (formData: FormData) => {
   return parseSignupAttribution({
     get: (key) => {
@@ -269,6 +277,7 @@ export const requestLoginLink = async (
     });
 
     const email = validated.email.trim().toLowerCase();
+    const redirectTo = redirectToFromFormData(formData);
 
     // Rate-limit before doing any work (email send / account creation).
     if (!(await checkMagicLinkRequestLimit(email))) {
@@ -297,7 +306,12 @@ export const requestLoginLink = async (
         newUser.id,
         "email_verification",
       );
-      const magicLinkUrl = buildMagicLinkUrl(newUser.id, token, "verification");
+      const magicLinkUrl = buildMagicLinkUrl(
+        newUser.id,
+        token,
+        "verification",
+        redirectTo,
+      );
 
       await sendMagicLinkEmail({
         to: email,
@@ -320,6 +334,7 @@ export const requestLoginLink = async (
         existingUser.id,
         token,
         "verification",
+        redirectTo,
       );
 
       await sendMagicLinkEmail({
@@ -334,7 +349,12 @@ export const requestLoginLink = async (
 
     // Generate login token (15 min expiry, session lasts 30 days after login)
     const token = await createVerificationToken(existingUser.id, "login");
-    const magicLinkUrl = buildMagicLinkUrl(existingUser.id, token, "login");
+    const magicLinkUrl = buildMagicLinkUrl(
+      existingUser.id,
+      token,
+      "login",
+      redirectTo,
+    );
 
     // Send login email
     const emailResult = await sendMagicLinkEmail({
