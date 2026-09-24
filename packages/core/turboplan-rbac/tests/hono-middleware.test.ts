@@ -3,7 +3,11 @@ import { beforeEach, describe, it, mock } from "node:test";
 import { Hono, type MiddlewareHandler } from "hono";
 
 import { Action, EntityType } from "../src/types";
-import type { RBACContext, RBACUserContext } from "../src/utils/hono-types";
+import type {
+  AuthMethod,
+  RBACContext,
+  RBACUserContext,
+} from "../src/utils/hono-types";
 
 type PermissionResult = {
   allowed: boolean;
@@ -16,6 +20,7 @@ let permissionFixture: PermissionResult = { allowed: true };
 let permissionThrows: Error | null = null;
 let publicGovFixture = false;
 let publicGovCalls: { projectId: string; moduleName?: string }[] = [];
+let rbacServiceOptions: unknown[] = [];
 
 const checkPermission = mock.fn(async () => {
   if (permissionThrows) {
@@ -26,7 +31,10 @@ const checkPermission = mock.fn(async () => {
 
 mock.module("../src/services/rbac.service", {
   namedExports: {
-    getRBACService: () => ({ checkPermission }),
+    getRBACService: (_db?: unknown, options?: unknown) => {
+      rbacServiceOptions.push(options);
+      return { checkPermission };
+    },
   },
 });
 
@@ -62,7 +70,11 @@ const USER: RBACUserContext = {
  */
 const run = async (
   middleware: MiddlewareHandler<RBACContext>,
-  { user = USER as RBACUserContext | null, id = "row-1" } = {},
+  {
+    user = USER as RBACUserContext | null,
+    id = "row-1",
+    authMethod = undefined as AuthMethod | undefined,
+  } = {},
 ) => {
   const app = new Hono<RBACContext>();
   let handlerRan = false;
@@ -71,6 +83,9 @@ const run = async (
   app.use("/entity/:id", async (c, next) => {
     if (user) {
       c.set("user", user);
+    }
+    if (authMethod) {
+      c.set("authMethod", authMethod);
     }
     await next();
   });
@@ -112,6 +127,7 @@ beforeEach(() => {
   permissionThrows = null;
   publicGovFixture = false;
   publicGovCalls = [];
+  rbacServiceOptions = [];
   checkPermission.mock.resetCalls();
 });
 
@@ -392,5 +408,36 @@ describe("requireMemberPermission", () => {
 
     assert.strictEqual(result.status, 403);
     assert.strictEqual(result.handlerRan, false);
+  });
+});
+
+describe("platform-admin bypass by auth method", () => {
+  const guard = () =>
+    requirePermission(
+      EntityType.PROJECT,
+      Action.UPDATE,
+      (c) => c.req.param("id") ?? null,
+    );
+
+  it("never grants personal access tokens the platform-admin bypass", async () => {
+    await run(guard(), { authMethod: "pat" });
+    await run(requireEntityReadOrPublicGov(resolveTo("project-1")), {
+      authMethod: "pat",
+    });
+
+    assert.deepStrictEqual(rbacServiceOptions, [
+      { platformAdminBypass: false },
+      { platformAdminBypass: false },
+    ]);
+  });
+
+  it("keeps the bypass for session tokens", async () => {
+    await run(guard(), { authMethod: "session" });
+    await run(guard());
+
+    assert.deepStrictEqual(rbacServiceOptions, [
+      { platformAdminBypass: true },
+      { platformAdminBypass: true },
+    ]);
   });
 });

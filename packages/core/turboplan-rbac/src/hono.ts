@@ -1,5 +1,6 @@
 export { isMembershipGrant } from "./permission-resolver";
 export {
+  getRBACServiceForRequest,
   NO_PERMISSION_REASON,
   requireEntityPermission,
   requireEntityReadOrPublicGov,
@@ -9,6 +10,7 @@ export {
   resolveProjectIdFromRow,
 } from "./utils/hono-middleware";
 export type {
+  AuthMethod,
   RBACContext,
   RBACContextVariables,
   RBACUserContext,

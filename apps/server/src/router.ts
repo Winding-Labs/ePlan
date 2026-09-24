@@ -16,6 +16,7 @@ import {
   capturePosthogError,
   posthogMiddleware,
 } from "./middleware/posthog.js";
+import { requireSessionAuth } from "./middleware/session-only.js";
 import { captureTimelineAnalytics } from "./middleware/timeline-analytics.js";
 import { registerPrivateRoutes } from "./routes/privateRoutes.js";
 import { registerPublicRoutes } from "./routes/publicRoutes.js";
@@ -73,7 +74,8 @@ export async function createApiRouter() {
 
   // PRIVATE ROUTES (user auth required)
   apiRouter.use("/api/*", authMiddleware);
-  apiRouter.use("/api/admin/*", adminMiddleware);
+  // Admin routes require an interactive session — never a long-lived PAT.
+  apiRouter.use("/api/admin/*", requireSessionAuth, adminMiddleware);
   await registerPrivateRoutes(apiRouter);
 
   return apiRouter;

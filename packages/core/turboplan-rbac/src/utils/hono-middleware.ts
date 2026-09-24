@@ -51,6 +51,16 @@ const respondServerError = (c: Context<RBACContext>, error: unknown) => {
 };
 
 /**
+ * RBAC service for this request. Personal access tokens never get the
+ * platform-admin bypass — a leaked admin PAT must not unlock every entity.
+ * Prefer this over a bare `getRBACService()` in request handlers.
+ */
+export const getRBACServiceForRequest = (c: Context<RBACContext>) =>
+  getRBACService(undefined, {
+    platformAdminBypass: c.get("authMethod") !== "pat",
+  });
+
+/**
  * Shared body of every permission guard: authenticate, resolve the entity id,
  * check the permission, and normalise the failure responses.
  */
@@ -75,13 +85,11 @@ const createPermissionGuard = (
         return onMissingEntityId(c);
       }
 
-      const permissionResult = await getRBACService().checkPermission(
-        user.userId,
-        entityId,
-        entityType,
-        action,
-        { email: user.email },
-      );
+      const permissionResult = await getRBACServiceForRequest(
+        c,
+      ).checkPermission(user.userId, entityId, entityType, action, {
+        email: user.email,
+      });
 
       if (!permissionResult.allowed) {
         return respondForbidden(c, permissionResult.reason);
@@ -121,7 +129,9 @@ const createReadOrPublicGovGuard = (
         return onMissingProjectId(c);
       }
 
-      const permissionResult = await getRBACService().checkPermission(
+      const permissionResult = await getRBACServiceForRequest(
+        c,
+      ).checkPermission(
         user.userId,
         projectId,
         EntityType.PROJECT,

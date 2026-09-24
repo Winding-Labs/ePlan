@@ -11,7 +11,6 @@ import {
 } from "@wildfires-org/turboplan-db/db-client";
 import { getProfileByUserId } from "@wildfires-org/turboplan-db/queries";
 import { Action, EntityType } from "@wildfires-org/turboplan-rbac";
-import { getRBACService } from "@wildfires-org/turboplan-rbac/server";
 import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/server";
 import type { FieldChange } from "@wildfires-org/turboplan-timeline-records/types";
 import {
@@ -33,6 +32,7 @@ import {
   accessDenied,
   assertEntityExists,
   assertPermission,
+  getMcpRBACService,
 } from "../utils/permissions.js";
 import type { McpUserContext } from "../utils/types.js";
 import {
@@ -311,7 +311,7 @@ export const registerProjectTools = (
         const hasOfficeManageMembers =
           wantsPublicOrTemplate &&
           (
-            await getRBACService().checkPermission(
+            await getMcpRBACService().checkPermission(
               user.userId,
               officeId,
               EntityType.OFFICE,
@@ -512,7 +512,7 @@ export const registerProjectTools = (
           (validated.isTemplate === true && !project!.isTemplate);
         if (
           enablesPublicOrTemplate &&
-          !(await getRBACService().hasMembershipAccess(
+          !(await getMcpRBACService().hasMembershipAccess(
             user.userId,
             project!.officeId,
             EntityType.OFFICE,

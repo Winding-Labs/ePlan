@@ -397,6 +397,10 @@ export const registerOrganizationTools = (
           };
         }
 
+        // Explicit platform-admin action: kept available over PAT on purpose.
+        // Unlike the entity RBAC checks (which never grant PATs the admin
+        // bypass), this gate only unlocks creating a new org, not access to
+        // existing ones.
         const admin = await isAdmin(user.userId, user.email);
         if (!admin) {
           return accessDenied();
@@ -580,7 +584,9 @@ export const registerOrganizationTools = (
         const validated = validation.data;
 
         // Type and status control public cataloging, so they require
-        // platform-admin privileges (org-level roles are not enough).
+        // platform-admin privileges (org-level roles are not enough). Over a
+        // PAT the admin must ALSO hold UPDATE on the org (checked above) —
+        // PATs get no platform-admin RBAC bypass.
         const changesAdminFields =
           validated.type !== undefined || validated.status !== undefined;
         if (changesAdminFields) {
@@ -591,8 +597,8 @@ export const registerOrganizationTools = (
         }
 
         // Email domains drive auto-affiliation, so changing them requires the
-        // org-owner bar (MANAGE_MEMBERS). Platform admins still pass via the
-        // RBAC adminCheck bypass inside assertPermission.
+        // org-owner bar (MANAGE_MEMBERS). PATs carry no platform-admin RBAC
+        // bypass, so an admin needs a real role on the org here too.
         if (validated.emailDomains !== undefined) {
           const deniedEmailDomains = await assertPermission(
             user.userId,
