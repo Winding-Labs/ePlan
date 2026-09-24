@@ -17,7 +17,7 @@ const corsHeaders = {
 };
 
 // NextAuth sign-in endpoints. The app only signs in via server actions, whose
-// `signIn()` calls Auth() in-process (next-auth 5.0.0-beta.25, lib/actions.js)
+// `signIn()` calls Auth() in-process (next-auth 5.0.0-beta.32, lib/actions.js)
 // and never reaches these routes over HTTP, so external POSTs are refused.
 const BLOCKED_AUTH_POST_PREFIXES = ["/api/auth/callback", "/api/auth/signin"];
 
@@ -69,7 +69,7 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
   // Type assertion needed as NextAuth expects AppRouteHandlerFnContext
   return authMiddleware(
     request,
-    event as unknown as { params: Record<string, string | string[]> },
+    event as unknown as Parameters<typeof authMiddleware>[1],
   );
 }
 

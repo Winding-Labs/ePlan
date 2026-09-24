@@ -32,7 +32,7 @@
     "@wildfires-org/turboplan-db": "workspace:*",
     "@wildfires-org/turboplan-rbac": "workspace:*",
     "@wildfires-org/turboplan-utils": "workspace:*",
-    "drizzle-orm": "^0.42.0",
+    "drizzle-orm": "^0.45.2",
     "hono": "^4.7.5",
     "lucide-react": "^0.446.0",
     "zod": "^4.4.3"
