@@ -19,10 +19,10 @@ import {
 } from "@wildfires-org/turboplan-db/queries";
 import { Action, EntityType } from "@wildfires-org/turboplan-rbac";
 import {
+  getRBACServiceForRequest,
   isPublicGovProjectReadAllowed,
   type RBACContext,
 } from "@wildfires-org/turboplan-rbac/hono";
-import { getRBACService } from "@wildfires-org/turboplan-rbac/server";
 import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/server";
 import {
   isOwnedUploadUrl,
@@ -153,7 +153,7 @@ projectDocumentsRouter.get("/", async (c) => {
     // Check if user has READ permission on the project, with a fallback that
     // allows any authenticated user to read documents from public government
     // projects (matching the main project READ endpoint's bypass).
-    const rbacService = getRBACService();
+    const rbacService = getRBACServiceForRequest(c);
     const permissionResult = await rbacService.checkPermission(
       user.userId,
       projectId,
@@ -233,7 +233,7 @@ projectDocumentsRouter.post("/", async (c) => {
     }
 
     // Check if user has UPDATE permission on the project (Editor+)
-    const rbacService = getRBACService();
+    const rbacService = getRBACServiceForRequest(c);
     const permissionResult = await rbacService.checkPermission(
       user.userId,
       projectId,
@@ -346,7 +346,7 @@ projectDocumentsRouter.patch("/:id", async (c) => {
       existingDocument.userId != null &&
       existingDocument.userId === user.userId;
 
-    const rbacService = getRBACService();
+    const rbacService = getRBACServiceForRequest(c);
     const permissionResult = await rbacService.checkPermission(
       user.userId,
       existingDocument.projectId,
@@ -459,7 +459,7 @@ projectDocumentsRouter.delete("/:id", async (c) => {
       existingDocument.userId != null &&
       existingDocument.userId === user.userId;
 
-    const rbacService = getRBACService();
+    const rbacService = getRBACServiceForRequest(c);
     const permissionResult = await rbacService.checkPermission(
       user.userId,
       existingDocument.projectId,

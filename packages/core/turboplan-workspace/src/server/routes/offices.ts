@@ -22,14 +22,12 @@ import {
   VALID_MEMBER_ROLES,
 } from "@wildfires-org/turboplan-rbac";
 import {
+  getRBACServiceForRequest,
   type RBACContext,
   requireMemberPermission,
   requirePermission,
 } from "@wildfires-org/turboplan-rbac/hono";
-import {
-  getRBACService,
-  RBACService,
-} from "@wildfires-org/turboplan-rbac/server";
+import { RBACService } from "@wildfires-org/turboplan-rbac/server";
 import {
   deleteReplacedStorageFiles,
   isAllowedStorageUrlUpdate,
@@ -103,7 +101,7 @@ officesRouter.get("/", async (c) => {
 
     if (!isPubliclyListedOrg) {
       // Check RBAC permission on the resolved organization
-      const rbacService = getRBACService();
+      const rbacService = getRBACServiceForRequest(c);
       const permissionResult = await rbacService.checkPermission(
         user.userId,
         org.id,
@@ -252,7 +250,7 @@ officesRouter.post("/", async (c) => {
     }
 
     // Verify user has CREATE permission for the organization (requires owner/editor role)
-    const rbacService = getRBACService();
+    const rbacService = getRBACServiceForRequest(c);
     const permissionResult = await rbacService.checkPermission(
       user.userId,
       officeData.organizationId,
@@ -565,7 +563,7 @@ officesRouter.post(
         const userId = users[0].id;
 
         // Check if user already has a membership
-        const rbacService = getRBACService();
+        const rbacService = getRBACServiceForRequest(c);
         const existingMembership = await rbacService.getUserMembershipForEntity(
           userId,
           officeId,

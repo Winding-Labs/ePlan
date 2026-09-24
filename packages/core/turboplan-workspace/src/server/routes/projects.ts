@@ -25,10 +25,10 @@ import {
 import { getApiEnv } from "@wildfires-org/turboplan-env";
 import { Action, EntityType } from "@wildfires-org/turboplan-rbac";
 import {
+  getRBACServiceForRequest,
   type RBACContext,
   requirePermission,
 } from "@wildfires-org/turboplan-rbac/hono";
-import { getRBACService } from "@wildfires-org/turboplan-rbac/server";
 import {
   computeChanges,
   createTimelineRecord,
@@ -117,7 +117,7 @@ projectsRouter.get("/", async (c) => {
 
     // The permission check and the org lookup both only need the resolved
     // office — run them in parallel (one round-trip instead of two).
-    const rbacService = getRBACService();
+    const rbacService = getRBACServiceForRequest(c);
     const [permissionResult, org] = await Promise.all([
       rbacService.checkPermission(
         user.userId,
@@ -296,7 +296,7 @@ projectsRouter.post("/", async (c) => {
     }
 
     // Verify user has CREATE permission for the office (requires owner/editor role)
-    const rbacService = getRBACService();
+    const rbacService = getRBACServiceForRequest(c);
     const permissionResult = await rbacService.checkPermission(
       user.userId,
       officeRecord.id,
@@ -480,7 +480,7 @@ projectsRouter.get("/:id", async (c) => {
     }
 
     // Check RBAC permission
-    const rbacService = getRBACService();
+    const rbacService = getRBACServiceForRequest(c);
     const permissionResult = await rbacService.checkPermission(
       user.userId,
       id,
@@ -622,7 +622,7 @@ projectsRouter.put(
         updateData.isTemplate !== projectRecord.isTemplate;
 
       if (changesPublicVisibility || changesTemplateFlag) {
-        const elevated = await getRBACService().checkPermission(
+        const elevated = await getRBACServiceForRequest(c).checkPermission(
           user.userId,
           id,
           EntityType.PROJECT,
@@ -649,7 +649,7 @@ projectsRouter.put(
         (changesTemplateFlag && updateData.isTemplate === true);
       if (
         enablesPublicOrTemplate &&
-        !(await getRBACService().hasMembershipAccess(
+        !(await getRBACServiceForRequest(c).hasMembershipAccess(
           user.userId,
           projectRecord.officeId,
           EntityType.OFFICE,

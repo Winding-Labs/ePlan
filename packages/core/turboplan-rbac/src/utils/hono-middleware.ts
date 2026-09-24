@@ -11,6 +11,7 @@ import {
 import { getRBACService } from "../services/rbac.service";
 import type { ActionType, EntityTypeType } from "../types";
 import { Action, EntityType } from "../types";
+import { isAdmin } from "./admin-server";
 import type { RBACContext } from "./hono-types";
 import {
   isPublicGovProjectReadAllowed,
@@ -59,6 +60,19 @@ export const getRBACServiceForRequest = (c: Context<RBACContext>) =>
   getRBACService(undefined, {
     platformAdminBypass: c.get("authMethod") !== "pat",
   });
+
+/**
+ * Whether the caller is a platform admin on a session. Personal access tokens
+ * never carry admin powers, so a PAT request is never an admin here.
+ */
+export const isSessionAdmin = async (c: Context<RBACContext>) => {
+  if (c.get("authMethod") === "pat") {
+    return false;
+  }
+
+  const user = c.get("user");
+  return isAdmin(user.userId, user.email);
+};
 
 /**
  * Shared body of every permission guard: authenticate, resolve the entity id,

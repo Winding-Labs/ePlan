@@ -26,13 +26,11 @@ import {
   VALID_MEMBER_ROLES,
 } from "@wildfires-org/turboplan-rbac";
 import {
+  getRBACServiceForRequest,
   type RBACContext,
   requirePermission,
 } from "@wildfires-org/turboplan-rbac/hono";
-import {
-  getRBACService,
-  RBACService,
-} from "@wildfires-org/turboplan-rbac/server";
+import { RBACService } from "@wildfires-org/turboplan-rbac/server";
 import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/server";
 
 import type { MemberWithInheritance, PendingInvitation } from "../../types";
@@ -310,7 +308,7 @@ projectMembersRouter.post(
         const userId = users[0].id;
 
         // Check if user already has a membership
-        const rbacService = getRBACService();
+        const rbacService = getRBACServiceForRequest(c);
         const existingMembership = await rbacService.getUserMembershipForEntity(
           userId,
           projectId,
@@ -452,7 +450,7 @@ projectMembersRouter.patch(
       const { userId, role } = validationResult.data;
 
       // Fetch old role for timeline recording
-      const rbacService = getRBACService();
+      const rbacService = getRBACServiceForRequest(c);
       const oldMembership = await rbacService.getUserMembershipForEntity(
         userId,
         projectId,

@@ -10,10 +10,10 @@ import {
 import { getApiEnv } from "@wildfires-org/turboplan-env";
 import { Action, EntityType } from "@wildfires-org/turboplan-rbac";
 import {
+  getRBACServiceForRequest,
   type RBACContext,
   requirePermission,
 } from "@wildfires-org/turboplan-rbac/hono";
-import { getRBACService } from "@wildfires-org/turboplan-rbac/server";
 import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/server";
 
 import { getOfficeBySlug } from "../offices/queries";
@@ -54,7 +54,7 @@ projectTemplatesRouter.post(
       }
 
       // Check CREATE permission on the parent office
-      const rbacService = getRBACService();
+      const rbacService = getRBACServiceForRequest(c);
       const permissionResult = await rbacService.checkPermission(
         user.userId,
         sourceProject.officeId,
@@ -206,7 +206,7 @@ projectTemplatesRouter.post("/:id/create-from-template", async (c) => {
       return c.json({ error: "Source project is not a template" }, 400);
     }
 
-    const rbacService = getRBACService();
+    const rbacService = getRBACServiceForRequest(c);
 
     // Private templates require explicit READ access. A public template may be
     // cloned by anyone, but without READ the caller only gets the modules the

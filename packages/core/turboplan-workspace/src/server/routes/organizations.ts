@@ -21,15 +21,13 @@ import {
   VALID_MEMBER_ROLES,
 } from "@wildfires-org/turboplan-rbac";
 import {
+  getRBACServiceForRequest,
+  isSessionAdmin,
   type RBACContext,
   requireMemberPermission,
   requirePermission,
 } from "@wildfires-org/turboplan-rbac/hono";
-import {
-  getRBACService,
-  isAdmin,
-  RBACService,
-} from "@wildfires-org/turboplan-rbac/server";
+import { RBACService } from "@wildfires-org/turboplan-rbac/server";
 import {
   deleteReplacedStorageFiles,
   isAllowedStorageUrlUpdate,
@@ -185,9 +183,7 @@ organizationsRouter.put(
       // non-admin editor can still save the rest of the form (the edit dialog
       // always sends type/status). Mirrors the MCP update_organization gate.
       if (type !== organization.type || status !== organization.status) {
-        const authUser = c.get("user");
-        const admin = await isAdmin(authUser.userId, authUser.email);
-        if (!admin) {
+        if (!(await isSessionAdmin(c))) {
           return c.json(
             {
               error:
@@ -464,7 +460,7 @@ organizationsRouter.post(
         const userId = users[0].id;
 
         // Check if user already has a membership
-        const rbacService = getRBACService();
+        const rbacService = getRBACServiceForRequest(c);
         const existingMembership = await rbacService.getUserMembershipForEntity(
           userId,
           orgId,

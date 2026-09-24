@@ -38,6 +38,12 @@ mock.module("../src/services/rbac.service", {
   },
 });
 
+const isAdmin = mock.fn(async () => true);
+
+mock.module("../src/utils/admin-server", {
+  namedExports: { isAdmin },
+});
+
 mock.module("../src/utils/public-project-access", {
   namedExports: {
     isPublicGovProjectReadAllowed: async (
@@ -56,6 +62,7 @@ const {
   requireEntityReadOrPublicGov,
   requireMemberPermission,
   requirePermission,
+  isSessionAdmin,
 } = await import("../src/utils/hono-middleware");
 const { UPWARD_READ_REASON } = await import("../src/permission-resolver");
 
@@ -129,6 +136,7 @@ beforeEach(() => {
   publicGovCalls = [];
   rbacServiceOptions = [];
   checkPermission.mock.resetCalls();
+  isAdmin.mock.resetCalls();
 });
 
 describe("requireEntityPermission", () => {
@@ -438,6 +446,28 @@ describe("platform-admin bypass by auth method", () => {
     assert.deepStrictEqual(rbacServiceOptions, [
       { platformAdminBypass: true },
       { platformAdminBypass: true },
+    ]);
+  });
+});
+
+describe("isSessionAdmin", () => {
+  const probe: MiddlewareHandler<RBACContext> = async (c) =>
+    c.json({ admin: await isSessionAdmin(c) });
+
+  it("never treats a personal access token as a platform admin", async () => {
+    const result = await run(probe, { authMethod: "pat" });
+
+    assert.strictEqual(result.body.admin, false);
+    assert.strictEqual(isAdmin.mock.callCount(), 0);
+  });
+
+  it("defers to the admin check for session tokens", async () => {
+    const result = await run(probe, { authMethod: "session" });
+
+    assert.strictEqual(result.body.admin, true);
+    assert.deepStrictEqual(isAdmin.mock.calls[0]?.arguments, [
+      USER.userId,
+      USER.email,
     ]);
   });
 });

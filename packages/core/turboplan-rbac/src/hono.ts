@@ -1,6 +1,7 @@
 export { isMembershipGrant } from "./permission-resolver";
 export {
   getRBACServiceForRequest,
+  isSessionAdmin,
   NO_PERMISSION_REASON,
   requireEntityPermission,
   requireEntityReadOrPublicGov,

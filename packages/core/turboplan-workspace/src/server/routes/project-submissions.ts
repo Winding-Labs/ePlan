@@ -19,11 +19,11 @@ import { getApiEnv } from "@wildfires-org/turboplan-env";
 import { getMailService } from "@wildfires-org/turboplan-mail/server";
 import { Action, EntityType, MemberRole } from "@wildfires-org/turboplan-rbac";
 import {
+  getRBACServiceForRequest,
   NO_PERMISSION_REASON,
   type RBACContext,
   requirePermission,
 } from "@wildfires-org/turboplan-rbac/hono";
-import { getRBACService } from "@wildfires-org/turboplan-rbac/server";
 import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/server";
 
 import { generateUniqueProjectSlug } from "../projects/queries";
@@ -182,7 +182,9 @@ projectSubmissionsRouter.patch(
       }
 
       const reviewScope = getSubmissionReviewScope(submission);
-      const permissionResult = await getRBACService().checkPermission(
+      const permissionResult = await getRBACServiceForRequest(
+        c,
+      ).checkPermission(
         currentUser.userId,
         reviewScope.entityId,
         reviewScope.entityType,

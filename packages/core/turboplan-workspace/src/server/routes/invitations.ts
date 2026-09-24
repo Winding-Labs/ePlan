@@ -2,8 +2,10 @@ import { Hono } from "hono";
 
 import { BillingError } from "@wildfires-org/turboplan-billing/server";
 import { Action } from "@wildfires-org/turboplan-rbac";
-import { type RBACContext } from "@wildfires-org/turboplan-rbac/hono";
-import { getRBACService } from "@wildfires-org/turboplan-rbac/server";
+import {
+  getRBACServiceForRequest,
+  type RBACContext,
+} from "@wildfires-org/turboplan-rbac/hono";
 
 import { InvitationEmailMismatchError } from "../invitations/policy";
 import {
@@ -143,7 +145,7 @@ invitationsRouter.delete("/:id", async (c) => {
     );
 
     // Check MANAGE_MEMBERS permission on the entity
-    const rbacService = getRBACService();
+    const rbacService = getRBACServiceForRequest(c);
     const permissionResult = await rbacService.checkPermission(
       user.userId,
       invitation.entityId,
@@ -198,7 +200,7 @@ invitationsRouter.post("/:id/resend", async (c) => {
     );
 
     // Check MANAGE_MEMBERS permission on the entity
-    const rbacService = getRBACService();
+    const rbacService = getRBACServiceForRequest(c);
     const permissionResult = await rbacService.checkPermission(
       user.userId,
       invitation.entityId,
@@ -252,7 +254,7 @@ invitationsRouter.get("/entity/:entityType/:entityId", async (c) => {
     const rbacEntityType = mapToRBACEntityType(entityTypeResult.data);
 
     // Check READ permission on the entity (to see invitations)
-    const rbacService = getRBACService();
+    const rbacService = getRBACServiceForRequest(c);
     const permissionResult = await rbacService.checkPermission(
       user.userId,
       entityId,
