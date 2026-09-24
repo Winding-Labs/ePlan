@@ -98,7 +98,9 @@ export function CommentReply({
           {!comment.isAutoResponse && comment.author.avatarUrl && (
             <AvatarImage src={comment.author.avatarUrl} alt={displayName} />
           )}
-          <AvatarFallback className="text-xs">{displayInitials}</AvatarFallback>
+          <AvatarFallback className="bg-brand-800 text-xs text-white">
+            {displayInitials}
+          </AvatarFallback>
         </Avatar>
 
         {/* Content */}
