@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+import {
+  HTTP_URL_ONLY_MESSAGE,
+  isSafeHttpUrl,
+} from "@wildfires-org/turboplan-utils/server";
+
 import { ACTIONS, ENTITY_TYPES, VALUE_TYPES } from "../types";
 
 export const fieldChangeSchema = z.object({
@@ -48,7 +53,7 @@ export const manualRecordSchema = z.object({
   resourceUrls: z
     .array(
       z.object({
-        url: z.string().url(),
+        url: z.string().url().refine(isSafeHttpUrl, HTTP_URL_ONLY_MESSAGE),
         filename: z.string(),
         type: z.string().optional(),
       }),
