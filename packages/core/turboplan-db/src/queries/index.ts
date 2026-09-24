@@ -9,6 +9,7 @@ export * from "./ai-model-config";
 // Assignee queries (for task/milestone assignment)
 export * from "./assignees";
 // Comments queries
+export * from "./comment-public-view";
 export * from "./comments";
 export * from "./core";
 // Prompt queries

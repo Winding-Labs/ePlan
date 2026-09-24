@@ -118,10 +118,12 @@ commentsRouter.get("/", async (c) => {
     // Get comments with visibility filtering:
     // - Moderators see all comments
     // - Regular users see public + their own private comments
+    // - Non-members get the public projection (no commenter emails)
     const comments = await getCommentsByProjectId({
       projectId,
       currentUserId: user.userId,
       showAllPrivate: moderatorCheck.allowed,
+      publicView: !permissionResult.allowed,
     });
 
     return c.json(comments);
