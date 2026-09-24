@@ -52,3 +52,22 @@ export const resolveProjectCreationFlags = ({
     isTemplate: hasOfficeManageMembers && requestedIsTemplate === true,
   };
 };
+
+interface TemplateVisibilityInput {
+  /** Caller holds MANAGE_MEMBERS on the source project's office. */
+  hasOfficeManageMembers: boolean;
+  /** Omitted = public (the historical default for publishers). */
+  requestedIsPublic: boolean | undefined;
+}
+
+/**
+ * Decides whether a template created from an existing project is public.
+ * Editors may save private templates; publishing one (a full content copy
+ * visible to everyone) takes office MANAGE_MEMBERS — the same bar as
+ * `resolveProjectCreationFlags`.
+ */
+export const resolveTemplateIsPublic = ({
+  hasOfficeManageMembers,
+  requestedIsPublic,
+}: TemplateVisibilityInput): boolean =>
+  hasOfficeManageMembers && requestedIsPublic !== false;

@@ -4,7 +4,10 @@ import { describe, it } from "node:test";
 import { OwnershipStatus } from "@wildfires-org/turboplan-db";
 import { UserRole } from "@wildfires-org/turboplan-db/types";
 
-import { resolveProjectCreationFlags } from "../src/server/projects/creation-policy";
+import {
+  resolveProjectCreationFlags,
+  resolveTemplateIsPublic,
+} from "../src/server/projects/creation-policy";
 
 describe("resolveProjectCreationFlags", () => {
   describe("government-office fallback (no CREATE on the office)", () => {
@@ -115,5 +118,44 @@ describe("resolveProjectCreationFlags", () => {
       assert.equal(flags.isPublic, false);
       assert.equal(flags.isTemplate, false);
     });
+  });
+});
+
+describe("resolveTemplateIsPublic", () => {
+  it("keeps an editor's template private even when public is requested", () => {
+    assert.equal(
+      resolveTemplateIsPublic({
+        hasOfficeManageMembers: false,
+        requestedIsPublic: true,
+      }),
+      false,
+    );
+    assert.equal(
+      resolveTemplateIsPublic({
+        hasOfficeManageMembers: false,
+        requestedIsPublic: undefined,
+      }),
+      false,
+    );
+  });
+
+  it("defaults to public for office MANAGE_MEMBERS holders", () => {
+    assert.equal(
+      resolveTemplateIsPublic({
+        hasOfficeManageMembers: true,
+        requestedIsPublic: undefined,
+      }),
+      true,
+    );
+  });
+
+  it("honours an explicit private request from MANAGE_MEMBERS holders", () => {
+    assert.equal(
+      resolveTemplateIsPublic({
+        hasOfficeManageMembers: true,
+        requestedIsPublic: false,
+      }),
+      false,
+    );
   });
 });

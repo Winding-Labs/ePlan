@@ -1036,6 +1036,7 @@ async function copyProjectContentToTarget(
 export async function createTemplateFromProject(
   sourceProjectId: string,
   userId: string,
+  isPublic: boolean,
   overrides?: { name?: string; description?: string },
 ): Promise<Project> {
   try {
@@ -1067,7 +1068,7 @@ export async function createTemplateFromProject(
           lastModifiedBy: userId,
           isTemplate: true,
           parentProjectId: sourceProjectId,
-          isPublic: true,
+          isPublic,
           status: sourceProject.status,
           hiddenModules: sourceProject.hiddenModules,
           privateModules: sourceProject.privateModules,

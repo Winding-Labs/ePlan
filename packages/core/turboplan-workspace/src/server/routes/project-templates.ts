@@ -18,6 +18,7 @@ import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/
 
 import { getOfficeBySlug } from "../offices/queries";
 import { getOrCreatePersonalWorkspace } from "../organizations/personal-workspace";
+import { resolveTemplateIsPublic } from "../projects/creation-policy";
 import {
   createProjectFromTemplate,
   createTemplateFromProject,
@@ -27,7 +28,8 @@ import { createProjectFromTemplateSchema } from "../projects/validation";
 
 export const projectTemplatesRouter = new Hono<RBACContext>();
 
-// POST /:id/create-template - Create template from project (RBAC: UPDATE on source + CREATE on office)
+// POST /:id/create-template - Create template from project (RBAC: UPDATE on source + CREATE on office;
+// a public template additionally needs MANAGE_MEMBERS on the office, otherwise it is private)
 projectTemplatesRouter.post(
   "/:id/create-template",
   requirePermission(
@@ -71,8 +73,12 @@ projectTemplatesRouter.post(
 
       // Parse optional overrides from request body
       let overrides: { name?: string; description?: string } | undefined;
+      let requestedIsPublic: boolean | undefined;
       try {
         const body = await c.req.json();
+        if (typeof body.isPublic === "boolean") {
+          requestedIsPublic = body.isPublic;
+        }
         if (body.name || body.description) {
           overrides = {
             name: body.name ? String(body.name) : undefined,
@@ -85,10 +91,28 @@ projectTemplatesRouter.post(
         // No body or invalid JSON — use defaults
       }
 
+      // Editors may save private templates; publishing one takes office
+      // MANAGE_MEMBERS (same bar as creating/updating a public project).
+      const hasOfficeManageMembers =
+        requestedIsPublic !== false &&
+        (
+          await rbacService.checkPermission(
+            user.userId,
+            sourceProject.officeId,
+            EntityType.OFFICE,
+            Action.MANAGE_MEMBERS,
+          )
+        ).allowed;
+      const isPublic = resolveTemplateIsPublic({
+        hasOfficeManageMembers,
+        requestedIsPublic,
+      });
+
       // Create template from project
       const newTemplate = await createTemplateFromProject(
         sourceId,
         user.userId,
+        isPublic,
         overrides,
       );
 
