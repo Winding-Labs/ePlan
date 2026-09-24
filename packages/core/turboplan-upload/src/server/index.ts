@@ -21,6 +21,7 @@ export {
   uploadFile,
 } from "./r2-client";
 export { uploadRouter } from "./router";
+export { uniqueStorageName } from "./storage-key";
 export {
   UploadService,
   uploadService,

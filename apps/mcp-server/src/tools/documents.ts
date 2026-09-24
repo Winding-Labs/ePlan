@@ -9,7 +9,10 @@ import {
 } from "@wildfires-org/turboplan-db/queries";
 import { Action, EntityType } from "@wildfires-org/turboplan-rbac";
 import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/server";
-import { uploadFile } from "@wildfires-org/turboplan-upload/server";
+import {
+  uniqueStorageName,
+  uploadFile,
+} from "@wildfires-org/turboplan-upload/server";
 import { removeProjectDocument } from "@wildfires-org/turboplan-workspace/server";
 
 import { assertEntityExists, assertPermission } from "../utils/permissions.js";
@@ -56,15 +59,14 @@ const buildStoredFilename = (
   return `${sanitized}${ext}`;
 };
 
-// A timestamp alone is not collision-safe: concurrent uploads of files with
-// the same name can land in the same millisecond and silently overwrite each
-// other's R2 object. The random infix makes each stored key unique.
+// The shared helper appends a full random UUID: stored objects are served from
+// public URLs, so the key must be unguessable, and concurrent uploads of the
+// same name must not overwrite each other.
 const buildUniqueStoredFilename = (
   originalFilename: string,
   mimeType: string,
 ): string => {
-  const random = crypto.randomUUID().slice(0, 8);
-  return `${Date.now()}-${random}-${buildStoredFilename(originalFilename, mimeType)}`;
+  return uniqueStorageName(buildStoredFilename(originalFilename, mimeType));
 };
 
 // Reads the response body enforcing the size cap as bytes arrive, so a
