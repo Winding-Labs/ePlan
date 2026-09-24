@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { secureHeaders } from "hono/secure-headers";
 import { pinoLogger } from "hono-pino";
 import pino from "pino";
 
@@ -34,6 +35,26 @@ export async function createApiRouter() {
   const apiRouter = new Hono();
 
   apiRouter.onError(globalErrorHandler);
+
+  // Registered first so every response — including CORS preflights and error
+  // responses — carries the headers.
+  apiRouter.use(
+    "/*",
+    secureHeaders({
+      // The web app and landing page call this API from other origins, and
+      // may load API-served resources (e.g. images) directly.
+      crossOriginResourcePolicy: "cross-origin",
+      // JSON API — no documents here need opener isolation, and COOP on an
+      // auth redirect hop could sever popup/opener flows.
+      crossOriginOpenerPolicy: false,
+      xFrameOptions: "DENY",
+      // HSTS only in production — never pin localhost to HTTPS during dev.
+      strictTransportSecurity:
+        ENV.NODE_ENV === "production"
+          ? "max-age=63072000; includeSubDomains"
+          : false,
+    }),
+  );
 
   const redactPaths = [
     'req.headers["x-internal-secret"]',
