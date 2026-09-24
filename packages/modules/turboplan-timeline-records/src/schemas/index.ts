@@ -20,13 +20,21 @@ export const createTimelineRecordInputSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
+/**
+ * Query-string boolean: only the literals "true" and "false" are accepted.
+ * `z.coerce.boolean()` would turn the string "false" into `true`.
+ */
+export const queryBooleanSchema = z
+  .enum(["true", "false"])
+  .transform((value) => value === "true");
+
 export const timelineQuerySchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(100).default(25),
   entityType: z.enum(ENTITY_TYPES).optional(),
   action: z.enum(ACTIONS).optional(),
   userId: z.string().uuid().optional(),
-  isPublic: z.coerce.boolean().optional(),
+  isPublic: queryBooleanSchema.optional(),
 });
 
 export const manualRecordSchema = z.object({

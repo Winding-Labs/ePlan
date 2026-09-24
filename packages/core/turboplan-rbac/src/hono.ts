@@ -1,3 +1,4 @@
+export { isMembershipGrant } from "./permission-resolver";
 export {
   NO_PERMISSION_REASON,
   requireEntityPermission,
