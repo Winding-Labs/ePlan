@@ -30,7 +30,10 @@ import {
   getRBACService,
   RBACService,
 } from "@wildfires-org/turboplan-rbac/server";
-import { deleteReplacedStorageFile } from "@wildfires-org/turboplan-upload/server";
+import {
+  deleteReplacedStorageFiles,
+  isAllowedStorageUrlUpdate,
+} from "@wildfires-org/turboplan-upload/server";
 import { generateUniqueSlug } from "@wildfires-org/turboplan-utils/server";
 
 import type { MemberWithInheritance, PendingInvitation } from "../../types";
@@ -235,6 +238,19 @@ officesRouter.post("/", async (c) => {
 
     const officeData = validationResult.data;
 
+    // A new office has no current logos, so any bucket URL must be the
+    // caller's own upload (see the PUT route for why).
+    if (
+      [officeData.documentLogoUrl, officeData.documentFooterLogoUrl].some(
+        (url) => !isAllowedStorageUrlUpdate(url, null, { userId: user.userId }),
+      )
+    ) {
+      return c.json(
+        { error: "Logo URLs must reference your own uploads" },
+        400,
+      );
+    }
+
     // Verify user has CREATE permission for the organization (requires owner/editor role)
     const rbacService = getRBACService();
     const permissionResult = await rbacService.checkPermission(
@@ -322,15 +338,25 @@ officesRouter.put(
 
       const updateData = validationResult.data;
 
-      // Clean up old document/footer logos from storage when replaced or removed.
-      await deleteReplacedStorageFile(
-        office.documentLogoUrl,
-        updateData.documentLogoUrl,
-      );
-      await deleteReplacedStorageFile(
-        office.documentFooterLogoUrl,
-        updateData.documentFooterLogoUrl,
-      );
+      // Logo fields may only point into our bucket at the caller's own
+      // uploads — otherwise the replaced-logo cleanup below could be aimed at
+      // another tenant's object. External links are unaffected.
+      const storageOwner = { userId: c.get("user").userId };
+      const logoFields = [
+        [updateData.documentLogoUrl, office.documentLogoUrl],
+        [updateData.documentFooterLogoUrl, office.documentFooterLogoUrl],
+      ] as const;
+      if (
+        logoFields.some(
+          ([next, current]) =>
+            !isAllowedStorageUrlUpdate(next, current, storageOwner),
+        )
+      ) {
+        return c.json(
+          { error: "Logo URLs must reference your own uploads" },
+          400,
+        );
+      }
 
       // Generate new slug if name is changing
       let newSlug: string | undefined;
@@ -339,6 +365,10 @@ officesRouter.put(
       }
 
       await updateOffice({ ...updateData, slug: newSlug });
+
+      // Clean up old document/footer logos once the row no longer points at
+      // them. Omitted fields (undefined) are left alone.
+      await deleteReplacedStorageFiles(logoFields, storageOwner);
 
       // Return updated office
       const updatedOffice = await getOfficeWithRelations(id);

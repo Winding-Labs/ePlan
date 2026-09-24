@@ -13,7 +13,6 @@ import { z } from "zod";
 
 import {
   createProjectDocument,
-  deleteProjectDocument,
   getProjectDocumentById,
   getProjectDocumentsByProjectId,
   updateProjectDocument,
@@ -26,10 +25,11 @@ import {
 import { getRBACService } from "@wildfires-org/turboplan-rbac/server";
 import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/server";
 import {
-  deleteFile,
   isOwnedUploadUrl,
   isStorageUrl,
 } from "@wildfires-org/turboplan-upload/server";
+
+import { removeProjectDocument } from "../projects/documents";
 
 // Allowed MIME types for document uploads
 const ALLOWED_MIME_TYPES = [
@@ -468,33 +468,9 @@ projectDocumentsRouter.delete("/:id", async (c) => {
       return c.json({ error: "Forbidden" }, 403);
     }
 
-    // Delete from R2 storage first — but only when the stored URL resolves to
-    // an object the document's own uploader owns. Rows created before the POST
-    // route started gating `url` can hold an arbitrary key, and deleting the
-    // row must not become a way to destroy another tenant's blob.
-    const ownsStoredObject =
-      existingDocument.userId != null &&
-      isOwnedUploadUrl(existingDocument.url, existingDocument.userId);
-
-    if (ownsStoredObject) {
-      try {
-        await deleteFile(existingDocument.url);
-      } catch (blobError) {
-        console.error(
-          "Failed to delete document from blob storage:",
-          blobError,
-        );
-        // Continue with DB deletion even if blob deletion fails
-        // The blob can be cleaned up later
-      }
-    } else {
-      console.warn(
-        `Skipping storage deletion for document ${documentId}: stored URL is not owned by its uploader`,
-      );
-    }
-
-    // Delete the document record from database
-    await deleteProjectDocument(documentId);
+    // Row first, then the stored object only if it belongs to this row's
+    // uploader/project and no copied row still references it.
+    await removeProjectDocument(existingDocument);
 
     await createTimelineRecord({
       projectId: existingDocument.projectId,

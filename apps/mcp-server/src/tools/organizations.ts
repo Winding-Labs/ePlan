@@ -9,7 +9,10 @@ import { runWithWorkerConnection } from "@wildfires-org/turboplan-db/db-client";
 import { getCommonEnv } from "@wildfires-org/turboplan-env";
 import { Action, EntityType } from "@wildfires-org/turboplan-rbac";
 import { isAdmin } from "@wildfires-org/turboplan-rbac/server";
-import { uploadFile } from "@wildfires-org/turboplan-upload/server";
+import {
+  orgLogoStorageKey,
+  uploadFile,
+} from "@wildfires-org/turboplan-upload/server";
 import {
   EMAIL_DOMAIN_REGEX,
   normalizeEmailDomains,
@@ -149,11 +152,6 @@ const fetchLogoImage = async (
 
   return { bytes };
 };
-
-// Storage prefix mirrors the seed script
-// (packages/core/turboplan-workspace/src/seed/organizations.ts) so app + public
-// catalog rendering resolves MCP-uploaded logos identically to seeded ones.
-const ORG_LOGOS_PREFIX = "org-logos";
 
 export const registerOrganizationTools = (
   server: McpServer,
@@ -733,7 +731,9 @@ export const registerOrganizationTools = (
         }
         const sniffed = resolved.type;
 
-        const blobPath = `${ORG_LOGOS_PREFIX}/${organizationId}.${sniffed.extension}`;
+        // Same `org-logos/` prefix as the seed script, so app + public catalog
+        // rendering resolves MCP-uploaded logos identically to seeded ones.
+        const blobPath = orgLogoStorageKey(organizationId, sniffed.extension);
 
         const { url: logoUrl } = await uploadFile(
           blobPath,

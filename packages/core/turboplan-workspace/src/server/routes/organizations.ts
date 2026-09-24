@@ -30,7 +30,11 @@ import {
   isAdmin,
   RBACService,
 } from "@wildfires-org/turboplan-rbac/server";
-import { deleteReplacedStorageFile } from "@wildfires-org/turboplan-upload/server";
+import {
+  deleteReplacedStorageFiles,
+  isAllowedStorageUrlUpdate,
+  type StorageOwner,
+} from "@wildfires-org/turboplan-upload/server";
 import {
   generateUniqueSlug,
   normalizeEmailDomains,
@@ -194,16 +198,29 @@ organizationsRouter.put(
         }
       }
 
-      // Clean up old logos from storage when replaced or removed.
-      await deleteReplacedStorageFile(organization.logoUrl, logoUrl);
-      await deleteReplacedStorageFile(
-        organization.documentLogoUrl,
-        documentLogoUrl,
-      );
-      await deleteReplacedStorageFile(
-        organization.documentFooterLogoUrl,
-        documentFooterLogoUrl,
-      );
+      // Logo fields may only point into our bucket at objects this caller (or
+      // this org) owns — otherwise the replaced-logo cleanup below could be
+      // aimed at another tenant's object. External links are unaffected.
+      const storageOwner: StorageOwner = {
+        userId: c.get("user").userId,
+        organizationId: id,
+      };
+      const logoFields = [
+        [logoUrl, organization.logoUrl],
+        [documentLogoUrl, organization.documentLogoUrl],
+        [documentFooterLogoUrl, organization.documentFooterLogoUrl],
+      ] as const;
+      if (
+        logoFields.some(
+          ([next, current]) =>
+            !isAllowedStorageUrlUpdate(next, current, storageOwner),
+        )
+      ) {
+        return c.json(
+          { error: "Logo URLs must reference your own uploads" },
+          400,
+        );
+      }
 
       // Generate new slug if name is changing
       let newSlug: string | undefined;
@@ -226,6 +243,9 @@ organizationsRouter.put(
         documentFooterNote,
         documentFooterLogoUrl,
       });
+
+      // Clean up old logos from storage once the row no longer points at them.
+      await deleteReplacedStorageFiles(logoFields, storageOwner);
 
       // Return updated organization
       const updatedOrganization = await getOrganizationById(id);

@@ -4,13 +4,13 @@ import { z } from "zod";
 import { runWithWorkerConnection } from "@wildfires-org/turboplan-db/db-client";
 import {
   createProjectDocument,
-  deleteProjectDocument,
   getProjectDocumentById,
   getProjectDocumentsByProjectId,
 } from "@wildfires-org/turboplan-db/queries";
 import { Action, EntityType } from "@wildfires-org/turboplan-rbac";
 import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/server";
-import { deleteFile, uploadFile } from "@wildfires-org/turboplan-upload/server";
+import { uploadFile } from "@wildfires-org/turboplan-upload/server";
+import { removeProjectDocument } from "@wildfires-org/turboplan-workspace/server";
 
 import { assertEntityExists, assertPermission } from "../utils/permissions.js";
 import { projectExists } from "../utils/queries.js";
@@ -867,13 +867,9 @@ export const registerDocumentTools = (
           return denied;
         }
 
-        try {
-          await deleteFile(existing.url);
-        } catch {
-          // Continue with DB deletion even if R2 deletion fails
-        }
-
-        await deleteProjectDocument(documentId as string);
+        // Row first, then the stored object only if it belongs to this row's
+        // uploader/project and no copied row (template clone) still uses it.
+        await removeProjectDocument(existing);
 
         await createTimelineRecord({
           projectId: existing.projectId,
