@@ -1,11 +1,15 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { PgDialect } from "drizzle-orm/pg-core";
 
 import { EntityType } from "@wildfires-org/turboplan-rbac";
 
 import { buildUserSearchUrl } from "../src/hooks/use-user-search";
 import { mergePublicAndAccessibleProjects } from "../src/server/projects/visibility";
-import { resolveUserSearchScope } from "../src/server/users/scope";
+import {
+  isMemberOfSearchBranch,
+  resolveUserSearchScope,
+} from "../src/server/users/scope";
 
 const ORG_ID = "11111111-1111-4111-8111-111111111111";
 const OFFICE_ID = "22222222-2222-4222-8222-222222222222";
@@ -37,6 +41,54 @@ describe("resolveUserSearchScope", () => {
       resolveUserSearchScope({ organizationId: ORG_ID, projectId: PROJECT_ID }),
       null,
     );
+  });
+});
+
+describe("isMemberOfSearchBranch", () => {
+  const dialect = new PgDialect();
+  const render = (branch: Parameters<typeof isMemberOfSearchBranch>[0]) => {
+    const query = dialect.sqlToQuery(isMemberOfSearchBranch(branch));
+    return { sql: query.sql.replace(/\s+/g, " ").trim(), params: query.params };
+  };
+
+  const orgMembers =
+    '"user"."id" in ( select "organization_users"."user_id" from "organization_users" where "organization_users"."organization_id" = $3 )';
+
+  it("limits a project scope to the project, its office and its organization", () => {
+    const { sql, params } = render({
+      organizationId: ORG_ID,
+      officeId: OFFICE_ID,
+      projectId: PROJECT_ID,
+    });
+
+    assert.equal(
+      sql,
+      `( "user"."id" in ( select "project_users"."user_id" from "project_users" where "project_users"."project_id" = $1 ) or "user"."id" in ( select "office_users"."user_id" from "office_users" where "office_users"."office_id" = $2 ) or ${orgMembers} )`,
+    );
+    assert.deepEqual(params, [PROJECT_ID, OFFICE_ID, ORG_ID]);
+  });
+
+  it("limits an office scope to the office, its live projects and its organization", () => {
+    const { sql, params } = render({
+      organizationId: ORG_ID,
+      officeId: OFFICE_ID,
+    });
+
+    assert.equal(
+      sql,
+      `( "user"."id" in ( select "office_users"."user_id" from "office_users" where "office_users"."office_id" = $1 ) or "user"."id" in ( select "project_users"."user_id" from "project_users" inner join "project" on "project"."id" = "project_users"."project_id" where "project"."office_id" = $2 and "project"."deleted_at" is null ) or ${orgMembers} )`,
+    );
+    assert.deepEqual(params, [OFFICE_ID, OFFICE_ID, ORG_ID]);
+  });
+
+  it("opens an organization scope to its whole tree", () => {
+    const { sql, params } = render({ organizationId: ORG_ID });
+
+    assert.equal(
+      sql,
+      '( "user"."id" in ( select "organization_users"."user_id" from "organization_users" where "organization_users"."organization_id" = $1 ) or "user"."id" in ( select "office_users"."user_id" from "office_users" inner join "office" on "office"."id" = "office_users"."office_id" where "office"."organization_id" = $2 ) or "user"."id" in ( select "project_users"."user_id" from "project_users" inner join "project" on "project"."id" = "project_users"."project_id" inner join "office" on "office"."id" = "project"."office_id" where "office"."organization_id" = $3 and "project"."deleted_at" is null ) )',
+    );
+    assert.deepEqual(params, [ORG_ID, ORG_ID, ORG_ID]);
   });
 });
 
