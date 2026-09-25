@@ -31,6 +31,10 @@ import {
   saveMessages,
 } from "@wildfires-org/turboplan-db/queries";
 import {
+  formatMemorySnapshot,
+  getMemorySnapshot,
+} from "@wildfires-org/turboplan-documents/server";
+import {
   isResearchAgentPackageEnabled,
   isTasksPackageEnabled,
 } from "@wildfires-org/turboplan-feature-flags";
@@ -106,6 +110,89 @@ const mapStreamErrorToUserMessage = (error: unknown): string => {
   );
 
   return matched?.message ?? GENERIC_STREAM_ERROR_MESSAGE;
+};
+
+/**
+ * Character length of a value once serialized, or -1 when it cannot be
+ * serialized (circular refs, BigInt, …). Diagnostics must never break a tool.
+ */
+const safeJsonChars = (value: unknown): number => {
+  try {
+    return JSON.stringify(value)?.length ?? -1;
+  } catch {
+    return -1;
+  }
+};
+
+type LoggedToolExecute = (
+  input: unknown,
+  options: { toolCallId: string },
+) => unknown;
+
+/**
+ * Wraps every tool's `execute` with timing/size/memory logging. Mutates the
+ * tools in place so later direct `.execute()` calls (the quick-responses
+ * fallback below) are instrumented too. Behavior is unchanged — errors are
+ * logged and rethrown.
+ */
+const withToolLogging = (
+  tools: Record<string, Tool>,
+  chatId?: string,
+): Record<string, Tool> => {
+  for (const [toolName, toolDefinition] of Object.entries(tools)) {
+    const originalExecute = toolDefinition.execute;
+    if (typeof originalExecute !== "function") {
+      continue;
+    }
+
+    const loggedExecute = async (
+      input: unknown,
+      options: { toolCallId: string },
+    ) => {
+      const startedAt = Date.now();
+      const toolCallId = options?.toolCallId;
+
+      console.log("[chat] tool start", {
+        chatId,
+        toolName,
+        toolCallId,
+        inputChars: safeJsonChars(input),
+      });
+
+      try {
+        const output = await (originalExecute as LoggedToolExecute)(
+          input,
+          options,
+        );
+
+        console.log("[chat] tool done", {
+          chatId,
+          toolName,
+          toolCallId,
+          elapsedMs: Date.now() - startedAt,
+          outputChars: safeJsonChars(output),
+          mem: formatMemorySnapshot(getMemorySnapshot()),
+        });
+
+        return output;
+      } catch (error) {
+        console.error("[chat] tool failed", {
+          chatId,
+          toolName,
+          toolCallId,
+          elapsedMs: Date.now() - startedAt,
+          errorName: error instanceof Error ? error.name : typeof error,
+          errorMessage: error instanceof Error ? error.message : String(error),
+          mem: formatMemorySnapshot(getMemorySnapshot()),
+        });
+        throw error;
+      }
+    };
+
+    (toolDefinition as { execute?: unknown }).execute = loggedExecute;
+  }
+
+  return tools;
 };
 
 /**
@@ -205,7 +292,7 @@ const createTools = async ({
     });
   }
 
-  return tools;
+  return withToolLogging(tools, chatId);
 };
 
 export async function POST(request: Request) {
@@ -247,6 +334,13 @@ export async function POST(request: Request) {
     // authorized against. For brand-new chats there is no chat row yet, so this
     // falls back to the body projectId (which IS what RBAC validates).
     const effectiveProjectId = chat?.projectId ?? projectId;
+
+    console.log("[chat] request start", {
+      chatId: id,
+      projectId: effectiveProjectId,
+      messageCount: messages.length,
+      mem: formatMemorySnapshot(getMemorySnapshot()),
+    });
 
     // Kick off the (expensive) prompt-context build now that we know the
     // authorized projectId — it is independent of the RBAC/save work below, so
@@ -420,6 +514,23 @@ export async function POST(request: Request) {
         .filter(Boolean)
         .join("\n\n") || undefined;
 
+    console.log("[chat] context sizes", {
+      chatId: id,
+      mode: promptArgs.mode,
+      activeTools: promptArgs.activeTools,
+      projectContextDataChars: promptArgs.projectContextData?.length ?? 0,
+      projectFieldsContextChars: promptArgs.projectFieldsContext?.length ?? 0,
+      savedResearchContextChars: promptArgs.savedResearchContext?.length ?? 0,
+      unsavedResearchContextChars:
+        promptArgs.unsavedResearchContext?.length ?? 0,
+      projectTasksContextChars: promptArgs.projectTasksContext?.length ?? 0,
+      projectDocumentsContextChars:
+        promptArgs.projectDocumentsContext?.length ?? 0,
+      messageCount: messages.length,
+      requestMessagesJsonChars: safeJsonChars(messages),
+      mem: formatMemorySnapshot(getMemorySnapshot()),
+    });
+
     // Only images and PDFs can be sent to the model — Anthropic rejects other
     // file types (e.g. docx) with a 400. Unsupported file parts are dropped
     // from `parts` (which convertToModelMessages actually consumes) and
@@ -553,6 +664,21 @@ export async function POST(request: Request) {
           convertToModelMessages(aiSupportedMessages),
         ]);
 
+        console.log("[chat] model input", {
+          chatId: id,
+          systemChars: system.length,
+          modelMessageCount: modelMessages.length,
+          modelMessagesJsonChars: safeJsonChars(modelMessages),
+          filePartCount: aiSupportedMessages.reduce(
+            (count, message) =>
+              count +
+              (message.parts ?? []).filter((part) => part.type === "file")
+                .length,
+            0,
+          ),
+          mem: formatMemorySnapshot(getMemorySnapshot()),
+        });
+
         // Single multi-step stream (matches the v4 flow and upstream Vercel
         // chatbot): the model researches as needed, synthesizes a text answer,
         // and calls generateQuickResponses at the end. The OpenRouter provider
@@ -564,6 +690,7 @@ export async function POST(request: Request) {
         // it survives a mid-run failure (completed steps stay accumulated).
         let accumulatedCostUsd = 0;
         let accumulatedTokens = 0;
+        let stepIndex = 0;
         let meteredChatRun = false;
         const meterChatRun = async () => {
           if (meteredChatRun || !billingOrgId) {
@@ -598,6 +725,16 @@ export async function POST(request: Request) {
             accumulatedCostUsd +=
               extractOpenRouterCost(step.providerMetadata) ?? 0;
             accumulatedTokens += step.usage?.totalTokens ?? 0;
+
+            console.log("[chat] step", {
+              chatId: id,
+              stepIndex,
+              toolCalls: step.toolCalls?.map((tc) => tc.toolName) ?? [],
+              finishReason: step.finishReason,
+              elapsedMs: Date.now() - requestStartedAt,
+              mem: formatMemorySnapshot(getMemorySnapshot()),
+            });
+            stepIndex++;
           },
         });
 
@@ -687,6 +824,13 @@ export async function POST(request: Request) {
       generateId: generateUUID,
       originalMessages: messages,
       onFinish: async ({ responseMessage }) => {
+        console.log("[chat] stream done", {
+          chatId: id,
+          elapsedMs: Date.now() - requestStartedAt,
+          partCount: responseMessage.parts?.length ?? 0,
+          mem: formatMemorySnapshot(getMemorySnapshot()),
+        });
+
         if (session.user?.id) {
           try {
             const cleanedParts = responseMessage.parts
@@ -718,7 +862,13 @@ export async function POST(request: Request) {
         }
       },
       onError: (error) => {
-        console.error("[Chat] Stream error:", error);
+        console.error("[Chat] Stream error:", error, {
+          chatId: id,
+          elapsedMs: Date.now() - requestStartedAt,
+          errorName: error instanceof Error ? error.name : typeof error,
+          errorMessage: error instanceof Error ? error.message : String(error),
+          mem: formatMemorySnapshot(getMemorySnapshot()),
+        });
         return mapStreamErrorToUserMessage(error);
       },
     });
@@ -730,7 +880,12 @@ export async function POST(request: Request) {
     if (error instanceof Error && error.message === "Already processing") {
       return new Response("Already processing", { status: 409 });
     }
-    console.error("Error in chat route:", error);
+    console.error("Error in chat route:", {
+      errorName: error instanceof Error ? error.name : typeof error,
+      errorMessage: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      mem: formatMemorySnapshot(getMemorySnapshot()),
+    });
     return ErrorResponses.internalServerError(
       "An error occurred while processing your request!",
     );

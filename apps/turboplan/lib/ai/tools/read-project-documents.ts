@@ -6,7 +6,11 @@ import {
   getProjectDocumentsByIds,
   getProjectDocumentsByProjectId,
 } from "@wildfires-org/turboplan-db/queries";
-import { extractDocumentText } from "@wildfires-org/turboplan-documents/server";
+import {
+  extractDocumentText,
+  formatMemorySnapshot,
+  getMemorySnapshot,
+} from "@wildfires-org/turboplan-documents/server";
 import { Action, EntityType } from "@wildfires-org/turboplan-rbac";
 import { getRBACService } from "@wildfires-org/turboplan-rbac/server";
 
@@ -89,6 +93,13 @@ export const readProjectDocuments = async ({
       // duplicate the document in the output.
       const requestedIds = [...new Set(documentIds ?? [])];
 
+      const executeStartedAt = Date.now();
+      console.log("[read-project-documents] start", {
+        projectId,
+        requestedIds: requestedIds.length,
+        mem: formatMemorySnapshot(getMemorySnapshot()),
+      });
+
       // Fetch by ids when provided, otherwise every document in the project.
       const records =
         requestedIds.length > 0
@@ -142,12 +153,36 @@ export const readProjectDocuments = async ({
         });
       }
 
+      console.log("[read-project-documents] resolved", {
+        projectId,
+        candidateDocs: orderedRecords.length,
+        cappedDocs: cappedRecords.length,
+        totalBytes: cappedRecords.reduce((sum, record) => sum + record.size, 0),
+        docs: cappedRecords.map((record) => ({
+          id: record.id,
+          filename: record.originalFilename,
+          size: record.size,
+          mimeType: record.mimeType,
+        })),
+        mem: formatMemorySnapshot(getMemorySnapshot()),
+      });
+
       // Extract in small batches — each fetch can buffer up to 50MB, so a
       // full 10-wide fan-out could hold ~500MB at once. The total budget is
       // then applied sequentially in the deterministic order above.
       const extractions: Awaited<ReturnType<typeof extractDocumentText>>[] = [];
       for (let i = 0; i < cappedRecords.length; i += EXTRACTION_CONCURRENCY) {
         const batch = cappedRecords.slice(i, i + EXTRACTION_CONCURRENCY);
+        const batchIndex = i / EXTRACTION_CONCURRENCY;
+        const batchStartedAt = Date.now();
+
+        console.log("[read-project-documents] batch start", {
+          projectId,
+          batchIndex,
+          ids: batch.map((record) => record.id),
+          mem: formatMemorySnapshot(getMemorySnapshot()),
+        });
+
         extractions.push(
           ...(await Promise.all(
             batch.map((record) =>
@@ -158,6 +193,13 @@ export const readProjectDocuments = async ({
             ),
           )),
         );
+
+        console.log("[read-project-documents] batch done", {
+          projectId,
+          batchIndex,
+          elapsedMs: Date.now() - batchStartedAt,
+          mem: formatMemorySnapshot(getMemorySnapshot()),
+        });
       }
 
       const documents: ReadDocument[] = [];
@@ -195,6 +237,15 @@ export const readProjectDocuments = async ({
           text: withinBudget,
           truncated: result.truncated || budgetTruncated,
         });
+      });
+
+      console.log("[read-project-documents] done", {
+        projectId,
+        documentsReturned: documents.length,
+        skipped: skipped.length,
+        totalChars: documents.reduce((sum, doc) => sum + doc.text.length, 0),
+        elapsedMs: Date.now() - executeStartedAt,
+        mem: formatMemorySnapshot(getMemorySnapshot()),
       });
 
       return {

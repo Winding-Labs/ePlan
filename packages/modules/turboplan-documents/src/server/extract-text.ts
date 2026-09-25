@@ -2,6 +2,7 @@ import mammoth from "mammoth";
 import { extractText, getDocumentProxy } from "unpdf";
 
 import { DOC_MIME, DOCX_MIME, PDF_MIME } from "../document-mime";
+import { formatMemorySnapshot, getMemorySnapshot } from "./memory-snapshot";
 
 /**
  * Maximum number of characters returned for a single document. Extracted text
@@ -83,6 +84,19 @@ export const isDisallowedDocumentUrl = (url: string): boolean => {
   }
 
   return false;
+};
+
+/**
+ * Host + pathname only — signed R2 URLs carry credentials in the query string,
+ * so the query must never reach the logs.
+ */
+const redactUrlForLog = (url: string): string => {
+  try {
+    const parsed = new URL(url);
+    return `${parsed.host}${parsed.pathname}`;
+  } catch {
+    return "invalid-url";
+  }
 };
 
 export type ExtractionResult =
@@ -377,10 +391,40 @@ export const extractDocumentText = async ({
     };
   }
 
+  const logUrl = redactUrlForLog(url);
+
+  console.log("[extract-text] start", {
+    url: logUrl,
+    mimeType: normalizedMime,
+    mem: formatMemorySnapshot(getMemorySnapshot()),
+  });
+
+  const fetchStartedAt = Date.now();
   const fetched = await fetchDocument(url);
+  const fetchMs = Date.now() - fetchStartedAt;
+
   if (!fetched.ok) {
+    console.log("[extract-text] fetch failed", {
+      url: logUrl,
+      mimeType: normalizedMime,
+      bytes: 0,
+      fetchMs,
+      reason: fetched.reason,
+      message: fetched.message,
+      mem: formatMemorySnapshot(getMemorySnapshot()),
+    });
     return fetched;
   }
+
+  console.log("[extract-text] fetched", {
+    url: logUrl,
+    mimeType: normalizedMime,
+    bytes: fetched.buffer.length,
+    fetchMs,
+    mem: formatMemorySnapshot(getMemorySnapshot()),
+  });
+
+  const parseStartedAt = Date.now();
 
   try {
     const rawText =
@@ -391,10 +435,29 @@ export const extractDocumentText = async ({
     const normalized = normalizeWhitespace(rawText);
     const { text, truncated } = capText(normalized);
 
+    console.log("[extract-text] parsed", {
+      url: logUrl,
+      mimeType: normalizedMime,
+      bytes: fetched.buffer.length,
+      parseMs: Date.now() - parseStartedAt,
+      rawChars: rawText.length,
+      returnedChars: text.length,
+      truncated,
+      mem: formatMemorySnapshot(getMemorySnapshot()),
+    });
+
     return { ok: true, text, truncated };
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Unknown extraction error";
+    console.error("[extract-text] parse failed", {
+      url: logUrl,
+      mimeType: normalizedMime,
+      bytes: fetched.buffer.length,
+      parseMs: Date.now() - parseStartedAt,
+      message,
+      mem: formatMemorySnapshot(getMemorySnapshot()),
+    });
     return { ok: false, reason: "extraction-failed", message };
   }
 };

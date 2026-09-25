@@ -5,3 +5,8 @@ export {
   isDisallowedDocumentUrl,
   MAX_EXTRACTED_CHARS,
 } from "./server/extract-text";
+export type { MemorySnapshot } from "./server/memory-snapshot";
+export {
+  formatMemorySnapshot,
+  getMemorySnapshot,
+} from "./server/memory-snapshot";

@@ -5,6 +5,10 @@ import {
   getMessagesByChatId,
   saveMessages,
 } from "@wildfires-org/turboplan-db/queries";
+import {
+  formatMemorySnapshot,
+  getMemorySnapshot,
+} from "@wildfires-org/turboplan-documents/server";
 
 import { auth } from "@/app/(auth)/auth";
 import { userCanAccessChat } from "@/lib/api/chat-access";
@@ -19,6 +23,18 @@ type ResearchSavedBody = {
     savedCount: number;
     itemNames: string[];
   }>;
+};
+
+/**
+ * Character length of a value once serialized, or -1 when it cannot be
+ * serialized. Diagnostics must never break the response.
+ */
+const safeJsonChars = (value: unknown): number => {
+  try {
+    return JSON.stringify(value)?.length ?? -1;
+  } catch {
+    return -1;
+  }
 };
 
 const isValidResearchSavedBody = (body: unknown): body is ResearchSavedBody => {
@@ -36,6 +52,8 @@ export async function GET(
   _request: Request,
   { params }: { params: Promise<{ chatId: string }> },
 ) {
+  const startedAt = Date.now();
+
   try {
     const session = await auth();
 
@@ -58,9 +76,23 @@ export async function GET(
 
     const messages = await getMessagesByChatId({ id: chatId });
 
+    console.log("[chat-messages] done", {
+      chatId,
+      count: messages.length,
+      jsonChars: safeJsonChars(messages),
+      elapsedMs: Date.now() - startedAt,
+      mem: formatMemorySnapshot(getMemorySnapshot()),
+    });
+
     return NextResponse.json(messages);
   } catch (error) {
-    console.error("Error fetching chat messages:", error);
+    console.error("[chat-messages] failed", {
+      elapsedMs: Date.now() - startedAt,
+      errorName: error instanceof Error ? error.name : typeof error,
+      errorMessage: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      mem: formatMemorySnapshot(getMemorySnapshot()),
+    });
     return ErrorResponses.internalServerError("Failed to fetch messages");
   }
 }
