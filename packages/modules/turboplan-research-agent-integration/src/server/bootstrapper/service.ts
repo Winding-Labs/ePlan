@@ -14,10 +14,10 @@ import { chat, type DBMessage } from "@wildfires-org/turboplan-db";
 import { db } from "@wildfires-org/turboplan-db/db-client";
 import {
   createProjectDocument,
+  getProjectDocumentExtractionByIds,
   getProjectDocumentsByProjectId,
 } from "@wildfires-org/turboplan-db/queries";
 import type { ResearchAgentMessage as DbResearchAgentMessage } from "@wildfires-org/turboplan-db/schemas";
-import { extractDocumentText } from "@wildfires-org/turboplan-documents/server";
 import {
   getProjectContextByProjectId,
   insertProjectContext,
@@ -214,9 +214,13 @@ async function gatherProjectContextForResearchAgent(
 }
 
 /**
- * Extract text from the newest uploaded project documents and format them as
- * `## <originalFilename>\n<text>` blocks, capping the total at
- * {@link MAX_DOCUMENTS_TOTAL_CHARS}. Failed extractions are skipped and logged.
+ * Format the newest uploaded project documents as `## <originalFilename>\n<text>`
+ * blocks, capping the total at {@link MAX_DOCUMENTS_TOTAL_CHARS}.
+ *
+ * Text is NOT extracted here — it is read from `extracted_text` on the document
+ * row, written asynchronously by the research-agent service's extraction pass.
+ * Documents whose extraction has not finished (or failed, or is unsupported)
+ * are skipped and logged; nothing is downloaded or parsed on this Worker.
  * Never throws — any failure degrades to "N/A" so it can't fail or delay the
  * research run.
  */
@@ -231,6 +235,13 @@ async function gatherProjectDocumentsForResearchAgent(
 
     // Documents are returned newest-first; take the most recent few.
     const recentDocuments = documents.slice(0, MAX_DOCUMENTS);
+    const extractions = await getProjectDocumentExtractionByIds(
+      recentDocuments.map((doc) => doc.id),
+    );
+    const extractionById = new Map(
+      extractions.map((extraction) => [extraction.id, extraction]),
+    );
+
     const blocks: string[] = [];
     let totalChars = 0;
 
@@ -239,18 +250,15 @@ async function gatherProjectDocumentsForResearchAgent(
         break;
       }
 
-      const result = await extractDocumentText({
-        url: doc.url,
-        mimeType: doc.mimeType,
-      });
-      if (!result.ok) {
+      const extraction = extractionById.get(doc.id);
+      if (!extraction || extraction.extractionStatus !== "done") {
         console.error(
-          `[bootstrapper] Skipping document "${doc.originalFilename}" for research agent: ${result.reason}${result.message ? ` (${result.message})` : ""}`,
+          `[bootstrapper] Skipping document "${doc.originalFilename}" (${doc.id}) for research agent: extraction ${extraction?.extractionStatus ?? "missing"}${extraction?.extractionError ? ` (${extraction.extractionError})` : ""}`,
         );
         continue;
       }
 
-      const text = result.text.trim();
+      const text = (extraction.extractedText ?? "").trim();
       if (!text) {
         continue;
       }
