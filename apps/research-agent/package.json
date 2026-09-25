@@ -27,6 +27,7 @@
     "@sentry/node": "^10.70.0",
     "@wildfires-org/turboplan-auth": "workspace:*",
     "@wildfires-org/turboplan-db": "workspace:*",
+    "@wildfires-org/turboplan-document-extraction": "workspace:*",
     "@wildfires-org/turboplan-env": "workspace:*",
     "@wildfires-org/turboplan-utils": "workspace:*",
     "drizzle-orm": "^0.45.2",
