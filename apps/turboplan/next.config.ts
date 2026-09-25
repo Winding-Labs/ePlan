@@ -172,7 +172,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     // `unpdf` (PDF text extraction, server-only, reached via
     // turboplan-documents) uses `import.meta` in a form webpack cannot analyse
     // statically, so every compile logs "Critical dependency: Accessing
@@ -188,6 +188,19 @@ const nextConfig: NextConfig = {
       ...(config.ignoreWarnings ?? []),
       { module: /unpdf/, message: /import\.meta/ },
     ];
+
+    if (isServer) {
+      // `@streamdown/code` statically imports every shiki grammar (~23 MB of
+      // JSON). markdown.tsx only loads it client-side after mount, but webpack
+      // would still bundle it into the server build; alias it away there so the
+      // Worker bundle stays under the memory/size limits. The dynamic import in
+      // markdown.tsx never executes during SSR.
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        "@streamdown/code": false,
+      };
+    }
+
     return config;
   },
 };
