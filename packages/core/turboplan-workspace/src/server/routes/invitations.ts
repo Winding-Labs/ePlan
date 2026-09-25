@@ -4,6 +4,8 @@ import { BillingError } from "@wildfires-org/turboplan-billing/server";
 import { Action } from "@wildfires-org/turboplan-rbac";
 import {
   getRBACServiceForRequest,
+  isMembershipGrant,
+  NO_PERMISSION_REASON,
   type RBACContext,
 } from "@wildfires-org/turboplan-rbac/hono";
 
@@ -253,7 +255,9 @@ invitationsRouter.get("/entity/:entityType/:entityId", async (c) => {
     // Map entity type to RBAC entity type
     const rbacEntityType = mapToRBACEntityType(entityTypeResult.data);
 
-    // Check READ permission on the entity (to see invitations)
+    // Pending invitations expose invitee emails, roles and inviters, so READ
+    // must come from a role on the entity itself (or a parent). READ derived
+    // upward from a single child project membership does not qualify.
     const rbacService = getRBACServiceForRequest(c);
     const permissionResult = await rbacService.checkPermission(
       user.userId,
@@ -262,14 +266,8 @@ invitationsRouter.get("/entity/:entityType/:entityId", async (c) => {
       Action.READ,
     );
 
-    if (!permissionResult.allowed) {
-      return c.json(
-        {
-          error: "Forbidden",
-          reason: permissionResult.reason,
-        },
-        403,
-      );
+    if (!isMembershipGrant(permissionResult)) {
+      return c.json({ error: "Forbidden", reason: NO_PERMISSION_REASON }, 403);
     }
 
     // Get pending invitations
