@@ -640,30 +640,35 @@ projectsRouter.put(
         }
       }
 
-      // Publishing (or listing as a template) presents the project under the
-      // office's name, so it also needs a role on the office itself. A project
-      // owner who only reached the office through that project — e.g. a citizen
-      // whose application lives in a government office — may not publish it.
+      // Turning isPublic / isTemplate ON presents the project under the
+      // office's name, so it takes MANAGE_MEMBERS on the office itself — the
+      // same bar project creation uses for these flags. Project ownership alone
+      // is not enough: the creator of a project is always its owner, so an
+      // office editor could otherwise create it and then publish it with a
+      // second request. Turning them OFF only needs project MANAGE_MEMBERS.
       const enablesPublicOrTemplate =
         (changesPublicVisibility && updateData.isPublic === true) ||
         (changesTemplateFlag && updateData.isTemplate === true);
-      if (
-        enablesPublicOrTemplate &&
-        !(await getRBACServiceForRequest(c).hasMembershipAccess(
+      if (enablesPublicOrTemplate) {
+        const officeElevated = await getRBACServiceForRequest(
+          c,
+        ).checkPermission(
           user.userId,
           projectRecord.officeId,
           EntityType.OFFICE,
+          Action.MANAGE_MEMBERS,
           { email: user.email },
-        ))
-      ) {
-        return c.json(
-          {
-            error: "Forbidden",
-            reason:
-              "Publishing a project requires a role on its office or organization",
-          },
-          403,
         );
+        if (!officeElevated.allowed) {
+          return c.json(
+            {
+              error: "Forbidden",
+              reason:
+                "Publishing a project or listing it as a template requires MANAGE_MEMBERS on its office",
+            },
+            403,
+          );
+        }
       }
 
       // Billing gate on template conversion: flipping isTemplate off turns

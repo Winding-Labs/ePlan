@@ -29,7 +29,6 @@ import {
   getProjectDashboardUrl,
 } from "../utils/entity-urls.js";
 import {
-  accessDenied,
   assertEntityExists,
   assertPermission,
   getMcpRBACService,
@@ -390,7 +389,7 @@ export const registerProjectTools = (
     "update_project",
     {
       description:
-        "Update a project's properties. Requires editor role or higher on the project. Changing isPublic or isTemplate requires owner role.",
+        "Update a project's properties. Requires editor role or higher on the project. Changing isPublic or isTemplate requires owner role on the project; turning either on additionally requires owner role on the project's office.",
       inputSchema: {
         projectId: z.string().uuid().describe("Project UUID"),
         name: z.string().min(1).max(255).optional().describe("New name"),
@@ -504,22 +503,26 @@ export const registerProjectTools = (
           }
         }
 
-        // Publishing presents the project under its office's name, so it also
-        // needs a role on the office itself — not just ownership of this one
-        // project (e.g. a citizen application inside a government office).
+        // Turning isPublic / isTemplate ON presents the project under its
+        // office's name, so it takes MANAGE_MEMBERS on the office itself — the
+        // same bar create_project uses for these flags. Project ownership alone
+        // is not enough: the creator of a project is always its owner, so an
+        // office editor could otherwise create and then publish in two calls.
+        // Turning them OFF only needs project MANAGE_MEMBERS (checked above).
         const enablesPublicOrTemplate =
           (validated.isPublic === true && !project!.isPublic) ||
           (validated.isTemplate === true && !project!.isTemplate);
-        if (
-          enablesPublicOrTemplate &&
-          !(await getMcpRBACService().hasMembershipAccess(
+        if (enablesPublicOrTemplate) {
+          const officeDenied = await assertPermission(
             user.userId,
             project!.officeId,
             EntityType.OFFICE,
-            user.email ? { email: user.email } : undefined,
-          ))
-        ) {
-          return accessDenied();
+            Action.MANAGE_MEMBERS,
+            user.email,
+          );
+          if (officeDenied) {
+            return officeDenied;
+          }
         }
 
         // Billing gate on template conversion: flipping isTemplate off turns
