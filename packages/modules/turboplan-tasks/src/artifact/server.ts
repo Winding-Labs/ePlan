@@ -260,6 +260,7 @@ export const taskDocumentHandler = {
         analysisResult,
         document.id,
         session,
+        updateProjectId ?? undefined,
       );
 
       // Get the updated structure to return

@@ -21,6 +21,7 @@ import {
 } from "@wildfires-org/turboplan-timeline-records/server";
 
 import { TaskStatus } from "../types";
+import { projectIdOfMilestone } from "./milestone-project";
 import {
   assigneesVisibleTo,
   requireProjectPermission,
@@ -245,22 +246,23 @@ router.post(
         order: data.order,
         startDate: data.startDate ? new Date(data.startDate) : tomorrow,
         dueDate: data.dueDate ? new Date(data.dueDate) : nextWeek,
+        // `documentId` is the project the guard authorised; record it as the
+        // milestone's project too, so the row resolves without the fallback.
         documentId,
+        projectId: documentId,
         userId,
       };
 
       const milestone = await milestoneService.createMilestone(milestoneInput);
 
-      if (milestone.projectId) {
-        await createTimelineRecord({
-          projectId: milestone.projectId,
-          userId,
-          entityType: "milestone",
-          entityId: milestone.id,
-          entityName: milestone.title,
-          action: "created",
-        });
-      }
+      await createTimelineRecord({
+        projectId: documentId,
+        userId,
+        entityType: "milestone",
+        entityId: milestone.id,
+        entityName: milestone.title,
+        action: "created",
+      });
 
       return c.json({ milestone }, 201);
     } catch (error) {
@@ -318,19 +320,18 @@ router.post(
         startDate: data.startDate ? new Date(data.startDate) : new Date(),
         dueDate: data.dueDate ? new Date(data.dueDate) : new Date(),
         documentId,
+        projectId: documentId,
         userId,
       });
 
-      if (milestone.projectId) {
-        await createTimelineRecord({
-          projectId: milestone.projectId,
-          userId,
-          entityType: "milestone",
-          entityId: milestone.id,
-          entityName: milestone.title,
-          action: "created",
-        });
-      }
+      await createTimelineRecord({
+        projectId: documentId,
+        userId,
+        entityType: "milestone",
+        entityId: milestone.id,
+        entityName: milestone.title,
+        action: "created",
+      });
 
       return c.json({ milestone }, 201);
     } catch (error) {
@@ -372,7 +373,7 @@ router.put(
         return c.json({ error: "Milestone not found" }, 404);
       }
 
-      if (milestone.projectId && userId) {
+      if (userId) {
         const changes = computeChanges(
           existingMilestone as unknown as Record<string, unknown>,
           milestone as unknown as Record<string, unknown>,
@@ -380,7 +381,7 @@ router.put(
         );
         if (changes.length > 0) {
           await createTimelineRecord({
-            projectId: milestone.projectId,
+            projectId: projectIdOfMilestone(milestone),
             userId,
             entityType: "milestone",
             entityId: milestone.id,
@@ -425,9 +426,9 @@ router.delete(
         return c.json({ error: "Milestone not found" }, 404);
       }
 
-      if (existingMilestone?.projectId && userId) {
+      if (existingMilestone && userId) {
         await createTimelineRecord({
-          projectId: existingMilestone.projectId,
+          projectId: projectIdOfMilestone(existingMilestone),
           userId,
           entityType: "milestone",
           entityId: id,
@@ -460,9 +461,9 @@ router.patch(
         return c.json({ error: "Milestone not found" }, 404);
       }
 
-      if (milestone.projectId && userId) {
+      if (userId) {
         await createTimelineRecord({
-          projectId: milestone.projectId,
+          projectId: projectIdOfMilestone(milestone),
           userId,
           entityType: "milestone",
           entityId: milestone.id,
@@ -503,9 +504,9 @@ router.patch(
         return c.json({ error: "Milestone not found" }, 404);
       }
 
-      if (milestone.projectId && userId) {
+      if (userId) {
         await createTimelineRecord({
-          projectId: milestone.projectId,
+          projectId: projectIdOfMilestone(milestone),
           userId,
           entityType: "milestone",
           entityId: milestone.id,
@@ -546,9 +547,9 @@ router.patch(
         return c.json({ error: "Milestone not found" }, 404);
       }
 
-      if (milestone.projectId && userId) {
+      if (userId) {
         await createTimelineRecord({
-          projectId: milestone.projectId,
+          projectId: projectIdOfMilestone(milestone),
           userId,
           entityType: "milestone",
           entityId: milestone.id,

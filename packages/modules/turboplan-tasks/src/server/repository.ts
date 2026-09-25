@@ -11,6 +11,10 @@ import {
   user,
 } from "@wildfires-org/turboplan-db";
 import { db } from "@wildfires-org/turboplan-db/db-client";
+import {
+  milestoneInProject,
+  taskInProject,
+} from "@wildfires-org/turboplan-db/queries";
 
 import {
   MilestoneCreateInput,
@@ -76,7 +80,7 @@ export class DrizzleMilestoneRepository implements MilestoneRepository {
     const results = await db
       .select()
       .from(milestones)
-      .where(eq(milestones.documentId, documentId))
+      .where(milestoneInProject(documentId))
       .orderBy(
         asc(milestones.order),
         asc(milestones.createdAt),
@@ -89,7 +93,7 @@ export class DrizzleMilestoneRepository implements MilestoneRepository {
     const results = await db
       .select()
       .from(milestones)
-      .where(eq(milestones.documentId, documentId))
+      .where(milestoneInProject(documentId))
       .orderBy(
         asc(milestones.order),
         asc(milestones.createdAt),
@@ -107,7 +111,7 @@ export class DrizzleMilestoneRepository implements MilestoneRepository {
     const results = await db
       .select()
       .from(milestones)
-      .where(eq(milestones.projectId, projectId))
+      .where(milestoneInProject(projectId))
       .orderBy(
         asc(milestones.order),
         asc(milestones.createdAt),
@@ -128,12 +132,7 @@ export class DrizzleMilestoneRepository implements MilestoneRepository {
     const results = await db
       .select()
       .from(milestones)
-      .where(
-        and(
-          eq(milestones.documentId, documentId),
-          eq(milestones.status, status),
-        ),
-      )
+      .where(and(milestoneInProject(documentId), eq(milestones.status, status)))
       .orderBy(asc(milestones.createdAt), asc(milestones.id));
     return results.map(this.mapToDomainEntity);
   }
@@ -155,7 +154,7 @@ export class DrizzleMilestoneRepository implements MilestoneRepository {
     const countResult = await db
       .select({ count: sql`COUNT(*)`.as("count") })
       .from(milestones)
-      .where(eq(milestones.documentId, data.documentId));
+      .where(milestoneInProject(data.projectId ?? data.documentId));
 
     const existingMilestoneCount = Number(countResult[0]?.count || 0);
     order = existingMilestoneCount + 1; // Next order number
@@ -379,7 +378,7 @@ export class DrizzleTaskRepository implements TaskRepository {
     const results = await db
       .select()
       .from(tasksSchema)
-      .where(eq(tasksSchema.documentId, documentId))
+      .where(taskInProject(documentId))
       .orderBy(
         asc(tasksSchema.order),
         asc(tasksSchema.createdAt),
@@ -405,12 +404,7 @@ export class DrizzleTaskRepository implements TaskRepository {
     const results = await db
       .select()
       .from(tasksSchema)
-      .where(
-        and(
-          eq(tasksSchema.documentId, documentId),
-          eq(tasksSchema.status, status),
-        ),
-      )
+      .where(and(taskInProject(documentId), eq(tasksSchema.status, status)))
       .orderBy(
         asc(tasksSchema.order),
         asc(tasksSchema.createdAt),
