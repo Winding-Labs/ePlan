@@ -18,10 +18,6 @@ concurrency:
   group: deploy-${{ github.event.pull_request.number || github.ref_name }}
   cancel-in-progress: true
 
-env:
-  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
 jobs:
   detect-changes:
     runs-on: ubuntu-latest
@@ -379,6 +375,9 @@ jobs:
       - name: Deploy
         id: deploy
         env:
+          # Cloudflare credentials are scoped to the steps that call wrangler/the CF API
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           REF_NAME: ${{ github.ref_name }}
           WORKERS_SUBDOMAIN: ${{ vars.WORKERS_SUBDOMAIN }}
           # Optional apex custom domain — when unset, production stays on workers.dev
@@ -506,6 +505,9 @@ jobs:
       - name: Setup Hyperdrive
         id: hyperdrive
         env:
+          # Cloudflare credentials are scoped to the steps that call wrangler/the CF API
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           REF_NAME: ${{ github.ref_name }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           DB_URL_SECRET: ${{ secrets.POSTGRES_URL }}
@@ -582,6 +584,9 @@ jobs:
       - name: Deploy
         id: deploy
         env:
+          # Cloudflare credentials are scoped to the steps that call wrangler/the CF API
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           # Optional custom domain — when unset, production stays on workers.dev
           PRODUCTION_API_DOMAIN: ${{ vars.PRODUCTION_API_DOMAIN }}
           # Secrets (set via wrangler secret put in deploy script)
@@ -803,6 +808,9 @@ jobs:
       - name: Deploy
         id: deploy
         env:
+          # Cloudflare credentials are scoped to the steps that call wrangler/the CF API
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           # Optional custom domain — when unset, production stays on workers.dev
           PRODUCTION_APP_DOMAIN: ${{ vars.PRODUCTION_APP_DOMAIN }}
           # Sentry webpack plugin pushes next build past Node's default ~2GB heap
@@ -917,6 +925,9 @@ jobs:
       - name: Deploy
         id: deploy
         env:
+          # Cloudflare credentials are scoped to the steps that call wrangler/the CF API
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           MAP_SERVICE_API_KEY: ${{ secrets.MAP_SERVICE_API_KEY }}
           # Optional custom domain — when unset, production stays on workers.dev
           PRODUCTION_MAP_DOMAIN: ${{ vars.PRODUCTION_MAP_DOMAIN }}
@@ -1010,6 +1021,9 @@ jobs:
       - name: Deploy
         id: deploy
         env:
+          # Cloudflare credentials are scoped to the steps that call wrangler/the CF API
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           # Optional custom domain — when unset, production stays on workers.dev
           PRODUCTION_MCP_DOMAIN: ${{ vars.PRODUCTION_MCP_DOMAIN }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}

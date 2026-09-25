@@ -145,6 +145,22 @@ export async function deleteProjectDocument(id: string): Promise<void> {
 }
 
 /**
+ * Whether any project document row still points at `url`. Copied projects
+ * (templates, duplicates) share one stored object across rows, so the object
+ * may only be deleted once no row references it.
+ */
+export const hasProjectDocumentWithUrl = async (
+  url: string,
+): Promise<boolean> => {
+  const [row] = await db
+    .select({ id: projectDocument.id })
+    .from(projectDocument)
+    .where(eq(projectDocument.url, url))
+    .limit(1);
+  return row !== undefined;
+};
+
+/**
  * Update the display name (originalFilename) of a project document.
  * Storage fields (filename, url) are intentionally left untouched.
  */
