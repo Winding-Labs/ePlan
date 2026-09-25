@@ -69,6 +69,12 @@ if [[ "$ENVIRONMENT" == "production" && -n "${PRODUCTION_APP_DOMAIN:-}" ]]; then
 fi
 
 # Hyperdrive configuration — replace placeholder ID in wrangler config.
+# `opennextjs-cloudflare deploy` boots a Miniflare platform proxy to read the
+# bindings, and Miniflare refuses to start the Hyperdrive binding (even the
+# placeholder one) without a local Postgres string. It is only used by that
+# proxy, never by the deployed Worker, so the direct database URL is fine here.
+export CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE="${POSTGRES_URL:?POSTGRES_URL env var is required}"
+
 # The custom-domain block above may already have taken the backup; only create
 # it when missing so the EXIT trap still restores the pristine file.
 if [[ -n "${HYPERDRIVE_ID:-}" ]]; then
