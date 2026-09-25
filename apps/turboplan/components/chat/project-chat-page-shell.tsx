@@ -7,7 +7,9 @@ interface ProjectChatPageShellProps {
   containerHeight?: string;
 }
 
-const DEFAULT_CHAT_CONTAINER_HEIGHT = "calc(100vh - 64px)";
+// Divide the viewport unit by the interface scale: the global viewport-unit
+// overrides in globals.css only reach utility classes, not inline styles.
+const DEFAULT_CHAT_CONTAINER_HEIGHT = "calc(100vh / var(--ui-scale, 1) - 64px)";
 
 export function ProjectChatPageShell({
   children,
