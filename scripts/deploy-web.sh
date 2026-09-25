@@ -22,6 +22,7 @@ set -euo pipefail
 #   AUTH_COOKIE_DOMAIN, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, EXA_API_KEY
 #   R2_ACCOUNT_ID, R2_BUCKET_NAME, R2_PUBLIC_URL
 #   POSTHOG_API_KEY, OPENROUTER_MODEL_*, ADMIN_EMAILS, USE_EXTERNAL_PROMPTS
+#   HYPERDRIVE_ID         (Hyperdrive config id — pooled Postgres connection)
 
 ENVIRONMENT="${1:?Usage: deploy-web.sh <environment> [pr-number]}"
 PR_NUMBER="${2:-}"
@@ -63,6 +64,19 @@ if [[ "$ENVIRONMENT" == "production" && -n "${PRODUCTION_APP_DOMAIN:-}" ]]; then
   sed -i "s|\"name\": \"turboplan-web\",|\"name\": \"turboplan-web\",\n  \"routes\": [{ \"pattern\": \"${PRODUCTION_APP_DOMAIN}\", \"custom_domain\": true }],|" wrangler.jsonc
   grep -q "\"pattern\": \"${PRODUCTION_APP_DOMAIN}\"" wrangler.jsonc || {
     echo "ERROR: custom-domain route injection failed (sed anchor drifted?)" >&2
+    exit 1
+  }
+fi
+
+# Hyperdrive configuration — replace placeholder ID in wrangler config.
+# The custom-domain block above may already have taken the backup; only create
+# it when missing so the EXIT trap still restores the pristine file.
+if [[ -n "${HYPERDRIVE_ID:-}" ]]; then
+  echo "==> Configuring Hyperdrive binding: ${HYPERDRIVE_ID}"
+  [ -f wrangler.jsonc.bak ] || cp wrangler.jsonc wrangler.jsonc.bak
+  sed -i "s/HYPERDRIVE_ID_PLACEHOLDER/${HYPERDRIVE_ID}/" wrangler.jsonc
+  grep -q "\"id\": \"${HYPERDRIVE_ID}\"" wrangler.jsonc || {
+    echo "ERROR: Hyperdrive id injection failed (placeholder missing?)" >&2
     exit 1
   }
 fi
