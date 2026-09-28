@@ -77,8 +77,27 @@ export const ProjectChat = forwardRef<ProjectChatRef, ProjectChatProps>(
 
     const { artifact, setArtifact, setMetadata } = useArtifact();
 
+    // The artifact lives in a global SWR key, so it would reappear open in the
+    // next chat mounted anywhere. Reset it when this chat goes away. A stream
+    // left running in the background keeps calling this instance's callbacks,
+    // so they check `isMountedRef` before touching the artifact. The view keys
+    // this component by chat id, so a new id always means a new instance.
+    const isMountedRef = useRef(true);
+    useEffect(() => {
+      isMountedRef.current = true;
+      return () => {
+        isMountedRef.current = false;
+        setMetadata(null);
+        setArtifact(initialArtifactData);
+      };
+    }, [id, setArtifact, setMetadata]);
+
     const handleArtifactDelta = useCallback(
       (delta: ArtifactStreamDelta) => {
+        if (!isMountedRef.current) {
+          return;
+        }
+
         const artifactDefinition = artifactDefinitions.find(
           (def) => def.kind === artifact.kind,
         );
@@ -176,6 +195,7 @@ export const ProjectChat = forwardRef<ProjectChatRef, ProjectChatProps>(
       body: { id, projectId },
       initialMessages,
       generateId: generateUUID,
+      // Runs after every request (success, abort and error alike).
       onFinish: () => {
         mutate(unstable_serialize(getChatHistoryPaginationKey));
 
@@ -183,6 +203,22 @@ export const ProjectChat = forwardRef<ProjectChatRef, ProjectChatProps>(
         if (sidebarChatsKey) {
           mutate(sidebarChatsKey);
         }
+
+        // The server has stored the reply by now; refresh the cached messages
+        // so a remount (e.g. Back) is seeded with them.
+        mutate(`/api/chat/${id}/messages`);
+
+        // A stopped or failed document run never sends its "finish" delta, so
+        // the artifact would otherwise stay stuck in "streaming". Skipped once
+        // unmounted: the artifact then belongs to another chat.
+        if (!isMountedRef.current) {
+          return;
+        }
+        setArtifact((currentArtifact) =>
+          currentArtifact.status === "streaming"
+            ? { ...currentArtifact, status: "idle" }
+            : currentArtifact,
+        );
       },
       onError: (error) => {
         // Silently ignore duplicate request rejections (see inFlightChats in route.ts)
