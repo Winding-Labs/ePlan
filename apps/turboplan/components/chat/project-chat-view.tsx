@@ -1,11 +1,18 @@
 "use client";
 
-import { Fragment, useCallback, useEffect, useMemo, useRef } from "react";
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import type { UIMessage } from "ai";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, Loader2 } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import useSWR, { useSWRConfig } from "swr";
 
 import type { Attachment } from "@wildfires-org/turboplan-chat-actions/types";
@@ -65,12 +72,43 @@ interface ProjectChatViewProps {
   userId: string;
 }
 
+const NEW_CHAT_PATH_PATTERN = /\/chats\/new\/?$/;
+const RESEARCH_START_POLL_TIMEOUT_MS = 30_000;
+
 export const ProjectChatView = ({
   project,
   chat,
   isInitialChat,
   userId,
 }: ProjectChatViewProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  // A chat started at /chats/new swaps its URL to /chats/<id> with
+  // history.replaceState, which keeps the /chats/new router tree in that
+  // history entry. Back/forward then replays the cached /chats/new page: no
+  // chat under a /chats/<id> URL. Detected on mount only, since the swap
+  // itself happens later in the same mount.
+  const [staleChatPath] = useState(() =>
+    !chat && !NEW_CHAT_PATH_PATTERN.test(pathname) ? pathname : null,
+  );
+
+  useEffect(() => {
+    if (staleChatPath) {
+      router.replace(staleChatPath, { scroll: false });
+    }
+  }, [router, staleChatPath]);
+
+  if (staleChatPath) {
+    return (
+      <div className="flex h-full flex-col">
+        <span className="sr-only" role="status">
+          Loading messages...
+        </span>
+        <ChatMessagesSkeleton />
+      </div>
+    );
+  }
+
   return (
     <ResearchPanelProvider
       defaultOpen={
@@ -161,9 +199,26 @@ const ProjectChatViewInner = ({
     entityId: project.id,
     action: Action.UPDATE,
   });
+  // The chat route starts the research agent server-side when the first message
+  // of the initial chat is sent — after this view already fetched an idle
+  // status. Poll until the run shows up (bounded, in case the start is rejected,
+  // e.g. no credits) instead of waiting for a focus revalidation.
+  const [isAwaitingResearchStart, setIsAwaitingResearchStart] = useState(false);
+  useEffect(() => {
+    if (!isAwaitingResearchStart) {
+      return;
+    }
+    const timeout = setTimeout(
+      () => setIsAwaitingResearchStart(false),
+      RESEARCH_START_POLL_TIMEOUT_MS,
+    );
+    return () => clearTimeout(timeout);
+  }, [isAwaitingResearchStart]);
+
   const { status: researchAgentStatus, isActive: researchAgentIsActive } =
     useResearchAgentStatus(
       researchEnabled && effectiveIsInitialChat ? project.id : null,
+      { awaitRunStart: isAwaitingResearchStart },
     );
   const {
     isResearchPhaseCompleted,
@@ -298,6 +353,10 @@ const ProjectChatViewInner = ({
       );
       window.history.replaceState(null, "", newUrl);
 
+      if (researchEnabled && effectiveIsInitialChat) {
+        setIsAwaitingResearchStart(true);
+      }
+
       // Optimistically inject the new chat into the sidebar SWR cache
       mutate(
         sidebarChatsKey,
@@ -323,6 +382,7 @@ const ProjectChatViewInner = ({
       project.id,
       sidebarChatsKey,
       userId,
+      researchEnabled,
       effectiveIsInitialChat,
     ],
   );
