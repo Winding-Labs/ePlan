@@ -1,5 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { generateObject, getModel } from "@wildfires-org/turboplan-ai/server";
@@ -8,7 +7,7 @@ import {
   meterAiCall,
   resolveBillingOrgForProject,
 } from "@wildfires-org/turboplan-billing/server";
-import { chat, type DBMessage } from "@wildfires-org/turboplan-db";
+import type { DBMessage } from "@wildfires-org/turboplan-db";
 import { db } from "@wildfires-org/turboplan-db/db-client";
 import {
   createProjectDocument,
@@ -27,7 +26,6 @@ import { getProjectById } from "@wildfires-org/turboplan-workspace/server";
 import { isDownloadableDocument } from "../../document-preview-utils";
 import {
   type ContextItem,
-  DEFAULT_SUGGESTION_TEMPLATES,
   type DocumentItem,
   type FieldItem,
   type MilestoneItem,
@@ -47,10 +45,13 @@ import {
 } from "../document-utils";
 import { getResearchAgentClient } from "../external-client";
 import {
+  getDraftedDocumentTitlesByChatId,
   getExistingMilestoneIds,
   getExistingTaskIds,
   getNewChatMessagesSince,
   getProjectFieldsByProjectId,
+  getProjectMilestonesWithTasks,
+  getRecentUserMessagePartsByChatId,
   getResearchAgentMessageByIdAndProjectId,
   insertMilestonesWithTasks,
   insertProjectFields,
@@ -61,6 +62,11 @@ import {
   upsertSuggestionsMessage,
 } from "../repository";
 import { describeUrlForLog, safeFetch } from "../safe-fetch";
+import {
+  buildProjectSuggestionPromptVariables,
+  extractMessageText,
+  type ProjectSuggestionInputs,
+} from "./suggestion-inputs";
 
 // ---------------------------------------------------------------------------
 // Format chat messages for research agent context
@@ -110,11 +116,13 @@ export function formatChatMessagesForResearchAgent(
 
 // Per-section character budgets. Their sum plus template overhead and
 // sanitizePromptValue expansion is kept comfortably under MAX_START_PROMPT_CHARS
-// so the assembled start prompt clears the external service's hard 10k limit.
+// so the assembled start prompt clears the external service's hard 20k limit.
+// Uploaded documents get the largest share: a user's own scope/proposal lets
+// the agent skip web research for facts it would otherwise rediscover.
 const MAX_FIELDS_CHARS = 800;
 const MAX_CONTEXT_CHARS = 1800;
 const MAX_DOCUMENTS = 5;
-const MAX_DOCUMENTS_TOTAL_CHARS = 3600;
+const MAX_DOCUMENTS_TOTAL_CHARS = 12_000;
 
 const TRUNCATION_MARKER = "\n[truncated]";
 
@@ -238,11 +246,13 @@ async function gatherProjectDocumentsForResearchAgent(
     );
 
     const blocks: string[] = [];
+    const omittedFilenames: string[] = [];
     let totalChars = 0;
 
     for (const doc of recentDocuments) {
       if (totalChars >= MAX_DOCUMENTS_TOTAL_CHARS) {
-        break;
+        omittedFilenames.push(doc.originalFilename);
+        continue;
       }
 
       const extraction = extractionById.get(doc.id);
@@ -261,7 +271,8 @@ async function gatherProjectDocumentsForResearchAgent(
       const header = `## ${doc.originalFilename}\n`;
       const remaining = MAX_DOCUMENTS_TOTAL_CHARS - totalChars - header.length;
       if (remaining <= 0) {
-        break;
+        omittedFilenames.push(doc.originalFilename);
+        continue;
       }
 
       const isTruncated = text.length > remaining;
@@ -273,7 +284,16 @@ async function gatherProjectDocumentsForResearchAgent(
       totalChars += block.length;
     }
 
-    return blocks.length > 0 ? blocks.join("\n\n") : "N/A";
+    if (blocks.length === 0) {
+      return "N/A";
+    }
+    // Tell the agent more material exists, so a missing section is not read
+    // as "the uploads don't cover this".
+    const omittedNote =
+      omittedFilenames.length > 0
+        ? `\n\n[truncated: ${omittedFilenames.length} more uploaded document(s) omitted for length: ${omittedFilenames.join(", ")}]`
+        : "";
+    return `${blocks.join("\n\n")}${omittedNote}`;
   } catch (error) {
     console.error(
       "[bootstrapper] Failed to gather project documents for research agent:",
@@ -292,11 +312,11 @@ async function gatherProjectDocumentsForResearchAgent(
 const sanitizePromptValue = (value: string): string =>
   value.replace(/<\//g, "&lt;/");
 
-// Mirrors the external research-agent service's hard limit: it rejects any start
-// request whose `prompt` exceeds 10,000 characters (server-side, not
-// configurable from this repo). All per-section caps and the final guard below
-// exist to keep the assembled prompt under this ceiling.
-const MAX_START_PROMPT_CHARS = 10_000;
+// Mirrors the research-agent service's hard limit (MAX_PROMPT_LENGTH in
+// apps/research-agent/src/http/validation.ts): it rejects any start request
+// whose `prompt` exceeds 20,000 characters. All per-section caps and the final
+// guard below exist to keep the assembled prompt under this ceiling.
+const MAX_START_PROMPT_CHARS = 20_000;
 const MAX_NAME_CHARS = 200;
 const MAX_DESCRIPTION_CHARS = 800;
 
@@ -1360,109 +1380,157 @@ export async function saveTimelineToProject(
 }
 
 // ---------------------------------------------------------------------------
-// Generate suggestions from milestones (fire-and-forget)
+// Generate project next-step suggestions (chips under the chat input)
 // ---------------------------------------------------------------------------
+
+const MAX_SUGGESTIONS = 8;
 
 const suggestionItemSchema = z.object({
   label: z
     .string()
     .describe(
-      "Short action chip label, 2-5 words, e.g. 'Draft Scoping Letter'",
+      "Chip label, at most 4 words, imperative and specific to the deliverable",
     ),
   content: z
     .string()
     .describe(
-      "Short imperative sentence to send as chat message, max 10-15 words, e.g. 'Draft a scoping letter for the project'",
+      "Full instruction sent as the chat message: names the project and the exact deliverable, 1-2 sentences",
     ),
   emoji: z
     .string()
-    .describe(
-      "Single emoji representing the action, e.g. '📝' for drafting, '🔍' for analysis, '📊' for reports",
-    ),
+    .describe("Single emoji for the action, unique across all chips"),
 });
 
-/** chat → project → org, for attributing the local chip generation. */
-const resolveBillingOrgForProjectByChatId = async (
-  chatId: string,
-): Promise<string | null> => {
-  const [row] = await db
-    .select({ projectId: chat.projectId })
-    .from(chat)
-    .where(eq(chat.id, chatId))
-    .limit(1);
-  if (!row?.projectId) {
-    return null;
-  }
-  return resolveBillingOrgForProject(row.projectId);
-};
-
-export const generateSuggestionsFromMilestones = async ({
-  chatId,
-  researchAgentChatId,
-  milestones,
-  projectName,
-}: {
-  chatId: string;
-  researchAgentChatId: string;
-  milestones: MilestoneItem[];
-  projectName: string;
-}): Promise<void> => {
+/**
+ * Resolve to an empty list (and log) when an optional input fails to load, so
+ * one broken source never blocks suggestion generation.
+ */
+const loadOrEmpty = async <T>(label: string, load: Promise<T[]>) => {
   try {
-    const result = await generateObject({
-      model: await getModel("lite"),
-      system: `You generate short action chip suggestions for a project chat UI. Rules:
-- label: 2-5 words, imperative verb phrase (e.g. "Draft Scoping Letter", "Write Purpose Statement")
-- content: single short imperative sentence, max 15 words (e.g. "Draft a scoping letter for the project")
-- emoji: single emoji that best represents the action. Every suggestion MUST have a unique emoji — no duplicates. Avoid 📝, 📋, 📄, ⚖️, and 📅 (already used by fixed suggestions). Use varied, descriptive emojis (e.g. "🔍" for analysis, "📊" for reports, "🗺️" for mapping, "🌲" for forestry, "📐" for planning, "🏗️" for construction, "🦅" for wildlife, "💧" for water/watershed).
-- NO questions. NO explanations. Just direct action requests.
-- Order by workflow priority: what needs to happen first comes first.
-- Cover diverse deliverables: consultation letters, resource analyses, surveys, monitoring plans, contracts, and other documents relevant to the milestones.
-- Focus on document creation, planning, and key deliverables from the milestones.`,
-      prompt: `Project: ${projectName}\n\nMilestones and tasks:\n${milestones.map((m) => `- ${m.title}\n${m.tasks.map((t) => `  - ${t.title}`).join("\n")}`).join("\n")}\n\nGenerate 5-8 action chip suggestions. Do NOT generate suggestions for scoping letters, proposed actions, purpose & need, decision memos, or project schedules — those are already included separately.`,
-      output: "array",
-      schema: suggestionItemSchema,
-    });
-
-    // Consume-only: the run itself was flat-charged at start; this local
-    // chip generation is an extra lite call attributed to the same project.
-    const chipBillingOrgId = await resolveBillingOrgForProjectByChatId(chatId);
-    await meterAiCall({
-      billing: chipBillingOrgId ? { organizationId: chipBillingOrgId } : null,
-      source: "research_agent",
-      usage: result.usage,
-      providerMetadata: result.providerMetadata,
-      metadata: { tool: "suggestionChips", researchAgentChatId },
-    });
-
-    const generated = result.object as SuggestionItem[];
-
-    const fixedSuggestions: SuggestionItem[] = DEFAULT_SUGGESTION_TEMPLATES.map(
-      (t) => ({
-        label: t.label,
-        content: t.contentTemplate.replace("{projectName}", projectName),
-        emoji: t.emoji,
-      }),
-    );
-
-    const dynamicSuggestions: SuggestionItem[] = generated
-      .slice(0, 8)
-      .map((s) => ({
-        label: s.label,
-        content: s.content,
-        emoji: s.emoji,
-      }));
-
-    const suggestions = [...fixedSuggestions, ...dynamicSuggestions];
-
-    await upsertSuggestionsMessage({
-      chatId,
-      researchAgentChatId,
-      data: { suggestions },
-    });
+    return await load;
   } catch (error) {
     console.error(
-      "[bootstrapper] Failed to generate suggestions from milestones:",
+      `[bootstrapper] Failed to load ${label} for suggestions:`,
       error,
     );
+    return [] as T[];
   }
+};
+
+/**
+ * Collect the project's saved data. Unsaved research proposals are
+ * deliberately left out: chips are built when the user completes the research
+ * phase, from what they chose to keep. Chat activity (drafted documents,
+ * recent requests) comes only from the chat the chips belong to, since other
+ * members' chats are private.
+ */
+const gatherProjectSuggestionInputs = async (
+  projectId: string,
+  chatId: string,
+): Promise<ProjectSuggestionInputs> => {
+  const project = await getProjectById(projectId);
+  if (!project) {
+    throw new Error(`Project ${projectId} not found`);
+  }
+
+  const [
+    savedFields,
+    savedContext,
+    documents,
+    savedMilestones,
+    draftedDocumentTitles,
+    userMessageParts,
+  ] = await Promise.all([
+    loadOrEmpty("fields", getProjectFieldsByProjectId(projectId)),
+    loadOrEmpty("context", getProjectContextByProjectId(projectId)),
+    loadOrEmpty("documents", getProjectDocumentsByProjectId(projectId)),
+    loadOrEmpty("milestones", getProjectMilestonesWithTasks(projectId)),
+    loadOrEmpty("drafted documents", getDraftedDocumentTitlesByChatId(chatId)),
+    loadOrEmpty("recent messages", getRecentUserMessagePartsByChatId(chatId)),
+  ]);
+
+  return {
+    projectName: project.name,
+    projectDescription: project.description,
+    projectPrompt: project.prompt,
+    fields: savedFields.map((field) => ({
+      label: field.name,
+      value: (field.values ?? []).filter(Boolean).join(", "),
+    })),
+    context: savedContext.map((entry) => ({
+      label: entry.label,
+      content: entry.content ?? "",
+    })),
+    documentTitles: documents.map((doc) => doc.originalFilename),
+    milestones: savedMilestones,
+    draftedDocumentTitles,
+    recentUserRequests: userMessageParts.map(extractMessageText),
+  };
+};
+
+/**
+ * Generate the project's next-step chips from its framework, data and progress,
+ * and store them as the chat's `suggestions` research-agent message (replacing
+ * any previous set). Throws on failure and leaves the stored set untouched.
+ */
+export const generateProjectSuggestions = async ({
+  projectId,
+  chatId,
+  researchAgentChatId,
+}: {
+  projectId: string;
+  chatId: string;
+  researchAgentChatId: string;
+}): Promise<SuggestionItem[]> => {
+  const inputs = await gatherProjectSuggestionInputs(projectId, chatId);
+  const system = await getPrompt(
+    "project-next-step-suggestions",
+    buildProjectSuggestionPromptVariables(inputs),
+  );
+
+  const result = await generateObject({
+    model: await getModel("lite"),
+    system,
+    prompt: "Generate the next-step chips for this project, most urgent first.",
+    output: "array",
+    schema: suggestionItemSchema,
+  });
+
+  const billingOrgId = await resolveBillingOrgForProject(projectId);
+  await meterAiCall({
+    billing: billingOrgId ? { organizationId: billingOrgId } : null,
+    source: "research_agent",
+    usage: result.usage,
+    providerMetadata: result.providerMetadata,
+    metadata: { tool: "suggestionChips", researchAgentChatId },
+  });
+
+  const seenLabels = new Set<string>();
+  const suggestions = (result.object as z.infer<typeof suggestionItemSchema>[])
+    .map((item) => ({
+      label: item.label.trim(),
+      content: item.content.trim(),
+      emoji: item.emoji.trim(),
+    }))
+    .filter((item) => {
+      const key = item.label.toLowerCase();
+      if (!item.label || !item.content || seenLabels.has(key)) {
+        return false;
+      }
+      seenLabels.add(key);
+      return true;
+    })
+    .slice(0, MAX_SUGGESTIONS);
+
+  if (suggestions.length === 0) {
+    throw new Error("Model returned no usable suggestions");
+  }
+
+  await upsertSuggestionsMessage({
+    chatId,
+    researchAgentChatId,
+    data: { suggestions },
+  });
+
+  return suggestions;
 };

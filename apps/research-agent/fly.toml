@@ -23,7 +23,7 @@ app = "turboplan-research-agent"
   ALLOWED_ORIGINS = "*.example.com,*.<account>.workers.dev"
   TARGET_API_ROOT_PATH = "/api/webhooks/research-agent"
   TARGET_API_HEALTH_PATH = "/health"
-  CLAUDE_MODEL = "claude-sonnet-4-6"
+  CLAUDE_MODEL = "claude-opus-5-5"
   CLAUDE_FAST_MODEL = "claude-haiku-4-5-20251001"
   RUN_TIMEOUT_MS = "900000"
 
