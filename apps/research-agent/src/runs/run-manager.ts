@@ -25,7 +25,10 @@ import {
 } from "./types";
 import { buildResumePrompt } from "./utils/build-resume-prompt";
 import { parseRunStatus } from "./utils/parse-run-status";
-import { parseStoredResult } from "./utils/parse-stored-result";
+import {
+  parseStoredResult,
+  serializeRunResult,
+} from "./utils/parse-stored-result";
 
 export class RunManager {
   constructor(
@@ -71,6 +74,10 @@ export class RunManager {
     captureRunEvent("research_run_completed", {
       run_id: runId,
       status: finalState.status,
+      skill: runRecordContext.skill,
+      num_turns: finalState.stats?.num_turns,
+      duration_ms: finalState.stats?.duration_ms,
+      total_cost_usd: finalState.stats?.total_cost_usd,
     });
 
     try {
@@ -142,7 +149,7 @@ export class RunManager {
     // Overwrite resultJson only if memory extraction stripped content from the raw result.
     if (cleanResult !== finalState.result) {
       await this.repository.updateStatus(runId, finalState.status, {
-        resultJson: JSON.stringify(cleanResult),
+        resultJson: serializeRunResult(cleanResult, finalState.stats),
       });
     }
   }
@@ -196,6 +203,7 @@ export class RunManager {
       projectId: options.projectId,
       webhookSecret: options.webhookSecret,
       targetApiUrl: options.targetApiUrl,
+      skill: options.skill,
     });
 
     captureRunEvent("research_run_started", {
