@@ -41,7 +41,11 @@ type ProjectChatProps = {
   initialMessages: Array<UIMessage>;
   isReadonly: boolean;
   projectId?: string;
+  /** Map module enabled (resolved on the server) */
+  isMapEnabled?: boolean;
   onChatCreated?: (chatId: string) => void;
+  /** Fires once when the first message of a new chat is sent, before the reply streams. */
+  onFirstMessageSubmitted?: () => void;
   isInitialChat?: boolean;
   isInputDisabled?: boolean;
   disabledPlaceholder?: string;
@@ -63,7 +67,9 @@ export const ProjectChat = forwardRef<ProjectChatRef, ProjectChatProps>(
       initialMessages,
       isReadonly,
       projectId,
+      isMapEnabled,
       onChatCreated,
+      onFirstMessageSubmitted,
       isInputDisabled,
       disabledPlaceholder,
       isResearchPhaseCompleted,
@@ -327,6 +333,26 @@ export const ProjectChat = forwardRef<ProjectChatRef, ProjectChatProps>(
       }
     }, [status, notifyChatCreated]);
 
+    // Fire onFirstMessageSubmitted exactly once, as soon as the first message is
+    // sent (the server kicks off work for it before the reply starts streaming)
+    const hasNotifiedFirstMessage = useRef(false);
+    const notifyFirstMessageSubmitted = useCallback(() => {
+      if (
+        !hasNotifiedFirstMessage.current &&
+        initialMessages.length === 0 &&
+        onFirstMessageSubmitted
+      ) {
+        hasNotifiedFirstMessage.current = true;
+        onFirstMessageSubmitted();
+      }
+    }, [initialMessages.length, onFirstMessageSubmitted]);
+
+    useEffect(() => {
+      if (status === "submitted" || status === "streaming") {
+        notifyFirstMessageSubmitted();
+      }
+    }, [status, notifyFirstMessageSubmitted]);
+
     // Auto-send initial message from URL parameter
     // Empty deps array is intentional - this should only run on mount when URL param is present
     // Ref guard prevents React StrictMode double-mount from calling append() twice
@@ -379,12 +405,13 @@ export const ProjectChat = forwardRef<ProjectChatRef, ProjectChatProps>(
             projectId={projectId}
           />
 
-          <form className={CHAT_FORM_CLASS}>
+          <form className={CHAT_FORM_CLASS} data-testid="project-chat-composer">
             {!isReadonly && (
               <div className={CHAT_COMPOSER_SHELL_CLASS}>
                 <ProjectMultimodalInput
                   chatId={id}
                   projectId={projectId}
+                  isMapEnabled={isMapEnabled}
                   input={input}
                   setInput={setInput}
                   handleSubmit={handleSubmit}
@@ -397,6 +424,7 @@ export const ProjectChat = forwardRef<ProjectChatRef, ProjectChatProps>(
                   append={append}
                   isInputDisabled={isInputDisabled}
                   disabledPlaceholder={disabledPlaceholder}
+                  autoFocus={!isArtifactVisible}
                 />
               </div>
             )}
@@ -428,6 +456,9 @@ export const ProjectChat = forwardRef<ProjectChatRef, ProjectChatProps>(
           reload={reload}
           isReadonly={isReadonly}
           projectId={projectId}
+          isMapEnabled={isMapEnabled}
+          isInputDisabled={isInputDisabled}
+          disabledPlaceholder={disabledPlaceholder}
         />
       </>
     );

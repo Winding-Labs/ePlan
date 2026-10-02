@@ -44,6 +44,11 @@ import { getRBACService } from "@wildfires-org/turboplan-rbac/server";
 
 import { auth } from "@/app/(auth)/auth";
 import { triggerResearchAgent } from "@/app/self-service/helpers";
+import {
+  buildDroppedFilesNote,
+  buildGisAttachmentNote,
+  isGisAttachment,
+} from "@/lib/ai/attachment-notes";
 import { buildSystemPromptArgs } from "@/lib/ai/build-system-prompt-args";
 import { generateTitleFromUserMessage } from "@/lib/ai/generate-title";
 import { createDocument } from "@/lib/ai/tools/create-document";
@@ -428,7 +433,20 @@ export async function POST(request: Request) {
     // Only images and PDFs can be sent to the model — Anthropic rejects other
     // file types (e.g. docx) with a 400. Unsupported file parts are dropped
     // from `parts` (which convertToModelMessages actually consumes) and
-    // replaced with a text note; ZIP files get a geospatial hint instead.
+    // replaced with a text note; GIS files get a geospatial hint instead. In
+    // project chats the client has already mirrored Word files into project
+    // documents and GIS files into the project map, and the notes say so.
+    const attachmentNoteContext = {
+      isProjectChat: Boolean(chatProjectId) && hasProjectAccess,
+      canReadProjectDocuments: promptArgs.activeTools.includes(
+        "readProjectDocuments",
+      ),
+      // createDocument is off in the research phase, and only offers the map
+      // kind when the map package is enabled.
+      canCreateMap:
+        promptArgs.activeTools.includes("createDocument") &&
+        promptArgs.enabledFeatures.map,
+    };
     const isModelReadableType = (contentType?: string) =>
       Boolean(
         contentType?.startsWith("image/") || contentType === "application/pdf",
@@ -449,12 +467,6 @@ export async function POST(request: Request) {
       const messageAttachments: LegacyAttachment[] =
         (message as MessageWithAttachments).experimental_attachments ?? [];
 
-      const zipTypes = [
-        "application/zip",
-        "application/x-zip-compressed",
-        "application/octet-stream",
-      ];
-
       const supportedAttachments = messageAttachments.filter((att) =>
         isModelReadableType(att.contentType),
       );
@@ -469,28 +481,32 @@ export async function POST(request: Request) {
         ("filename" in part ? part.filename : undefined) ||
         safeDecodeURIComponent(part.url.split("/").pop() || "") ||
         "unnamed file";
-      const isZipPart = (part: (typeof fileParts)[number]) =>
-        zipTypes.includes(part.mediaType || "") ||
-        filePartName(part).toLowerCase().endsWith(".zip");
+      // GIS files (ZIP/KMZ, GeoJSON, KML — stored as text/plain — and
+      // GeoPackage) are never sent to the model.
+      const isGisPart = (part: (typeof fileParts)[number]) =>
+        isGisAttachment({
+          name: filePartName(part),
+          mediaType: part.mediaType,
+        });
 
-      const zipParts = fileParts.filter(isZipPart);
+      const gisParts = fileParts.filter(isGisPart);
       const droppedParts = fileParts.filter(
-        (part) => !isModelReadableType(part.mediaType) && !isZipPart(part),
+        (part) => !isModelReadableType(part.mediaType) && !isGisPart(part),
       );
 
-      const noteLines: string[] = [];
-      if (zipParts.length > 0) {
-        const zipFileNames = zipParts.map(filePartName).join(", ");
-        noteLines.push(
-          `[System: User has uploaded ZIP file(s): ${zipFileNames} - these contain geospatial data ready for map visualization]`,
-        );
-      }
-      if (droppedParts.length > 0) {
-        const droppedNames = droppedParts.map(filePartName).join(", ");
-        noteLines.push(
-          `[System: User attached document(s) the model cannot read directly: ${droppedNames}]`,
-        );
-      }
+      const noteLines = [
+        buildGisAttachmentNote(
+          gisParts.map(filePartName),
+          attachmentNoteContext,
+        ),
+        buildDroppedFilesNote(
+          droppedParts.map((part) => ({
+            name: filePartName(part),
+            mediaType: part.mediaType,
+          })),
+          attachmentNoteContext,
+        ),
+      ].filter((line): line is string => Boolean(line));
 
       let updatedParts = message.parts?.filter(
         (part) =>

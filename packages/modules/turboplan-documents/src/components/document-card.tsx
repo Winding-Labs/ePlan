@@ -1,8 +1,8 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 
-import { User } from "lucide-react";
+import { Loader2, User } from "lucide-react";
 
 import {
   Avatar,
@@ -11,6 +11,10 @@ import {
   generateInitials,
 } from "@wildfires-org/turboplan-utils";
 
+import {
+  getMsUntilStale,
+  type ProjectDocumentExtractionStatus,
+} from "../types";
 import { formatDateTime, getFileTypeLabel } from "./utils";
 
 interface DocumentCardBase {
@@ -30,12 +34,21 @@ interface DocumentCardUploader {
 
 export interface EditableDocumentCardData extends DocumentCardBase {
   uploader?: DocumentCardUploader | null;
+  extractionStatus?: ProjectDocumentExtractionStatus;
+  extractionError?: string | null;
 }
 
 interface DocumentCardEditableProps {
   document: EditableDocumentCardData;
   actions?: ReactNode;
   onClick?: () => void;
+  /** Show whether the document's text has been extracted for the AI. */
+  showExtractionStatus?: boolean;
+  /**
+   * When this client first saw the document pending (epoch ms). Times the
+   * "waiting" state; the server's `createdAt` is the fallback.
+   */
+  pendingSince?: number;
 }
 
 interface DocumentCardReadOnlyProps {
@@ -47,7 +60,18 @@ export function DocumentCardEditable({
   document,
   actions,
   onClick,
+  showExtractionStatus = false,
+  pendingSince,
 }: DocumentCardEditableProps) {
+  // Shown inline rather than in a tooltip so touch and keyboard users can
+  // read why no text was extracted.
+  const extractionErrorText =
+    showExtractionStatus &&
+    (document.extractionStatus === "failed" ||
+      document.extractionStatus === "unsupported")
+      ? document.extractionError
+      : null;
+
   return (
     <div
       className={cn(
@@ -90,9 +114,29 @@ export function DocumentCardEditable({
               {formatDateTime(document.createdAt)}
             </span>
           </div>
+
+          {extractionErrorText && (
+            <p
+              title={extractionErrorText}
+              className={cn(
+                "line-clamp-2 text-xs leading-4 [overflow-wrap:anywhere]",
+                document.extractionStatus === "failed"
+                  ? "text-error-700"
+                  : "text-gray-700",
+              )}
+            >
+              {extractionErrorText}
+            </p>
+          )}
         </div>
 
         <div className="flex shrink-0 items-start gap-2">
+          {showExtractionStatus && (
+            <ExtractionStatusChip
+              status={document.extractionStatus}
+              pendingSince={pendingSince ?? Date.parse(document.createdAt)}
+            />
+          )}
           <span className="rounded-full bg-slate-900/[0.05] px-2 py-0.5 text-[11px] font-medium text-gray-700 ring-1 ring-inset ring-slate-900/[0.06]">
             {getFileTypeLabel(document.mimeType)}
           </span>
@@ -163,3 +207,108 @@ export function DocumentCardReadOnly({
     </a>
   );
 }
+
+const EXTRACTION_CHIP_CLASS =
+  "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ring-1 ring-inset";
+
+/**
+ * Whether a document pending since `pendingSince` (epoch ms) has waited past
+ * the stale threshold. Re-renders once when the threshold passes, so the
+ * spinner does not run forever.
+ */
+const useIsExtractionStale = (isPending: boolean, pendingSince: number) => {
+  const [isStale, setIsStale] = useState(
+    () => isPending && getMsUntilStale(pendingSince) === 0,
+  );
+
+  useEffect(() => {
+    if (!isPending) {
+      setIsStale(false);
+      return;
+    }
+    const delay = getMsUntilStale(pendingSince);
+    if (delay === 0) {
+      setIsStale(true);
+      return;
+    }
+    setIsStale(false);
+    if (!Number.isFinite(delay)) {
+      return;
+    }
+    const timer = setTimeout(() => setIsStale(true), delay);
+    return () => clearTimeout(timer);
+  }, [isPending, pendingSince]);
+
+  return isStale;
+};
+
+type ExtractionStatusChipProps = {
+  status?: ProjectDocumentExtractionStatus;
+  pendingSince: number;
+};
+
+const ExtractionStatusChip = ({
+  status,
+  pendingSince,
+}: ExtractionStatusChipProps) => {
+  const isStale = useIsExtractionStale(status === "pending", pendingSince);
+
+  if (status === "pending" && isStale) {
+    return (
+      <span
+        title="The assistant can read this document once text extraction finishes."
+        className={cn(
+          EXTRACTION_CHIP_CLASS,
+          "bg-slate-900/[0.04] text-gray-700 ring-slate-900/[0.06]",
+        )}
+      >
+        Waiting for text extraction
+      </span>
+    );
+  }
+
+  if (status === "pending") {
+    return (
+      <span
+        className={cn(
+          EXTRACTION_CHIP_CLASS,
+          "bg-blue-50 text-blue-700 ring-blue-700/10",
+        )}
+      >
+        <Loader2
+          aria-hidden
+          className="size-3 animate-spin motion-reduce:animate-none"
+        />
+        Extracting text
+      </span>
+    );
+  }
+
+  if (status === "failed") {
+    return (
+      <span
+        className={cn(
+          EXTRACTION_CHIP_CLASS,
+          "bg-error-50 text-error-700 ring-error-700/10",
+        )}
+      >
+        Text extraction failed
+      </span>
+    );
+  }
+
+  if (status === "unsupported") {
+    return (
+      <span
+        className={cn(
+          EXTRACTION_CHIP_CLASS,
+          "bg-slate-900/[0.04] text-gray-700 ring-slate-900/[0.06]",
+        )}
+      >
+        No readable text
+      </span>
+    );
+  }
+
+  return null;
+};

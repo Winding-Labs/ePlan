@@ -50,6 +50,9 @@ import { ALLOWED_MIME_TYPES, MAX_FILE_SIZE } from "./utils";
 type DocumentCardWithActionsProps = {
   document: ProjectDocument;
   readOnly: boolean;
+  showExtractionStatus: boolean;
+  /** When this client first saw the document pending */
+  pendingSince?: number;
   isDeleting: string | null;
   canModify: boolean;
   onPreview: (doc: ProjectDocument) => void;
@@ -60,6 +63,8 @@ type DocumentCardWithActionsProps = {
 const DocumentCardWithActions = ({
   document,
   readOnly,
+  showExtractionStatus,
+  pendingSince,
   isDeleting,
   canModify,
   onPreview,
@@ -68,6 +73,8 @@ const DocumentCardWithActions = ({
 }: DocumentCardWithActionsProps) => (
   <DocumentCardEditable
     document={document}
+    showExtractionStatus={showExtractionStatus}
+    pendingSince={pendingSince}
     onClick={() => onPreview(document)}
     actions={
       <DropdownMenu>
@@ -166,6 +173,8 @@ const groupDocumentsByFolder = (
 type DocumentCardsGridProps = {
   documents: ProjectDocument[];
   readOnly: boolean;
+  showExtractionStatus: boolean;
+  pendingSince: ReadonlyMap<string, number>;
   isDeleting: string | null;
   canModifyDocument: (doc: ProjectDocument) => boolean;
   onPreview: (doc: ProjectDocument) => void;
@@ -176,6 +185,8 @@ type DocumentCardsGridProps = {
 const DocumentCardsGrid = ({
   documents,
   readOnly,
+  showExtractionStatus,
+  pendingSince,
   isDeleting,
   canModifyDocument,
   onPreview,
@@ -196,6 +207,8 @@ const DocumentCardsGrid = ({
             key={document.id}
             document={document}
             readOnly={readOnly}
+            showExtractionStatus={showExtractionStatus}
+            pendingSince={pendingSince.get(document.id)}
             isDeleting={isDeleting}
             canModify={canModifyDocument(document)}
             onPreview={onPreview}
@@ -231,6 +244,8 @@ const DocumentCardsGrid = ({
                 key={document.id}
                 document={document}
                 readOnly={readOnly}
+                showExtractionStatus={showExtractionStatus}
+                pendingSince={pendingSince.get(document.id)}
                 isDeleting={isDeleting}
                 canModify={canModifyDocument(document)}
                 onPreview={onPreview}
@@ -259,6 +274,8 @@ const DocumentCardsGrid = ({
                 key={document.id}
                 document={document}
                 readOnly={readOnly}
+                showExtractionStatus={showExtractionStatus}
+                pendingSince={pendingSince.get(document.id)}
                 isDeleting={isDeleting}
                 canModify={canModifyDocument(document)}
                 onPreview={onPreview}
@@ -293,6 +310,8 @@ export interface DocumentsSectionUIProps {
   isResearchPhaseCompleted?: boolean;
   /** Callback when a suggestion pill is clicked */
   onSuggestionClick?: (content: string) => void;
+  /** Show each document's text extraction status */
+  showExtractionStatus?: boolean;
 }
 
 /**
@@ -312,6 +331,7 @@ export function DocumentsSectionUI({
   variant = "default",
   isResearchPhaseCompleted,
   onSuggestionClick,
+  showExtractionStatus = false,
 }: DocumentsSectionUIProps) {
   const [deleteFileId, setDeleteFileId] = useState<string | null>(null);
   const [renameDoc, setRenameDoc] = useState<ProjectDocument | null>(null);
@@ -339,9 +359,12 @@ export function DocumentsSectionUI({
     renameDocument,
     isDeleting,
     isRenaming,
+    pendingSince,
   } = useProjectDocuments({
     projectId,
     source,
+    // Pick up text extraction results while a card shows "Extracting text"
+    pollPendingExtraction: showExtractionStatus,
   });
 
   // Check if user has UPDATE permission (Editor+) on the project
@@ -526,6 +549,8 @@ export function DocumentsSectionUI({
             <DocumentCardsGrid
               documents={documents}
               readOnly={readOnly}
+              showExtractionStatus={showExtractionStatus}
+              pendingSince={pendingSince}
               isDeleting={isDeleting}
               canModifyDocument={canModifyDocument}
               onPreview={setPreviewDoc}
@@ -661,6 +686,7 @@ export function DocumentsSectionUI({
           filename={previewDoc.originalFilename}
           url={previewDoc.url}
           mimeType={previewDoc.mimeType}
+          projectDocumentId={previewDoc.id}
           open={!!previewDoc}
           onOpenChange={(open) => {
             if (!open) setPreviewDoc(null);
