@@ -3,6 +3,8 @@ import { alias } from "drizzle-orm/pg-core";
 import { Hono } from "hono";
 import { z } from "zod";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import {
   generatedImages,
   OwnershipStatus,
@@ -26,6 +28,7 @@ import {
 } from "@wildfires-org/turboplan-rbac/hono";
 import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/server";
 
+import { actorContext } from "../analytics-helpers";
 import { generateUniqueProjectSlug } from "../projects/queries";
 import { getSubmissionReviewScope } from "../projects/submission-policy";
 import {
@@ -497,6 +500,19 @@ projectSubmissionsRouter.patch(
           console.error("Failed to send rejection email:", emailError);
         }
       }
+
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.PROJECT_REVIEWED,
+        actorContext(currentUser.userId, {
+          organizationId: submission.targetOrganizationId,
+          officeId: submission.targetOfficeId,
+          projectId,
+        }),
+        {
+          decision:
+            action === OwnershipStatus.ACCEPTED ? "accepted" : "rejected",
+        },
+      );
 
       return c.json({ success: true, ownershipStatus: action });
     } catch (error) {

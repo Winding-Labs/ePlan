@@ -13,6 +13,7 @@
     "@cfworker/json-schema": "^4.1.1",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@sentry/cloudflare": "^10.70.0",
+    "@wildfires-org/turboplan-analytics": "workspace:*",
     "@wildfires-org/turboplan-api-client": "workspace:*",
     "@wildfires-org/turboplan-billing": "workspace:*",
     "@wildfires-org/turboplan-db": "workspace:*",

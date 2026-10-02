@@ -20,6 +20,13 @@ set -euo pipefail
 #   R2_ACCOUNT_ID
 #   R2_BUCKET_NAME
 #   OPENROUTER_API_KEY
+#
+# Optional analytics (each destination is off when its value is empty):
+#   POSTHOG_API_KEY       PostHog project token (a --var)
+#   GA_MEASUREMENT_ID     GA4 stream id (public, a --var) for server-side
+#                         Measurement Protocol hits
+#   GA_API_SECRET         that stream's Measurement Protocol secret (encrypted
+#                         secret). Server-side GA4 is off without it
 
 ENVIRONMENT="${1:?Usage: deploy-mcp.sh <environment> [pr-number]}"
 PR_NUMBER="${2:-}"
@@ -91,6 +98,8 @@ VARS=(
   --var "RELEASE_VERSION:${RELEASE_VERSION:-}"
   # PostHog analytics (optional — analytics disabled when empty)
   --var "POSTHOG_API_KEY:${POSTHOG_API_KEY:-}"
+  # GA4 Measurement Protocol stream (optional — needs GA_API_SECRET below)
+  --var "GA_MEASUREMENT_ID:${GA_MEASUREMENT_ID:-}"
 )
 
 if [[ "$ENVIRONMENT" == "preview" ]]; then
@@ -118,6 +127,10 @@ fi
 
 if [[ -n "${OPENROUTER_API_KEY:-}" ]]; then
   SECRETS_JSON=$(echo "$SECRETS_JSON" | jq --arg k "OPENROUTER_API_KEY" --arg v "$OPENROUTER_API_KEY" '. + {($k): $v}')
+fi
+
+if [[ -n "${GA_API_SECRET:-}" ]]; then
+  SECRETS_JSON=$(echo "$SECRETS_JSON" | jq --arg k "GA_API_SECRET" --arg v "$GA_API_SECRET" '. + {($k): $v}')
 fi
 
 echo "$SECRETS_JSON" | npx wrangler secret bulk --name "$WORKER_NAME"

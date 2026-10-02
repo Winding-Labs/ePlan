@@ -1,5 +1,7 @@
 import { and, eq, inArray, or, sql } from "drizzle-orm";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import {
   OfficeStatus,
   type Organization,
@@ -19,7 +21,6 @@ import {
 } from "@wildfires-org/turboplan-utils/server";
 
 import type { SlugLookupResult } from "../../types";
-import { emitWorkspaceAnalytics } from "../analytics";
 import type { OfficeWithAccess, OrganizationWithOffices } from "./types";
 
 export async function getOrganizationById(
@@ -257,14 +258,17 @@ export async function createOrganization({
     // inside createUser (turboplan-db) do NOT come through here — that is
     // deliberate: a personal workspace is an artifact of signup, already
     // covered by user_signed_up, and counting it would double every account.
-    emitWorkspaceAnalytics({
-      distinctId: createdBy,
-      event: "organization_created",
-      properties: {
-        organization_id: newOrg.id,
-        organization_type: newOrg.type,
+    // The one caller today is the cataloger, which runs from its webhook.
+    trackAnalyticsEvent(
+      ANALYTICS_EVENTS.ORGANIZATION_CREATED,
+      {
+        distinctId: createdBy,
+        userId: createdBy,
+        organizationId: newOrg.id,
+        source: "system",
       },
-    });
+      { organization_type: newOrg.type },
+    );
 
     return newOrg;
   } catch (error) {

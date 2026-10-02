@@ -1,6 +1,8 @@
 import { and, eq } from "drizzle-orm";
 import { Hono } from "hono";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import {
   assertSeatAvailable,
   syncSubscriptionSeatsSafe,
@@ -39,6 +41,7 @@ import {
 } from "@wildfires-org/turboplan-utils/server";
 
 import type { PendingInvitation } from "../../types";
+import { actorContext, changedFieldNames } from "../analytics-helpers";
 import { sendMemberAddedNotification } from "../invitations/email";
 import { getEntityInvitationsWithInviter } from "../invitations/queries";
 import { getInvitationService } from "../invitations/service";
@@ -224,11 +227,9 @@ organizationsRouter.put(
         newSlug = generateUniqueSlug(name);
       }
 
-      await updateOrganization({
-        id,
+      const updates = {
         name,
         shortName: shortName || undefined,
-        slug: newSlug,
         description,
         country: country || undefined,
         type,
@@ -238,10 +239,22 @@ organizationsRouter.put(
         documentFooterText,
         documentFooterNote,
         documentFooterLogoUrl,
-      });
+      };
+      await updateOrganization({ id, slug: newSlug, ...updates });
 
       // Clean up old logos from storage once the row no longer points at them.
       await deleteReplacedStorageFiles(logoFields, storageOwner);
+
+      // The edit dialog always sends every field, so report only the ones
+      // that actually changed (names only, never values).
+      const changedFields = changedFieldNames(organization, updates);
+      if (changedFields.length > 0) {
+        trackAnalyticsEvent(
+          ANALYTICS_EVENTS.ORGANIZATION_UPDATED,
+          actorContext(c.get("user").userId, { organizationId: id }),
+          { changed_fields: changedFields },
+        );
+      }
 
       // Return updated organization
       const updatedOrganization = await getOrganizationById(id);
@@ -300,6 +313,15 @@ organizationsRouter.put(
       const emailDomains = Array.from(new Set(normalized.domains));
 
       await updateOrganization({ id, emailDomains });
+
+      const changedFields = changedFieldNames(organization, { emailDomains });
+      if (changedFields.length > 0) {
+        trackAnalyticsEvent(
+          ANALYTICS_EVENTS.ORGANIZATION_UPDATED,
+          actorContext(c.get("user").userId, { organizationId: id }),
+          { changed_fields: changedFields },
+        );
+      }
 
       return c.json({ emailDomains });
     } catch (error) {
@@ -451,7 +473,7 @@ organizationsRouter.post(
           userId: users[0]?.id,
         });
         if (!seatDecision.allowed) {
-          return seatLimitResponse(c, seatDecision);
+          return seatLimitResponse(c, seatDecision, orgId);
         }
       }
 
@@ -484,6 +506,17 @@ organizationsRouter.post(
 
         // Keep Stripe seat quantity in sync (non-viewer roles are billable).
         await syncSubscriptionSeatsSafe(orgId);
+
+        trackAnalyticsEvent(
+          ANALYTICS_EVENTS.MEMBER_JOINED,
+          actorContext(authUser.userId, { organizationId: orgId }),
+          {
+            entity_type: "organization",
+            via: "added",
+            member_user_id: userId,
+            role,
+          },
+        );
 
         // Notify the existing user that they were added (best-effort).
         try {
@@ -520,6 +553,15 @@ organizationsRouter.post(
         if (!result) {
           // This shouldn't happen since we already checked user doesn't exist
           return c.json({ error: "Failed to create invitation" }, 500);
+        }
+
+        // A repeat invite returns the pending one — not a new invitation.
+        if (!result.isExisting) {
+          trackAnalyticsEvent(
+            ANALYTICS_EVENTS.MEMBER_INVITED,
+            actorContext(authUser.userId, { organizationId: orgId }),
+            { entity_type: "organization", role },
+          );
         }
 
         return c.json({
@@ -567,7 +609,7 @@ organizationsRouter.patch(
           userId,
         });
         if (!seatDecision.allowed) {
-          return seatLimitResponse(c, seatDecision);
+          return seatLimitResponse(c, seatDecision, orgId);
         }
       }
 
@@ -601,6 +643,12 @@ organizationsRouter.patch(
 
       // Role change can move a member in/out of the billable (non-viewer) set.
       await syncSubscriptionSeatsSafe(orgId);
+
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.MEMBER_ROLE_CHANGED,
+        actorContext(authUser.userId, { organizationId: orgId }),
+        { entity_type: "organization", member_user_id: userId, role },
+      );
 
       return c.json({
         success: true,
@@ -665,6 +713,12 @@ organizationsRouter.delete(
 
       // Removing a non-viewer frees a seat — push the new count to Stripe.
       await syncSubscriptionSeatsSafe(orgId);
+
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.MEMBER_REMOVED,
+        actorContext(authUser.userId, { organizationId: orgId }),
+        { entity_type: "organization", member_user_id: userId },
+      );
 
       return c.json({ success: true });
     } catch (error) {

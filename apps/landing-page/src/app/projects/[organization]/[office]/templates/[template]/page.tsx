@@ -24,7 +24,7 @@ import { PublicFieldsSection } from "@/components/public-project/public-fields-s
 import { PublicModuleSection } from "@/components/public-project/public-module-section";
 import { PublicTasksSection } from "@/components/public-project/public-tasks-section";
 import { ReadOnlyModulesRenderer } from "@/components/public-project/read-only-modules-renderer";
-import { brand } from "@/lib/brand";
+import { buildPageMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { routing } from "@/utils/routing";
 
@@ -154,44 +154,25 @@ export async function generateMetadata({
   const templateData = await getPublicTemplate(organization, office, template);
 
   if (!templateData) {
-    return {
-      title: `Template Not Found - ${brand.name}`,
-      description:
-        "This template could not be found or is not publicly available.",
-    };
+    notFound();
   }
 
-  const title = `${templateData.name} Template - ${templateData.organization.name} | ${brand.name}`;
-  const description =
-    templateData.description ||
-    `Preview the ${templateData.name} template from ${templateData.organization.name}`;
-  const image = templateData.coverImageUrl || brand.ogImage;
-
+  // Server-rendered detail page: opt back in from the catalog's noindex
+  // (app/projects/layout.tsx).
   return {
-    title,
-    description,
-    // Server-rendered detail page: opt back in from the catalog's noindex.
-    robots: { index: true, follow: true },
-    alternates: {
-      canonical: routing.catalogTemplate({
+    ...buildPageMetadata({
+      title: `${templateData.name} template – ${templateData.organization.name}`,
+      description:
+        templateData.description ||
+        `Preview the ${templateData.name} template from ${templateData.organization.name}`,
+      path: routing.catalogTemplate({
         organizationSlug: organization,
         officeSlug: office,
         templateSlug: template,
       }),
-    },
-    openGraph: {
-      title,
-      description,
-      siteName: brand.name,
-      type: "website",
-      images: [{ url: image }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [image],
-    },
+      image: templateData.coverImageUrl || undefined,
+    }),
+    robots: { index: true, follow: true },
   };
 }
 

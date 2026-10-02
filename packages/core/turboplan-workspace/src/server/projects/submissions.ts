@@ -1,5 +1,7 @@
 import { and, desc, eq, isNull, ne } from "drizzle-orm";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import {
   invitations,
   type Office,
@@ -17,6 +19,7 @@ import { db } from "@wildfires-org/turboplan-db/db-client";
 import { MemberRole } from "@wildfires-org/turboplan-rbac";
 import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/server";
 
+import { actorContext } from "../analytics-helpers";
 import { generateUniqueProjectSlug } from "./queries";
 import { SUBMITTED_PROJECT_VISIBILITY } from "./submission-policy";
 
@@ -311,6 +314,18 @@ export const submitProjectForReview = async ({
     ],
     isPublic: true,
   });
+
+  // Emitted here, not in the route, so every submit flow (the API route and
+  // the web self-service signup) counts once. The project now lives in the
+  // target office, so that is its scope.
+  trackAnalyticsEvent(
+    ANALYTICS_EVENTS.PROJECT_SUBMITTED_FOR_REVIEW,
+    actorContext(submittedBy, {
+      organizationId: targetOrganizationId,
+      officeId: targetOfficeId,
+      projectId,
+    }),
+  );
 
   return {
     submission,

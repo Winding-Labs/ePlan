@@ -5,6 +5,10 @@ import * as Sentry from "@sentry/nextjs";
 export const register = async () => {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     await import("./sentry.server.config");
+    // Registers the server analytics sink at boot (the OpenNext Worker runs
+    // the Node runtime). App code also imports the emit through this module,
+    // which registers the sink in every bundle layer that emits.
+    await import("./lib/server-analytics");
   }
 
   if (process.env.NEXT_RUNTIME === "edge") {

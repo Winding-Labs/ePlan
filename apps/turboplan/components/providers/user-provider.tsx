@@ -3,8 +3,8 @@
 import { createContext, type ReactNode, useContext, useEffect } from "react";
 
 import type { User } from "next-auth";
-import { posthog } from "posthog-js";
 
+import { analytics } from "@wildfires-org/turboplan-analytics/client";
 import type { Profile } from "@wildfires-org/turboplan-db/types";
 
 interface UserContext {
@@ -23,9 +23,10 @@ interface UserProviderProps {
 export function UserProvider({ children, user, profile }: UserProviderProps) {
   useEffect(() => {
     // Identify with user id + role only — no email (PII decision in the
-    // tracking plan). No-ops when PostHog is not initialized.
-    if (user?.id && posthog.__loaded) {
-      posthog.identify(user.id, {
+    // tracking plan). Fans out to PostHog and GA4 (user_id); no-ops for any
+    // provider that is not configured.
+    if (user?.id) {
+      analytics.set(user.id, {
         role: profile?.userRole ?? undefined,
       });
     }

@@ -1,25 +1,31 @@
 import type { MetadataRoute } from "next";
 
-import { NEPA_PAGES, NEPA_SOURCES_READ_ON } from "@/consts/nepa-pages";
-import { absoluteUrl } from "@/lib/site-url";
+import { DOCUMENT_TEMPLATES } from "@/consts/document-templates";
+import { NEPA_PAGES } from "@/consts/nepa-pages";
+import { getSiteUrl } from "@/lib/seo";
 import { source } from "@/lib/source";
+import { routing } from "@/utils/routing";
 
-// Server-rendered marketing and docs pages only. The /projects catalog is
-// left out: its listings render client-side and are noindex (see
-// app/projects/layout.tsx).
-export default function sitemap(): MetadataRoute.Sitemap {
+// Merge of #34 and #35; replaced by the guide registry in the next commit.
+const sitemap = (): MetadataRoute.Sitemap => {
+  const siteUrl = getSiteUrl();
+  if (!siteUrl) {
+    return [];
+  }
+  const toEntry = (path: string, priority: number) => ({
+    url: new URL(path, siteUrl).href,
+    priority,
+  });
   return [
-    { url: absoluteUrl("/"), changeFrequency: "weekly", priority: 1 },
-    ...NEPA_PAGES.map((page) => ({
-      url: absoluteUrl(page.path),
-      lastModified: NEPA_SOURCES_READ_ON,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    })),
-    ...source.getPages().map((page) => ({
-      url: absoluteUrl(page.url),
-      changeFrequency: "monthly" as const,
-      priority: 0.5,
-    })),
+    toEntry(routing.home(), 1),
+    ...NEPA_PAGES.map((page) => toEntry(page.path, 0.8)),
+    ...DOCUMENT_TEMPLATES.map((template) =>
+      toEntry(routing.documentTemplate({ slug: template.slug }), 0.8),
+    ),
+    ...source
+      .getPages()
+      .map((page) => toEntry(page.url, page.url === "/docs" ? 0.7 : 0.5)),
   ];
-}
+};
+
+export default sitemap;

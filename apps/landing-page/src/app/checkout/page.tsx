@@ -26,8 +26,11 @@ import { StatusPanel } from "@/components/shared/status-panel";
 import { cn } from "@/lib/utils";
 import { routing } from "@/utils/routing";
 
+// A transactional step (reached from the pricing section with ?plan=…), not a
+// search landing page.
 export const metadata: Metadata = {
   title: "Checkout",
+  robots: { index: false, follow: true },
 };
 
 // `NEXT_PUBLIC_*` env vars are inlined at build time, so reading the flag

@@ -42,6 +42,29 @@ const r2Origins = (process.env.R2_PUBLIC_URL ?? "")
 const cspSources = (...sources: Array<string | null | false>) =>
   sources.filter(Boolean).join(" ");
 
+// gtag.js loads GA4 and the Google Ads tag. The Ads tag (remarketing +
+// conversion linker) pulls scripts, pixels and an iframe from these hosts on
+// top of the GA4 ones.
+const GOOGLE_ADS_SCRIPT_HOSTS = [
+  "https://www.googleadservices.com",
+  "https://googleads.g.doubleclick.net",
+  "https://www.google.com",
+];
+const GOOGLE_ADS_IMG_HOSTS = [
+  "https://googleads.g.doubleclick.net",
+  "https://www.google.com",
+];
+const GOOGLE_ADS_CONNECT_HOSTS = [
+  "https://www.google.com",
+  "https://googleads.g.doubleclick.net",
+  "https://www.googleadservices.com",
+  "https://pagead2.googlesyndication.com",
+];
+const GOOGLE_ADS_FRAME_HOSTS = [
+  "https://td.doubleclick.net",
+  "https://www.googletagmanager.com",
+];
+
 // Report-only for now: violations surface in the browser console without
 // breaking anything. Tighten and promote to an enforced policy once clean.
 // Host lists are env-driven where the host is deployment-specific; values are
@@ -55,6 +78,7 @@ const contentSecurityPolicyReportOnly = [
     "'unsafe-inline'",
     !isProduction && "'unsafe-eval'",
     "https://www.googletagmanager.com",
+    ...GOOGLE_ADS_SCRIPT_HOSTS,
   )}`,
   // Next.js, Leaflet and framer-motion all write inline styles.
   "style-src 'self' 'unsafe-inline'",
@@ -71,6 +95,7 @@ const contentSecurityPolicyReportOnly = [
     "https://server.arcgisonline.com",
     "https://www.googletagmanager.com",
     "https://*.google-analytics.com",
+    ...GOOGLE_ADS_IMG_HOSTS,
   )}`,
   "font-src 'self' data:",
   `connect-src ${cspSources(
@@ -83,9 +108,10 @@ const contentSecurityPolicyReportOnly = [
     "https://www.googletagmanager.com",
     "https://*.google-analytics.com",
     "https://*.analytics.google.com",
+    ...GOOGLE_ADS_CONNECT_HOSTS,
     !isProduction && "ws:",
   )}`,
-  "frame-src 'self'",
+  `frame-src ${cspSources("'self'", ...GOOGLE_ADS_FRAME_HOSTS)}`,
   // react-pdf worker is bundled same-origin; some libraries spawn blob workers.
   "worker-src 'self' blob:",
   "media-src 'self' blob:",
@@ -174,6 +200,8 @@ const nextConfig: NextConfig = {
   },
 
   async redirects() {
+    const appOrigin = toOrigin(process.env.NEXT_PUBLIC_TURBOPLAN_URL);
+
     return [
       // Specific rule must precede the wildcard below so it wins.
       {
@@ -194,6 +222,23 @@ const nextConfig: NextConfig = {
         destination: "/#contact",
         permanent: false,
       },
+      // Pricing is a homepage section too; /pricing was a 404 (2026-10-02
+      // audit). Temporary for the same reason as /contact.
+      {
+        source: "/pricing",
+        destination: "/#pricing",
+        permanent: false,
+      },
+      // Sign-in lives on the app; /login on the marketing domain was a 404.
+      ...(appOrigin
+        ? [
+            {
+              source: "/login",
+              destination: `${appOrigin}/login`,
+              permanent: false,
+            },
+          ]
+        : []),
       {
         source: "/user-guide",
         destination: "/docs",

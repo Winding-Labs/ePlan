@@ -43,6 +43,11 @@ const BRIDGE_KEYS = [
   "RESEARCH_AGENT_SERVICE_API_KEY",
   "RESEND_API_KEY",
   "POSTHOG_API_KEY",
+  // GA4 server-side fan-out (Measurement Protocol): the stream's public
+  // measurement id, and its api_secret — a server-only secret, never shipped
+  // to a browser. Server-side GA4 is off unless both are set.
+  "GA_MEASUREMENT_ID",
+  "GA_API_SECRET",
   "APP_NAME",
   "APP_ENV",
   "ADMIN_EMAILS",

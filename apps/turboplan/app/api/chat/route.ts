@@ -14,6 +14,7 @@ import { Session } from "next-auth";
 
 import { ChatMode, systemPrompt } from "@wildfires-org/turboplan-ai";
 import { getModel } from "@wildfires-org/turboplan-ai/server";
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
 import {
   assertCreditsAvailable,
   type BillingContext,
@@ -62,7 +63,8 @@ import { updateProjectContext } from "@/lib/ai/tools/update-project-context";
 import { updateProjectFields } from "@/lib/ai/tools/update-project-fields";
 import { webSearch } from "@/lib/ai/tools/web-search";
 import { ErrorResponses } from "@/lib/api/utils";
-import { captureServerEvent } from "@/lib/server-analytics";
+import { chatMessageAnalytics } from "@/lib/chat-analytics";
+import { trackAnalyticsEvent } from "@/lib/server-analytics";
 import { generateUUID, getMostRecentUserMessage } from "@/lib/utils";
 
 // https://vercel.com/docs/functions/configuring-functions/duration
@@ -293,11 +295,23 @@ export async function POST(request: Request) {
     const billingOrgId = effectiveProjectId
       ? await resolveBillingOrgForProject(effectiveProjectId)
       : await resolveBillingOrgForUser(session.user.id);
+    const analyticsContext = {
+      distinctId: session.user.id,
+      userId: session.user.id,
+      organizationId: billingOrgId,
+      projectId: effectiveProjectId,
+      chatId: id,
+    };
     if (billingOrgId) {
       try {
         await assertCreditsAvailable(billingOrgId);
       } catch (error) {
         if (error instanceof CreditsExhaustedError) {
+          trackAnalyticsEvent(
+            ANALYTICS_EVENTS.PLAN_LIMIT_REACHED,
+            analyticsContext,
+            { limit: "credits", surface: "chat" },
+          );
           return Response.json(
             { error: error.message, code: "CREDITS_EXHAUSTED" },
             { status: 402 },
@@ -306,14 +320,6 @@ export async function POST(request: Request) {
         throw error;
       }
     }
-
-    // Captured after RBAC and the credit gate so denied or 402-rejected
-    // requests don't inflate the metric — only messages that actually
-    // proceed to the model count as sent.
-    captureServerEvent(session.user.id, "chat_message_sent", {
-      chat_id: id,
-      project_id: effectiveProjectId,
-    });
 
     // When the user sends the first message of a project's initial chat, kick off
     // the research agent here (not at project creation) so the run's initial prompt
@@ -397,6 +403,19 @@ export async function POST(request: Request) {
         },
       ],
     });
+
+    // Captured once the message is saved: denied, 402-rejected and duplicate
+    // (409) requests never get here, so only messages that proceed to the
+    // model count as sent.
+    const messageAnalytics = chatMessageAnalytics(messages);
+    trackAnalyticsEvent(
+      ANALYTICS_EVENTS.CHAT_MESSAGE_SENT,
+      analyticsContext,
+      messageAnalytics,
+    );
+    if (messageAnalytics.is_first_message) {
+      trackAnalyticsEvent(ANALYTICS_EVENTS.CHAT_STARTED, analyticsContext);
+    }
 
     // Fire-and-forget: start the research agent now that the first message is
     // persisted, so /start builds the prompt with this conversation included.
@@ -658,11 +677,16 @@ export async function POST(request: Request) {
         // Guarantee quick-response suggestions after every answer. The model
         // usually calls generateQuickResponses itself; this is a fallback for
         // when it doesn't, so the user always gets suggested replies.
+        // The response counts as received once the model's text and steps
+        // resolve; a failed quick-response fallback after that does not
+        // turn it into an error.
+        let responseStatus: "success" | "error" = "error";
         try {
           const [finalText, steps] = await Promise.all([
             result.text,
             result.steps,
           ]);
+          responseStatus = "success";
 
           // Meter the accumulated run (awaited: cheap DB write; Vercel cannot
           // reap it before it lands).
@@ -714,15 +738,16 @@ export async function POST(request: Request) {
           await meterChatRun();
         }
 
-        if (session.user?.id) {
-          captureServerEvent(session.user.id, "ai_response_received", {
-            chat_id: id,
-            project_id: effectiveProjectId,
+        trackAnalyticsEvent(
+          ANALYTICS_EVENTS.AI_RESPONSE_RECEIVED,
+          analyticsContext,
+          {
+            status: responseStatus,
             model: typeof model === "string" ? model : model.modelId,
             latency_ms: Date.now() - requestStartedAt,
             total_tokens: accumulatedTokens,
-          });
-        }
+          },
+        );
 
         // We suppressed the stream's own finish chunk (sendFinish:false) so we
         // could append the quick responses above; emit it now so the client
@@ -811,6 +836,13 @@ export async function DELETE(request: Request) {
     }
 
     await deleteChatById({ id });
+
+    trackAnalyticsEvent(ANALYTICS_EVENTS.CHAT_DELETED, {
+      distinctId: chat.userId,
+      userId: chat.userId,
+      projectId: chat.projectId,
+      chatId: id,
+    });
 
     return new Response("Chat deleted", { status: 200 });
   } catch (_error) {

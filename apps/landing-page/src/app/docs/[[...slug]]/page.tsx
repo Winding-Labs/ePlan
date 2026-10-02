@@ -13,6 +13,7 @@ import { DocsPageNav } from "@/components/docs/docs-page-nav";
 import { DocsTOC, DocsTOCBar } from "@/components/docs/docs-toc";
 import { SECTION_LEAD_CLASS } from "@/components/home-v2/ui/section-header";
 import { brand } from "@/lib/brand";
+import { buildPageMetadata } from "@/lib/seo";
 import { source } from "@/lib/source";
 import { cn } from "@/lib/utils";
 
@@ -20,8 +21,14 @@ interface DocsPageProps {
   params: Promise<{ slug?: string[] }>;
 }
 
+// Every docs page is known at build time (generateStaticParams), so an
+// unknown slug is a real 404 instead of a 200 "not found" page.
+export const dynamicParams = false;
+
 // Docs page title: the site's heading recipe (Geist, -0.04em), sized for a
 // reading column rather than a hero.
+const DOCS_FALLBACK_DESCRIPTION = `${brand.name} product documentation.`;
+
 const DOCS_TITLE_CLASS =
   "font-heading text-[32px] font-normal leading-[1.15] tracking-[-0.04em] text-balance text-egray-900 md:text-[40px]";
 
@@ -78,25 +85,13 @@ export async function generateMetadata({
   const page = source.getPage(slug);
 
   if (!page) {
-    return {};
+    notFound();
   }
 
-  return {
+  return buildPageMetadata({
     title: page.data.title,
-    description: page.data.description,
-    alternates: { canonical: page.url },
-    openGraph: {
-      title: page.data.title,
-      description: page.data.description,
-      siteName: brand.name,
-      type: "article",
-      images: [{ url: brand.ogImage }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: page.data.title,
-      description: page.data.description,
-      images: [brand.ogImage],
-    },
-  };
+    description: page.data.description ?? DOCS_FALLBACK_DESCRIPTION,
+    path: page.url,
+    type: "article",
+  });
 }

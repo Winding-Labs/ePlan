@@ -22,6 +22,9 @@ set -euo pipefail
 #   AUTH_COOKIE_DOMAIN, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, EXA_API_KEY
 #   R2_ACCOUNT_ID, R2_BUCKET_NAME, R2_PUBLIC_URL
 #   POSTHOG_API_KEY, OPENROUTER_MODEL_*, ADMIN_EMAILS, USE_EXTERNAL_PROMPTS
+#   GA_API_SECRET         GA4 Measurement Protocol secret (encrypted secret) for
+#                         server-side events; pairs with the build-time
+#                         NEXT_PUBLIC_GA_MEASUREMENT_ID. Server GA4 is off without it
 #   HYPERDRIVE_ID         (Hyperdrive config id — pooled Postgres connection)
 
 ENVIRONMENT="${1:?Usage: deploy-web.sh <environment> [pr-number]}"
@@ -129,7 +132,7 @@ SECRETS_JSON=$(jq -n \
   --arg OPENROUTER_API_KEY "${OPENROUTER_API_KEY:?OPENROUTER_API_KEY env var is required}" \
   '{AUTH_SECRET: $AUTH_SECRET, INTERNAL_API_SECRET: $INTERNAL_API_SECRET, JWT_SIGNING_SECRET: $JWT_SIGNING_SECRET, POSTGRES_URL: $POSTGRES_URL, OPENROUTER_API_KEY: $OPENROUTER_API_KEY}')
 
-for VAR_NAME in AUTH_COOKIE_DOMAIN R2_ACCESS_KEY_ID R2_SECRET_ACCESS_KEY EXA_API_KEY ADMIN_EMAILS; do
+for VAR_NAME in AUTH_COOKIE_DOMAIN R2_ACCESS_KEY_ID R2_SECRET_ACCESS_KEY EXA_API_KEY ADMIN_EMAILS GA_API_SECRET; do
   VAR_VALUE="${!VAR_NAME:-}"
   if [[ -n "$VAR_VALUE" ]]; then
     SECRETS_JSON=$(echo "$SECRETS_JSON" | jq --arg k "$VAR_NAME" --arg v "$VAR_VALUE" '. + {($k): $v}')

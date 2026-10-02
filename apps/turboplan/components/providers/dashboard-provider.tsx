@@ -2,8 +2,7 @@
 
 import { createContext, type ReactNode, useContext, useEffect } from "react";
 
-import { posthog } from "posthog-js";
-
+import { analytics } from "@wildfires-org/turboplan-analytics/client";
 import type {
   Office,
   Organization,
@@ -49,31 +48,21 @@ export function DashboardProvider({
   projectCoverImageUrl = null,
 }: DashboardProviderProps) {
   useEffect(() => {
-    // Group analytics: scope subsequent events to the active workspace
-    // entities. No-ops when PostHog is not initialized.
-    if (!posthog.__loaded) {
-      return;
-    }
-    // Groups are sticky in posthog persistence — clear first so leaving a
-    // project/office doesn't keep tagging events with the previous one.
-    posthog.resetGroups();
-    if (organization?.id) {
-      // Personal workspaces are auto-named from the user's email local part —
-      // sending that name would leak PII to analytics. Id-only for those.
-      const isPersonalOrg = organization.type === "personal";
-      posthog.group(
-        "organization",
-        organization.id,
-        isPersonalOrg ? undefined : { name: organization.name },
-      );
-    }
-    if (office?.id) {
-      posthog.group("office", office.id, { name: office.name });
-    }
-    if (project?.id) {
-      posthog.group("project", project.id, { name: project.name });
-    }
+    // Scope every later event and pageview to the active workspace entities
+    // (properties + PostHog groups). null clears a scope the user left.
+    // Personal workspaces are auto-named from the user's email local part —
+    // sending that name would leak PII to analytics. Id-only for those.
+    const isPersonalOrg = organization?.type === "personal";
+    analytics.setContext({
+      organizationId: organization?.id ?? null,
+      organizationName: isPersonalOrg ? null : (organization?.name ?? null),
+      officeId: office?.id ?? null,
+      officeName: office?.name ?? null,
+      projectId: project?.id ?? null,
+      projectName: project?.name ?? null,
+    });
   }, [
+    organization?.type,
     organization?.id,
     organization?.name,
     office?.id,

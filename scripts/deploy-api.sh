@@ -25,6 +25,11 @@ set -euo pipefail
 # Optional:
 #   R2_BUCKET_NAME        also ensures the bucket's landing-uploads lifecycle
 #                         rule (needs R2 read/edit permission on the API token)
+#   POSTHOG_API_KEY       PostHog project token; server PostHog is off without it
+#   GA_MEASUREMENT_ID     GA4 stream id (public, a --var) for the server-side
+#                         GA4 fan-out (Measurement Protocol)
+#   GA_API_SECRET         that stream's Measurement Protocol secret (encrypted
+#                         secret); server-side GA4 is off without both
 
 ENVIRONMENT="${1:?Usage: deploy-api.sh <environment> [pr-number]}"
 PR_NUMBER="${2:-}"
@@ -66,6 +71,8 @@ VARS=(
   --var "LANDING_URL:${LANDING_URL:-}"
   --var "ALLOWED_ORIGINS:${ALLOWED_ORIGINS:-}"
   --var "POSTHOG_API_KEY:${POSTHOG_API_KEY:-}"
+  # GA4 stream id (public). Its api_secret is a secret below.
+  --var "GA_MEASUREMENT_ID:${GA_MEASUREMENT_ID:-}"
   # Sentry error monitoring (optional — monitoring disabled when empty)
   --var "SENTRY_DSN:${SENTRY_DSN:-}"
   --var "RELEASE_VERSION:${RELEASE_VERSION:-}"
@@ -230,7 +237,7 @@ if [[ -n "${ADMIN_EMAILS_SECRET:-}" ]]; then
   SECRETS_JSON=$(echo "$SECRETS_JSON" | jq --arg k "ADMIN_EMAILS" --arg v "$ADMIN_EMAILS_SECRET" '. + {($k): $v}')
 fi
 
-for VAR_NAME in AUTH_COOKIE_DOMAIN R2_ACCESS_KEY_ID R2_SECRET_ACCESS_KEY MAP_SERVICE_API_KEY RESEARCH_AGENT_SERVICE_API_KEY RESEND_API_KEY STRIPE_SECRET_KEY STRIPE_WEBHOOK_SECRET RECONCILE_SECRET DOCUMENSO_API_KEY DOCUMENSO_WEBHOOK_SECRET; do
+for VAR_NAME in AUTH_COOKIE_DOMAIN R2_ACCESS_KEY_ID R2_SECRET_ACCESS_KEY MAP_SERVICE_API_KEY RESEARCH_AGENT_SERVICE_API_KEY RESEND_API_KEY STRIPE_SECRET_KEY STRIPE_WEBHOOK_SECRET RECONCILE_SECRET DOCUMENSO_API_KEY DOCUMENSO_WEBHOOK_SECRET GA_API_SECRET; do
   VAR_VALUE="${!VAR_NAME:-}"
   if [[ -n "$VAR_VALUE" ]]; then
     SECRETS_JSON=$(echo "$SECRETS_JSON" | jq --arg k "$VAR_NAME" --arg v "$VAR_VALUE" '. + {($k): $v}')
