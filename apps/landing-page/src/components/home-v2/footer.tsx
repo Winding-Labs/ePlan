@@ -1,7 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { PAGE_CONTAINER, PAGE_GUTTER } from "@/components/home-v2/ui/layout";
 import { AnalyticsLink } from "@/components/shared/analytics-link";
+import { NEPA_GUIDE_LINKS } from "@/consts/nepa-guide-links";
 import { brand } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 import { events } from "@/types/analytics";
@@ -45,39 +47,58 @@ export function Footer() {
       <div
         className={cn(
           PAGE_CONTAINER,
-          "glass flex flex-col items-center gap-5 rounded-2xl px-6 py-6 sm:flex-row sm:justify-between sm:gap-0 sm:py-4 lg:px-8",
+          "glass rounded-2xl px-6 py-6 sm:py-4 lg:px-8",
         )}
       >
-        {/* Copyright — last on mobile, left on desktop */}
-        <p className="order-3 font-inter text-[13px] font-normal leading-[20px] text-egray-700 sm:order-none sm:w-[296px] sm:text-left">
-          &copy; {new Date().getFullYear()} {brand.name}
-        </p>
+        <div className="flex flex-col items-center gap-5 sm:flex-row sm:justify-between sm:gap-0">
+          {/* Copyright — last on mobile, left on desktop */}
+          <p className="order-3 font-inter text-[13px] font-normal leading-[20px] text-egray-700 sm:order-none sm:w-[296px] sm:text-left">
+            &copy; {new Date().getFullYear()} {brand.name}
+          </p>
 
-        {/* Logo — first on mobile, center on desktop */}
-        <div className="order-1 flex w-full items-center justify-center sm:order-none sm:w-auto sm:flex-1">
-          <Image
-            src={brand.logo}
-            alt={brand.name}
-            width={275}
-            height={45}
-            className="h-9 w-auto sm:h-8 lg:h-10"
-          />
+          {/* Logo — first on mobile, center on desktop */}
+          <div className="order-1 flex w-full items-center justify-center sm:order-none sm:w-auto sm:flex-1">
+            <Image
+              src={brand.logo}
+              alt={brand.name}
+              width={275}
+              height={45}
+              className="h-9 w-auto sm:h-8 lg:h-10"
+            />
+          </div>
+
+          {/* Nav links — middle on mobile, right on desktop */}
+          <nav
+            className="order-2 flex items-center gap-5 sm:order-none sm:w-[296px] sm:justify-end sm:gap-[24px]"
+            aria-label="Footer navigation"
+          >
+            {FOOTER_LINKS.map((link) => (
+              <AnalyticsLink
+                key={link.label}
+                href={link.href}
+                eventName={link.eventName}
+                className="py-1 font-inter text-[13px] font-normal leading-[20px] text-[#161616] transition-colors duration-200 hover:text-egray-900 sm:text-[14px]"
+              >
+                {link.label}
+              </AnalyticsLink>
+            ))}
+          </nav>
         </div>
 
-        {/* Nav links — middle on mobile, right on desktop */}
+        {/* Every route renders this footer, so this one list links the NEPA
+            guide pages from the whole site. */}
         <nav
-          className="order-2 flex items-center gap-5 sm:order-none sm:w-[296px] sm:justify-end sm:gap-[24px]"
-          aria-label="Footer navigation"
+          className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 border-t border-egray-200/60 pt-4 sm:mt-4"
+          aria-label="NEPA guides"
         >
-          {FOOTER_LINKS.map((link) => (
-            <AnalyticsLink
-              key={link.label}
-              href={link.href}
-              eventName={link.eventName}
-              className="py-1 font-inter text-[13px] font-normal leading-[20px] text-[#161616] transition-colors duration-200 hover:text-egray-900 sm:text-[14px]"
+          {NEPA_GUIDE_LINKS.map((link) => (
+            <Link
+              key={link.path}
+              href={link.path}
+              className="py-1 font-inter text-[13px] font-normal leading-[20px] text-egray-700 transition-colors duration-200 hover:text-egray-900"
             >
               {link.label}
-            </AnalyticsLink>
+            </Link>
           ))}
         </nav>
       </div>

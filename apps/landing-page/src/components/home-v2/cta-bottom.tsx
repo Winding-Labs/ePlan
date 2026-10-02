@@ -46,7 +46,13 @@ const SPARKLE_TRANSITION = {
   bounce: 0.2,
 } as const;
 
-export function CtaBottom() {
+interface CtaBottomProps {
+  // The homepage renders the footer here (animated with the CTA); other
+  // routes get it from the global SiteFooter, so they turn this off.
+  showFooter?: boolean;
+}
+
+export function CtaBottom({ showFooter = true }: CtaBottomProps) {
   const router = useRouter();
   const { captureEvent } = useAnalytics();
   const { displayText, currentIndex } = useTypewriterHeading(CTA_WORDS);
@@ -163,11 +169,13 @@ export function CtaBottom() {
         </ScrollReveal>
       </div>
 
-      <div id="footer-nav">
-        <ScrollReveal direction="up" delay={FOOTER_DELAY}>
-          <Footer />
-        </ScrollReveal>
-      </div>
+      {showFooter && (
+        <div id="footer-nav">
+          <ScrollReveal direction="up" delay={FOOTER_DELAY}>
+            <Footer />
+          </ScrollReveal>
+        </div>
+      )}
     </section>
   );
 }

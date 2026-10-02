@@ -246,6 +246,15 @@ export async function generateMetadata({
   return {
     title,
     description,
+    // Server-rendered detail page: opt back in from the catalog's noindex.
+    robots: { index: true, follow: true },
+    alternates: {
+      canonical: routing.catalogProject({
+        organizationSlug: organization,
+        officeSlug: office,
+        projectSlug: project,
+      }),
+    },
     openGraph: {
       title,
       description,

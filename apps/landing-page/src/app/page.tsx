@@ -1,6 +1,6 @@
-"use client";
-
 import { Suspense } from "react";
+
+import type { Metadata } from "next";
 
 import { ContactSection } from "@/components/home-v2/contact-section";
 import { CtaBottom } from "@/components/home-v2/cta-bottom";
@@ -10,6 +10,33 @@ import { Hero } from "@/components/home-v2/hero";
 import { LogoMarquee } from "@/components/home-v2/logo-marquee";
 import { Pricing } from "@/components/home-v2/pricing";
 import { Skeleton } from "@/components/ui/skeleton";
+import { brand } from "@/lib/brand";
+
+const HOME_TITLE = `${brand.name} | AI NEPA Workspace for Environmental Planning`;
+const HOME_DESCRIPTION =
+  "The AI-native NEPA workspace: draft scoping letters, categorical exclusion decision memos and environmental assessments that cite the regulation and project location they were built from.";
+
+// A server component so it can export metadata; every section below is its
+// own client component.
+export const metadata: Metadata = {
+  title: { absolute: HOME_TITLE },
+  description: HOME_DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    url: "/",
+    siteName: brand.name,
+    type: "website",
+    images: [{ url: brand.ogImage, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: [brand.ogImage],
+  },
+};
 
 export default function Home() {
   return (
