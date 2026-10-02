@@ -1,6 +1,7 @@
 import { type LoaderPlugin, loader } from "fumadocs-core/source";
 
 import { docs } from "@/.source";
+import { brand } from "@/lib/brand";
 import { rebrandDocsText } from "@/lib/docs-branding";
 
 // Page titles and descriptions drive the sidebar, <title>, social cards and
@@ -17,10 +18,10 @@ const rebrandFrontmatter: LoaderPlugin = {
 
       const { data } = file;
       if (data.title) {
-        data.title = rebrandDocsText(data.title);
+        data.title = rebrandDocsText(data.title, brand.name);
       }
       if (data.description) {
-        data.description = rebrandDocsText(data.description);
+        data.description = rebrandDocsText(data.description, brand.name);
       }
     }
   },

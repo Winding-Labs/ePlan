@@ -26,8 +26,8 @@ analytics work (see `2026-10-02-analytics-master-pattern.md`).
 | 3 | No canonical tags | 0 of 267 pages had `<link rel="canonical">`. `/?tryIt=true` duplicated the homepage | High | Fixed |
 | 4 | `metadataBase` resolved to localhost | `og:image` and `twitter:image` were `http://localhost:3000/brand/og-image.png` on every page. The landing deploy job never set `NEXT_PUBLIC_LANDING_URL` or `LANDING_URL` (the API and web jobs did), so Next fell back to localhost. Social cards were broken site-wide | High | Fixed (workflow + guard) |
 | 5 | Docs used the upstream brand | `/docs` was titled "TurboPlan Documentation" with an H1 to match. 23–31 "TurboPlan" mentions per docs page, in titles, sidebar, prose and search | High | Fixed |
-| 6 | `app.eplan.ai` was indexable and competed with the homepage | `/login` returned 200 with no robots meta and the **same title and description** as eplan.ai. `/profile` and `/logout` returned 200 to anonymous visitors. No robots.txt. Every eplan.ai page links to `app.eplan.ai/login` | High | robots.txt added; noindex meta still open (see Open items) |
-| 7 | Soft 404s | Unknown URLs under `/docs`, `/projects/<org>` and `/projects/<org>/<office>` returned **200** with a noindex not-found page, including for the Googlebot user agent. A truncated slug (`/projects/dot/pipeline-and-hazardous-materials-safety-`) is linked from `/projects/dot` and soft-404s. Cause: the root layout wraps every page in `<Suspense>`, so the status is sent before `notFound()` runs | Medium | Fixed for `/docs` and `/templates` (`dynamicParams = false`). `/projects/*` remains (Open items) |
+| 6 | `app.eplan.ai` was indexable and competed with the homepage | `/login` returned 200 with no robots meta and the **same title and description** as eplan.ai. `/profile` and `/logout` returned 200 to anonymous visitors. No robots.txt. Every eplan.ai page links to `app.eplan.ai/login` | High | Fixed: `noindex, nofollow` on every app page (root layout) and a robots.txt that *allows* crawling, so Google can fetch pages and see the noindex |
+| 7 | Soft 404s | Unknown URLs under `/docs`, `/projects/<org>` and `/projects/<org>/<office>` returned **200** with a noindex not-found page, including for the Googlebot user agent. A truncated slug (`/projects/dot/pipeline-and-hazardous-materials-safety-`) is linked from `/projects/dot` and soft-404s: the API answers `{"error":"Invalid slug"}` because the slug ends in `-`. Cause: the root layout wraps every page in `<Suspense>`, so the status is sent before `notFound()` runs | Medium | Fixed for `/docs` and `/templates` (`dynamicParams = false`). Broken slug fixed at the root (see below). Generic `/projects/*` 404 status remains (Open items) |
 | 8 | `/pricing` returned 404 | Nothing links to it (the nav uses `/#pricing`), but it is the URL people type and the obvious Ads URL | Medium | Fixed: 307 to `/#pricing` |
 | 9 | `/login`, `/signup`, `/privacy`, `/terms`, `/about` returned 404 | Direct requests | Medium | `/login` redirects to the app. **No privacy policy or terms page exists** (Ads blocker, see below) |
 | 10 | Project and template lists aren't in the HTML | Office pages server-render only the hero. Project and template cards load client-side over SWR, so the HTML has no links to project or template detail pages. Google may find them after rendering JavaScript; other crawlers won't | Medium | Open |
@@ -88,6 +88,21 @@ JSX props (remark plugin) and in titles and descriptions (source loader
 plugin). The MDX stays identical to upstream, so docs merges don't conflict.
 URLs and code identifiers (`/docs/getting-started/what-is-turboplan`,
 `turboplan-catalog`) are unchanged.
+
+**Truncated slugs.** `generateSlug` (turboplan-utils) trimmed edge hyphens
+*before* cutting to 40 characters, so a cut between words left a trailing `-`
+that the public API's slug check rejects. The same order bug made
+`generateUniqueSlug` emit `--` (e.g. `pipeline-and-hazardous-material--330b78`).
+It now cuts first, then trims (with tests). Migration
+`0003_trim_trailing_hyphen_slugs` renames existing organization, office and
+project slugs that end in `-`. It keeps the old slug in `slug_history`, which
+the app already resolves, and skips any row whose trimmed slug is taken.
+
+**CI.** The first push of this PR failed every job at `pnpm install`. The
+`fumadocs-mdx` postinstall evaluates `source.config.ts`, which imported
+`@wildfires-org/turboplan-env` (via `brand.ts`) before workspace packages are
+built. The remark plugin now loads the app name lazily, when an MDX file
+compiles.
 
 **Links.** `/pricing` returns 307 to `/#pricing` and `/login` returns 307 to
 the app's `/login` (both temporary, like `/contact`). The footer gains a
@@ -183,29 +198,47 @@ following are true buys clicks with no way to measure them:
    search-terms review. Stop if CPA exceeds 2× target after about 30
    conversions.
 
-## Operator steps (not code)
+## Indexing runbook (operator, after PR #34 deploys)
 
-- Verify `eplan.ai` in Google Search Console (DNS TXT on the domain property),
-  submit `https://eplan.ai/sitemap.xml`, and request indexing for the five
-  `/templates/*` pages. Repeat in Bing Webmaster Tools.
-- After deploy, check that `https://eplan.ai/robots.txt` lists the sitemap,
-  that `og:image` is `https://eplan.ai/brand/og-image.png` (not localhost), and
-  that `app.eplan.ai/robots.txt` returns `Disallow: /`.
+These are browser steps for an operator; they aren't code. Until #34 deploys,
+`/robots.txt`, `/sitemap.xml` and `/templates/*` still 404 on eplan.ai, so
+submitting them earlier would only record 404s.
+
+1. **Google Search Console.** Add a *Domain* property for `eplan.ai`, verified
+   by a DNS TXT record on the Cloudflare zone. Submit
+   `https://eplan.ai/sitemap.xml`. Use *URL Inspection → Request indexing* for
+   the home page and the five `/templates/*` pages (or their `/nepa/*` /
+   `/ceqa/*` successors once the stacked PR moves them).
+2. **Bing Webmaster Tools.** Import the property from Search Console, then
+   submit the same sitemap.
+3. **IndexNow (optional).** In Cloudflare, under *Caching → Configuration →
+   Crawler Hints*, turn on IndexNow for the eplan.ai zone. Bing and Yandex are
+   then notified of changes, with no key file needed.
+4. **Check after the deploy.** `og:image` resolves to `https://eplan.ai/...`,
+   not localhost. `app.eplan.ai/login` serves `noindex`.
 
 ## Open items
 
-- **Noindex on app.eplan.ai.** robots.txt `Disallow` stops crawling but doesn't
-  remove URLs Google already knows about (linked from every eplan.ai page).
-  Add `robots: { index: false, follow: false }` to the metadata in
-  `apps/turboplan/app/layout.tsx`, which is outside this task's scope. For
-  pages already indexed, either use Search Console's removals tool, or briefly
-  allow crawling with noindex until they drop out and then disallow.
 - **Soft 404s on `/projects/*`.** The root `<Suspense>` streams a 200 before
   the page's `notFound()` runs. `generateMetadata` now calls `notFound()` too,
   which gives noindex but still a 200 in dev for Googlebot and Bingbot. A real
   fix would move the Suspense below the page or check the organization or
-  office in middleware. Also fix the truncated office slug
-  (`pipeline-and-hazardous-materials-safety-`) in the data.
+  office in middleware. These pages already carry noindex, so this only affects
+  Search Console's "soft 404" report, not the index. The broken DOT slug that
+  caused the one linked soft 404 is fixed (migration 0003).
+- **Privacy policy and terms pages.** These need the legal entity, address,
+  governing law and retention periods, so a person has to write or approve the
+  text. The policy has to disclose these services, which are in the code
+  today: PostHog, Google Analytics 4 and the Google Ads tag (analytics and
+  ads cookies); Sentry (errors); Cloudflare Workers and R2 (hosting and file
+  storage); Neon Postgres (database); Stripe (payments); Resend (email);
+  Documenso (signing); and OpenRouter, Anthropic and Exa (AI drafting and
+  research, which receive project text and uploaded documents). Once there is
+  approved text, add `/privacy` and `/terms` routes, footer links, and the
+  sitemap entries.
+- **Google Ads / GA4 account setup** (items 1, 2, 5 and 6 above). This is
+  done in the Ads and GA4 UIs after the analytics PR deploys. Don't create
+  campaigns or budgets until conversions are verified.
 - **Server-render project and template lists** on organization and office
   pages, or add a dynamic sitemap from the public API, so detail pages are
   discoverable without JavaScript.
