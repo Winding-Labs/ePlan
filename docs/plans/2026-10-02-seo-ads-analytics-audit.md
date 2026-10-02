@@ -27,7 +27,7 @@ analytics work (see `2026-10-02-analytics-master-pattern.md`).
 | 4 | `metadataBase` resolved to localhost | `og:image` and `twitter:image` were `http://localhost:3000/brand/og-image.png` on every page. The landing deploy job never set `NEXT_PUBLIC_LANDING_URL` or `LANDING_URL` (the API and web jobs did), so Next fell back to localhost. Social cards were broken site-wide | High | Fixed (workflow + guard) |
 | 5 | Docs used the upstream brand | `/docs` was titled "TurboPlan Documentation" with an H1 to match. 23–31 "TurboPlan" mentions per docs page, in titles, sidebar, prose and search | High | Fixed |
 | 6 | `app.eplan.ai` was indexable and competed with the homepage | `/login` returned 200 with no robots meta and the **same title and description** as eplan.ai. `/profile` and `/logout` returned 200 to anonymous visitors. No robots.txt. Every eplan.ai page links to `app.eplan.ai/login` | High | Fixed: `noindex, nofollow` on every app page (root layout) and a robots.txt that *allows* crawling, so Google can fetch pages and see the noindex |
-| 7 | Soft 404s | Unknown URLs under `/docs`, `/projects/<org>` and `/projects/<org>/<office>` returned **200** with a noindex not-found page, including for the Googlebot user agent. A truncated slug (`/projects/dot/pipeline-and-hazardous-materials-safety-`) is linked from `/projects/dot` and soft-404s: the API answers `{"error":"Invalid slug"}` because the slug ends in `-`. Cause: the root layout wraps every page in `<Suspense>`, so the status is sent before `notFound()` runs | Medium | Broken slug fixed at the root (see below). **The 404 status is not fixed on the deployed Worker.** `dynamicParams = false` returns 404 only under `next dev`. On the pr-34 preview, `/docs/x`, `/templates/x` and `/projects/x` still return 200 with noindex, because the root `<Suspense>` streams the status first. Fixed in Round 2 of `2026-10-02-seo-ads-speed-fixpacks.md` (Open items) |
+| 7 | Soft 404s | Unknown URLs under `/docs`, `/projects/<org>` and `/projects/<org>/<office>` returned **200** with a noindex not-found page, including for the Googlebot user agent. A truncated slug (`/projects/dot/pipeline-and-hazardous-materials-safety-`) is linked from `/projects/dot` and soft-404s: the API answers `{"error":"Invalid slug"}` because the slug ends in `-`. Cause: the root layout wraps every page in `<Suspense>`, so the status is sent before `notFound()` runs | Medium | **The broken slug is not fixed** (see "Truncated slugs" below; the fix was never shipped). **The 404 status is not fixed on the deployed Worker.** `dynamicParams = false` returns 404 only under `next dev`. On the pr-34 preview, `/docs/x`, `/templates/x` and `/projects/x` still return 200 with noindex, because the root `<Suspense>` streams the status first. Fixed in Round 2 of `2026-10-02-seo-ads-speed-fixpacks.md` (Open items) |
 | 8 | `/pricing` returned 404 | Nothing links to it (the nav uses `/#pricing`), but it is the URL people type and the obvious Ads URL | Medium | Fixed: 307 to `/#pricing` |
 | 9 | `/login`, `/signup`, `/privacy`, `/terms`, `/about` returned 404 | Direct requests | Medium | `/login` redirects to the app. **No privacy policy or terms page exists** (Ads blocker, see below) |
 | 10 | Project and template lists aren't in the HTML | Office pages server-render only the hero. Project and template cards load client-side over SWR, so the HTML has no links to project or template detail pages. Google may find them after rendering JavaScript; other crawlers won't | Medium | Open |
@@ -89,14 +89,14 @@ plugin). The MDX stays identical to upstream, so docs merges don't conflict.
 URLs and code identifiers (`/docs/getting-started/what-is-turboplan`,
 `turboplan-catalog`) are unchanged.
 
-**Truncated slugs.** `generateSlug` (turboplan-utils) trimmed edge hyphens
-*before* cutting to 40 characters, so a cut between words left a trailing `-`
-that the public API's slug check rejects. The same order bug made
+**Truncated slugs (not shipped).** `generateSlug` (turboplan-utils) trims edge
+hyphens *before* cutting to 40 characters, so a cut between words leaves a
+trailing `-` that the public API's slug check rejects. The same order bug makes
 `generateUniqueSlug` emit `--` (e.g. `pipeline-and-hazardous-material--330b78`).
-It now cuts first, then trims (with tests). Migration
-`0003_trim_trailing_hyphen_slugs` renames existing organization, office and
-project slugs that end in `-`. It keeps the old slug in `slug_history`, which
-the app already resolves, and skips any row whose trimmed slug is taken.
+The fix (cut first, then trim) and a migration renaming existing slugs that end
+in `-` (keeping the old slug in `slug_history`) exist only in an unreviewed stash.
+Neither is in #34 or `develop`, so the DOT link still soft-404s through the API's
+`{"error":"Invalid slug"}`.
 
 **CI.** The first push of this PR failed every job at `pnpm install`. The
 `fumadocs-mdx` postinstall evaluates `source.config.ts`, which imported
@@ -232,7 +232,8 @@ submitting them earlier would only record 404s.
   fix would move the Suspense below the page or check the organization or
   office in middleware. These pages already carry noindex, so this only affects
   Search Console's "soft 404" report, not the index. The broken DOT slug that
-  caused the one linked soft 404 is fixed (migration 0003).
+  causes the one linked soft 404 is **not** fixed: the slug-order fix and its
+  migration were never shipped (see "Truncated slugs").
 - **Privacy policy and terms pages.** These need the legal entity, address,
   governing law and retention periods, so a person has to write or approve the
   text. The policy has to disclose these services, which are in the code

@@ -18,7 +18,7 @@ against the live pages after every release.
 | Ad copy vs pages | Template pages had no pricing, "free" or "minutes" text, yet every ad headline says it. Some ad claims are only partly true: "Cites Regulation & Location" (the drafting prompt doesn't require a citation), EIS drafting (Max lists EA/EIR/Decision Memos only), and Appendix G (the generic generator handles it). The display path `nepa-ceqa/documents` is shown on NEPA-only ads. |
 | Crawl (#34 audit, 267 URLs) | Fixed in #34: robots, sitemap, titles, canonicals, og:image, docs branding. **Still open:** soft 404s on `/projects/*`, lists rendered client-side, `no-store` HTML, no privacy/terms page, no Organization JSON-LD. |
 | Code | Two page systems for the same keywords: #34 `/templates/[slug]` (5 pages) and `feat/nepa-seo-pages` 8efe489 (6 pages, cited sources, pricing, no PR). knip flags 23 unused files and 24 unused dependencies (22 and 27 after grep checks) in `apps/landing-page`. Checkout asks users to agree to Terms and a Privacy Policy that don't exist. |
-| SEOmator (373 rules) + headless Chrome as Googlebot | **`www.eplan.ai` is a GoDaddy "for sale" page**: unproxied A records 76.223.54.146 / 13.248.169.48 in the Cloudflare zone. `http://` isn't redirected to `https://`. **`/checkout` says "Billing is not enabled"** because the landing build never gets the flag, so every pricing button dead-ends. Title, description and canonical stream into `<body>` for Googlebot (root `<Suspense>`). Unknown `/docs/x`, `/templates/x` and `/projects/x` return 200 on the deployed preview. The office slug `pipeline-and-hazardous-materials-safety-` comes from a truncation bug in `turboplan-utils/src/slug.ts`. No `<link rel=icon>`; the ICO is under 48 px. |
+| SEOmator (373 rules) + headless Chrome as Googlebot | **`www.eplan.ai` was a GoDaddy "for sale" page**: `www` was NS-delegated to Dan.com (fixed 2026-10-02, §5). `http://` isn't redirected to `https://`. **`/checkout` says "Billing is not enabled"** because the landing build never gets the flag, so every pricing button dead-ends. Title, description and canonical stream into `<body>` for Googlebot (root `<Suspense>`). Unknown `/docs/x`, `/templates/x` and `/projects/x` return 200 on the deployed preview. The office slug `pipeline-and-hazardous-materials-safety-` comes from a truncation bug in `turboplan-utils/src/slug.ts`. No `<link rel=icon>`; the ICO is under 48 px. |
 | Speed | See §5. Mobile LCP is 6–9 s on every landing page; desktop is fine. |
 
 ## 2. Decisions
@@ -109,7 +109,12 @@ Each round is one PR (one fix pack). The steps:
 - `src/app/icon.png` (≥ 192 px) + `apple-icon.png`; resize the og image to
   1200×630 and under 300 KB.
 - Server-render the catalog lists (SWR `fallback`), and generate a dynamic sitemap
-  from the public API. (#34 already fixed the broken office slug in migration 0003.)
+  from the public API.
+- Fix the slug truncation order in `turboplan-utils/src/slug.ts` (cut, then trim),
+  with a migration that renames existing slugs ending in `-` and keeps the old one in
+  `slug_history`. The DOT office link still soft-404s.
+- eplan-53's #39 removes the root `<Suspense>` (real 404s). After it lands, this round
+  moves the session read client-side so marketing pages can be cached.
 - Ask dash-0b, who owns the hero: render the hero H1 visible on first paint.
   Today `ScrollReveal` server-renders it with `opacity:0`, which is most of the
   mobile LCP.
@@ -146,10 +151,18 @@ Each round is one PR (one fix pack). The steps:
 - Worker cold starts add 550–900 ms because HTML is `no-store`.
 - `/_next/static/*` is served with `max-age=0`.
 
-Operator fixes (Cloudflare dashboard; no code):
-1. Replace the `www` A records with a proxied CNAME `www → eplan.ai`, plus a
-   redirect rule `www.eplan.ai/*` → 301 `https://eplan.ai/$1`.
-2. Turn on **Always Use HTTPS** for eplan.ai and app.eplan.ai.
+Cloudflare fixes, **done 2026-10-02**, with the owner's go-ahead:
+1. `www` and 14 other subdomains (aws, dev, e, email, info, k8s, mail, news,
+   newsletter, ns1, ns2, test, track) were delegated by NS records to
+   `ns1/ns2.dan.com`, leftovers from the Dan.com purchase. That delegation served
+   GoDaddy's "for sale" page and gave a third party control of those names.
+   - Deleted all 30 NS records and the 24 parked A records behind them
+     (76.223.54.146 / 13.248.169.48). The zone went from 79 records to 24.
+   - Added a proxied CNAME `www → eplan.ai`, and a Single Redirect `*://www.eplan.ai/*`
+     → 301 `https://eplan.ai/${2}` that keeps the query string.
+   - Verified: `https://www.eplan.ai/pricing` → 301 `https://eplan.ai/pricing`.
+2. **Always Use HTTPS** is on for the zone. Verified: `http://eplan.ai/docs?x=1` and
+   `http://app.eplan.ai/login` → 301 to https.
 
 ## 6. Acceptance per round
 
