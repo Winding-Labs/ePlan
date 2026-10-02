@@ -3,6 +3,7 @@
 export const events = {
   TRY_IT_CLICKED: "try_it_clicked",
   HERO_PROMPT_SUBMITTED: "hero_prompt_submitted",
+  HERO_DOCUMENT_ATTACHED: "hero_document_attached",
   CATALOG_REQUEST_CLICKED: "catalog_request_clicked",
   PRICING_PLAN_CLICKED: "pricing_plan_clicked",
   ENTERPRISE_CONTACT_CLICKED: "enterprise_contact_clicked",

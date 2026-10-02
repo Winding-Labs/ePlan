@@ -4,6 +4,14 @@
  * This file exports the UploadService, router, and related utilities.
  */
 
+export { LANDING_UPLOAD_PREFIX } from "../types";
+export {
+  type ClaimedLandingUpload,
+  claimLandingUpload,
+  type InspectedLandingUpload,
+  inspectLandingUpload,
+} from "./landing-uploads";
+export { publicUploadRouter } from "./public-router";
 export {
   canonicalStorageKey,
   deleteFile,
