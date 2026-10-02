@@ -18,7 +18,8 @@ against the live pages after every release.
 | Ad copy vs pages | Template pages had no pricing, "free" or "minutes" text, yet every ad headline says it. Some ad claims are only partly true: "Cites Regulation & Location" (the drafting prompt doesn't require a citation), EIS drafting (Max lists EA/EIR/Decision Memos only), and Appendix G (the generic generator handles it). The display path `nepa-ceqa/documents` is shown on NEPA-only ads. |
 | Crawl (#34 audit, 267 URLs) | Fixed in #34: robots, sitemap, titles, canonicals, og:image, docs branding. **Still open:** soft 404s on `/projects/*`, lists rendered client-side, `no-store` HTML, no privacy/terms page, no Organization JSON-LD. |
 | Code | Two page systems for the same keywords: #34 `/templates/[slug]` (5 pages) and `feat/nepa-seo-pages` 8efe489 (6 pages, cited sources, pricing, no PR). knip flags 23 unused files and 24 unused dependencies (22 and 27 after grep checks) in `apps/landing-page`. Checkout asks users to agree to Terms and a Privacy Policy that don't exist. |
-| Speed | See §5 (Lighthouse, mobile and desktop). |
+| SEOmator (373 rules) + headless Chrome as Googlebot | **`www.eplan.ai` is a GoDaddy "for sale" page**: unproxied A records 76.223.54.146 / 13.248.169.48 in the Cloudflare zone. `http://` isn't redirected to `https://`. **`/checkout` says "Billing is not enabled"** because the landing build never gets the flag, so every pricing button dead-ends. Title, description and canonical stream into `<body>` for Googlebot (root `<Suspense>`). Unknown `/docs/x`, `/templates/x` and `/projects/x` return 200 on the deployed preview. The office slug `pipeline-and-hazardous-materials-safety-` comes from a truncation bug in `turboplan-utils/src/slug.ts`. No `<link rel=icon>`; the ICO is under 48 px. |
+| Speed | See §5. Mobile LCP is 6–9 s on every landing page; desktop is fine. |
 
 ## 2. Decisions
 
@@ -74,7 +75,7 @@ Each round is one PR (one fix pack). The steps:
    eplan.ai).
 4. Chrome check and an audit of eplan.ai. Findings become the next round's fix pack.
 
-### Round 1: legal pages, checkout links, dead code
+### Round 1: legal pages, checkout links, dead code, working checkout
 
 - `/privacy` and `/terms` (`components/legal/legal-page.tsx`). They list the processors the
   product actually uses and read the brand name and support email from env, so forks
@@ -82,6 +83,9 @@ Each round is one PR (one fix pack). The steps:
 - Both checkout flows (landing `CheckoutView`, app `UpgradeModal`) link "Terms of
   Service" and "Privacy Policy" to those pages through a new `getLandingUrl()`. They
   pointed at `#` or nothing.
+- The landing build and deploy get `NEXT_PUBLIC_IS_BILLING_PACKAGE_ENABLED`
+  (`FF_IS_BILLING_PACKAGE_ENABLED`, already `true`). Without it `/checkout` renders
+  "Billing is not enabled" and the `purchase` conversion can never fire.
 - Delete 22 unused files and 27 unused dependencies (knip, each hit grep-verified;
   `lib/telemetry-proxy.ts` is used by `middleware.ts` and stays). Also delete the landing
   app's own Playwright suite (one test of playwright.dev), `.eslintrc.json`, the
@@ -91,13 +95,25 @@ Each round is one PR (one fix pack). The steps:
 
 ### Round 2: static, cacheable, crawlable HTML + speed
 
-- Root layout without `getSession()`/`cookies()`. Session UI client-side. Drop the
-  root `<Suspense fallback>` so `notFound()` returns real 404s (fixes the
-  `/projects/*` soft 404s). Cache headers for marketing routes.
-- Server-render the organization and office lists, or add a dynamic sitemap from
-  the public API. Fix the truncated office slug in the data.
-- The Lighthouse opportunities in §5: fonts (9 Geist weights + Inter), unused JS
-  per route, image weight.
+- Root layout (`src/app/layout.tsx`): drop the root `<Suspense fallback>` and stop
+  calling `getSession()`/`cookies()`. The navbar reads the session client-side.
+  - Effects: real 404s from `notFound()`, metadata stays in `<head>` for Googlebot,
+    and the marketing routes prerender so the CDN can cache them.
+  - Keep Suspense only around the `useSearchParams` consumers.
+- `public/_headers`: `/_next/static/*` → `public, max-age=31536000, immutable`, for
+  the landing app and the web app.
+- Move `pat` and `jwt` out of the `turboplan-api-client` barrel into its `./server`
+  entry. That drops the 91 KiB crypto polyfill from every landing page.
+- Sentry `bundleSizeOptimizations` (127 KiB chunk); initialize PostHog when the
+  browser is idle.
+- `src/app/icon.png` (≥ 192 px) + `apple-icon.png`; resize the og image to
+  1200×630 and under 300 KB.
+- Slug truncation fix plus a 301 for the broken office URL. Server-render the
+  catalog lists (SWR `fallback`), and generate a dynamic sitemap from the public
+  API.
+- Ask dash-0b, who owns the hero: render the hero H1 visible on first paint.
+  Today `ScrollReveal` server-renders it with `opacity:0`, which is most of the
+  mobile LCP.
 
 ### Round 3: ads ↔ live pages, citation claim, operator steps
 
@@ -111,9 +127,30 @@ Each round is one PR (one fix pack). The steps:
   GA4 ↔ Ads link and conversion import (#34 §7), then the ash bootstrap with the
   final URLs.
 
-## 5. Speed
+## 5. Speed (Lighthouse 12, production + PR #34 preview, 2026-10-02)
 
-(Filled in from the Lighthouse pass. See Round 2.)
+| Page | Mobile score / LCP | Desktop score / LCP | TTFB (median of 5) |
+|---|---|---|---|
+| eplan.ai/ | 71 / 8.45 s | 96 / 1.37 s | 196 ms |
+| /docs quickstart | 72 / 7.32 s | 96 / 1.35 s | 143 ms |
+| /projects | 78 / 6.07 s | 97 / 1.23 s | 162 ms |
+| Project detail (Caldor) | 69 / 7.52 s | 91 / 1.81 s | 205 ms |
+| Preview /templates/nepa-scoping-letter | 67 / 8.86 s | 97 / 1.20 s | 197 ms |
+| app.eplan.ai/login | 84 / 4.10 s | 99 / 0.83 s | 162 ms |
+
+- CLS ≤ 0.018 and TBT ≤ 149 ms everywhere.
+- Mobile LCP is render delay, not server time. The LCP element is text that stays
+  hidden until JS runs, because of the root Suspense and the hero's `opacity:0`.
+- Each page loads 600–870 KiB of JS. The largest chunks are Sentry (127 KiB), the
+  crypto polyfill (91 KiB), PostHog (80 KiB), Radix (70 KiB) and react-dom
+  (55 KiB). The preview adds gtag (174 KiB).
+- Worker cold starts add 550–900 ms because HTML is `no-store`.
+- `/_next/static/*` is served with `max-age=0`.
+
+Operator fixes (Cloudflare dashboard; no code):
+1. Replace the `www` A records with a proxied CNAME `www → eplan.ai`, plus a
+   redirect rule `www.eplan.ai/*` → 301 `https://eplan.ai/$1`.
+2. Turn on **Always Use HTTPS** for eplan.ai and app.eplan.ai.
 
 ## 6. Acceptance per round
 
