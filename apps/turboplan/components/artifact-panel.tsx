@@ -233,6 +233,13 @@ export function ArtifactPanel({
 
   const saveContent = useCallback(
     (updatedContent: string, debounce: boolean) => {
+      // While the AI streams, the editor holds partial generated text and the
+      // next delta replaces any keystroke anyway. Saving then would store that
+      // partial text as a version, possibly after the server's final save.
+      if (artifact.status === "streaming") {
+        return;
+      }
+
       if (document && updatedContent !== document.content) {
         setIsContentDirty(true);
 
@@ -243,7 +250,12 @@ export function ArtifactPanel({
         }
       }
     },
-    [document, debouncedHandleContentChange, handleContentChange],
+    [
+      artifact.status,
+      document,
+      debouncedHandleContentChange,
+      handleContentChange,
+    ],
   );
 
   function getDocumentContentById(index: number) {
