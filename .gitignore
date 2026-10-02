@@ -10,7 +10,8 @@ node_modules
 .vercel
 .wrangler
 
-/docs
+/docs/*
+!/docs/plans/
 **/dist
 .cursor/**/*local*.md*
 .claude/**/*local*.md*

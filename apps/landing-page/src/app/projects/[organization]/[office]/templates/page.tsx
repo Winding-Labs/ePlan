@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { CATALOG_PAGE_CLASS } from "@/components/catalog/catalog-layout";
@@ -5,10 +6,18 @@ import { CatalogOfficeHero } from "@/components/catalog/catalog-office-hero";
 import { ProjectTemplatesSection } from "@/components/catalog/project-templates-section";
 import { getOffice } from "@/handlers/offices";
 import { getOrganization } from "@/handlers/organizations";
+import { buildOfficeMetadata } from "@/lib/catalog-metadata";
 
 interface OfficeTemplatesPageProps {
   params: Promise<{ organization: string; office: string }>;
 }
+
+export const generateMetadata = async ({
+  params,
+}: OfficeTemplatesPageProps): Promise<Metadata> => {
+  const { organization, office } = await params;
+  return buildOfficeMetadata(organization, office, "templates");
+};
 
 export default async function OfficeTemplatesPage({
   params,

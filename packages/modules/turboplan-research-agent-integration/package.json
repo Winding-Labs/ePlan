@@ -32,6 +32,7 @@
     "@hono/zod-validator": "^0.8.0",
     "@rive-app/react-webgl2": "^4.27.0",
     "@wildfires-org/turboplan-ai": "workspace:*",
+    "@wildfires-org/turboplan-analytics": "workspace:*",
     "@wildfires-org/turboplan-api-client": "workspace:*",
     "@wildfires-org/turboplan-billing": "workspace:*",
     "@wildfires-org/turboplan-db": "workspace:*",

@@ -1,5 +1,6 @@
 "use server";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
 import { assertProjectCreationAllowed } from "@wildfires-org/turboplan-billing/server";
 import { project, projectUsers } from "@wildfires-org/turboplan-db";
 import { db } from "@wildfires-org/turboplan-db/db-client";
@@ -7,6 +8,7 @@ import { generateUniqueSlug } from "@wildfires-org/turboplan-utils/server";
 import { getOrCreatePersonalWorkspace } from "@wildfires-org/turboplan-workspace/server";
 import { MemberRole } from "@wildfires-org/turboplan-workspace/types";
 
+import { trackAnalyticsEvent } from "@/lib/server-analytics";
 import { auth } from "../(auth)/auth";
 import {
   attachLandingUploads,
@@ -76,7 +78,18 @@ export async function createProjectForAuthenticatedUser(
     const entitlement = await assertProjectCreationAllowed({
       organizationId: personalOrg.id,
     });
+    const analyticsContext = {
+      distinctId: userId,
+      userId,
+      organizationId: personalOrg.id,
+      officeId: personalOffice.id,
+    };
     if (!entitlement.allowed) {
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.PLAN_LIMIT_REACHED,
+        analyticsContext,
+        { limit: "projects", surface: "self_service" },
+      );
       return {
         status: "upgrade_required",
         error: "UPGRADE_REQUIRED",
@@ -124,6 +137,12 @@ export async function createProjectForAuthenticatedUser(
       projectId: newProject.id,
       role: MemberRole.OWNER,
     });
+
+    trackAnalyticsEvent(
+      ANALYTICS_EVENTS.PROJECT_CREATED,
+      { ...analyticsContext, projectId: newProject.id },
+      { from_template: false, flow: "self_service" },
+    );
 
     // Documents attached on the landing page move into the user's uploads and
     // onto the project now, so the first chat turn can read them.

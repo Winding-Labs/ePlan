@@ -1,6 +1,8 @@
 import { and, eq } from "drizzle-orm";
 import { Hono } from "hono";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import { profile, projectContext, user } from "@wildfires-org/turboplan-db";
 import { db } from "@wildfires-org/turboplan-db/db-client";
 import { Action, EntityType } from "@wildfires-org/turboplan-rbac";
@@ -81,6 +83,7 @@ contextRouter.post(
       }
 
       const { label, content, url } = validationResult.data;
+      const userId = c.get("user").userId;
 
       const [newEntry] = await db
         .insert(projectContext)
@@ -89,9 +92,15 @@ contextRouter.post(
           label,
           content,
           url: url ?? null,
-          createdBy: c.get("user").userId,
+          createdBy: userId,
         })
         .returning();
+
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.PROJECT_CONTEXT_ADDED,
+        { distinctId: userId, userId, projectId: id, source: "web" },
+        { context_id: newEntry.id, has_url: Boolean(url) },
+      );
 
       return c.json({ contextEntry: newEntry }, 201);
     } catch (error) {

@@ -1,6 +1,8 @@
 import { and, eq, inArray, isNull, sql } from "drizzle-orm";
 import { Hono } from "hono";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import {
   assertSeatAvailable,
   syncSubscriptionSeatsSafe,
@@ -35,6 +37,7 @@ import {
 import { generateUniqueSlug } from "@wildfires-org/turboplan-utils/server";
 
 import type { MemberWithInheritance, PendingInvitation } from "../../types";
+import { actorContext, changedFieldNames } from "../analytics-helpers";
 import { ROLE_LEVEL } from "../constants";
 import { sendMemberAddedNotification } from "../invitations/email";
 import { getEntityInvitationsWithInviter } from "../invitations/queries";
@@ -270,6 +273,14 @@ officesRouter.post("/", async (c) => {
 
     const newOffice = await createOffice(officeData);
 
+    trackAnalyticsEvent(
+      ANALYTICS_EVENTS.OFFICE_CREATED,
+      actorContext(user.userId, {
+        organizationId: officeData.organizationId,
+        officeId: newOffice.id,
+      }),
+    );
+
     return c.json(newOffice, 201);
   } catch (error) {
     console.error("Failed to create office:", error);
@@ -368,6 +379,19 @@ officesRouter.put(
       // them. Omitted fields (undefined) are left alone.
       await deleteReplacedStorageFiles(logoFields, storageOwner);
 
+      // Names only, never values — and only fields that actually changed.
+      const changedFields = changedFieldNames(office, updateData);
+      if (changedFields.length > 0) {
+        trackAnalyticsEvent(
+          ANALYTICS_EVENTS.OFFICE_UPDATED,
+          actorContext(c.get("user").userId, {
+            organizationId: office.organizationId,
+            officeId: id,
+          }),
+          { changed_fields: changedFields },
+        );
+      }
+
       // Return updated office
       const updatedOffice = await getOfficeWithRelations(id);
       return c.json(updatedOffice);
@@ -397,6 +421,15 @@ officesRouter.delete(
       }
 
       await deleteOffice(id);
+
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.OFFICE_DELETED,
+        actorContext(c.get("user").userId, {
+          organizationId: officeRecord.organizationId,
+          officeId: id,
+        }),
+      );
+
       return c.json({ message: "Office deleted successfully" });
     } catch (error) {
       console.error("Failed to delete office:", error);
@@ -543,20 +576,27 @@ officesRouter.post(
       const users = await getUser(email);
 
       // Starter seat cap: office owners/editors are org-billable seats. Gate
-      // before BOTH branches (direct add and invitation).
+      // before BOTH branches (direct add and invitation). The resolved org
+      // also scopes the analytics events below (viewer adds skip the lookup).
+      let organizationId: string | undefined;
       if (role !== "viewer") {
         const officeRow = await getOfficeById(officeId);
         if (!officeRow) {
           return c.json({ error: "Office not found" }, 404);
         }
+        organizationId = officeRow.organizationId;
         const seatDecision = await assertSeatAvailable({
-          organizationId: officeRow.organizationId,
+          organizationId,
           userId: users[0]?.id,
         });
         if (!seatDecision.allowed) {
-          return seatLimitResponse(c, seatDecision);
+          return seatLimitResponse(c, seatDecision, organizationId);
         }
       }
+      const memberContext = actorContext(authUser.userId, {
+        organizationId,
+        officeId,
+      });
 
       if (users[0]) {
         // User exists - add directly to membership
@@ -587,6 +627,13 @@ officesRouter.post(
 
         // Office owner/editor members are billable seats — keep Stripe in sync.
         await syncSeatsForOffice(officeId);
+
+        trackAnalyticsEvent(ANALYTICS_EVENTS.MEMBER_JOINED, memberContext, {
+          entity_type: "office",
+          via: "added",
+          member_user_id: userId,
+          role,
+        });
 
         // Notify the existing user that they were added (best-effort).
         try {
@@ -623,6 +670,14 @@ officesRouter.post(
         if (!result) {
           // This shouldn't happen since we already checked user doesn't exist
           return c.json({ error: "Failed to create invitation" }, 500);
+        }
+
+        // A repeat invite returns the pending one — not a new invitation.
+        if (!result.isExisting) {
+          trackAnalyticsEvent(ANALYTICS_EVENTS.MEMBER_INVITED, memberContext, {
+            entity_type: "office",
+            role,
+          });
         }
 
         return c.json({
@@ -664,17 +719,19 @@ officesRouter.patch(
 
       // Starter seat cap: promoting into the billable set counts as adding a
       // seat; already-billable users pass via the userId short-circuit.
+      let organizationId: string | undefined;
       if (role !== "viewer") {
         const officeRow = await getOfficeById(officeId);
         if (!officeRow) {
           return c.json({ error: "Office not found" }, 404);
         }
+        organizationId = officeRow.organizationId;
         const seatDecision = await assertSeatAvailable({
-          organizationId: officeRow.organizationId,
+          organizationId,
           userId,
         });
         if (!seatDecision.allowed) {
-          return seatLimitResponse(c, seatDecision);
+          return seatLimitResponse(c, seatDecision, organizationId);
         }
       }
 
@@ -708,6 +765,12 @@ officesRouter.patch(
 
       // Role change can move a member in/out of the billable (non-viewer) set.
       await syncSeatsForOffice(officeId);
+
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.MEMBER_ROLE_CHANGED,
+        actorContext(authUser.userId, { organizationId, officeId }),
+        { entity_type: "office", member_user_id: userId, role },
+      );
 
       return c.json({
         success: true,
@@ -768,6 +831,12 @@ officesRouter.delete(
 
       // Removing a non-viewer office member may free a seat — resync.
       await syncSeatsForOffice(officeId);
+
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.MEMBER_REMOVED,
+        actorContext(authUser.userId, { officeId }),
+        { entity_type: "office", member_user_id: userId },
+      );
 
       return c.json({ success: true });
     } catch (error) {

@@ -1,0 +1,50 @@
+{
+  "name": "@wildfires-org/turboplan-analytics",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The one analytics layer: tracking plan, destinations, PostHog + GA4 fan-out",
+  "type": "module",
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch --no-clean",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test $(find tests -name '*.test.ts')"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js",
+      "default": "./dist/client.js"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js",
+      "default": "./dist/server.js"
+    }
+  },
+  "dependencies": {
+    "@wildfires-org/turboplan-env": "workspace:*"
+  },
+  "peerDependencies": {
+    "next": ">=15.0.0",
+    "posthog-js": "^1.417.1",
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "@types/react": "^19.1.2",
+    "next": "15.5.25",
+    "posthog-js": "^1.417.1",
+    "react": "19.1.7",
+    "rollup-plugin-preserve-use-client": "^3.0.1",
+    "tsdown": "^0.15.9",
+    "tsx": "^4.19.3",
+    "typescript": "^5.3.3"
+  }
+}

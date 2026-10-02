@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.8.0",
+    "@wildfires-org/turboplan-analytics": "workspace:*",
     "@wildfires-org/turboplan-api-client": "workspace:*",
     "@wildfires-org/turboplan-auth": "workspace:*",
     "@wildfires-org/turboplan-db": "workspace:*",

@@ -2,6 +2,8 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import { assertProjectCreationAllowed } from "@wildfires-org/turboplan-billing/server";
 import type { ProjectStatus } from "@wildfires-org/turboplan-db";
 import { projectField } from "@wildfires-org/turboplan-db";
@@ -352,6 +354,20 @@ export const registerProjectTools = (
           action: "created",
           metadata: { source: "mcp", actor: user.actor },
         });
+
+        // MCP creations skip the workspace route that emits this for the app.
+        trackAnalyticsEvent(
+          ANALYTICS_EVENTS.PROJECT_CREATED,
+          {
+            distinctId: user.userId,
+            userId: user.userId,
+            organizationId: office!.organizationId,
+            officeId: office!.id,
+            projectId: project.id,
+            source: "mcp",
+          },
+          { from_template: false, flow: "mcp" },
+        );
 
         const org = await getOrganizationById(office!.organizationId);
 

@@ -35,6 +35,8 @@ See `.env.example` for the full annotated list.
 ## Structure
 
 - `src/app/` – App Router pages (`/`, `/catalog`, `/contact`, `/docs`)
+- NEPA guide pages (`/nepa`, `/categorical-exclusions`, `/nepa/environmental-assessment`, `/nepa/scoping-letter`, `/nepa-software`, `/compare/nepa-ai-tools`) – one template, `src/components/nepa-page/`, rendering content from `src/consts/nepa-pages.ts`. Every claim there cites a dated source; `nepa-pages.test.ts` guards citations, prices and claims.
+- `src/app/robots.ts`, `src/app/sitemap.ts` – built from `NEXT_PUBLIC_LANDING_URL`, as are canonical URLs
 - `src/components/` – UI components (import directly, no barrel exports)
 - `src/handlers/` – API client functions
 - Path alias: `@/*` → `./src/*`

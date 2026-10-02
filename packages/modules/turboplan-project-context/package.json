@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
+    "@wildfires-org/turboplan-analytics": "workspace:*",
     "@wildfires-org/turboplan-api-client": "workspace:*",
     "@wildfires-org/turboplan-db": "workspace:*",
     "@wildfires-org/turboplan-rbac": "workspace:*",

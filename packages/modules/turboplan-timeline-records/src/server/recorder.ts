@@ -1,10 +1,11 @@
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import { timelineRecord } from "@wildfires-org/turboplan-db";
 import { db } from "@wildfires-org/turboplan-db/db-client";
 
 import type { CreateTimelineRecordInput } from "../types";
+import { toTimelineAnalyticsEvents } from "./analytics-mapping";
 
 let errorHandler: ((error: Error) => void) | undefined;
-let analyticsHandler: ((input: CreateTimelineRecordInput) => void) | undefined;
 
 /**
  * Configure the global error handler for timeline recording failures.
@@ -15,21 +16,17 @@ export const configureRecorder = (onError: (error: Error) => void) => {
 };
 
 /**
- * Configure a post-write analytics hook, invoked once per successfully
- * written record. The recorder is the single choke point every mutation
- * flows through (web, MCP, system), so one hook here gives product
- * analytics full server-side coverage. Handler failures are swallowed —
- * analytics can never break a business operation.
+ * Product analytics for a successfully written record. The recorder is the
+ * single choke point every mutation flows through (web, MCP, webhooks), so
+ * the events derived here reach whichever process registered an analytics
+ * sink. Failures are swallowed — analytics can never break a business
+ * operation.
  */
-export const configureRecorderAnalytics = (
-  onRecord: (input: CreateTimelineRecordInput) => void,
-) => {
-  analyticsHandler = onRecord;
-};
-
 const emitAnalytics = (input: CreateTimelineRecordInput) => {
   try {
-    analyticsHandler?.(input);
+    for (const { event, context, extra } of toTimelineAnalyticsEvents(input)) {
+      trackAnalyticsEvent(event, context, extra);
+    }
   } catch (error) {
     const err = error instanceof Error ? error : new Error(String(error));
     errorHandler?.(err);

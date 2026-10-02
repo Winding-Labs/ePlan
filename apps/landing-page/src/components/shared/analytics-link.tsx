@@ -3,11 +3,13 @@ import { ReactNode } from "react";
 
 import Link, { LinkProps } from "next/link";
 
+import type { AnalyticsEvent } from "@wildfires-org/turboplan-analytics";
+
 import { useAnalytics } from "@/hooks/useAnalytics";
 
 type Props = LinkProps & {
   className?: string;
-  eventName: string;
+  eventName: AnalyticsEvent;
   children: ReactNode;
 };
 

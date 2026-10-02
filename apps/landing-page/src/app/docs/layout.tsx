@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
+import type { Metadata } from "next";
 
 import { DOCS_LABEL_CLASS } from "@/components/docs/docs-classes";
 import {
@@ -9,12 +10,22 @@ import {
   DocsSidebarItem,
   DocsSidebarSeparator,
 } from "@/components/docs/docs-sidebar";
+import { brand } from "@/lib/brand";
 import { source } from "@/lib/source";
 import { cn } from "@/lib/utils";
 
 interface DocsRootLayoutProps {
   children: ReactNode;
 }
+
+// Docs pages read "Quickstart | <brand> Docs" rather than the site-wide
+// "<page> | <brand>", so a docs result is recognizable in search.
+export const metadata: Metadata = {
+  title: {
+    default: `${brand.name} Docs`,
+    template: `%s | ${brand.name} Docs`,
+  },
+};
 
 // #nd-docs-layout. Fumadocs' default layout pins the sidebar and TOC with
 // `position: fixed` from `--fd-nav-height` to the viewport bottom, which
