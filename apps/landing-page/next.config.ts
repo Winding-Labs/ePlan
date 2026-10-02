@@ -203,6 +203,22 @@ const nextConfig: NextConfig = {
     const appOrigin = toOrigin(process.env.NEXT_PUBLIC_TURBOPLAN_URL);
 
     return [
+      // One URL per keyword: the /templates guides (ePlan #34) and #35's
+      // /categorical-exclusions moved into the guide system.
+      ...[
+        ["/templates", "/nepa"],
+        ["/templates/categorical-exclusion-decision-memo", "/nepa/categorical-exclusion"],
+        ["/templates/nepa-environmental-assessment", "/nepa/environmental-assessment"],
+        ["/templates/environmental-impact-statement", "/nepa/environmental-impact-statement"],
+        ["/templates/nepa-scoping-letter", "/nepa/scoping-letter"],
+        ["/templates/ceqa-initial-study", "/ceqa/initial-study"],
+        ["/templates/purpose-and-need-statement", "/nepa/environmental-assessment"],
+        ["/categorical-exclusions", "/nepa/categorical-exclusion"],
+      ].map(([source, destination]) => ({
+        source,
+        destination,
+        permanent: true,
+      })),
       // Specific rule must precede the wildcard below so it wins.
       {
         source: "/catalog/org",

@@ -1,26 +1,38 @@
 import type { MetadataRoute } from "next";
 
-import { DOCUMENT_TEMPLATES } from "@/consts/document-templates";
-import { NEPA_PAGES } from "@/consts/nepa-pages";
+import { GUIDE_SOURCES_READ_ON, GUIDES } from "@/consts/guides";
 import { getSiteUrl } from "@/lib/seo";
 import { source } from "@/lib/source";
 import { routing } from "@/utils/routing";
 
-// Merge of #34 and #35; replaced by the guide registry in the next commit.
+type SitemapEntry = MetadataRoute.Sitemap[number];
+
+// Indexable, server-rendered pages only: home, every guide and the docs. The
+// /projects listings render client-side and are noindex (app/projects/
+// layout.tsx); their detail pages come from the API at request time.
 const sitemap = (): MetadataRoute.Sitemap => {
   const siteUrl = getSiteUrl();
+
+  // A sitemap needs absolute URLs; without the site's origin there is nothing
+  // correct to emit.
   if (!siteUrl) {
     return [];
   }
-  const toEntry = (path: string, priority: number) => ({
+
+  const toEntry = (
+    path: string,
+    priority: number,
+    lastModified?: string,
+  ): SitemapEntry => ({
     url: new URL(path, siteUrl).href,
     priority,
+    ...(lastModified ? { lastModified } : {}),
   });
+
   return [
     toEntry(routing.home(), 1),
-    ...NEPA_PAGES.map((page) => toEntry(page.path, 0.8)),
-    ...DOCUMENT_TEMPLATES.map((template) =>
-      toEntry(routing.documentTemplate({ slug: template.slug }), 0.8),
+    ...GUIDES.map((guide) =>
+      toEntry(guide.path, guide.parent ? 0.8 : 0.9, GUIDE_SOURCES_READ_ON),
     ),
     ...source
       .getPages()

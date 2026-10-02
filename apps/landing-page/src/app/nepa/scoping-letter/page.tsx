@@ -1,9 +1,9 @@
-import { NepaPage, nepaPageMetadata } from "@/components/nepa-page/nepa-page";
+import { GuidePage, guideMetadata } from "@/components/guide-page/guide-page";
 
 const PATH = "/nepa/scoping-letter";
 
-export const metadata = nepaPageMetadata(PATH);
+export const metadata = guideMetadata(PATH);
 
 export default function Page() {
-  return <NepaPage path={PATH} />;
+  return <GuidePage path={PATH} />;
 }

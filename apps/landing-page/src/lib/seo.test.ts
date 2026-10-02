@@ -121,7 +121,7 @@ describe("robots", () => {
 });
 
 describe("sitemap", () => {
-  it("lists static pages, document templates and docs as absolute URLs", async () => {
+  it("lists home, every guide page and docs as absolute URLs", async () => {
     const { sitemap } = await loadWithEnv({
       NEXT_PUBLIC_LANDING_URL: "https://example.test",
     });
@@ -131,16 +131,18 @@ describe("sitemap", () => {
     expect(urls).toEqual(
       expect.arrayContaining([
         "https://example.test/",
-        "https://example.test/templates",
-        "https://example.test/templates/nepa-scoping-letter",
-        "https://example.test/templates/environmental-impact-statement",
-        "https://example.test/projects",
+        "https://example.test/nepa",
+        "https://example.test/nepa/scoping-letter",
+        "https://example.test/ceqa/initial-study",
         "https://example.test/docs",
         "https://example.test/docs/guides/quickstart",
       ]),
     );
     expect(new Set(urls).size).toBe(urls.length);
-    expect(urls.some((url) => url.includes("purpose-and-need"))).toBe(false);
+    // Moved pages (308) and the client-rendered, noindex catalog listings
+    // stay out of the sitemap.
+    expect(urls.some((url) => url.includes("/templates"))).toBe(false);
+    expect(urls.some((url) => url.endsWith("/projects"))).toBe(false);
     expect(urls.some((url) => url.includes("/checkout"))).toBe(false);
   });
 

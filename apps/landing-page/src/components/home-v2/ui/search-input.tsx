@@ -61,6 +61,9 @@ interface SearchInputProps {
   // Office name used when title generation returns none (or fails)
   fallbackOfficeName?: string;
 
+  // Extra properties for the submit event (e.g. the guide page it came from)
+  eventProps?: Record<string, string>;
+
   // Controlled mode (optional) — mirrors ProjectPromptInput
   defaultValue?: string;
   value?: string;
@@ -71,6 +74,7 @@ export function SearchInput({
   className,
   placeholder = "I'm working on restoring a small wetland area adjacent...",
   fallbackOfficeName,
+  eventProps,
   defaultValue = "",
   value,
   onValueChange,
@@ -176,7 +180,7 @@ export function SearchInput({
       return;
     }
 
-    captureEvent(events.HERO_PROMPT_SUBMITTED);
+    captureEvent(events.HERO_PROMPT_SUBMITTED, eventProps);
 
     // Billing status not resolved yet (e.g. first click right after a page
     // refresh), or attached documents still uploading. Defer the decision

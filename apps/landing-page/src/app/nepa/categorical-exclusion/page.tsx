@@ -1,6 +1,6 @@
 import { GuidePage, guideMetadata } from "@/components/guide-page/guide-page";
 
-const PATH = "/nepa-software";
+const PATH = "/nepa/categorical-exclusion";
 
 export const metadata = guideMetadata(PATH);
 

@@ -1,0 +1,206 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+
+import { PLANS } from "@wildfires-org/turboplan-billing/types";
+
+import { orderCitations, stripCitations } from "@/lib/citations";
+import { GUIDE_LINKS } from "../guide-links";
+import { GUIDE_PATHS, GUIDES, SOURCES } from "./index";
+import { MANUAL_COMPARISON_BASE, PRICING_SUMMARY } from "./shared";
+import type { GuideEntry } from "./types";
+
+// Every string a visitor can read on a guide page.
+const pageCopy = (page: GuideEntry): string[] => [
+  page.title,
+  page.description,
+  page.h1,
+  page.answer,
+  ...page.glance.flatMap((row) => [row.label, row.value]),
+  ...page.hero.examples.flatMap((example) => [
+    example.label,
+    example.heading,
+    example.prompt,
+  ]),
+  page.draft.description,
+  ...page.draft.mock.paragraphs,
+  ...(page.comparison ?? []).flatMap((row) => Object.values(row)),
+  ...(page.tools ?? []).flatMap((row) => Object.values(row)),
+  ...page.sections.flatMap((section) => [
+    section.heading,
+    ...section.paragraphs,
+    ...(section.bullets ?? []),
+  ]),
+  page.outline.heading,
+  page.outline.intro,
+  ...page.outline.items.flatMap((item) => [item.title, item.detail]),
+  ...page.faq.flatMap((item) => [item.question, item.answer]),
+];
+
+const ALL_COPY = [
+  ...GUIDES.flatMap(pageCopy),
+  ...MANUAL_COMPARISON_BASE.flatMap((row) => Object.values(row)),
+];
+const MARKER = /\[\[([A-Za-z0-9]+)\]\]/g;
+const lower = (text: string) => stripCitations(text).toLowerCase();
+
+// Where a secondary keyword counts as answered: the short answer, an H2, the
+// outline heading, an FAQ question, or the at-a-glance box.
+const keywordHaystack = (page: GuideEntry): string =>
+  [
+    page.title,
+    page.h1,
+    page.answer,
+    ...page.sections.map((section) => section.heading),
+    page.outline.heading,
+    ...page.faq.map((item) => item.question),
+    ...page.glance.flatMap((row) => [row.label, row.value]),
+  ]
+    .map(lower)
+    .join("\n");
+
+describe("guide pages", () => {
+  it("has content and a route for every registered path", () => {
+    expect(GUIDES.map((page) => page.path)).toEqual([...GUIDE_PATHS]);
+    GUIDE_PATHS.forEach((path) => {
+      expect(
+        existsSync(join(__dirname, "../../app", path, "page.tsx")),
+      ).toBe(true);
+    });
+  });
+
+  it("links only real guide pages from the footer", () => {
+    GUIDE_LINKS.forEach((link) => {
+      expect(GUIDE_PATHS as readonly string[]).toContain(link.href);
+    });
+  });
+
+  it("gives every page a unique title, description and H1 of search-friendly length", () => {
+    for (const field of ["title", "description", "h1"] as const) {
+      const values = GUIDES.map((page) => page[field]);
+      expect(new Set(values).size).toBe(values.length);
+    }
+    GUIDES.forEach((page) => {
+      // The site appends " | ePlan.ai" (11 characters); Google shows ~60.
+      expect(page.title.length).toBeLessThanOrEqual(49);
+      expect(page.description.length).toBeLessThanOrEqual(160);
+    });
+  });
+
+  it("gives each page its own primary keyword, in its title and H1", () => {
+    const primaries = GUIDES.map((page) => page.primaryKeyword.toLowerCase());
+    expect(new Set(primaries).size).toBe(primaries.length);
+    GUIDES.forEach((page) => {
+      expect(page.title.toLowerCase()).toContain(
+        page.primaryKeyword.toLowerCase(),
+      );
+      expect(page.h1.toLowerCase()).toContain(
+        page.primaryKeyword.toLowerCase(),
+      );
+    });
+  });
+
+  it("answers every secondary keyword in the answer, an H2, the outline, an FAQ question or the glance box", () => {
+    GUIDES.forEach((page) => {
+      const haystack = keywordHaystack(page);
+      page.secondaryKeywords.forEach((keyword) => {
+        expect({ page: page.path, keyword, found: haystack.includes(keyword.toLowerCase()) }).toEqual({
+          page: page.path,
+          keyword,
+          found: true,
+        });
+      });
+    });
+  });
+
+  it("gives every page five hero examples whose pills and headings are distinct", () => {
+    GUIDES.forEach((page) => {
+      const { examples } = page.hero;
+      expect(examples.length).toBe(5);
+      expect(new Set(examples.map((e) => e.label)).size).toBe(5);
+      expect(new Set(examples.map((e) => e.heading)).size).toBe(5);
+      examples.forEach((example) => {
+        expect(example.prompt.length).toBeGreaterThan(40);
+        expect(example.heading.length).toBeLessThanOrEqual(42);
+      });
+    });
+  });
+
+  it("cites only sources that exist, and lists no source it never cites", () => {
+    const cited = new Set(orderCitations(ALL_COPY));
+    cited.forEach((key) => expect(Object.keys(SOURCES)).toContain(key));
+    Object.keys(SOURCES).forEach((key) => expect(cited).toContain(key));
+  });
+
+  it("dates every source and links it over https", () => {
+    Object.values(SOURCES).forEach((source) => {
+      expect(source.url).toMatch(/^https:\/\//);
+      expect(source.read).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      if (source.published) {
+        expect(source.published).toMatch(/^\d{4}-\d{2}(-\d{2})?$/);
+      }
+    });
+  });
+
+  it("keeps FAQ answers free of citation markers (they feed JSON-LD)", () => {
+    GUIDES.flatMap((page) => page.faq).forEach((item) => {
+      expect(item.answer).not.toMatch(MARKER);
+    });
+  });
+
+  it("never claims agency approval, legal sufficiency or compliance for ePlan output", () => {
+    ALL_COPY.forEach((text) => {
+      expect(text).not.toMatch(/\bcompliant\b/i);
+      expect(text).not.toMatch(/legally sufficient/i);
+      expect(text).not.toMatch(/\b(approved|accepted|certified) by\b/i);
+      expect(text).not.toMatch(/guarantee/i);
+    });
+  });
+
+  it("never says a draft cites its regulation and location (it marks what it can't confirm)", () => {
+    ALL_COPY.forEach((text) => {
+      expect(text).not.toMatch(/cit(es?|ing) the regulation/i);
+      expect(text).not.toMatch(/correct locations/i);
+    });
+  });
+
+  it("only mentions CEQ's 40 CFR 1500-1508 rules as removed", () => {
+    ALL_COPY.forEach((text) => {
+      text
+        .split(/(?<=\.)\s+/)
+        .filter((sentence) => /40 CFR/.test(sentence))
+        .forEach((sentence) => {
+          expect(sentence).toMatch(/removed|rescinded/i);
+        });
+    });
+  });
+
+  it("quotes only prices from the billing catalog", () => {
+    const catalogPrices = new Set(
+      Object.values(PLANS).flatMap((plan) => [
+        plan.price_usd,
+        plan.additional_seat_price_usd,
+      ]),
+    );
+    ALL_COPY.forEach((text) => {
+      for (const match of text.matchAll(/\$(\d+)/g)) {
+        expect(catalogPrices).toContain(Number(match[1]));
+      }
+    });
+    expect(PRICING_SUMMARY).toContain(`$${PLANS.pro.price_usd} a month`);
+    expect(PRICING_SUMMARY).toContain(`$${PLANS.max.price_usd} a month`);
+  });
+
+  it("gives every page a draft mock with placeholders, comparison rows and an FAQ", () => {
+    GUIDES.forEach((page) => {
+      const mockText = [
+        ...page.draft.mock.paragraphs,
+        ...page.draft.mock.letterhead.right,
+        ...page.draft.mock.meta,
+      ].join(" ");
+      expect(mockText).toMatch(/\[INSERT:/);
+      expect(page.draft.mock.missing.length).toBeGreaterThan(0);
+      expect(page.glance.length).toBeGreaterThanOrEqual(3);
+      expect(page.faq.length).toBeGreaterThanOrEqual(4);
+    });
+  });
+});

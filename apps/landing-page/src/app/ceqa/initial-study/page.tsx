@@ -1,6 +1,6 @@
 import { GuidePage, guideMetadata } from "@/components/guide-page/guide-page";
 
-const PATH = "/nepa-software";
+const PATH = "/ceqa/initial-study";
 
 export const metadata = guideMetadata(PATH);
 

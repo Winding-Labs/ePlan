@@ -5,6 +5,7 @@ import type { AnalyticsEvent } from "@wildfires-org/turboplan-analytics";
 
 import { PAGE_CONTAINER, PAGE_GUTTER } from "@/components/home-v2/ui/layout";
 import { AnalyticsLink } from "@/components/shared/analytics-link";
+import { GUIDE_LINKS, LEGAL_LINKS } from "@/consts/guide-links";
 import { brand } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 import { events } from "@/types/analytics";
@@ -20,16 +21,14 @@ type FooterLink = {
 const LINK_CLASS =
   "py-1 font-inter text-[13px] font-normal leading-[20px] text-[#161616] transition-colors duration-200 hover:text-egray-900 sm:text-[14px]";
 
+const SUB_LINK_CLASS =
+  "py-1 font-inter text-[13px] font-normal leading-[20px] text-egray-700 transition-colors duration-200 hover:text-egray-900";
+
 const FOOTER_LINKS: FooterLink[] = [
   {
     label: "Projects",
     href: routing.catalog(),
     eventName: events.PROJECTS_CLICKED,
-  },
-  {
-    label: "Templates",
-    href: routing.documentTemplates(),
-    eventName: events.TEMPLATES_CLICKED,
   },
   {
     label: "Docs",
@@ -99,6 +98,31 @@ export function Footer() {
           )}
         </nav>
       </div>
+
+      {/* Every route renders this footer, so this row links the guide hubs and
+          the legal pages from the whole site. */}
+      <nav
+        aria-label="Guides and legal"
+        className={cn(
+          PAGE_CONTAINER,
+          "flex flex-wrap items-center justify-center gap-x-5 gap-y-1 px-6 pt-3 sm:justify-between",
+        )}
+      >
+        <span className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1">
+          {GUIDE_LINKS.map((link) => (
+            <Link key={link.href} href={link.href} className={SUB_LINK_CLASS}>
+              {link.label}
+            </Link>
+          ))}
+        </span>
+        <span className="flex items-center gap-x-5">
+          {LEGAL_LINKS.map((link) => (
+            <Link key={link.href} href={link.href} className={SUB_LINK_CLASS}>
+              {link.label}
+            </Link>
+          ))}
+        </span>
+      </nav>
     </footer>
   );
 }

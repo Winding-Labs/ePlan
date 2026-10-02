@@ -4,19 +4,25 @@ import { useEffect, useState } from "react";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
+  Building2,
+  FileText,
   Flame,
+  Landmark,
   type LucideIcon,
   Route,
+  Scale,
   Sparkles,
   TreePine,
+  Waves,
   Zap,
 } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+import type { QuickStartExample } from "@/consts/quick-start-options";
 import { PROJECT_DESCRIPTION_PARAM } from "@/consts/urlParams";
 import { cn } from "@/lib/utils";
-import { routing } from "@/utils/routing";
 import { FeatureShowcase } from "./feature-showcase";
+import type { Tab } from "./feature-showcase/types";
 import { PAGE_CONTAINER, PAGE_GUTTER } from "./ui/layout";
 import { EASE_OUT } from "./ui/motion";
 import { QuickStartPills } from "./ui/quick-start-pills";
@@ -25,35 +31,77 @@ import { SearchInput } from "./ui/search-input";
 import { EYEBROW_CLASS, EYEBROW_ICON_CLASS } from "./ui/section-header";
 import { useTypewriterHeading } from "./ui/typewriter-heading";
 
-interface ContentPair {
+// Icons are named, not passed as components, so a server page can hand the
+// hero its content as plain data.
+const HERO_ICONS = {
+  sparkles: Sparkles,
+  route: Route,
+  tree: TreePine,
+  flame: Flame,
+  zap: Zap,
+  file: FileText,
+  scale: Scale,
+  landmark: Landmark,
+  waves: Waves,
+  building: Building2,
+} satisfies Record<string, LucideIcon>;
+
+export type HeroIconName = keyof typeof HERO_ICONS;
+
+export interface HeroSlide {
   eyebrow: string;
+  /** Typed after the prefix in the brand accent. */
   heading: string;
-  Icon: LucideIcon;
+  icon?: HeroIconName;
 }
 
-const CONTENT_PAIRS: ContentPair[] = [
-  {
-    eyebrow: "THE AI-NATIVE NEPA WORKSPACE",
-    heading: "environmental planning",
-    Icon: Sparkles,
-  },
-  {
-    eyebrow: "PUBLIC LANDS INFRASTRUCTURE",
-    heading: "road repairs",
-    Icon: Route,
-  },
-  { eyebrow: "MODERN FOREST MANAGEMENT", heading: "forestry", Icon: TreePine },
-  {
-    eyebrow: "AI ENVIRONMENTAL PLANNING",
-    heading: "environmental planning",
-    Icon: Flame,
-  },
-  {
-    eyebrow: "CRITICAL ENERGY PROJECTS",
-    heading: "nuclear power plants",
-    Icon: Zap,
-  },
-];
+/** Event properties added to the hero's prompt and pill events. */
+export type HeroAnalytics = Record<string, string>;
+
+export interface HeroContent {
+  /** Words before the typed heading, e.g. "Accelerate your" or "Draft a". */
+  prefix: string;
+  /** Stable accessible name for the heading (the typewriter mutates). */
+  label: string;
+  slides: HeroSlide[];
+  /** Guide pages put their H1 in the text header and render this as an h2. */
+  headingLevel?: "h1" | "h2";
+  placeholder?: string;
+  /** Quick-start pills; defaults to the home examples. */
+  examples?: QuickStartExample[];
+  /** Feature showcase tabs; defaults to the home tabs. */
+  tabs?: Tab[];
+  analytics?: HeroAnalytics;
+}
+
+export const HOME_HERO: HeroContent = {
+  prefix: "Accelerate your",
+  label: "Accelerate your environmental planning",
+  headingLevel: "h1",
+  slides: [
+    {
+      eyebrow: "THE AI-NATIVE NEPA WORKSPACE",
+      heading: "environmental planning",
+      icon: "sparkles",
+    },
+    {
+      eyebrow: "PUBLIC LANDS INFRASTRUCTURE",
+      heading: "road repairs",
+      icon: "route",
+    },
+    { eyebrow: "MODERN FOREST MANAGEMENT", heading: "forestry", icon: "tree" },
+    {
+      eyebrow: "AI ENVIRONMENTAL PLANNING",
+      heading: "environmental planning",
+      icon: "flame",
+    },
+    {
+      eyebrow: "CRITICAL ENERGY PROJECTS",
+      heading: "nuclear power plants",
+      icon: "zap",
+    },
+  ],
+};
 
 const CURSOR_BLINK_RATE = 530;
 
@@ -69,11 +117,18 @@ const SPARKLE_TRANSITION = {
 const getPromptTextarea = () =>
   document.getElementById("project-prompt-input")?.querySelector("textarea");
 
-export function Hero() {
-  const router = useRouter();
-  const params = useSearchParams();
+interface HeroProps {
+  content?: HeroContent;
+}
 
-  const headingWords = CONTENT_PAIRS.map((p) => p.heading);
+export function Hero({ content = HOME_HERO }: HeroProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useSearchParams();
+  const { slides } = content;
+  const HeadingTag = content.headingLevel ?? "h1";
+
+  const headingWords = slides.map((slide) => slide.heading);
   // Sizing copies only need each distinct word once (keys must be unique).
   const uniqueHeadingWords = [...new Set(headingWords)];
   const { displayText, currentIndex } = useTypewriterHeading(headingWords);
@@ -116,10 +171,10 @@ export function Hero() {
     // Strip the param only after the smooth scroll has finished — an
     // immediate replace cancels the scroll animation.
     const timeout = setTimeout(() => {
-      router.replace(routing.home(), { scroll: false });
+      router.replace(pathname, { scroll: false });
     }, 600);
     return () => clearTimeout(timeout);
-  }, [params, router]);
+  }, [params, pathname, router]);
 
   // Focus the prompt with the caret at the end so Enter submits right away.
   // Selection is set on the next frame, after React has flushed the new value.
@@ -137,7 +192,8 @@ export function Hero() {
     });
   };
 
-  const EyebrowIcon = CONTENT_PAIRS[currentIndex].Icon;
+  const slide = slides[currentIndex];
+  const EyebrowIcon = HERO_ICONS[slide.icon ?? "sparkles"];
 
   return (
     <section className={PAGE_GUTTER}>
@@ -156,7 +212,7 @@ export function Hero() {
               <div className="flex h-[28px] items-center justify-center">
                 <AnimatePresence mode="wait">
                   <motion.span
-                    key={CONTENT_PAIRS[currentIndex].eyebrow}
+                    key={slide.eyebrow}
                     initial={
                       prefersReducedMotion
                         ? { opacity: 0 }
@@ -172,7 +228,7 @@ export function Hero() {
                     className={EYEBROW_CLASS}
                   >
                     <EyebrowIcon className={EYEBROW_ICON_CLASS} />
-                    {CONTENT_PAIRS[currentIndex].eyebrow}
+                    {slide.eyebrow}
                   </motion.span>
                 </AnimatePresence>
               </div>
@@ -180,14 +236,12 @@ export function Hero() {
               {/* H1 — no fixed min-height: every heading word is laid out
                   invisibly in the same grid cell as the live text, so the
                   block always reserves the longest wrap at any width. */}
-              <h1 className="font-heading text-[36px] font-normal leading-[1.15] tracking-[-2px] text-[#1A1A1A] md:text-[48px] md:tracking-[-2.8px] lg:text-[60px] lg:tracking-[-3.6px]">
+              <HeadingTag className="font-heading text-[36px] font-normal leading-[1.15] tracking-[-2px] text-[#1A1A1A] md:text-[48px] md:tracking-[-2.8px] lg:text-[60px] lg:tracking-[-3.6px]">
                 {/* Stable accessible name — the typewriter below mutates every
                     few ms and would spam screen readers. */}
-                <span className="sr-only">
-                  Accelerate your environmental planning
-                </span>
+                <span className="sr-only">{content.label}</span>
                 <span aria-hidden="true" className="block">
-                  Accelerate your
+                  {content.prefix}
                 </span>
                 <span aria-hidden="true" className="grid">
                   {uniqueHeadingWords.map((word) => (
@@ -207,7 +261,7 @@ export function Hero() {
                     />
                   </span>
                 </span>
-              </h1>
+              </HeadingTag>
             </div>
           </ScrollReveal>
 
@@ -218,7 +272,12 @@ export function Hero() {
             distance={20}
             className="mt-[42px] w-full max-w-[686px]"
           >
-            <SearchInput value={promptValue} onValueChange={setPromptValue} />
+            <SearchInput
+              value={promptValue}
+              onValueChange={setPromptValue}
+              placeholder={content.placeholder}
+              eventProps={content.analytics}
+            />
           </ScrollReveal>
 
           {/* Input → Pills — Embla carousel with ambient auto-scroll. Hover,
@@ -230,14 +289,21 @@ export function Hero() {
             distance={16}
             className="mt-[18px] w-full max-w-[686px]"
           >
-            <QuickStartPills onSelect={handleQuickStart} />
+            <QuickStartPills
+              onSelect={handleQuickStart}
+              examples={content.examples}
+              eventProps={content.analytics}
+            />
           </ScrollReveal>
 
           {/* Pills → Product showcase. Joins the hero's entrance sequence
               right after the pills; `text-left` resets the hero's centered
               text for the app mockups inside. */}
           <div className="mt-10 w-full text-left sm:mt-12 lg:mt-16">
-            <FeatureShowcase revealDelay={SHOWCASE_REVEAL_DELAY} />
+            <FeatureShowcase
+              revealDelay={SHOWCASE_REVEAL_DELAY}
+              tabs={content.tabs}
+            />
           </div>
         </div>
       </div>

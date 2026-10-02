@@ -32,6 +32,15 @@ export const getSiteUrl = () =>
   resolveMetadataBase(getLandingPageEnv().LANDING_URL);
 
 /**
+ * Absolute URL for a site path (JSON-LD, sitemap). Without a known origin the
+ * path stays relative: a guessed localhost origin is worse than none.
+ */
+export const absoluteUrl = (path: string): string => {
+  const siteUrl = getSiteUrl();
+  return siteUrl ? new URL(path, siteUrl).href : path;
+};
+
+/**
  * Only production may be indexed. An unset APP_ENV (local dev, or a fork that
  * never configured it) counts as production, so a missing variable can never
  * silently block a live site from search engines.

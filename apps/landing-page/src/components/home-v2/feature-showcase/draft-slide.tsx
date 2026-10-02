@@ -10,40 +10,88 @@ import {
   X,
 } from "lucide-react";
 
-import { AppWindow } from "./app-window";
+import { Fragment } from "react";
+
+import { HOME_DRAFT_MOCK } from "@/consts/draft-mocks";
+import type { DraftMock } from "@/consts/guides/types";
+import { type AppPath, AppWindow } from "./app-window";
 import { DocAction, Insert, Reveal } from "./showcase-ui";
 
 // ---------------------------------------------------------------------------
 // Slide 2 — Draft NEPA documents (TipTap / MUI document editor)
 // ---------------------------------------------------------------------------
 
-const DRAFT_INSERTS = [
-  "District Ranger name",
-  "Project location description",
-  "Exact treatment acreage",
-  "Comment deadline",
-  "Project contact",
-];
-
-const DRAFT_CHAT_ACTIONS = [
+const DEFAULT_ACTIONS = [
   "📍 Add location details",
-  "👤 Add District Ranger name",
+  "👤 Add the signer's name",
   "✏️ Make other edits first",
 ];
 
-// Slide 2 — Draft NEPA documents: the project chat with the document artifact
-// preview panel open (split view). Left: chat rail where the agent reports the
-// drafted scoping letter and the details still needed. Right: the live letter
-// preview with USFS letterhead + inline [INSERT] placeholders highlighted.
-export function DraftSlide({ reduce }: { reduce: boolean }) {
+const INSERT_PATTERN = /(\[INSERT:[^\]]*\])/;
+
+// Renders `[INSERT: …]` spans as the highlighted placeholders ePlan leaves for
+// every fact it could not confirm.
+function WithInserts({ text }: { text: string }) {
   return (
-    <AppWindow crumb="Chat" active="chat" contentClassName="bg-white">
+    <>
+      {text.split(INSERT_PATTERN).map((part, index) =>
+        INSERT_PATTERN.test(part) ? (
+          <Insert key={`${index}-${part}`}>{part}</Insert>
+        ) : (
+          <Fragment key={`${index}-${part}`}>{part}</Fragment>
+        ),
+      )}
+    </>
+  );
+}
+
+// Breadcrumb org / office from the mock's letterhead: the agency's own line
+// (the second, after a department) and the office after the last dash.
+const appPathOf = (mock: DraftMock): AppPath => {
+  const [first, second, third] = mock.letterhead.left;
+  return {
+    org: second ?? first,
+    office: (third ?? first).split(" — ").pop() ?? first,
+    project: mock.project,
+  };
+};
+
+// The agent's message, with the document title in bold where it appears.
+function Summary({ mock }: { mock: DraftMock }) {
+  const [before, ...rest] = mock.summary.split(mock.documentTitle);
+  if (rest.length === 0) {
+    return <>{mock.summary}</>;
+  }
+  return (
+    <>
+      {before}
+      <span className="font-semibold">{mock.documentTitle}</span>
+      {rest.join(mock.documentTitle)}
+    </>
+  );
+}
+
+export function DraftSlide({
+  reduce,
+  mock = HOME_DRAFT_MOCK,
+}: {
+  reduce: boolean;
+  mock?: DraftMock;
+}) {
+  const actions = mock.actions ?? DEFAULT_ACTIONS;
+  return (
+    <AppWindow
+      crumb="Chat"
+      path={mock === HOME_DRAFT_MOCK ? undefined : appPathOf(mock)}
+      active="chat"
+      contentClassName="bg-white"
+    >
       <div className="flex h-full">
         {/* Chat rail */}
         <div className="hidden w-[38%] max-w-[340px] shrink-0 flex-col border-r border-egray-100 bg-white md:flex">
           <div className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-egray-100 px-4">
             <span className="truncate font-heading text-[14px] font-bold text-neutral-black">
-              Canyon Three Fuels Reduction
+              {mock.project}
             </span>
             <span className="flex shrink-0 items-center gap-1 rounded-md border border-egray-200 px-2 py-1 font-heading text-[10px] font-medium text-egray-600">
               <Sparkles className="size-3 text-brand-800" />
@@ -61,18 +109,12 @@ export function DraftSlide({ reduce }: { reduce: boolean }) {
               <div className="flex min-w-0 flex-1 flex-col gap-2.5">
                 <Reveal index={0} reduce={reduce}>
                   <p className="font-inter text-[12.5px] leading-[19px] text-neutral-black">
-                    The{" "}
-                    <span className="font-semibold">
-                      Canyon Three — Scoping Letter
-                    </span>{" "}
-                    is ready. It follows the same structure and formal USFS tone
-                    as the reference letter. A few details still need your
-                    input:
+                    <Summary mock={mock} />
                   </p>
                 </Reveal>
                 <Reveal index={1} reduce={reduce}>
                   <ul className="flex flex-col gap-0.5">
-                    {DRAFT_INSERTS.map((item) => (
+                    {mock.missing.map((item) => (
                       <li
                         key={item}
                         className="flex items-start gap-1.5 font-inter text-[12px] leading-[18px] text-egray-700"
@@ -94,7 +136,7 @@ export function DraftSlide({ reduce }: { reduce: boolean }) {
                   reduce={reduce}
                   className="flex flex-wrap gap-1.5"
                 >
-                  {DRAFT_CHAT_ACTIONS.map((action) => (
+                  {actions.map((action) => (
                     <span
                       key={action}
                       className="rounded-md border border-egray-200 bg-white px-2 py-1 font-inter text-[11px] font-medium text-neutral-black"
@@ -132,7 +174,7 @@ export function DraftSlide({ reduce }: { reduce: boolean }) {
               </span>
               <div className="flex min-w-0 flex-col">
                 <span className="truncate font-heading text-[14px] font-medium text-neutral-black">
-                  Canyon Three — Scoping Letter
+                  {mock.documentTitle}
                 </span>
                 <span className="font-inter text-[11px] text-egray-500">
                   Updated less than a minute ago
@@ -166,76 +208,56 @@ export function DraftSlide({ reduce }: { reduce: boolean }) {
               fades out at the bottom edge like a page continuing below. */}
           <div className="min-h-0 flex-1 overflow-hidden px-6 py-6 max-sm:[mask-image:linear-gradient(to_bottom,black_75%,transparent)] sm:px-10">
             <div className="mx-auto flex max-w-[520px] flex-col gap-3.5">
-              {/* USFS letterhead table */}
+              {/* Agency letterhead */}
               <Reveal index={0} reduce={reduce}>
                 <div className="flex overflow-hidden rounded-sm border border-egray-300 font-inter text-[9.5px] leading-[14px] text-egray-700">
                   <div className="flex-1 border-r border-egray-300 p-2.5">
-                    <p>United States Department of Agriculture</p>
-                    <p className="font-semibold text-neutral-black">
-                      Forest Service
-                    </p>
-                    <p>Tahoe National Forest — Nevada City Ranger District</p>
+                    {mock.letterhead.left.map((line, index) => (
+                      <p
+                        key={line}
+                        className={
+                          index === 1 ? "font-semibold text-neutral-black" : ""
+                        }
+                      >
+                        <WithInserts text={line} />
+                      </p>
+                    ))}
                   </div>
                   <div className="w-[42%] p-2.5">
-                    <p>
-                      <Insert>
-                        [INSERT: office street address — 631 Coyote St.]
-                      </Insert>
-                    </p>
-                    <p className="mt-0.5">Nevada City, CA 95959</p>
-                    <p className="mt-0.5">530-265-4531</p>
-                    <p className="mt-0.5">
-                      Fax: <Insert>[INSERT: office fax number]</Insert>
-                    </p>
+                    {mock.letterhead.right.map((line, index) => (
+                      <p key={line} className={index > 0 ? "mt-0.5" : ""}>
+                        <WithInserts text={line} />
+                      </p>
+                    ))}
                   </div>
                 </div>
               </Reveal>
 
               <Reveal index={1} reduce={reduce}>
                 <div className="flex flex-col items-end gap-0.5 font-inter text-[10.5px] text-egray-700">
-                  <p>
-                    File Code: <Insert>[INSERT: file code]</Insert>
-                  </p>
-                  <p>Date: August 12, 2026</p>
+                  {mock.meta.map((line) => (
+                    <p key={line}>
+                      <WithInserts text={line} />
+                    </p>
+                  ))}
                 </div>
               </Reveal>
 
-              <Reveal index={2} reduce={reduce}>
-                <p className="font-inter text-[11.5px] font-medium text-neutral-black">
-                  Dear Interested Party:
-                </p>
-              </Reveal>
+              {mock.salutation && (
+                <Reveal index={2} reduce={reduce}>
+                  <p className="font-inter text-[11.5px] font-medium text-neutral-black">
+                    {mock.salutation}
+                  </p>
+                </Reveal>
+              )}
 
-              <Reveal index={3} reduce={reduce}>
-                <p className="font-inter text-[11.5px] leading-[19px] text-egray-700">
-                  The Tahoe National Forest,{" "}
-                  <Insert>
-                    [INSERT: Nevada City Ranger District — suggested: Yuba River
-                    Ranger District]
-                  </Insert>
-                  , is proposing the Canyon Three Fuels Reduction project to
-                  reduce hazardous fuels across{" "}
-                  <Insert>
-                    [INSERT: treatment acreage — within the 50–100 acre range]
-                  </Insert>{" "}
-                  near{" "}
-                  <Insert>
-                    [INSERT: project location description — e.g., watershed or
-                    road corridor]
-                  </Insert>
-                  .
-                </p>
-              </Reveal>
-
-              <Reveal index={4} reduce={reduce}>
-                <p className="font-inter text-[11.5px] leading-[19px] text-egray-700">
-                  We invite your comments during the scoping period. Please
-                  submit written comments by{" "}
-                  <Insert>[INSERT: comment deadline]</Insert> to the address
-                  above or through the project web page at{" "}
-                  <Insert>[INSERT: project web page URL]</Insert>.
-                </p>
-              </Reveal>
+              {mock.paragraphs.map((paragraph, index) => (
+                <Reveal key={paragraph} index={3 + index} reduce={reduce}>
+                  <p className="font-inter text-[11.5px] leading-[19px] text-egray-700">
+                    <WithInserts text={paragraph} />
+                  </p>
+                </Reveal>
+              ))}
             </div>
           </div>
         </div>

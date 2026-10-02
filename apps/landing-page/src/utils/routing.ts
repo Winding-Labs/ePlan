@@ -105,13 +105,6 @@ export const routing = {
   }) {
     return `/projects/${organizationSlug}/${officeSlug}/templates`;
   },
-  /** Document guides (/templates) — not the catalog's project templates. */
-  documentTemplates() {
-    return "/templates";
-  },
-  documentTemplate({ slug }: { slug: string }) {
-    return `/templates/${slug}`;
-  },
   signIn() {
     return `${getLandingPageEnv().TURBOPLAN_URL}/login`;
   },
