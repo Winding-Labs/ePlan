@@ -85,24 +85,32 @@ test.describe("Landing Page - NEPA guide pages", () => {
     }
   });
 
-  test("prefills the prompt from projectDescription and opens the signup flow with it", async ({
-    page,
-  }) => {
-    const description =
-      "I'm planning a culvert replacement on a national forest road in Idaho.";
-    await page.goto(
-      `${LANDING_URL}/nepa/scoping-letter?projectDescription=${encodeURIComponent(description)}`,
-    );
+  // Ad and search traffic is anonymous. (Signed in, the prompt waits on
+  // /api/billing/access, which 404s when the billing package is disabled, as
+  // it is in this suite.)
+  test.describe("as an anonymous visitor", () => {
+    test.use({ storageState: { cookies: [], origins: [] } });
 
-    const prompt = page.locator("#project-prompt-input textarea");
-    await expect(prompt).toHaveValue(description);
+    test("prefills the prompt from projectDescription and opens the signup flow with it", async ({
+      page,
+    }) => {
+      const description =
+        "I'm planning a culvert replacement on a national forest road in Idaho.";
+      await page.goto(
+        `${LANDING_URL}/nepa/scoping-letter?projectDescription=${encodeURIComponent(description)}`,
+      );
 
-    await page
-      .locator('#project-prompt-input button[aria-label="Create project"]')
-      .click();
-    const dialog = page.getByRole("dialog");
-    await expect(dialog).toBeVisible({ timeout: 30_000 });
-    await expect(dialog.locator("textarea").first()).toHaveValue(description);
+      const prompt = page.locator("#project-prompt-input textarea");
+      await expect(prompt).toHaveValue(description);
+
+      await page
+        .locator('#project-prompt-input button[aria-label="Create project"]')
+        .click();
+      const dialog = page.getByRole("dialog");
+      await expect(dialog).toBeVisible({ timeout: 30_000 });
+      await expect(dialog.getByText("Sign up for")).toBeVisible();
+      await expect(dialog.locator("textarea").first()).toHaveValue(description);
+    });
   });
 
   test("links every guide page from the footer", async ({ page }) => {
