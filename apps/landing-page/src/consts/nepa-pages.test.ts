@@ -1,7 +1,7 @@
 import { PLANS } from "@wildfires-org/turboplan-billing/types";
 
 import { orderCitations } from "@/lib/nepa-citations";
-import { DESCRIPTION_MAX_LENGTH, TITLE_MAX_LENGTH } from "@/lib/site-url";
+import { DESCRIPTION_MAX_LENGTH, TITLE_MAX_LENGTH } from "@/lib/seo";
 import { NEPA_GUIDE_LINKS } from "./nepa-guide-links";
 import {
   NEPA_PAGES,

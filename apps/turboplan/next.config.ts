@@ -49,6 +49,32 @@ const r2Origins = (process.env.R2_PUBLIC_URL ?? "")
 const cspSources = (...sources: Array<string | null | false>) =>
   sources.filter(Boolean).join(" ");
 
+// gtag.js (loaded by <GoogleTag>) serves GA4 and the Google Ads tag. Sign-up
+// and purchase happen in this app, so both must be able to load and send
+// from here. The Ads tag (remarketing + conversion linker) adds its own
+// script, pixel and connect hosts on top of the GA4 ones.
+const GOOGLE_TAG_SCRIPT_HOSTS = [
+  "https://www.googletagmanager.com",
+  "https://www.googleadservices.com",
+  "https://googleads.g.doubleclick.net",
+  "https://www.google.com",
+];
+const GOOGLE_TAG_IMG_HOSTS = [
+  "https://www.googletagmanager.com",
+  "https://*.google-analytics.com",
+  "https://googleads.g.doubleclick.net",
+  "https://www.google.com",
+];
+const GOOGLE_TAG_CONNECT_HOSTS = [
+  "https://www.googletagmanager.com",
+  "https://*.google-analytics.com",
+  "https://*.analytics.google.com",
+  "https://www.google.com",
+  "https://googleads.g.doubleclick.net",
+  "https://www.googleadservices.com",
+  "https://pagead2.googlesyndication.com",
+];
+
 // Report-only for now: violations surface in the browser console without
 // breaking anything. Tighten and promote to an enforced policy once clean.
 // Host lists are env-driven where the host is deployment-specific; values are
@@ -57,7 +83,12 @@ const contentSecurityPolicyReportOnly = [
   "default-src 'self'",
   // Next.js needs inline scripts (no nonce pipeline yet); dev needs eval for
   // React Refresh.
-  `script-src ${cspSources("'self'", "'unsafe-inline'", !isProduction && "'unsafe-eval'")}`,
+  `script-src ${cspSources(
+    "'self'",
+    "'unsafe-inline'",
+    !isProduction && "'unsafe-eval'",
+    ...GOOGLE_TAG_SCRIPT_HOSTS,
+  )}`,
   // Next.js, Leaflet and framer-motion all write inline styles.
   "style-src 'self' 'unsafe-inline'",
   `img-src ${cspSources(
@@ -73,6 +104,7 @@ const contentSecurityPolicyReportOnly = [
     "https://*.tile.openstreetmap.org",
     "https://*.tile.opentopomap.org",
     "https://server.arcgisonline.com",
+    ...GOOGLE_TAG_IMG_HOSTS,
   )}`,
   "font-src 'self' data:",
   `connect-src ${cspSources(
@@ -82,10 +114,12 @@ const contentSecurityPolicyReportOnly = [
     ...r2Origins,
     // Browser PUTs to presigned R2 upload URLs.
     "https://*.r2.cloudflarestorage.com",
+    ...GOOGLE_TAG_CONNECT_HOSTS,
     !isProduction && "ws:",
   )}`,
   // Documenso signing is embedded from a per-organization host configured at
-  // runtime, so any https origin is allowed.
+  // runtime, so any https origin is allowed (that also covers the Ads tag's
+  // td.doubleclick.net / googletagmanager.com frames).
   "frame-src 'self' https:",
   // react-pdf worker is bundled same-origin; some libraries spawn blob workers.
   "worker-src 'self' blob:",

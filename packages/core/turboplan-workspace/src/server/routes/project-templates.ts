@@ -1,6 +1,8 @@
 import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import { assertProjectCreationAllowed } from "@wildfires-org/turboplan-billing/server";
 import { user as userTable } from "@wildfires-org/turboplan-db";
 import {
@@ -16,6 +18,7 @@ import {
 } from "@wildfires-org/turboplan-rbac/hono";
 import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/server";
 
+import { actorContext } from "../analytics-helpers";
 import { getOfficeBySlug } from "../offices/queries";
 import { getOrCreatePersonalWorkspace } from "../organizations/personal-workspace";
 import { resolveTemplateIsPublic } from "../projects/creation-policy";
@@ -290,6 +293,18 @@ projectTemplatesRouter.post("/:id/create-from-template", async (c) => {
         organizationId: targetOffice.organizationId,
       });
       if (!directEntitlement.allowed) {
+        trackAnalyticsEvent(
+          ANALYTICS_EVENTS.PLAN_LIMIT_REACHED,
+          actorContext(user.userId, {
+            organizationId: targetOffice.organizationId,
+            officeId: targetOffice.id,
+          }),
+          {
+            limit: "projects",
+            surface: "create_from_template",
+            plan: directEntitlement.plan,
+          },
+        );
         return c.json(
           {
             error: "Upgrade required",
@@ -322,6 +337,16 @@ projectTemplatesRouter.post("/:id/create-from-template", async (c) => {
         action: "created",
         metadata: { createdFromTemplate: true, templateId },
       });
+
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.PROJECT_CREATED,
+        actorContext(user.userId, {
+          organizationId: targetOffice.organizationId,
+          officeId: targetOffice.id,
+          projectId: directProject.id,
+        }),
+        { from_template: true, template_id: templateId },
+      );
 
       return c.json(
         {
@@ -361,6 +386,18 @@ projectTemplatesRouter.post("/:id/create-from-template", async (c) => {
       organizationId: personalOrg.id,
     });
     if (!entitlement.allowed) {
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.PLAN_LIMIT_REACHED,
+        actorContext(user.userId, {
+          organizationId: personalOrg.id,
+          officeId: personalOffice.id,
+        }),
+        {
+          limit: "projects",
+          surface: "create_from_template",
+          plan: entitlement.plan,
+        },
+      );
       return c.json(
         {
           error: "Upgrade required",
@@ -396,6 +433,16 @@ projectTemplatesRouter.post("/:id/create-from-template", async (c) => {
       action: "created",
       metadata: { createdFromTemplate: true, templateId },
     });
+
+    trackAnalyticsEvent(
+      ANALYTICS_EVENTS.PROJECT_CREATED,
+      actorContext(user.userId, {
+        organizationId: personalOrg.id,
+        officeId: personalOffice.id,
+        projectId: createdProject.id,
+      }),
+      { from_template: true, template_id: templateId },
+    );
 
     // The project always stays in the user's PERSONAL workspace at creation. The
     // gov org/office in `submitTo` is NOT submitted to here — it is only a

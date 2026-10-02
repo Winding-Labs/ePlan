@@ -4,6 +4,10 @@ import { createMagicLinkLoginTicket } from "@wildfires-org/turboplan-auth/server
 import { getInvitationService } from "@wildfires-org/turboplan-workspace/server";
 
 import { signIn } from "@/app/(auth)/auth";
+// Registers the web analytics sink for this action's bundle: the invitation
+// service emits `user_signed_up` + `member_joined` itself.
+import "@/lib/server-analytics";
+
 import { buildInviteLoginUrl } from "./login-url";
 
 export interface AcceptInvitationState {

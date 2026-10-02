@@ -8,6 +8,7 @@ import localFont from "next/font/local";
 import { cookies } from "next/headers";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
+import { AnalyticsPageView } from "@wildfires-org/turboplan-analytics/client";
 import { SessionProvider } from "@wildfires-org/turboplan-auth/client";
 import { getSession } from "@wildfires-org/turboplan-auth/session";
 import { getLandingPageEnv } from "@wildfires-org/turboplan-env";
@@ -19,7 +20,6 @@ import {
 import LayoutWrapper from "@/app/layoutWrapper";
 import { Navbar } from "@/components/home-v2/navbar";
 import { SiteFooter } from "@/components/home-v2/site-footer";
-import { GoogleAnalytics } from "@/components/providers/google-analytics";
 import { PostHogProvider } from "@/components/providers/posthog-provider";
 import { UiScaleSync } from "@/components/providers/ui-scale-sync";
 import { ReleaseInfoLogger } from "@/components/release-info-logger";
@@ -30,7 +30,12 @@ import AnalyticsContextProvider, {
 import GlobalProvider from "@/context/global";
 import { brand } from "@/lib/brand";
 import { resolveMetadataBase } from "@/lib/metadata-base";
-import { indexableRobots } from "@/lib/site-url";
+import {
+  indexableRobots,
+  SITE_DESCRIPTION,
+  SITE_TAGLINE,
+  SITE_TITLE,
+} from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import "../globals.css";
 dotenv.config();
@@ -92,21 +97,22 @@ const inter = Inter({
   display: "swap",
 });
 
-// NEXT_PUBLIC_ vars must be referenced statically so Next.js inlines them at
-// build time. No measurement ID → the GA4 script is never rendered, so local
-// dev and any environment that leaves this unset stay untracked. Use a
-// separate measurement ID per environment (production vs develop).
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
-
 const APP_TITLE = brand.name;
-const APP_TAGLINE = "AI Environmental Planning Platform";
-const APP_DESCRIPTION =
-  "An open source AI environmental planning platform — plan projects in minutes instead of months.";
+const APP_TAGLINE = SITE_TAGLINE;
+const APP_DESCRIPTION = SITE_DESCRIPTION;
 
+// Pages set only their own part of the title (or `buildPageMetadata` from
+// lib/seo); the template appends the brand. No canonical here: a
+// layout-level canonical would be inherited by every page that doesn't
+// override it and point them all at the home page.
 export const metadata: Metadata = {
   metadataBase: resolveMetadataBase(getLandingPageEnv().LANDING_URL),
-  title: `${APP_TITLE} | ${APP_TAGLINE}`,
+  title: {
+    default: SITE_TITLE,
+    template: `%s | ${APP_TITLE}`,
+  },
   description: APP_DESCRIPTION,
+  applicationName: APP_TITLE,
   openGraph: {
     title: APP_TAGLINE,
     description: APP_DESCRIPTION,
@@ -116,7 +122,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${APP_TITLE} | ${APP_TAGLINE}`,
+    title: SITE_TITLE,
     description: APP_DESCRIPTION,
     images: [brand.ogImage],
   },
@@ -232,13 +238,13 @@ export default async function RootLayout({
           </Suspense>
         </RootProvider>
         <Toaster />
-        {/* Suspense boundary required: GoogleAnalytics reads useSearchParams
-            to re-emit page_view on SPA navigation. */}
-        {GA_MEASUREMENT_ID && (
-          <Suspense>
-            <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />
-          </Suspense>
-        )}
+        {/* Suspense boundary required: AnalyticsPageView reads
+            useSearchParams to emit one pageview (PostHog + GA4) per route
+            change. Loads gtag only when GA4 or the Google Ads tag is
+            configured. */}
+        <Suspense>
+          <AnalyticsPageView />
+        </Suspense>
       </body>
     </html>
   );

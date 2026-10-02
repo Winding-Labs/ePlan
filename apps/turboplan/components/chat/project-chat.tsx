@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { useSWRConfig } from "swr";
 import { unstable_serialize } from "swr/infinite";
 
+import { analytics } from "@wildfires-org/turboplan-analytics/client";
 import type { Attachment } from "@wildfires-org/turboplan-chat-actions/types";
 import { DEFAULT_SUGGESTION_TEMPLATES } from "@wildfires-org/turboplan-research-agent-integration/types";
 import { SuggestionPills } from "@wildfires-org/turboplan-utils";
@@ -91,6 +92,15 @@ export const ProjectChat = forwardRef<ProjectChatRef, ProjectChatProps>(
     // left running in the background keeps calling this instance's callbacks,
     // so they check `isMountedRef` before touching the artifact. The view keys
     // this component by chat id, so a new id always means a new instance.
+    // Every event and pageview while this chat is open carries its chat_id;
+    // cleared when the chat unmounts so nothing outside it inherits the id.
+    useEffect(() => {
+      analytics.setContext({ chatId: id });
+      return () => {
+        analytics.setContext({ chatId: null });
+      };
+    }, [id]);
+
     const isMountedRef = useRef(true);
     useEffect(() => {
       isMountedRef.current = true;

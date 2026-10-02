@@ -2,6 +2,8 @@ import type { Context } from "hono";
 import { Hono } from "hono";
 import { z } from "zod";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import { Action, EntityType } from "@wildfires-org/turboplan-rbac";
 import {
   type RBACContext,
@@ -78,6 +80,13 @@ const exportPdfHandler = async (c: Context<RBACContext>) => {
         : undefined;
 
     const bytes = await generatePdfFromMarkdown(content, title, options);
+
+    const userId = c.get("user").userId;
+    trackAnalyticsEvent(
+      ANALYTICS_EVENTS.DOCUMENT_EXPORTED,
+      { distinctId: userId, userId, projectId, source: "web" },
+      { format: "pdf" },
+    );
 
     return new Response(Buffer.from(bytes), {
       headers: { "Content-Type": "application/pdf" },

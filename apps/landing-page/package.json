@@ -31,6 +31,7 @@
     "@radix-ui/react-tooltip": "^1.1.7",
     "@sentry/nextjs": "^10.70.0",
     "@wildfires-org/turboplan-ai": "workspace:*",
+    "@wildfires-org/turboplan-analytics": "workspace:*",
     "@wildfires-org/turboplan-api-client": "workspace:*",
     "@wildfires-org/turboplan-auth": "workspace:*",
     "@wildfires-org/turboplan-billing": "workspace:*",

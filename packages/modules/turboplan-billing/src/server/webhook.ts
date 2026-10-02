@@ -1,9 +1,11 @@
 import { Hono } from "hono";
 import type Stripe from "stripe";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import { getApiEnv } from "@wildfires-org/turboplan-env";
 
-import { emitBillingAnalytics } from "./analytics";
+import { buildCheckoutCompletedEvent } from "./analytics";
 import { sendPaymentFailedEmail } from "./dunning";
 import {
   claimWebhookEvent,
@@ -30,16 +32,18 @@ const syncSubscriptionById = async (subscriptionId: string): Promise<void> => {
 };
 
 export type SubscriptionAnalyticsEventName =
-  | "subscription_activated"
-  | "subscription_canceled"
-  | "payment_failed";
+  | typeof ANALYTICS_EVENTS.SUBSCRIPTION_ACTIVATED
+  | typeof ANALYTICS_EVENTS.SUBSCRIPTION_CANCELED
+  | typeof ANALYTICS_EVENTS.PAYMENT_FAILED;
 
 /**
  * Builds the webhook-side half of the billing funnel: subscription events
- * keyed by the owning organization (same key as checkout_started — see
- * buildCheckoutStartedEvent) and joinable via subscription_id. The
- * subscription lookup is injected so the identity contract is testable
- * without Stripe or a database (tests/analytics-contract.test.ts).
+ * keyed by the owning organization (the analytics projection marks an
+ * organization key as a non-person) and joinable via subscription_id and the
+ * organization context shared with checkout_started (see
+ * buildCheckoutStartedEvent). The subscription lookup is injected so the
+ * identity contract is testable without Stripe or a database
+ * (tests/analytics-contract.test.ts).
  */
 export const createSubscriptionAnalyticsEmitter = (
   lookupSubscription: (
@@ -59,18 +63,21 @@ export const createSubscriptionAnalyticsEmitter = (
         return null;
       },
     );
-    emitBillingAnalytics({
-      distinctId: row?.organizationId ?? "system",
-      event: eventName,
-      properties: {
+    trackAnalyticsEvent(
+      eventName,
+      {
+        distinctId: row?.organizationId ?? "system",
+        organizationId: row?.organizationId,
+        source: "system",
+      },
+      {
         subscription_id: stripeSubscriptionId,
-        organization_id: row?.organizationId,
         // Explicit marker: "system" rows are lookup failures, not a real
         // billing entity — keeps them filterable instead of silently
         // blending into org-keyed funnel data.
         ...(row ? {} : { unattributed: true }),
       },
-    });
+    );
   };
 };
 
@@ -123,13 +130,13 @@ stripeWebhookRouter.post("/", async (c) => {
         await syncSubscriptionById(event.data.object.id);
         if (event.type === "customer.subscription.created") {
           await emitSubscriptionAnalytics(
-            "subscription_activated",
+            ANALYTICS_EVENTS.SUBSCRIPTION_ACTIVATED,
             event.data.object.id,
           );
         }
         if (event.type === "customer.subscription.deleted") {
           await emitSubscriptionAnalytics(
-            "subscription_canceled",
+            ANALYTICS_EVENTS.SUBSCRIPTION_CANCELED,
             event.data.object.id,
           );
         }
@@ -151,6 +158,28 @@ stripeWebhookRouter.post("/", async (c) => {
           // removed in between would otherwise stay mis-billed until the next
           // membership mutation or invoice.upcoming (~a month).
           await reconcileSeatsForStripeSubscription(subscriptionId);
+        }
+        // The purchase conversion. Emitted last, after the sync succeeded, so
+        // a failed sync (released and retried) cannot double-count it; the
+        // event ledger above dedupes redeliveries, so one session yields one
+        // purchase. Analytics must never fail the webhook, which would make
+        // Stripe replay the whole event. `paid` only: a session completed
+        // with a delayed payment method (or a $0 trial) is not revenue yet.
+        if (
+          session.mode === "subscription" &&
+          session.status === "complete" &&
+          session.payment_status === "paid"
+        ) {
+          try {
+            const { event, context, extra } =
+              buildCheckoutCompletedEvent(session);
+            trackAnalyticsEvent(event, context, extra);
+          } catch (error) {
+            console.error(
+              "[stripe-webhook] checkout_completed analytics failed:",
+              error,
+            );
+          }
         }
         break;
       }
@@ -211,7 +240,10 @@ stripeWebhookRouter.post("/", async (c) => {
           // failure must never fail the webhook (which would make Stripe retry
           // the whole event), so we swallow and log any error here.
           if (invoice.attempt_count === 1) {
-            await emitSubscriptionAnalytics("payment_failed", subscriptionId);
+            await emitSubscriptionAnalytics(
+              ANALYTICS_EVENTS.PAYMENT_FAILED,
+              subscriptionId,
+            );
             try {
               await sendPaymentFailedEmail(subscriptionId);
             } catch (error) {

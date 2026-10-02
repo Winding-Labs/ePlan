@@ -4,12 +4,14 @@ import { Session } from "next-auth";
 import { z } from "zod";
 
 import { getPrompt } from "@wildfires-org/turboplan-ai";
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
 import {
   isMapPackageEnabled,
   isTasksPackageEnabled,
 } from "@wildfires-org/turboplan-feature-flags";
 
 import { artifactKinds, documentHandlers } from "@/lib/artifacts/server";
+import { trackAnalyticsEvent } from "@/lib/server-analytics";
 import { generateUUID } from "@/lib/utils";
 
 interface CreateDocumentProps {
@@ -171,6 +173,15 @@ export const createDocument = async ({
         chatId,
         attachments: getUserMessageAttachments(userMessage),
       });
+
+      const userId = session.user?.id;
+      if (userId) {
+        trackAnalyticsEvent(
+          ANALYTICS_EVENTS.AI_ARTIFACT_CREATED,
+          { distinctId: userId, userId, projectId, chatId },
+          { kind },
+        );
+      }
 
       writer.write({
         type: "data-artifact",

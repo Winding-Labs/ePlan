@@ -144,3 +144,31 @@ export const buildAttributionEventProperties = (
 
   return { ...set, $set: set, $set_once: setOnce };
 };
+
+const asPropertyBag = (value: unknown): Record<string, unknown> => {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
+};
+
+/**
+ * Merges the request's cookie attribution (`signupAttributionProperties`:
+ * Moab `link_*` + first-touch `utm_*`, `initial_*` person props) UNDER the
+ * signup caller's own properties: the caller wins on every flat key, and the
+ * two `$set_once` bags are merged so the hand-off `$initial_*` props and the
+ * cookie `initial_*` props both survive.
+ */
+export const mergeSignupAttribution = (
+  cookieAttribution: Record<string, unknown>,
+  callerProperties: Record<string, unknown>,
+): Record<string, unknown> => {
+  const setOnce = {
+    ...asPropertyBag(cookieAttribution.$set_once),
+    ...asPropertyBag(callerProperties.$set_once),
+  };
+  return {
+    ...cookieAttribution,
+    ...callerProperties,
+    ...(Object.keys(setOnce).length > 0 ? { $set_once: setOnce } : {}),
+  };
+};

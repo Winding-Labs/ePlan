@@ -27,7 +27,6 @@ export {
 } from "./server/public-view";
 export {
   configureRecorder,
-  configureRecorderAnalytics,
   createTimelineRecord,
   createTimelineRecordOrThrow,
 } from "./server/recorder";

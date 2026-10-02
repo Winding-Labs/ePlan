@@ -29,6 +29,7 @@
     }
   },
   "dependencies": {
+    "@wildfires-org/turboplan-analytics": "workspace:*",
     "@wildfires-org/turboplan-db": "workspace:*",
     "@wildfires-org/turboplan-rbac": "workspace:*",
     "@wildfires-org/turboplan-utils": "workspace:*",

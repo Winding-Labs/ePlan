@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
+import type { AnalyticsEvent } from "@wildfires-org/turboplan-analytics";
 import { useSession } from "@wildfires-org/turboplan-auth/client";
 import { OmniSearch } from "@wildfires-org/turboplan-search/client";
 
@@ -26,7 +27,7 @@ import { EASE_OUT } from "./ui/motion";
 type NavLink = {
   label: string;
   href: string;
-  event: string;
+  event: AnalyticsEvent;
   active: boolean;
 };
 
@@ -167,7 +168,7 @@ export function Navbar() {
     );
   }, [pathname]);
 
-  const handleNavClick = (event: string) => {
+  const handleNavClick = (event: AnalyticsEvent) => {
     captureEvent(event);
   };
 

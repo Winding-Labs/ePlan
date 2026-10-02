@@ -1,17 +1,36 @@
 import "server-only";
 
+import { cookies } from "next/headers";
 import { after } from "next/server";
 import { PostHog } from "posthog-node";
 
+import {
+  ANALYTICS_EVENTS,
+  distinctIdIsPerson,
+  readGa4Identity,
+  resolveAnalyticsDestinations,
+  signupAttributionProperties,
+} from "@wildfires-org/turboplan-analytics";
+import {
+  configureServerAnalytics,
+  flushGa4Events,
+  type ServerAnalyticsSink,
+  trackServerEvent,
+} from "@wildfires-org/turboplan-analytics/server";
 import { hmacEmailId } from "@wildfires-org/turboplan-auth/email-identity";
 import { getUserById } from "@wildfires-org/turboplan-db/queries";
 import { getWebEnv } from "@wildfires-org/turboplan-env";
 
+import { mergeSignupAttribution } from "@/lib/signup-attribution";
+
 /**
- * Server-side PostHog capture for Next.js route handlers and next-auth
- * events. Uses immediate flush (flushAt: 1) because there is no
- * per-request flush middleware in the Next runtime. No-ops when
- * POSTHOG_API_KEY is unset.
+ * The analytics sink of the Next web server process: every
+ * `trackAnalyticsEvent` emitted here — by a server action, a route handler,
+ * next-auth events or a package (timeline recorder, workspace services) —
+ * fans out to PostHog and to GA4 (Measurement Protocol) post-response.
+ * PostHog uses immediate flush (flushAt: 1) because there is no per-request
+ * flush middleware in the Next runtime. Each destination no-ops when it is not
+ * configured (see `resolveAnalyticsDestinations`).
  */
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -19,12 +38,12 @@ const UUID_PATTERN =
 let client: PostHog | null = null;
 
 const getClient = (): PostHog | null => {
-  const apiKey = getWebEnv().POSTHOG_API_KEY;
-  if (!apiKey) {
+  const token = resolveAnalyticsDestinations().posthog?.token;
+  if (!token) {
     return null;
   }
   if (!client) {
-    client = new PostHog(apiKey, {
+    client = new PostHog(token, {
       host: "https://us.i.posthog.com",
       flushAt: 1,
       flushInterval: 0,
@@ -101,25 +120,84 @@ export const aliasAnonymousId = (userId: string, anonymousId: string) => {
   });
 };
 
-export const captureServerEvent = (
-  distinctId: string,
-  event: string,
-  properties?: Record<string, unknown>,
-) => {
-  const posthog = getClient();
-  if (!posthog) {
-    return;
-  }
+/**
+ * Starts reading the request's cookies as one `Cookie:` header string.
+ * cookies() must be called synchronously inside the request scope (it throws
+ * outside one: scripts, tests, module-level work), so the sink calls this
+ * before deferring anything; the value is awaited post-response.
+ */
+const startCookieHeaderRead = (): Promise<string> => {
   try {
-    posthog.capture({
-      distinctId,
-      event,
-      properties: { service: "web", ...properties },
-    });
-    // Keep the runtime alive until the capture request lands — serverless
-    // targets may otherwise terminate right after the response and drop it.
-    after(() => posthog.flush());
-  } catch (error) {
-    console.error("PostHog captureServerEvent failed:", error);
+    return cookies()
+      .then((store) =>
+        store
+          .getAll()
+          .map(({ name, value }) => `${name}=${value}`)
+          .join("; "),
+      )
+      .catch(() => "");
+  } catch {
+    return Promise.resolve("");
   }
 };
+
+/**
+ * Runs the delivery post-response so no request (signup above all) waits on
+ * PostHog or GA4. Outside a request scope after() throws; the delivery then
+ * runs unawaited, best effort.
+ */
+const runAfterResponse = (task: () => Promise<void>) => {
+  try {
+    after(task);
+  } catch {
+    void task();
+  }
+};
+
+const webAnalyticsSink: ServerAnalyticsSink = (event, context, extra) => {
+  const cookieHeader = startCookieHeaderRead();
+  runAfterResponse(async () => {
+    try {
+      const header = await cookieHeader;
+      const posthog = getClient();
+      trackServerEvent(
+        { posthog, baseProperties: { service: "web" } },
+        event,
+        {
+          ...context,
+          // A machine id (an organization, "system") is never a GA4 user.
+          userId:
+            context.userId ??
+            (distinctIdIsPerson(context) ? context.distinctId : null),
+          source: context.source ?? "web",
+        },
+        // Sign-up carries the Moab / first-touch campaign cookies; the
+        // caller's hand-off attribution wins where both name a key.
+        event === ANALYTICS_EVENTS.USER_SIGNED_UP
+          ? mergeSignupAttribution(signupAttributionProperties(header), extra)
+          : extra,
+        // The visitor's `_ga` client + session ids: what joins a server hit
+        // (sign_up above all) to the browser session, and through it to the
+        // ad click.
+        readGa4Identity(
+          header,
+          resolveAnalyticsDestinations().ga4?.measurementId,
+        ),
+      );
+      await Promise.allSettled([flushGa4Events(), posthog?.flush()]);
+    } catch (error) {
+      console.error(`[analytics] web delivery failed for "${event}":`, error);
+    }
+  });
+};
+
+configureServerAnalytics(webAnalyticsSink);
+
+/**
+ * App code imports the emit from HERE, not from the package: importing this
+ * module is what registers the sink above, and Next compiles route handlers,
+ * server actions and instrumentation into separate bundle layers, each with
+ * its own copy of the package's module state. Importing through this file
+ * guarantees the caller's copy has the sink.
+ */
+export { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";

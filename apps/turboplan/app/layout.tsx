@@ -1,9 +1,12 @@
+import { Suspense } from "react";
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { cookies } from "next/headers";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 
+import { AnalyticsPageView } from "@wildfires-org/turboplan-analytics/client";
 import { getAuthCookieDomain } from "@wildfires-org/turboplan-env";
 import {
   UI_SCALE_COOKIE_NAME,
@@ -34,6 +37,11 @@ export const metadata: Metadata = {
     template: `%s | ${APP_TITLE}`,
   },
   description: APP_DESCRIPTION,
+  // The signed-in product never belongs in search results — everything
+  // indexable lives on the marketing site. noindex (not a robots.txt block)
+  // is what removes already-indexed URLs like /login: a crawler has to fetch
+  // the page to see it. See app/robots.ts.
+  robots: { index: false, follow: false },
   openGraph: {
     title: APP_TAGLINE,
     description: APP_DESCRIPTION,
@@ -141,6 +149,13 @@ export default async function RootLayout({
             </ThemeProvider>
           </NuqsAdapter>
         </PostHogProvider>
+        {/* One pageview (PostHog + GA4) per route change, stamped with the
+            active organization/office/project, and gtag.js for GA4 + the
+            Google Ads tag. Suspense boundary required: it reads
+            useSearchParams. */}
+        <Suspense>
+          <AnalyticsPageView />
+        </Suspense>
       </body>
     </html>
   );

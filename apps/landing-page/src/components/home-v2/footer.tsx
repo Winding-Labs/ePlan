@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import type { AnalyticsEvent } from "@wildfires-org/turboplan-analytics";
+
 import { PAGE_CONTAINER, PAGE_GUTTER } from "@/components/home-v2/ui/layout";
 import { AnalyticsLink } from "@/components/shared/analytics-link";
 import { NEPA_GUIDE_LINKS } from "@/consts/nepa-guide-links";
@@ -12,14 +14,23 @@ import { routing } from "@/utils/routing";
 type FooterLink = {
   label: string;
   href: string;
-  eventName: string;
+  /** Tracked click; links without a tracking-plan event render untracked. */
+  eventName?: AnalyticsEvent;
 };
+
+const LINK_CLASS =
+  "py-1 font-inter text-[13px] font-normal leading-[20px] text-[#161616] transition-colors duration-200 hover:text-egray-900 sm:text-[14px]";
 
 const FOOTER_LINKS: FooterLink[] = [
   {
     label: "Projects",
     href: routing.catalog(),
     eventName: events.PROJECTS_CLICKED,
+  },
+  {
+    label: "Templates",
+    href: routing.documentTemplates(),
+    eventName: events.TEMPLATES_CLICKED,
   },
   {
     label: "Docs",
@@ -52,7 +63,7 @@ export function Footer() {
       >
         <div className="flex flex-col items-center gap-5 sm:flex-row sm:justify-between sm:gap-0">
           {/* Copyright — last on mobile, left on desktop */}
-          <p className="order-3 font-inter text-[13px] font-normal leading-[20px] text-egray-700 sm:order-none sm:w-[296px] sm:text-left">
+          <p className="order-3 font-inter text-[13px] font-normal leading-[20px] text-egray-700 sm:order-none sm:w-[296px] sm:text-left lg:w-[380px]">
             &copy; {new Date().getFullYear()} {brand.name}
           </p>
 
@@ -69,19 +80,25 @@ export function Footer() {
 
           {/* Nav links — middle on mobile, right on desktop */}
           <nav
-            className="order-2 flex items-center gap-5 sm:order-none sm:w-[296px] sm:justify-end sm:gap-[24px]"
+            className="order-2 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 sm:order-none sm:w-[296px] sm:justify-end sm:gap-x-[24px] lg:w-[380px]"
             aria-label="Footer navigation"
           >
-            {FOOTER_LINKS.map((link) => (
-              <AnalyticsLink
-                key={link.label}
-                href={link.href}
-                eventName={link.eventName}
-                className="py-1 font-inter text-[13px] font-normal leading-[20px] text-[#161616] transition-colors duration-200 hover:text-egray-900 sm:text-[14px]"
-              >
-                {link.label}
-              </AnalyticsLink>
-            ))}
+            {FOOTER_LINKS.map((link) =>
+              link.eventName ? (
+                <AnalyticsLink
+                  key={link.label}
+                  href={link.href}
+                  eventName={link.eventName}
+                  className={LINK_CLASS}
+                >
+                  {link.label}
+                </AnalyticsLink>
+              ) : (
+                <Link key={link.label} href={link.href} className={LINK_CLASS}>
+                  {link.label}
+                </Link>
+              ),
+            )}
           </nav>
         </div>
 

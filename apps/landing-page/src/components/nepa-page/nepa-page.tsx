@@ -40,9 +40,8 @@ import {
   type Source,
   type SourceKey,
 } from "@/consts/nepa-pages";
-import { brand } from "@/lib/brand";
 import { orderCitations, stripCitations } from "@/lib/nepa-citations";
-import { absoluteUrl } from "@/lib/site-url";
+import { buildPageMetadata, toAbsoluteUrl } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { CitedText } from "./cited-text";
 import { DraftYoursPrompt } from "./draft-yours-prompt";
@@ -102,27 +101,14 @@ const citedTexts = (page: NepaPageEntry): string[] => [
 
 export const nepaPageMetadata = (path: NepaGuidePath): Metadata => {
   const page = getNepaPage(path);
-  const title = `${page.title} | ${brand.name}`;
 
-  return {
-    title: { absolute: title },
+  // The root layout's title template appends " | <brand>".
+  return buildPageMetadata({
+    title: page.title,
     description: page.description,
-    alternates: { canonical: page.path },
-    openGraph: {
-      title,
-      description: page.description,
-      url: page.path,
-      siteName: brand.name,
-      type: "article",
-      images: [{ url: brand.ogImage, width: 1200, height: 630 }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description: page.description,
-      images: [brand.ogImage],
-    },
-  };
+    path: page.path,
+    type: "article",
+  });
 };
 
 interface NepaPageProps {
@@ -151,7 +137,7 @@ export function NepaPage({ path }: NepaPageProps) {
             "@type": "ListItem",
             position: index + 1,
             name: crumb.name,
-            item: absoluteUrl(crumb.href),
+            item: toAbsoluteUrl(crumb.href),
           })),
         }}
       />

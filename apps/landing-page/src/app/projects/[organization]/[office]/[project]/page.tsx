@@ -30,8 +30,7 @@ import { PublicProjectProgress } from "@/components/public-project/public-projec
 import { PublicTasksSection } from "@/components/public-project/public-tasks-section";
 import { PublicTimelineSection } from "@/components/public-project/public-timeline-section";
 import { ReadOnlyModulesRenderer } from "@/components/public-project/read-only-modules-renderer";
-import { brand } from "@/lib/brand";
-import { indexableRobots } from "@/lib/site-url";
+import { buildPageMetadata } from "@/lib/seo";
 import { routing } from "@/utils/routing";
 
 interface PublicProjectDetail {
@@ -231,46 +230,21 @@ export async function generateMetadata({
   const projectData = await getPublicProject(organization, office, project);
 
   if (!projectData) {
-    return {
-      title: `Project Not Found - ${brand.name}`,
-      description:
-        "This project could not be found or is not publicly available.",
-    };
+    notFound();
   }
 
-  const title = `${projectData.name} - ${projectData.organization.name} | ${brand.name}`;
-  const description =
-    projectData.description ||
-    `View the ${projectData.name} project from ${projectData.organization.name}`;
-  const image = projectData.coverImageUrl || brand.ogImage;
-
-  return {
-    title,
-    description,
-    // Server-rendered detail page: opt back in from the catalog's noindex
-    // (on production only).
-    robots: indexableRobots(),
-    alternates: {
-      canonical: routing.catalogProject({
-        organizationSlug: organization,
-        officeSlug: office,
-        projectSlug: project,
-      }),
-    },
-    openGraph: {
-      title,
-      description,
-      siteName: brand.name,
-      type: "website",
-      images: [{ url: image }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [image],
-    },
-  };
+  return buildPageMetadata({
+    title: `${projectData.name} – ${projectData.organization.name}`,
+    description:
+      projectData.description ||
+      `View the ${projectData.name} project from ${projectData.organization.name}`,
+    path: routing.catalogProject({
+      organizationSlug: organization,
+      officeSlug: office,
+      projectSlug: project,
+    }),
+    image: projectData.coverImageUrl || undefined,
+  });
 }
 
 export default async function PublicProjectPage({ params }: ProjectPageProps) {

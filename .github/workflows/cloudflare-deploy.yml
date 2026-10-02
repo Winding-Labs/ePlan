@@ -314,8 +314,8 @@ jobs:
           WORKERS_SUBDOMAIN: ${{ vars.WORKERS_SUBDOMAIN }}
           API_DOMAIN: ${{ vars.PRODUCTION_API_DOMAIN }}
           APP_DOMAIN: ${{ vars.PRODUCTION_APP_DOMAIN }}
-          LANDING_DOMAIN: ${{ vars.PRODUCTION_LANDING_DOMAIN }}
           COOKIE_DOMAIN: ${{ vars.PRODUCTION_COOKIE_DOMAIN }}
+          LANDING_DOMAIN: ${{ vars.PRODUCTION_LANDING_DOMAIN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           SUFFIX="$WORKERS_SUBDOMAIN"
@@ -363,8 +363,8 @@ jobs:
         env:
           NEXT_PUBLIC_SERVER_URL: ${{ steps.service-urls.outputs.server_url }}
           NEXT_PUBLIC_TURBOPLAN_URL: ${{ steps.service-urls.outputs.turboplan_url }}
-          # Canonical URLs, sitemap.xml and robots.txt are built from this
-          # (metadataBase); without it they fall back to localhost.
+          # The site's own origin: metadataBase, canonical URLs, sitemap and
+          # robots.txt. Unset, Next falls back to http://localhost:3000.
           NEXT_PUBLIC_LANDING_URL: ${{ steps.service-urls.outputs.landing_url }}
           NEXT_PUBLIC_LINKEDIN_URL: https://linkedin.com
           NEXT_PUBLIC_APP_NAME: ${{ vars.APP_NAME }}
@@ -376,6 +376,8 @@ jobs:
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
           POSTHOG_API_KEY: ${{ vars.POSTHOG_API_KEY }}
           NEXT_PUBLIC_POSTHOG_KEY: ${{ vars.NEXT_PUBLIC_POSTHOG_KEY }}
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
+          NEXT_PUBLIC_GOOGLE_ADS_TAG_ID: ${{ vars.GOOGLE_ADS_TAG_ID }}
           R2_PUBLIC_URL: ${{ vars.R2_PUBLIC_URL }}
           NEXT_PUBLIC_SENTRY_DSN: ${{ vars.SENTRY_DSN_LANDING }}
 
@@ -392,8 +394,6 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           NEXT_PUBLIC_SERVER_URL: ${{ steps.service-urls.outputs.server_url }}
           NEXT_PUBLIC_TURBOPLAN_URL: ${{ steps.service-urls.outputs.turboplan_url }}
-          # Canonical URLs, sitemap.xml and robots.txt are built from this
-          # (metadataBase); without it they fall back to localhost.
           NEXT_PUBLIC_LANDING_URL: ${{ steps.service-urls.outputs.landing_url }}
           NEXT_PUBLIC_LINKEDIN_URL: https://linkedin.com
           NEXT_PUBLIC_APP_NAME: ${{ vars.APP_NAME }}
@@ -406,6 +406,8 @@ jobs:
           AUTH_COOKIE_DOMAIN: ${{ github.ref_name == 'main' && vars.PRODUCTION_COOKIE_DOMAIN || vars.WORKERS_SUBDOMAIN }}
           POSTHOG_API_KEY: ${{ vars.POSTHOG_API_KEY }}
           NEXT_PUBLIC_POSTHOG_KEY: ${{ vars.NEXT_PUBLIC_POSTHOG_KEY }}
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
+          NEXT_PUBLIC_GOOGLE_ADS_TAG_ID: ${{ vars.GOOGLE_ADS_TAG_ID }}
           R2_PUBLIC_URL: ${{ vars.R2_PUBLIC_URL }}
           # Sentry (optional — monitoring/sourcemap upload disabled when unset)
           NEXT_PUBLIC_SENTRY_DSN: ${{ vars.SENTRY_DSN_LANDING }}
@@ -630,6 +632,10 @@ jobs:
           MAP_SERVICE_URL: ${{ steps.service-urls.outputs.map_service_url }}
           ALLOWED_ORIGINS: ${{ steps.service-urls.outputs.turboplan_url }}|${{ steps.service-urls.outputs.landing_url }}
           POSTHOG_API_KEY: ${{ vars.POSTHOG_API_KEY }}
+          # GA4 server-side fan-out: the stream id is a --var, its Measurement
+          # Protocol secret an encrypted Worker secret
+          GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
+          GA_API_SECRET: ${{ secrets.GA_API_SECRET }}
           SENTRY_DSN: ${{ vars.SENTRY_DSN_API }}
           RELEASE_VERSION: ${{ github.sha }}
           RELEASE_DATE: ${{ steps.release-info.outputs.RELEASE_DATE }}
@@ -887,6 +893,8 @@ jobs:
           OPENROUTER_MODEL_IMAGE_LITE: ${{ vars.OPENROUTER_MODEL_IMAGE_LITE }}
           POSTHOG_API_KEY: ${{ vars.POSTHOG_API_KEY }}
           NEXT_PUBLIC_POSTHOG_KEY: ${{ vars.NEXT_PUBLIC_POSTHOG_KEY }}
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
+          NEXT_PUBLIC_GOOGLE_ADS_TAG_ID: ${{ vars.GOOGLE_ADS_TAG_ID }}
           ADMIN_EMAILS: ${{ vars.ADMIN_EMAILS }}
           USE_EXTERNAL_PROMPTS: ${{ vars.FF_USE_EXTERNAL_PROMPTS }}
           NEXT_PUBLIC_SENTRY_DSN: ${{ vars.SENTRY_DSN_WEB }}
@@ -936,6 +944,11 @@ jobs:
           # Runtime vars (used by deploy script for --var flags)
           POSTHOG_API_KEY: ${{ vars.POSTHOG_API_KEY }}
           NEXT_PUBLIC_POSTHOG_KEY: ${{ vars.NEXT_PUBLIC_POSTHOG_KEY }}
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
+          NEXT_PUBLIC_GOOGLE_ADS_TAG_ID: ${{ vars.GOOGLE_ADS_TAG_ID }}
+          # GA4 Measurement Protocol secret for server-side events (sign_up) —
+          # an encrypted Worker secret, never a NEXT_PUBLIC_ build var
+          GA_API_SECRET: ${{ secrets.GA_API_SECRET }}
           OPENROUTER_MODEL_PRIMARY: ${{ vars.OPENROUTER_MODEL_PRIMARY }}
           OPENROUTER_MODEL_LITE: ${{ vars.OPENROUTER_MODEL_LITE }}
           OPENROUTER_MODEL_IMAGE_PRIMARY: ${{ vars.OPENROUTER_MODEL_IMAGE_PRIMARY }}
@@ -1137,6 +1150,10 @@ jobs:
           SENTRY_DSN: ${{ vars.SENTRY_DSN_MCP }}
           RELEASE_VERSION: ${{ github.sha }}
           POSTHOG_API_KEY: ${{ vars.POSTHOG_API_KEY }}
+          # GA4 server-side fan-out: the stream id is a --var, its Measurement
+          # Protocol secret an encrypted Worker secret
+          GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
+          GA_API_SECRET: ${{ secrets.GA_API_SECRET }}
           REF_NAME: ${{ github.ref_name }}
           WORKERS_SUBDOMAIN: ${{ vars.WORKERS_SUBDOMAIN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
