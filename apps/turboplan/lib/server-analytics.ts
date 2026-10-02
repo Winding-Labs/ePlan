@@ -1,17 +1,30 @@
 import "server-only";
 
+import { cookies } from "next/headers";
 import { after } from "next/server";
 import { PostHog } from "posthog-node";
 
+import {
+  type AnalyticsEvent,
+  type Ga4Identity,
+  readGa4Identity,
+  resolveAnalyticsDestinations,
+} from "@wildfires-org/turboplan-analytics";
+import {
+  flushGa4Events,
+  getGa4ServerConfig,
+  sendGa4Event,
+} from "@wildfires-org/turboplan-analytics/server";
 import { hmacEmailId } from "@wildfires-org/turboplan-auth/email-identity";
 import { getUserById } from "@wildfires-org/turboplan-db/queries";
 import { getWebEnv } from "@wildfires-org/turboplan-env";
 
 /**
- * Server-side PostHog capture for Next.js route handlers and next-auth
- * events. Uses immediate flush (flushAt: 1) because there is no
- * per-request flush middleware in the Next runtime. No-ops when
- * POSTHOG_API_KEY is unset.
+ * Server-side analytics for Next.js server actions, route handlers and
+ * next-auth events: one capture fans out to PostHog and to GA4 (Measurement
+ * Protocol). PostHog uses immediate flush (flushAt: 1) because there is no
+ * per-request flush middleware in the Next runtime. Each destination no-ops
+ * when it is not configured (see `resolveAnalyticsDestinations`).
  */
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -19,12 +32,12 @@ const UUID_PATTERN =
 let client: PostHog | null = null;
 
 const getClient = (): PostHog | null => {
-  const apiKey = getWebEnv().POSTHOG_API_KEY;
-  if (!apiKey) {
+  const token = resolveAnalyticsDestinations().posthog?.token;
+  if (!token) {
     return null;
   }
   if (!client) {
-    client = new PostHog(apiKey, {
+    client = new PostHog(token, {
       host: "https://us.i.posthog.com",
       flushAt: 1,
       flushInterval: 0,
@@ -101,9 +114,9 @@ export const aliasAnonymousId = (userId: string, anonymousId: string) => {
   });
 };
 
-export const captureServerEvent = (
+const capturePostHogServerEvent = (
   distinctId: string,
-  event: string,
+  event: AnalyticsEvent,
   properties?: Record<string, unknown>,
 ) => {
   const posthog = getClient();
@@ -122,4 +135,71 @@ export const captureServerEvent = (
   } catch (error) {
     console.error("PostHog captureServerEvent failed:", error);
   }
+};
+
+/**
+ * The visitor's GA4 client + session ids from the current request's `_ga`
+ * cookies — what joins a server-side hit (sign_up above all) to the browser
+ * session, and through it to the ad click. Unknown ids outside a request
+ * scope, where cookies() throws.
+ */
+const readRequestGa4Identity = async (
+  measurementId: string,
+): Promise<Ga4Identity> => {
+  try {
+    const cookieHeader = (await cookies())
+      .getAll()
+      .map(({ name, value }) => `${name}=${value}`)
+      .join("; ");
+    return readGa4Identity(cookieHeader, measurementId);
+  } catch {
+    return { clientId: null, sessionId: null };
+  }
+};
+
+const captureGa4ServerEvent = (
+  distinctId: string,
+  event: AnalyticsEvent,
+  properties?: Record<string, unknown>,
+) => {
+  try {
+    const ga4 = getGa4ServerConfig();
+    if (!ga4) {
+      return;
+    }
+    // cookies() is read synchronously here, inside the request scope; the
+    // send and its flush then run post-response via after(), so the caller
+    // (signup above all) never waits on GA4.
+    const delivery = readRequestGa4Identity(ga4.measurementId)
+      .then(({ clientId, sessionId }) => {
+        sendGa4Event(ga4, {
+          event,
+          distinctId,
+          userId: distinctId,
+          clientId,
+          sessionId,
+          properties,
+        });
+        return flushGa4Events();
+      })
+      .catch((error) => {
+        console.error("GA4 captureServerEvent failed:", error);
+      });
+    after(() => delivery);
+  } catch (error) {
+    console.error("GA4 captureServerEvent failed:", error);
+  }
+};
+
+/**
+ * Captures a tracking-plan event for a user. Fire-and-forget — never throws,
+ * never blocks the caller.
+ */
+export const captureServerEvent = (
+  distinctId: string,
+  event: AnalyticsEvent,
+  properties?: Record<string, unknown>,
+) => {
+  capturePostHogServerEvent(distinctId, event, properties);
+  captureGa4ServerEvent(distinctId, event, properties);
 };

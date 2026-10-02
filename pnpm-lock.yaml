@@ -90,6 +90,9 @@ importers:
       '@wildfires-org/turboplan-ai':
         specifier: workspace:*
         version: link:../../packages/core/turboplan-ai
+      '@wildfires-org/turboplan-analytics':
+        specifier: workspace:*
+        version: link:../../packages/core/turboplan-analytics
       '@wildfires-org/turboplan-api-client':
         specifier: workspace:*
         version: link:../../packages/core/turboplan-api-client
@@ -453,6 +456,9 @@ importers:
       '@wildfires-org/turboplan-ai':
         specifier: workspace:*
         version: link:../../packages/core/turboplan-ai
+      '@wildfires-org/turboplan-analytics':
+        specifier: workspace:*
+        version: link:../../packages/core/turboplan-analytics
       '@wildfires-org/turboplan-api-client':
         specifier: workspace:*
         version: link:../../packages/core/turboplan-api-client
@@ -646,6 +652,9 @@ importers:
       '@wildfires-org/turboplan-ai':
         specifier: workspace:*
         version: link:../../packages/core/turboplan-ai
+      '@wildfires-org/turboplan-analytics':
+        specifier: workspace:*
+        version: link:../../packages/core/turboplan-analytics
       '@wildfires-org/turboplan-api-client':
         specifier: workspace:*
         version: link:../../packages/core/turboplan-api-client
@@ -1078,6 +1087,40 @@ importers:
         version: 0.15.12(typescript@5.9.3)
       tsx:
         specifier: ^4.19.0
+        version: 4.21.0
+      typescript:
+        specifier: ^5.3.3
+        version: 5.9.3
+
+  packages/core/turboplan-analytics:
+    dependencies:
+      '@wildfires-org/turboplan-env':
+        specifier: workspace:*
+        version: link:../turboplan-env
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.5
+        version: 20.19.24
+      '@types/react':
+        specifier: ^19.1.2
+        version: 19.2.2
+      next:
+        specifier: 15.5.25
+        version: 15.5.25(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.56.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.7(react@19.1.7))(react@19.1.7)
+      posthog-js:
+        specifier: ^1.417.1
+        version: 1.417.1(preact-render-to-string@6.5.11)
+      react:
+        specifier: 19.1.7
+        version: 19.1.7
+      rollup-plugin-preserve-use-client:
+        specifier: ^3.0.1
+        version: 3.0.1(rollup@4.62.4)
+      tsdown:
+        specifier: ^0.15.9
+        version: 0.15.12(typescript@5.9.3)
+      tsx:
+        specifier: ^4.19.3
         version: 4.21.0
       typescript:
         specifier: ^5.3.3
@@ -1654,6 +1697,9 @@ importers:
       '@hono/zod-validator':
         specifier: ^0.8.0
         version: 0.8.0(hono@4.13.8)(zod@4.4.3)
+      '@wildfires-org/turboplan-analytics':
+        specifier: workspace:*
+        version: link:../../core/turboplan-analytics
       '@wildfires-org/turboplan-api-client':
         specifier: workspace:*
         version: link:../../core/turboplan-api-client

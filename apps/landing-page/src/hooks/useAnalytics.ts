@@ -1,4 +1,4 @@
-import { posthog } from "posthog-js";
+import { trackEvent } from "@wildfires-org/turboplan-analytics/client";
 
 import { useAnalyticsContext } from "@/context/analytics";
 
@@ -15,21 +15,23 @@ export const useAnalytics = () => {
     eventName: string,
     properties?: Record<string, string>,
   ) => {
-    if (!user || !posthog.__loaded) return;
-    posthog.capture(eventName, properties);
+    if (!user) {
+      return;
+    }
+    trackEvent(eventName, properties);
   };
 
   /**
-   * Capture regardless of identification — posthog tracks anonymous ids
-   * natively. Use for marketing-funnel events (pricing, signup CTAs) where
-   * visitors are overwhelmingly anonymous.
+   * Capture regardless of identification — PostHog and GA4 both track
+   * anonymous visitors natively. Use for marketing-funnel events (pricing,
+   * signup CTAs) where visitors are overwhelmingly anonymous. Fans out to
+   * every configured destination and no-ops for the rest.
    */
   const captureEvent = (
     eventName: string,
     properties?: Record<string, string>,
   ) => {
-    if (!posthog.__loaded) return;
-    posthog.capture(eventName, properties);
+    trackEvent(eventName, properties);
   };
 
   return {

@@ -8,6 +8,7 @@ import localFont from "next/font/local";
 import { cookies } from "next/headers";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
+import { GoogleTag } from "@wildfires-org/turboplan-analytics/client";
 import { SessionProvider } from "@wildfires-org/turboplan-auth/client";
 import { getSession } from "@wildfires-org/turboplan-auth/session";
 import { getLandingPageEnv } from "@wildfires-org/turboplan-env";
@@ -19,7 +20,6 @@ import {
 import LayoutWrapper from "@/app/layoutWrapper";
 import { Navbar } from "@/components/home-v2/navbar";
 import { SiteFooter } from "@/components/home-v2/site-footer";
-import { GoogleAnalytics } from "@/components/providers/google-analytics";
 import { PostHogProvider } from "@/components/providers/posthog-provider";
 import { UiScaleSync } from "@/components/providers/ui-scale-sync";
 import { ReleaseInfoLogger } from "@/components/release-info-logger";
@@ -90,12 +90,6 @@ const inter = Inter({
   variable: "--font-inter",
   display: "swap",
 });
-
-// NEXT_PUBLIC_ vars must be referenced statically so Next.js inlines them at
-// build time. No measurement ID → the GA4 script is never rendered, so local
-// dev and any environment that leaves this unset stay untracked. Use a
-// separate measurement ID per environment (production vs develop).
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 const APP_TITLE = brand.name;
 const APP_TAGLINE = "AI Environmental Planning Platform";
@@ -225,13 +219,12 @@ export default async function RootLayout({
           </Suspense>
         </RootProvider>
         <Toaster />
-        {/* Suspense boundary required: GoogleAnalytics reads useSearchParams
-            to re-emit page_view on SPA navigation. */}
-        {GA_MEASUREMENT_ID && (
-          <Suspense>
-            <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />
-          </Suspense>
-        )}
+        {/* Suspense boundary required: GoogleTag reads useSearchParams to
+            re-emit page_view on SPA navigation. Renders nothing when neither
+            GA4 nor the Google Ads tag is configured. */}
+        <Suspense>
+          <GoogleTag />
+        </Suspense>
       </body>
     </html>
   );

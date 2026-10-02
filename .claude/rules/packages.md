@@ -26,6 +26,7 @@ import type { Task } from "@wildfires-org/turboplan-tasks/types";
 - **turboplan-db** – Database schemas, Drizzle client, migrations
 - **turboplan-rbac** – Role-based access control, Hono/Next.js middleware
 - **turboplan-env** – Environment variable management (never use process.env)
+- **turboplan-analytics** – The one analytics layer: tracking plan, PostHog + GA4 fan-out (browser + server). Never call posthog/gtag directly
 - **turboplan-api-client** – Authenticated fetch wrapper, JWT handling
 - **turboplan-utils** – Shared shadcn/ui components, Tailwind utilities
 - **turboplan-ai** – AI prompts, image generation service

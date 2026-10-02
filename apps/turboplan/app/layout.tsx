@@ -1,9 +1,12 @@
+import { Suspense } from "react";
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { cookies } from "next/headers";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 
+import { GoogleTag } from "@wildfires-org/turboplan-analytics/client";
 import { getAuthCookieDomain } from "@wildfires-org/turboplan-env";
 import {
   UI_SCALE_COOKIE_NAME,
@@ -141,6 +144,12 @@ export default async function RootLayout({
             </ThemeProvider>
           </NuqsAdapter>
         </PostHogProvider>
+        {/* gtag.js for GA4 + the Google Ads tag. Suspense boundary required:
+            GoogleTag reads useSearchParams to re-emit page_view on SPA
+            navigation. Renders nothing when neither is configured. */}
+        <Suspense>
+          <GoogleTag />
+        </Suspense>
       </body>
     </html>
   );

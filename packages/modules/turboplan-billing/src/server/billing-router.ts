@@ -4,6 +4,10 @@ import { type Context, Hono } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { z } from "zod";
 
+import {
+  readGa4Identity,
+  resolveAnalyticsDestinations,
+} from "@wildfires-org/turboplan-analytics";
 import { organization } from "@wildfires-org/turboplan-db";
 import { db } from "@wildfires-org/turboplan-db/db-client";
 import { getApiEnv } from "@wildfires-org/turboplan-env";
@@ -452,6 +456,14 @@ billingRouter.post(
           ? `${landingBase}/?checkout=cancelled`
           : `${env.TURBOPLAN_URL}/organizations/${org.slug}/billing?checkout=cancelled`;
 
+    // The browser's GA4 client + session (from the `_ga` cookies, sent with
+    // the credentialed request) travel in the session metadata, so the
+    // webhook's purchase event lands on the same GA session as the ad click.
+    const ga4Identity = readGa4Identity(
+      c.req.header("cookie"),
+      resolveAnalyticsDestinations().ga4?.measurementId,
+    );
+
     try {
       const url = await createCheckoutSession({
         organizationId,
@@ -460,6 +472,11 @@ billingRouter.post(
         name: org.name,
         successUrl,
         cancelUrl,
+        attribution: {
+          userId: user.userId,
+          gaClientId: ga4Identity.clientId,
+          gaSessionId: ga4Identity.sessionId,
+        },
       });
 
       // Keyed by the user who started checkout, so it joins the person funnel

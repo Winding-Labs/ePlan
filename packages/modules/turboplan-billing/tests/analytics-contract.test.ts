@@ -3,7 +3,10 @@ import { afterEach, beforeEach, describe, it, mock } from "node:test";
 
 import {
   type BillingAnalyticsEvent,
+  buildCheckoutCompletedEvent,
+  buildCheckoutSessionMetadata,
   buildCheckoutStartedEvent,
+  type CheckoutCompletedSession,
   configureBillingAnalytics,
 } from "../src/server/analytics";
 import { createSubscriptionAnalyticsEmitter } from "../src/server/webhook";
@@ -115,5 +118,104 @@ describe("billing funnel identity contract", () => {
     assert.equal(consoleError.mock.callCount(), 1);
     const [message] = consoleError.mock.calls[0].arguments;
     assert.match(String(message), new RegExp(SUBSCRIPTION_ID));
+  });
+});
+
+/**
+ * checkout_completed is the purchase conversion (GA4 `purchase`). The router
+ * writes the buyer + GA4 ids into the Checkout Session metadata; the webhook
+ * reads them back. These tests pin both sides of that metadata round trip.
+ */
+describe("checkout_completed (purchase) contract", () => {
+  const ORG_ID = "org_123";
+  const USER_ID = "user_1";
+  const SESSION_ID = "cs_test_789";
+  const SUBSCRIPTION_ID = "sub_456";
+
+  const completedSession = (
+    metadata: Record<string, string> | null,
+    overrides: Partial<CheckoutCompletedSession> = {},
+  ): CheckoutCompletedSession => ({
+    id: SESSION_ID,
+    amount_total: 4900,
+    currency: "usd",
+    client_reference_id: ORG_ID,
+    metadata,
+    subscription: SUBSCRIPTION_ID,
+    ...overrides,
+  });
+
+  it("is keyed by the metadata user, so it joins checkout_started", () => {
+    const metadata = buildCheckoutSessionMetadata(ORG_ID, "pro", {
+      userId: USER_ID,
+    });
+    const completed = buildCheckoutCompletedEvent(completedSession(metadata));
+    const started = buildCheckoutStartedEvent(ORG_ID, USER_ID, "pro");
+
+    assert.equal(completed.event, "checkout_completed");
+    assert.equal(completed.distinctId, USER_ID);
+    assert.equal(completed.distinctId, started.distinctId);
+    assert.equal(completed.properties?.user_id, USER_ID);
+    // Same property-level join key as every other billing event.
+    assert.equal(
+      completed.properties?.organization_id,
+      started.properties?.organization_id,
+    );
+    assert.equal(completed.properties?.plan, "pro");
+    assert.equal(completed.properties?.subscription_id, SUBSCRIPTION_ID);
+    assert.equal("unattributed" in (completed.properties ?? {}), false);
+  });
+
+  it("carries value, currency and transaction id for GA4 purchase", () => {
+    const completed = buildCheckoutCompletedEvent(
+      completedSession(
+        buildCheckoutSessionMetadata(ORG_ID, "pro", { userId: USER_ID }),
+      ),
+    );
+
+    assert.equal(completed.properties?.value, 49);
+    assert.equal(completed.properties?.currency, "USD");
+    assert.equal(completed.properties?.transaction_id, SESSION_ID);
+  });
+
+  it("carries the GA4 client and session ids when checkout captured them", () => {
+    const metadata = buildCheckoutSessionMetadata(ORG_ID, "pro", {
+      userId: USER_ID,
+      gaClientId: "1234567890.1727862000",
+      gaSessionId: "1727862000",
+    });
+    const completed = buildCheckoutCompletedEvent(completedSession(metadata));
+
+    assert.equal(completed.properties?.ga_client_id, "1234567890.1727862000");
+    assert.equal(completed.properties?.ga_session_id, "1727862000");
+  });
+
+  it("omits unknown GA4 ids — Stripe metadata values must be strings", () => {
+    const metadata = buildCheckoutSessionMetadata(ORG_ID, "pro", {
+      userId: USER_ID,
+      gaClientId: null,
+      gaSessionId: null,
+    });
+    assert.deepEqual(metadata, {
+      organizationId: ORG_ID,
+      plan: "pro",
+      userId: USER_ID,
+    });
+
+    const completed = buildCheckoutCompletedEvent(completedSession(metadata));
+    assert.equal("ga_client_id" in (completed.properties ?? {}), false);
+    assert.equal("ga_session_id" in (completed.properties ?? {}), false);
+  });
+
+  it("falls back to the organization, flagged unattributed, without a metadata user", () => {
+    // A session created before session metadata existed: only
+    // client_reference_id identifies the organization.
+    const completed = buildCheckoutCompletedEvent(completedSession(null));
+
+    assert.equal(completed.distinctId, ORG_ID);
+    assert.equal(completed.properties?.organization_id, ORG_ID);
+    assert.equal(completed.properties?.unattributed, true);
+    assert.equal(completed.properties?.user_id, undefined);
+    assert.equal(completed.properties?.transaction_id, SESSION_ID);
   });
 });

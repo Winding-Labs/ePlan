@@ -14,6 +14,7 @@ import { Session } from "next-auth";
 
 import { ChatMode, systemPrompt } from "@wildfires-org/turboplan-ai";
 import { getModel } from "@wildfires-org/turboplan-ai/server";
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
 import {
   assertCreditsAvailable,
   type BillingContext,
@@ -310,7 +311,7 @@ export async function POST(request: Request) {
     // Captured after RBAC and the credit gate so denied or 402-rejected
     // requests don't inflate the metric — only messages that actually
     // proceed to the model count as sent.
-    captureServerEvent(session.user.id, "chat_message_sent", {
+    captureServerEvent(session.user.id, ANALYTICS_EVENTS.CHAT_MESSAGE_SENT, {
       chat_id: id,
       project_id: effectiveProjectId,
     });
@@ -715,13 +716,17 @@ export async function POST(request: Request) {
         }
 
         if (session.user?.id) {
-          captureServerEvent(session.user.id, "ai_response_received", {
-            chat_id: id,
-            project_id: effectiveProjectId,
-            model: typeof model === "string" ? model : model.modelId,
-            latency_ms: Date.now() - requestStartedAt,
-            total_tokens: accumulatedTokens,
-          });
+          captureServerEvent(
+            session.user.id,
+            ANALYTICS_EVENTS.AI_RESPONSE_RECEIVED,
+            {
+              chat_id: id,
+              project_id: effectiveProjectId,
+              model: typeof model === "string" ? model : model.modelId,
+              latency_ms: Date.now() - requestStartedAt,
+              total_tokens: accumulatedTokens,
+            },
+          );
         }
 
         // We suppressed the stream's own finish chunk (sendFinish:false) so we

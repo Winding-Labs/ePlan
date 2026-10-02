@@ -3,7 +3,7 @@ import type Stripe from "stripe";
 
 import { getApiEnv } from "@wildfires-org/turboplan-env";
 
-import { emitBillingAnalytics } from "./analytics";
+import { buildCheckoutCompletedEvent, emitBillingAnalytics } from "./analytics";
 import { sendPaymentFailedEmail } from "./dunning";
 import {
   claimWebhookEvent,
@@ -151,6 +151,26 @@ stripeWebhookRouter.post("/", async (c) => {
           // removed in between would otherwise stay mis-billed until the next
           // membership mutation or invoice.upcoming (~a month).
           await reconcileSeatsForStripeSubscription(subscriptionId);
+        }
+        // The purchase conversion. Emitted last, after the sync succeeded, so
+        // a failed sync (released and retried) cannot double-count it; the
+        // event ledger above dedupes redeliveries, so one session yields one
+        // purchase. Analytics must never fail the webhook, which would make
+        // Stripe replay the whole event. `paid` only: a session completed
+        // with a delayed payment method (or a $0 trial) is not revenue yet.
+        if (
+          session.mode === "subscription" &&
+          session.status === "complete" &&
+          session.payment_status === "paid"
+        ) {
+          try {
+            emitBillingAnalytics(buildCheckoutCompletedEvent(session));
+          } catch (error) {
+            console.error(
+              "[stripe-webhook] checkout_completed analytics failed:",
+              error,
+            );
+          }
         }
         break;
       }

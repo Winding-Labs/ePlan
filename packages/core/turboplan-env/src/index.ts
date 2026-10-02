@@ -857,6 +857,44 @@ export const getAppEnv = (): string => {
   return process.env.APP_ENV || process.env.NEXT_PUBLIC_APP_ENV || "";
 };
 
+export type AnalyticsEnvType = {
+  /** PostHog project token (`phc_…`, public by design). */
+  POSTHOG_KEY?: string;
+  /** Browser ingest host. Defaults to the same-origin `/ingest` proxy. */
+  POSTHOG_HOST: string;
+  /** GA4 web stream measurement id (`G-…`, public by design). */
+  GA_MEASUREMENT_ID?: string;
+  /** Server-only GA4 Measurement Protocol secret — never NEXT_PUBLIC_. */
+  GA_API_SECRET?: string;
+  /** Google Ads tag (`AW-…`, public by design). Production only. */
+  GOOGLE_ADS_TAG_ID?: string;
+};
+
+/**
+ * Analytics destinations for `@wildfires-org/turboplan-analytics`. Every
+ * provider is optional: unset → that provider no-ops.
+ *
+ * Lightweight and safe in client bundles: the NEXT_PUBLIC_ reads are inlined
+ * by Next, and the server names become undefined there. On the server the
+ * plain names win, so the API worker (no NEXT_PUBLIC_ build step) and the
+ * Next server share one config.
+ */
+export const getAnalyticsEnv = (): AnalyticsEnvType => {
+  return {
+    POSTHOG_KEY:
+      process.env.POSTHOG_API_KEY ||
+      process.env.NEXT_PUBLIC_POSTHOG_KEY ||
+      undefined,
+    POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST || "/ingest",
+    GA_MEASUREMENT_ID:
+      process.env.GA_MEASUREMENT_ID ||
+      process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ||
+      undefined,
+    GA_API_SECRET: process.env.GA_API_SECRET || undefined,
+    GOOGLE_ADS_TAG_ID: process.env.NEXT_PUBLIC_GOOGLE_ADS_TAG_ID || undefined,
+  };
+};
+
 /**
  * APP_ENV values that identify a *deployed* environment. Anything set by
  * `scripts/deploy-*.sh` / the CI workflow (`vars.APP_ENV`) lands here; local

@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
 import {
   createProfile,
   getProfileByUserId,
@@ -94,9 +95,13 @@ export const completeSetup = async (
     // this is where the funnel ends. Fired only on the incomplete -> complete
     // transition, so a user editing their name later does not re-enter it.
     if (!wasAlreadyComplete) {
-      captureServerEvent(session.user.id, "onboarding_completed", {
-        affiliated_organization_id: affiliatedOrg?.id,
-      });
+      captureServerEvent(
+        session.user.id,
+        ANALYTICS_EVENTS.ONBOARDING_COMPLETED,
+        {
+          affiliated_organization_id: affiliatedOrg?.id,
+        },
+      );
     }
 
     return { status: FormStatus.SUCCESS };

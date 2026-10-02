@@ -2,7 +2,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useSearchParams } from "next/navigation";
-import { posthog } from "posthog-js";
+
+import { identifyUser } from "@wildfires-org/turboplan-analytics/client";
 
 import { persistAttributionParams } from "@/lib/attribution";
 
@@ -90,11 +91,9 @@ export const InitializeAnalyticsContext = () => {
       setUser(newUser);
       saveUserToStorage(newUser);
       // Identify with the user id only — email is PII and stays out of
-      // PostHog (tracking-plan decision). Same id the web app identifies
-      // with, so cross-domain journeys stitch into one person.
-      if (posthog.__loaded) {
-        posthog.identify(newUser.id);
-      }
+      // PostHog and GA4 (tracking-plan decision). Same id the web app
+      // identifies with, so cross-domain journeys stitch into one person.
+      identifyUser(newUser.id);
     }
   }, []);
 

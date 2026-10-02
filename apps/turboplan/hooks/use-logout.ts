@@ -3,8 +3,8 @@
 import { useCallback } from "react";
 
 import { signOut } from "next-auth/react";
-import { posthog } from "posthog-js";
 
+import { resetAnalytics } from "@wildfires-org/turboplan-analytics/client";
 import { ApiClient } from "@wildfires-org/turboplan-api-client";
 
 const apiClient = new ApiClient();
@@ -14,10 +14,8 @@ export const useLogout = () => {
     const redirectUrl = options?.redirectTo ?? "/login";
 
     // Unlink the analytics identity so the next user on this browser
-    // doesn't inherit it. No-ops when PostHog is not initialized.
-    if (posthog.__loaded) {
-      posthog.reset();
-    }
+    // doesn't inherit it. No-ops for any provider that is not configured.
+    resetAnalytics();
 
     try {
       // Clear JWT token first

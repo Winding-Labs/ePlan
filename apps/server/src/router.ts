@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { contextStorage } from "hono/context-storage";
 import { secureHeaders } from "hono/secure-headers";
 import { pinoLogger } from "hono-pino";
 import pino from "pino";
@@ -55,6 +56,13 @@ export async function createApiRouter() {
           : false,
     }),
   );
+
+  // Exposes the current request to code with no `c` in scope, via
+  // `tryGetContext()`. `captureEvent` is called from package callbacks
+  // (workspace, billing, timeline) and uses it to read the `_ga` cookies and
+  // the authenticated user for the GA4 fan-out. Must wrap posthogMiddleware
+  // and every route, so it is registered before them.
+  apiRouter.use("/*", contextStorage());
 
   const redactPaths = [
     'req.headers["x-internal-secret"]',

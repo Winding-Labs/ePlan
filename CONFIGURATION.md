@@ -352,6 +352,7 @@ missing.
 | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | api | Required only when billing is enabled |
 | `DOCUMENSO_API_KEY`, `DOCUMENSO_WEBHOOK_SECRET` | api | Required only when signing is enabled; pair with the `DOCUMENSO_API_URL` variable |
 | `RESEARCH_AGENT_SERVICE_API_KEY` | api | Required only when the research agent is enabled |
+| `GA_API_SECRET` | api, web | Optional — GA4 Measurement Protocol secret for server-side events; set per environment, see [Analytics](#analytics) |
 | `SENTRY_AUTH_TOKEN` | web, landing builds | Optional — enables sourcemap upload |
 | `NEON_API_KEY` | Preview deploys | Optional — used with the `NEON_PROJECT_ID` variable to create and reset a per-PR database branch |
 | `VERCEL_TOKEN` | Build step | Optional — this is the **Turborepo remote cache** token (`TURBO_TOKEN`), not a deploy target |
@@ -387,8 +388,7 @@ the deploy.
 The remaining variables mirror the `.env.example` files and are read straight
 into the Worker environment: `APP_NAME`, `APP_ENV`, `ADMIN_EMAILS`,
 `SUPPORT_EMAIL`, `SYSTEM_USER_EMAIL`, `RESEND_FROM_EMAIL`,
-`R2_ACCOUNT_ID`, `R2_BUCKET_NAME`, `R2_PUBLIC_URL`, `POSTHOG_API_KEY`,
-`NEXT_PUBLIC_POSTHOG_KEY`, `OPENROUTER_MODEL_*`,
+`R2_ACCOUNT_ID`, `R2_BUCKET_NAME`, `R2_PUBLIC_URL`, `OPENROUTER_MODEL_*`,
 `DISABLE_AUTO_PROJECT_IMAGE_GENERATION`, `RESEARCH_AGENT_SERVICE_URL`,
 `NEON_PROJECT_ID`, the Sentry `SENTRY_DSN_*` / `SENTRY_ORG` / `SENTRY_PROJECT_*`
 set, and the feature flags — which are named `FF_IS_<MODULE>_PACKAGE_ENABLED`
@@ -397,6 +397,31 @@ ambient environment.
 
 The research agent is not part of this pipeline: it deploys to Modal (sandbox)
 and Fly.io (app server) via its own `pnpm deploy` script.
+
+### Analytics
+
+One tracking plan (`packages/core/turboplan-analytics`) and one call per event:
+every event fans out to PostHog and to GA4 — gtag in the browser, the GA4
+Measurement Protocol on the servers. No destination is declared in code. Each
+deployment gets its destinations from these **GitHub environment** variables
+and secret (set them per environment — production, develop, pr_preview — so
+staging never writes into production). A provider left unset is off, and local
+development sends nothing unless you set the same names in `.env.local`.
+
+| Name | Kind | Reaches | Purpose |
+| --- | --- | --- | --- |
+| `POSTHOG_API_KEY` | variable | api, web, landing (runtime) | PostHog project token for server-side capture |
+| `NEXT_PUBLIC_POSTHOG_KEY` | variable | web, landing (build) | The same token for the browser |
+| `GA_MEASUREMENT_ID` | variable | api as `GA_MEASUREMENT_ID`; web and landing builds as `NEXT_PUBLIC_GA_MEASUREMENT_ID` | GA4 web stream (`G-…`) |
+| `GOOGLE_ADS_TAG_ID` | variable | web and landing builds as `NEXT_PUBLIC_GOOGLE_ADS_TAG_ID` | Google Ads tag (`AW-…`). **Production only**, so staging traffic never trains Ads audiences |
+| `GA_API_SECRET` | secret | api and web Workers (encrypted secret) | That stream's Measurement Protocol `api_secret`. Server-only; server-side GA4 (including `sign_up` and `purchase`) is off without it |
+
+Server-side events join the visitor's browser session through the `_ga`
+cookies, which is what lets Google Ads import `sign_up` and `purchase` from GA4.
+Do not check the secret with `/debug/mp/collect`, which answers 200 even for a
+wrong secret; GA4 Realtime is the proof. The design, the tracking plan and the
+operator steps are in
+[`docs/plans/2026-10-02-analytics-master-pattern.md`](./docs/plans/2026-10-02-analytics-master-pattern.md).
 
 ## Troubleshooting
 

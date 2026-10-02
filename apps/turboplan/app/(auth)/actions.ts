@@ -3,6 +3,7 @@
 import { after } from "next/server";
 import { z } from "zod";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
 import { createMagicLinkLoginTicket } from "@wildfires-org/turboplan-auth/server";
 import { hasChosenPlan } from "@wildfires-org/turboplan-billing/server";
 import {
@@ -221,8 +222,9 @@ export const requestRegistrationLink = async (
     if (attribution?.ph_did) {
       aliasAnonymousId(newUser.id, attribution.ph_did);
     }
-    captureServerEvent(newUser.id, "user_signed_up", {
+    captureServerEvent(newUser.id, ANALYTICS_EVENTS.USER_SIGNED_UP, {
       signup_flow: "register",
+      method: "register",
       ...buildAttributionEventProperties(attribution),
     });
 
@@ -298,8 +300,9 @@ export const requestLoginLink = async (
       if (attribution?.ph_did) {
         aliasAnonymousId(newUser.id, attribution.ph_did);
       }
-      captureServerEvent(newUser.id, "user_signed_up", {
+      captureServerEvent(newUser.id, ANALYTICS_EVENTS.USER_SIGNED_UP, {
         signup_flow: "login_auto_register",
+        method: "login_auto_register",
         ...buildAttributionEventProperties(attribution),
       });
       const token = await createVerificationToken(

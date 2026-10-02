@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
 import {
   authCallbacks,
   createMagicLinkProvider,
@@ -49,7 +50,7 @@ export const {
     // Credentials-based magic-link provider never sets isNewUser here.
     async signIn({ user }) {
       if (user.id) {
-        captureServerEvent(user.id, "user_logged_in");
+        captureServerEvent(user.id, ANALYTICS_EVENTS.USER_LOGGED_IN);
         if (user.email) {
           // Merge the pre-login magic-link identity into this user's profile
           await aliasEmailIdentity(user.id, user.email);

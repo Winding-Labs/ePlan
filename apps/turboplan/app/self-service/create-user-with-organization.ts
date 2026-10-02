@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
 import {
   activateStarterPlan,
   assertProjectCreationAllowed,
@@ -120,8 +121,9 @@ export async function createUserWithOrganization(
     if (attribution?.ph_did) {
       aliasAnonymousId(newUser.id, attribution.ph_did);
     }
-    captureServerEvent(newUser.id, "user_signed_up", {
+    captureServerEvent(newUser.id, ANALYTICS_EVENTS.USER_SIGNED_UP, {
       signup_flow: "self_service",
+      method: "self_service",
       ...buildAttributionEventProperties(attribution),
     });
 

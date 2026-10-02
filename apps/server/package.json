@@ -19,6 +19,7 @@
     "@types/bun": "latest",
     "@wildfires-org/turboplan-admin": "workspace:*",
     "@wildfires-org/turboplan-ai": "workspace:*",
+    "@wildfires-org/turboplan-analytics": "workspace:*",
     "@wildfires-org/turboplan-api-client": "workspace:*",
     "@wildfires-org/turboplan-auth": "workspace:*",
     "@wildfires-org/turboplan-billing": "workspace:*",
