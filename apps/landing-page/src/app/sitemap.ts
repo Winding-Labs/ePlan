@@ -16,6 +16,8 @@ const STATIC_PATHS: Array<{ path: string; priority: number }> = [
   { path: routing.catalog(), priority: 0.7 },
   { path: routing.catalogProjects(), priority: 0.6 },
   { path: routing.catalogTemplates(), priority: 0.6 },
+  { path: routing.privacy(), priority: 0.2 },
+  { path: routing.terms(), priority: 0.2 },
 ];
 
 const sitemap = (): MetadataRoute.Sitemap => {

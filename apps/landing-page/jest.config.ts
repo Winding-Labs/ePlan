@@ -9,10 +9,9 @@ const createJestConfig = nextJest({
 // Add any custom config to be passed to Jest
 const config: Config = {
   testEnvironment: "jest-environment-node",
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 };
 
 module.exports = async () => ({
   ...(await createJestConfig(config)()),
-  testPathIgnorePatterns: ["/node_modules/", "/e2e/"],
+  testPathIgnorePatterns: ["/node_modules/"],
 });

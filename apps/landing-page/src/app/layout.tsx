@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 
-import * as dotenv from "dotenv";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
@@ -33,7 +32,6 @@ import { resolveMetadataBase } from "@/lib/metadata-base";
 import { SITE_DESCRIPTION, SITE_TAGLINE, SITE_TITLE } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import "../globals.css";
-dotenv.config();
 
 const geist = localFont({
   src: [
