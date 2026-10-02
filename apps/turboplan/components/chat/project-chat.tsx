@@ -41,6 +41,8 @@ type ProjectChatProps = {
   initialMessages: Array<UIMessage>;
   isReadonly: boolean;
   projectId?: string;
+  /** Map module enabled (resolved on the server) */
+  isMapEnabled?: boolean;
   onChatCreated?: (chatId: string) => void;
   isInitialChat?: boolean;
   isInputDisabled?: boolean;
@@ -61,6 +63,7 @@ export const ProjectChat = forwardRef<ProjectChatRef, ProjectChatProps>(
       initialMessages,
       isReadonly,
       projectId,
+      isMapEnabled,
       onChatCreated,
       isInputDisabled,
       disabledPlaceholder,
@@ -376,12 +379,13 @@ export const ProjectChat = forwardRef<ProjectChatRef, ProjectChatProps>(
             projectId={projectId}
           />
 
-          <form className={CHAT_FORM_CLASS}>
+          <form className={CHAT_FORM_CLASS} data-testid="project-chat-composer">
             {!isReadonly && (
               <div className={CHAT_COMPOSER_SHELL_CLASS}>
                 <ProjectMultimodalInput
                   chatId={id}
                   projectId={projectId}
+                  isMapEnabled={isMapEnabled}
                   input={input}
                   setInput={setInput}
                   handleSubmit={handleSubmit}
@@ -394,6 +398,7 @@ export const ProjectChat = forwardRef<ProjectChatRef, ProjectChatProps>(
                   append={append}
                   isInputDisabled={isInputDisabled}
                   disabledPlaceholder={disabledPlaceholder}
+                  autoFocus={!isArtifactVisible}
                 />
               </div>
             )}
@@ -424,6 +429,9 @@ export const ProjectChat = forwardRef<ProjectChatRef, ProjectChatProps>(
           reload={reload}
           isReadonly={isReadonly}
           projectId={projectId}
+          isMapEnabled={isMapEnabled}
+          isInputDisabled={isInputDisabled}
+          disabledPlaceholder={disabledPlaceholder}
         />
       </>
     );
