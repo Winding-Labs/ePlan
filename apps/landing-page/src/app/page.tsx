@@ -1,28 +1,14 @@
-"use client";
+import type { Metadata } from "next";
 
-import { Suspense } from "react";
+import { HomePage } from "@/components/home-v2/home-page";
+import { buildPageMetadata, SITE_DESCRIPTION, SITE_TITLE } from "@/lib/seo";
 
-import { ContactSection } from "@/components/home-v2/contact-section";
-import { CtaBottom } from "@/components/home-v2/cta-bottom";
-import { Faq } from "@/components/home-v2/faq";
-import { Features } from "@/components/home-v2/features";
-import { Hero } from "@/components/home-v2/hero";
-import { LogoMarquee } from "@/components/home-v2/logo-marquee";
-import { Pricing } from "@/components/home-v2/pricing";
-import { Skeleton } from "@/components/ui/skeleton";
+export const metadata: Metadata = buildPageMetadata({
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  path: "/",
+});
 
 export default function Home() {
-  return (
-    <Suspense fallback={<Skeleton className="w-full h-[300px]" />}>
-      <div className="w-full overflow-x-clip bg-brandAlt-100">
-        <Hero />
-        <LogoMarquee />
-        <Features />
-        <Pricing />
-        <Faq />
-        <ContactSection />
-        <CtaBottom />
-      </div>
-    </Suspense>
-  );
+  return <HomePage />;
 }

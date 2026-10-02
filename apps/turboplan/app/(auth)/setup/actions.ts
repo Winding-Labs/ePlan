@@ -15,7 +15,7 @@ import {
   resolveAffiliation,
 } from "@/lib/affiliation-detection";
 import { FormStatus } from "@/lib/form-status";
-import { captureServerEvent } from "@/lib/server-analytics";
+import { trackAnalyticsEvent } from "@/lib/server-analytics";
 import { auth } from "../auth";
 
 const setupSchema = z.object({
@@ -95,13 +95,13 @@ export const completeSetup = async (
     // this is where the funnel ends. Fired only on the incomplete -> complete
     // transition, so a user editing their name later does not re-enter it.
     if (!wasAlreadyComplete) {
-      captureServerEvent(
-        session.user.id,
-        ANALYTICS_EVENTS.ONBOARDING_COMPLETED,
-        {
-          affiliated_organization_id: affiliatedOrg?.id,
-        },
-      );
+      // The org in hand is the affiliated one the user just joined as a
+      // viewer (none for a citizen).
+      trackAnalyticsEvent(ANALYTICS_EVENTS.ONBOARDING_COMPLETED, {
+        distinctId: session.user.id,
+        userId: session.user.id,
+        organizationId: affiliatedOrg?.id,
+      });
     }
 
     return { status: FormStatus.SUCCESS };

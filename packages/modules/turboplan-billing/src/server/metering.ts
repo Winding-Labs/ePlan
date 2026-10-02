@@ -1,5 +1,8 @@
 import type { Context } from "hono";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
+
 import { CATALOG, creditsFromUsage, extractOpenRouterCost } from "../types";
 import {
   assertCreditsAvailable,
@@ -115,6 +118,17 @@ export const gateCreditsOr402 = async (
     return null;
   } catch (error) {
     if (error instanceof CreditsExhaustedError) {
+      const userId: string | undefined = c.get("user")?.userId;
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.PLAN_LIMIT_REACHED,
+        {
+          distinctId: userId ?? organizationId,
+          userId,
+          organizationId,
+          source: "web",
+        },
+        { limit: "credits", surface: c.req.routePath },
+      );
       return c.json({ error: error.message, code: "CREDITS_EXHAUSTED" }, 402);
     }
     throw error;

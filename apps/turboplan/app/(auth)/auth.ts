@@ -8,7 +8,10 @@ import {
 } from "@wildfires-org/turboplan-auth/server";
 import { getWebEnv } from "@wildfires-org/turboplan-env";
 
-import { aliasEmailIdentity, captureServerEvent } from "@/lib/server-analytics";
+import {
+  aliasEmailIdentity,
+  trackAnalyticsEvent,
+} from "@/lib/server-analytics";
 import { authConfig } from "./auth.config";
 
 const toOrigin = (value: string | undefined): string | null => {
@@ -48,9 +51,13 @@ export const {
   events: {
     // Signup is captured at user creation in the login server action — the
     // Credentials-based magic-link provider never sets isNewUser here.
-    async signIn({ user }) {
+    async signIn({ user, account }) {
       if (user.id) {
-        captureServerEvent(user.id, ANALYTICS_EVENTS.USER_LOGGED_IN);
+        trackAnalyticsEvent(
+          ANALYTICS_EVENTS.USER_LOGGED_IN,
+          { distinctId: user.id, userId: user.id },
+          { method: account?.provider },
+        );
         if (user.email) {
           // Merge the pre-login magic-link identity into this user's profile
           await aliasEmailIdentity(user.id, user.email);

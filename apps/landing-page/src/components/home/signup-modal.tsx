@@ -3,7 +3,6 @@ import { type KeyboardEvent, useEffect, useMemo, useState } from "react";
 import { cx } from "class-variance-authority";
 import { FileText, Loader2, Sparkles } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { posthog } from "posthog-js";
 import useSWR from "swr";
 
 import {
@@ -11,7 +10,7 @@ import {
   useEnhanceProjectPrompt,
   useValidateProjectPrompt,
 } from "@wildfires-org/turboplan-ai/client";
-import { trackEvent } from "@wildfires-org/turboplan-analytics/client";
+import { analytics } from "@wildfires-org/turboplan-analytics/client";
 import { useSession } from "@wildfires-org/turboplan-auth/client";
 import { getLandingPageEnv } from "@wildfires-org/turboplan-env";
 import { LANDING_UPLOADS_PARAM } from "@wildfires-org/turboplan-upload/types";
@@ -305,11 +304,9 @@ export const SignupModal = ({
 
     // Forward the PostHog distinct id so the app can alias this browser's
     // landing-page session to the account created on the other side.
-    if (posthog.__loaded) {
-      const distinctId = posthog.get_distinct_id();
-      if (distinctId) {
-        params.append(POSTHOG_DISTINCT_ID_PARAM, distinctId);
-      }
+    const distinctId = analytics.getAnonymousId();
+    if (distinctId) {
+      params.append(POSTHOG_DISTINCT_ID_PARAM, distinctId);
     }
 
     // Campaign attribution — current URL first, then the values persisted on
@@ -321,10 +318,9 @@ export const SignupModal = ({
     );
 
     const href = `${ENV.TURBOPLAN_URL}/self-service?${params.toString()}`;
-    // sendBeacon: the full-page navigation right below would otherwise race
-    // posthog's batched XHR queue and can drop this event (Safari especially).
-    // gtag.js already sends GA4 hits with a beacon.
-    trackEvent(events.SIGNUP_STARTED, undefined, { transport: "sendBeacon" });
+    // The full-page navigation right below would otherwise race posthog's
+    // batched XHR queue and can drop this event (Safari especially).
+    analytics.eventBeforeNavigate(events.SIGNUP_STARTED);
     setIsRedirecting(true);
     // Cross-origin target — a full navigation, not a Next.js route change.
     window.location.assign(href);

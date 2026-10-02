@@ -10,6 +10,7 @@ import {
   redactUrl,
   resolveAnalyticsDestinations,
   sanitizeProperties,
+  TRACKING_PLAN,
   toGa4EventName,
   toGa4Params,
 } from "../src/index";
@@ -45,11 +46,25 @@ describe("tracking plan → GA4 names", () => {
   it("lists key events by the name GA4 receives, never the canonical one", () => {
     assert.deepEqual([...GA4_KEY_EVENTS].sort(), [
       "begin_checkout",
+      "chat_started",
       "project_created",
       "purchase",
+      "share",
       "sign_up",
     ]);
     assert.ok(!GA4_KEY_EVENTS.includes(ANALYTICS_EVENTS.USER_SIGNED_UP));
+  });
+
+  it("every event in the plan has a TRACKING_PLAN entry, and nothing else does", () => {
+    const names = Object.values(ANALYTICS_EVENTS).sort();
+    assert.deepEqual(Object.keys(TRACKING_PLAN).sort(), names);
+    assert.equal(new Set(names).size, names.length);
+  });
+
+  it("event names are snake_case and fit GA4's 40-char limit", () => {
+    for (const name of Object.values(ANALYTICS_EVENTS)) {
+      assert.match(toGa4EventName(name), /^[a-z][a-z0-9_]{0,39}$/);
+    }
   });
 });
 

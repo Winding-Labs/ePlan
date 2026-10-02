@@ -21,15 +21,19 @@ Google Ads can bid on, with the new Ads account (`AW-18490467941`) installed.
 The pattern is the one in dash `apps/web/lib/analytics/README.md`, which itself
 follows the Zest `packages/analytics` reference:
 
-| master-pattern rule | how ePlan gets it |
+| master-pattern rule (dash) | how ePlan gets it |
 |---|---|
-| ONE layer, no provider SDK called outside it | `packages/core/turboplan-analytics` (new) |
+| ONE layer, no provider SDK called outside it | `packages/core/turboplan-analytics` (new). No app code calls `posthog.*` or `gtag` directly; the only exceptions are the per-process sinks. |
+| Segment-shaped browser API | `analytics.init / setContext / set / event / eventBeforeNavigate / page / reset` (`/client`), the same shape as dash `lib/analytics/client.ts` |
+| ONE server pathway | `trackAnalyticsEvent(event, context, extra)` (`/server`). Packages call it, and each process (API worker, Next web server, MCP worker) registers ONE sink with `configureServerAnalytics`. This replaces the per-package `configureWorkspaceAnalytics` / `configureBillingAnalytics` / `configureRecorderAnalytics` hooks. |
+| ONE canonical projection | `projectAnalyticsEvent(name, context, extra)` stamps `user_id`, `organization_id`, `office_id`, `project_id`, `chat_id` and `source` plus PostHog groups (organization / office / project) on every event, on both transports. A machine `distinctId` (an org id, or `system`) gets `$process_person_profile: false`, so it never mints a fake person. |
 | ONE declaration point for destinations | per-environment **GitHub variables**, resolved by `resolveAnalyticsDestinations()` (see §3 for why not code) |
-| ONE tracking plan, canonical snake_case names | `src/events.ts` (`ANALYTICS_EVENTS`) |
-| GA4 recommended-event map applied on BOTH transports | `toGa4EventName`: `user_signed_up`→`sign_up`, `checkout_started`→`begin_checkout`, `checkout_completed`→`purchase`, `user_logged_in`→`login` |
-| PII never reaches Google | `toGa4Params`: drops `$…`, email/name/phone keys and email-shaped values |
-| server conversions join the browser session | `_ga` / `_ga_<id>` cookies → MP `client_id` + `session_id` |
-| local runs never write to real projects | each provider is off unless its variable is set, and none are set locally |
+| ONE declarative tracking plan | `ANALYTICS_EVENTS` + `TRACKING_PLAN` in `src/events.ts`. `Record<AnalyticsEvent, …>` makes a missing entry a compile error, and a test pins it. |
+| GA4 recommended-event map on BOTH transports | `toGa4EventName`: `user_signed_up`→`sign_up`, `user_logged_in`→`login`, `member_invited`→`share`, `checkout_started`→`begin_checkout`, `checkout_completed`→`purchase` |
+| PII never reaches Google | `toGa4Params` drops `$…`, email/name/phone keys and email-shaped values. Page URLs are redacted (`?email=`, `?token=`, `?code=`) before gtag config, including for the Ads conversion linker. |
+| Campaign attribution survives the marketing → app hop | first-touch `dash_utm` + last-touch Moab `dash_link` cookies on `.eplan.ai`, read by the browser (every event) and by the signup seam (§4a) |
+| Server conversions join the browser session | `_ga` / `_ga_<id>` cookies → MP `client_id` + `session_id` |
+| Local runs never write to real projects | each provider is off unless its variable is set, and none are set locally |
 
 ## 2. What production looked like on 2026-10-02 (measured, not assumed)
 
@@ -90,32 +94,148 @@ stream, but it must never reach a browser bundle.
 
 ## 4. Tracking plan
 
-Canonical names are `noun_verb`, past tense, snake_case, and match what PostHog
-already uses. The GA4 column is what GA4 **receives**. Key events are marked on
-the GA4 property and are what Google Ads imports.
+The plan as code is `ANALYTICS_EVENTS` + `TRACKING_PLAN` in
+`packages/core/turboplan-analytics/src/events.ts`; this table is its readable
+form. Canonical names are `noun_verb`, past tense, snake_case. The GA4 column is
+what GA4 **receives**. ★ marks a GA4 key event (Ads can import it).
 
-| canonical event | emitted at | GA4 name | GA4 key event | identity |
-|---|---|---|---|---|
-| `$pageview` (posthog) / `page_view` (gtag) | both Next apps, every route change, URL redacted | `page_view` | | anonymous → user |
-| landing CTAs (`try_it_clicked`, `pricing_plan_clicked`, `signup_started`, …) | `apps/landing-page` `useAnalytics().captureEvent` | same name | | anonymous |
-| `magic_link_requested` | API `magic-link-analytics.ts` | same | | `email:<hmac>` |
-| **`user_signed_up`** | web server actions: `/register`, login auto-register, `/self-service` | **`sign_up`** (`method` = signup flow) | **yes** | user id; `_ga` client + session |
-| `user_logged_in` | web `auth.ts` | `login` | | user id |
-| `onboarding_completed` | web `setup/actions.ts` | same | | user id |
-| `organization_created`, `project_created`, `member_joined`, … | API, workspace package + timeline mapping | same | `project_created` is already marked | user id; `_ga` from the request |
-| **`checkout_started`** | API `POST /api/billing/checkout` | **`begin_checkout`** | **yes** | user id; `_ga` from the request |
-| **`checkout_completed`** (new) | API Stripe webhook `checkout.session.completed` | **`purchase`** (`transaction_id`, `value`, `currency`) | **yes** | user id from session metadata; `_ga` ids stashed at checkout |
-| `subscription_activated` / `_canceled`, `payment_failed` | API Stripe webhook | same | | organization id |
-| chat / tasks / documents / MCP / research events | as today | same | | as today |
+Every event also carries the projection's standard dimensions where the emit
+site holds them: `user_id`, `organization_id`, `office_id`, `project_id`,
+`chat_id` and `source` (`web` / `landing` / `mcp` / `system`), plus PostHog
+groups. Browser events also carry the `utm_*` and `link_*` campaign bag.
+
+### Acquisition (landing, browser)
+
+| event | emitted at |
+|---|---|
+| `$pageview` / GA4 `page_view` | `analytics.page()` on every route change, both apps, URL redacted |
+| `try_it_clicked`, `hero_prompt_submitted`, `hero_document_attached`, `quick_start_selected`, `pricing_plan_clicked`, `pricing_nav_clicked`, `enterprise_contact_clicked`, `startup_discount_clicked`, `catalog_request_clicked`, `projects_clicked`, `contact_clicked`, `contact_support_clicked`, `docs_clicked`, `templates_clicked`, `sign_in_clicked` | landing CTAs (`useAnalytics().captureEvent`). Template SEO pages use `surface: "template_page"`. |
+| `signup_started` | signup modal, `analytics.eventBeforeNavigate` (beacon, survives the cross-origin redirect) |
+
+### Activation
+
+| event | GA4 | emitted at |
+|---|---|---|
+| `magic_link_requested` | same | API mail route (`email:<hmac>` identity) |
+| **`user_signed_up`** | ★ `sign_up` | web server: `/register`, login auto-register, `/self-service`; workspace invitations service (invite auto-signup, `signup_flow: "invite"`). Carries the Moab/UTM cookie bag (§4a). |
+| `email_verified` | same | web server, first magic-link verification |
+| `user_logged_in` | `login` | web server (`auth.ts`) |
+| `onboarding_completed` | same | web server (`setup/actions.ts`) |
+
+### Workspace + collaboration
+
+| event | GA4 | emitted at |
+|---|---|---|
+| `organization_created` | same | admin cataloger. Personal orgs at signup are deliberately not counted; `user_signed_up` covers them. |
+| `organization_updated` | same | API org PATCH / email domains (`changed_fields`) |
+| `office_created` / `office_updated` / `office_deleted` | same | API offices routes |
+| **`member_invited`** | ★ `share` | API: org / office / project invite of a non-user (`entity_type`, `role`) |
+| `member_joined` | same | API: add-existing-user (org / office / project via timeline) and invite accept (`via: "added" \| "invite"`) |
+| `member_role_changed` / `member_removed` | same | API: org / office routes, project via the timeline |
+
+### Projects
+
+| event | GA4 | emitted at |
+|---|---|---|
+| **`project_created`** | ★ same | API create + create-from-template (`from_template`, `template_id`); web self-service (×2 paths); MCP `create_project`. **Not** from timeline items: research and cataloger timeline entries used to inflate it. |
+| `project_status_changed` / `project_visibility_changed` | same | timeline `project/updated` with `status` / `isPublic` changes |
+| `project_submitted_for_review` / `project_reviewed` (`decision`) | same | API submissions |
+| `research_phase_completed` | same | API |
+| `project_deleted` (`hard`) | same | API soft and hard delete |
+
+### Chat / AI
+
+| event | GA4 | emitted at |
+|---|---|---|
+| **`chat_started`** | ★ same | web `/api/chat`: the chat's first user message, including pre-created initial chats |
+| `chat_message_sent` | same | web `/api/chat`, after the message is saved (`message_index`, `has_attachments`, `is_first_message`). No longer counts 409 duplicates or rejected requests. |
+| `ai_response_received` | same | web `/api/chat` (`status: success \| error`, `model`, `latency_ms`, `total_tokens`) |
+| `ai_artifact_created` | same | web AI `createDocument` tool |
+| `chat_deleted` | same | web `/api/chat` DELETE |
+| `research_requested` / `research_results_saved` (`kind`, `count`) | same | API research bootstrapper |
+
+### Documents, signing, project data
+
+| event | emitted at |
+|---|---|
+| `document_uploaded` / `document_deleted` | timeline `document` records, in any process (API, web, MCP); signing records excluded |
+| `document_exported` | API export |
+| `signature_requested` / `signature_completed` / `signature_declined` (`reason`) | timeline records from the signing router / Documenso webhook (these were previously mislabeled as document upload/delete) |
+| `task_created` / `task_assigned` / `task_completed` / `task_moved` / `task_deleted` | timeline (restores excluded) |
+| `milestone_created` / `milestone_completed` / `milestone_deleted` | timeline |
+| `comment_created` / `field_created` / `map_layer_added` | timeline |
+| `project_context_added` | API context router |
+
+### Billing
+
+| event | GA4 | emitted at |
+|---|---|---|
+| `plan_limit_reached` (`limit: credits \| projects`, `surface`) | same | API project-create wall, web self-service wall, chat 402 |
+| `plan_selected` (`plan: starter`) | same | API select-starter |
+| **`checkout_started`** | ★ `begin_checkout` | API checkout |
+| **`checkout_completed`** | ★ `purchase` (`transaction_id`, `value`, `currency`) | Stripe webhook, paid sessions only (§5) |
+| `plan_changed` / `subscription_cancel_requested` / `subscription_resumed` | same | API billing routes |
+| `subscription_activated` / `subscription_canceled` / `payment_failed` | same | Stripe webhook. Org-keyed, so they never create a person. |
+
+### Platform
+
+| event | emitted at |
+|---|---|
+| `access_token_created` | API PAT create (MCP adoption funnel) |
+| `mcp_tool_called` (`outcome`) | MCP worker, after the tool runs |
+| `research_run_started` / `research_run_completed` | research agent (Fly, its own client) |
 
 Rules:
 
-- A new event is added to `ANALYTICS_EVENTS` first. A GA4 rename goes in
-  `GA4_EVENT_NAME_MAP` and nowhere else.
-- `notify`/Slack fan-out (dash) is **not** ported. YAGNI until someone wants
+- A new event goes into `ANALYTICS_EVENTS` + `TRACKING_PLAN` first. A GA4
+  rename goes in `GA4_EVENT_NAME_MAP` and nowhere else.
+- Server code emits with `trackAnalyticsEvent`; browser code with
+  `analytics.event`. Pass org/office/project ids only when the code already
+  holds them. Never add a DB read to enrich an event (a dash rule).
+- dash's `notify` (Slack) fan-out is **not** ported. YAGNI until someone wants
   `#eplan-notify-users`.
 - Email stays out of PostHog **and** GA4. ePlan's existing PII decision (identify
-  by user id only) is kept.
+  by user id only) is kept. Moab joins on `link_code` / `link_outbox_id`
+  instead of email (§4a).
+
+## 4a. Moab campaign attribution (the `dash_link` / `dash_utm` cookies)
+
+Moab's outbound links for ePlan go through the dash links worker on
+**`links.eplan.ai`**, attached in dash PR #1956 and live: an unknown code
+302-redirects to `https://eplan.ai/`. On every click, before the 302, the
+worker sets two cookies on `.eplan.ai`:
+
+| cookie | touch | contents |
+|---|---|---|
+| `dash_utm` | first touch, never overwritten | `utm_source=moab`, `utm_medium=<channel>`, `utm_campaign=<agent>`, `utm_content=<link code>` |
+| `dash_link` | last touch (a newer click re-attributes) | `code`, `agent_id`, `campaign_id`, `channel`, `subject`, `program`, `code_style`, `outbox_id` |
+
+Until this PR, ePlan read neither. The redirect itself only appends `?code=`
+(and Moab bakes `?email=`), never `utm_*`, so every Moab visit landed as
+*direct* traffic in GA4 and as an unattributed `$pageview`. Now:
+
+- **Browser.** `src/attribution.ts` parses both cookies with dash's exact
+  allow-list, bounds and encoding. The cookies are attacker-controllable, so
+  only allow-listed string keys survive. Every event and pageview carries
+  `utm_*` + `link_*`. The bag is also `register_for_session`ed, so autocaptured
+  events carry it too. `analytics.set` writes it as first-touch person
+  properties (`initial_link_code`, …). Non-Moab campaign landings write
+  `dash_utm` themselves (first touch, `.eplan.ai`), so the app host inherits the
+  bag.
+- **Signup.** The web server sink adds `signupAttributionProperties(cookie)` to
+  `user_signed_up`: the bag as event properties, plus `$set_once` `initial_*`.
+  A Moab-sourced account therefore names its link, campaign and outbox row, and
+  every later event of that person, purchase included, can be broken down by
+  it.
+- **Join key.** `link_code` equals Moab's `campaign_link_clicked`
+  `utm_content`, which joins Moab's click (Moab PostHog project) to ePlan's
+  signup (ePlan project). `link_outbox_id` names the exact send, and so the
+  recipient, without any email in analytics.
+
+**Contract:** the cookie names and keys must match dash
+`apps/web/lib/analytics/{utm,link-attribution}.ts` and the links worker.
+`tests/attribution-context.test.ts` pins the exact byte format the worker
+writes.
 
 ## 5. The two conversions, end to end
 
@@ -162,13 +282,17 @@ Edges:
 
 | area | change |
 |---|---|
-| `packages/core/turboplan-analytics` (new) | tracking plan, GA4 name map + param sanitizer, destination resolver, `_ga` cookie parsers, GA4 MP sender with a flushable queue (`/server`), browser fan-out + `<GoogleTag>` (`/client`), URL redaction (moved from both apps), unit tests |
-| `apps/landing-page` | PostHog init through the layer; `<GoogleTag>` loads GA4 **and** the Ads tag; `captureEvent` fans out to GA4; CSP allows the Ads hosts |
-| `apps/turboplan` (browser) | PostHog init through the layer; `<GoogleTag>` added (it had none); `identify`/`reset` fan out (`user_id`); CSP allows the Google hosts |
-| `apps/turboplan` (server) | `captureServerEvent` fans out to GA4 MP with `_ga` client/session from `cookies()` |
-| `apps/server` | `captureEvent` fans out to GA4 MP; `_ga` ids read from the request via Hono context storage; the flush middleware also awaits GA4 |
-| `turboplan-billing` | checkout stores `user_id` + `_ga` ids in session metadata; webhook emits `checkout_completed` with value/currency/transaction id |
-| `turboplan-env`, deploy scripts, workflow, `worker.ts` | `getAnalyticsEnv()`; `GA_MEASUREMENT_ID` / `GOOGLE_ADS_TAG_ID` passed to the builds and the api Worker; `GA_API_SECRET` threaded as a Worker secret (api + web) |
+| `packages/core/turboplan-analytics` (new) | Tracking plan (`ANALYTICS_EVENTS` + `TRACKING_PLAN`) and the canonical projection (`projectAnalyticsEvent`: dimensions + PostHog groups + non-person machine ids). Also: the one server pathway (`trackAnalyticsEvent` / `configureServerAnalytics` / `trackServerEvent`, state on `globalThis` so every Next bundle layer shares it), the browser `analytics` object + `<AnalyticsPageView>` (gtag GA4 + Ads, redacted pageviews), Moab/UTM cookie attribution (`attribution.ts`), GA4 sanitizer, `_ga` parsers, MP sender, destination resolver, URL redaction. 35 tests. |
+| `apps/server` (API worker) | Registers the API sink (request `_ga` identity + authenticated user via Hono `contextStorage`). Flush middleware awaits PostHog + GA4. Old `captureEvent`, the timeline mapping and the per-package injection wiring are removed. Emits `document_exported`, `access_token_created`, `magic_link_requested`. |
+| `apps/turboplan` (web server) | Registers the web sink (`cookies()` → `_ga` identity, Moab/UTM signup attribution, `after()` delivery). Emits signup, `email_verified`, login, onboarding, self-service `project_created`, chat (`chat_started`, `chat_message_sent` after save, `ai_response_received` with `status`, `chat_deleted`, `ai_artifact_created`) and `plan_limit_reached`. |
+| `apps/turboplan` + `apps/landing-page` (browser) | All tracking goes through `analytics.*`. `setContext` stamps org/office/project/chat on every event (replacing the direct `posthog.group` calls). Pageviews are manual and context-stamped. `signup_started` survives the redirect (`eventBeforeNavigate`). |
+| `apps/mcp-server` | Per-isolate sink (`waitUntil` via AsyncLocalStorage). MCP timeline writes now emit domain events. `create_project` → `project_created`. `mcp_tool_called` is captured after the tool runs, with `outcome`. `GA_MEASUREMENT_ID` / `GA_API_SECRET` are bridged. |
+| `turboplan-timeline-records` | The recorder emits timeline-derived events itself (mapping moved here, 49 tests). `project/created` no longer counts as `project_created`. Signing records map to `signature_*`. Restores are excluded. |
+| `turboplan-workspace` | Org, office, member, invite, project lifecycle, submission/review, template and wall events (§4). Invite auto-signup emits `user_signed_up`. |
+| `turboplan-billing` | `checkout_completed` → `purchase` (paid only), `plan_selected`, `plan_changed`, cancel/resume, credit/seat walls. Org-keyed webhook events no longer create persons. |
+| research / project-context / tasks | `research_requested`, `research_results_saved`, `project_context_added`; task/milestone restores are marked so they are not counted as creates |
+| env, deploy scripts, workflow, `worker.ts` | `getAnalyticsEnv()`. `GA_MEASUREMENT_ID` / `GOOGLE_ADS_TAG_ID` go to the builds, the api Worker and the mcp Worker; `GA_API_SECRET` is a Worker secret (api, web, mcp). |
+| SEO (`apps/landing-page`, `apps/turboplan/app/robots.ts`) | robots + sitemap, unique titles / canonicals / NEPA-CEQA root metadata, docs branding, five `/templates/<slug>` document pages. See `docs/plans/2026-10-02-seo-ads-analytics-audit.md`. |
 
 ## 7. Operator steps
 
@@ -196,6 +320,10 @@ Edges:
    → Google Ads links → Link → account **256-990-8425**. Enable personalized
    advertising and auto-tagging. The reader service account cannot do this
    because it needs Ads admin.
+3a. ✅ **GA4 key events, done on 2026-10-02.** Both properties now mark every
+   name in `GA4_KEY_EVENTS`: `sign_up`, `project_created`, `chat_started` (new,
+   added via the Admin API as the reader service account, which holds Editor),
+   `share`, `begin_checkout`, `purchase`.
 4. **Import the conversions.** Google Ads → Goals → Conversions → New → Import →
    Google Analytics 4 → Web → tick **`sign_up`** and **`purchase`**. Set
    `purchase` to *Use the value from GA4*. Make `purchase` **Primary**, and make
@@ -246,11 +374,18 @@ Edges:
 
 ## 9. Phase 2 / follow-ups (not in this PR)
 
-- **`apps/mcp-server` and `apps/research-agent`** have their own raw PostHog
-  clients (PostHog only, no GA4). mcp-server picks up the `POSTHOG_API_KEY`
-  variable set in §7.1 on its next deploy. research-agent runs on Fly, outside
-  this workflow, so `POSTHOG_API_KEY` must be set there with `fly secrets set`.
-  Moving both onto the layer is optional; neither emits a conversion.
+- **`apps/research-agent`** (Fly, outside this workflow) keeps its own
+  PostHog client and keys `research_run_*` by `"system"`. Set `POSTHOG_API_KEY`
+  there with `fly secrets set`. Moving it onto the layer (user + project
+  context) is optional.
+- **Manual timeline entries are unguarded.** `POST /:id/timeline` accepts any
+  entity type and action, so a hand-authored "task created" entry counts as
+  `task_created`. The UI only writes "project created", which now maps to
+  nothing.
+- **Slack notify fan-out** (dash `notify`), if the team wants an
+  `#eplan-notify-users` feed.
+- **PostHog replay / heatmaps / web vitals** (dash turned these on by owner
+  decision, 2026-08-25). ePlan keeps posthog-js defaults until someone decides.
 - **Delayed payment methods.** If ACH or other async methods are enabled, emit
   `checkout_completed` from `checkout.session.async_payment_succeeded` too.
 - **Server event volume to GA4.** Every server event now also goes to GA4,

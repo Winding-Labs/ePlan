@@ -6,10 +6,7 @@ import pino from "pino";
 
 import { adminMiddleware } from "@wildfires-org/turboplan-admin/server";
 import { getApiEnv } from "@wildfires-org/turboplan-env";
-import {
-  configureRecorder,
-  configureRecorderAnalytics,
-} from "@wildfires-org/turboplan-timeline-records/server";
+import { configureRecorder } from "@wildfires-org/turboplan-timeline-records/server";
 
 import { apiKeyMiddleware } from "./middleware/api-key.js";
 import { authMiddleware } from "./middleware/auth.js";
@@ -17,9 +14,9 @@ import { corsMiddleware } from "./middleware/cors.js";
 import {
   capturePosthogError,
   posthogMiddleware,
+  registerApiAnalyticsSink,
 } from "./middleware/posthog.js";
 import { requireSessionAuth } from "./middleware/session-only.js";
-import { captureTimelineAnalytics } from "./middleware/timeline-analytics.js";
 import { registerPrivateRoutes } from "./routes/privateRoutes.js";
 import { registerPublicRoutes } from "./routes/publicRoutes.js";
 import {
@@ -31,7 +28,9 @@ import { globalErrorHandler } from "./utils/error-handler.js";
 export async function createApiRouter() {
   const ENV = getApiEnv();
   configureRecorder(capturePosthogError);
-  configureRecorderAnalytics(captureTimelineAnalytics);
+  // The one analytics pathway: every package's `trackAnalyticsEvent` (and the
+  // timeline recorder's derived events) lands in this process's sink.
+  registerApiAnalyticsSink({ environment: ENV.NODE_ENV });
 
   const apiRouter = new Hono();
 
@@ -58,10 +57,10 @@ export async function createApiRouter() {
   );
 
   // Exposes the current request to code with no `c` in scope, via
-  // `tryGetContext()`. `captureEvent` is called from package callbacks
-  // (workspace, billing, timeline) and uses it to read the `_ga` cookies and
-  // the authenticated user for the GA4 fan-out. Must wrap posthogMiddleware
-  // and every route, so it is registered before them.
+  // `tryGetContext()`. The analytics sink is called from packages (workspace,
+  // billing, timeline, ...) and uses it to read the `_ga` cookies and the
+  // authenticated user for the GA4 fan-out. Must wrap posthogMiddleware and
+  // every route, so it is registered before them.
   apiRouter.use("/*", contextStorage());
 
   const redactPaths = [

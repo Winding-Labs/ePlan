@@ -4,7 +4,7 @@ import { useCallback } from "react";
 
 import { signOut } from "next-auth/react";
 
-import { resetAnalytics } from "@wildfires-org/turboplan-analytics/client";
+import { analytics } from "@wildfires-org/turboplan-analytics/client";
 import { ApiClient } from "@wildfires-org/turboplan-api-client";
 
 const apiClient = new ApiClient();
@@ -15,7 +15,7 @@ export const useLogout = () => {
 
     // Unlink the analytics identity so the next user on this browser
     // doesn't inherit it. No-ops for any provider that is not configured.
-    resetAnalytics();
+    analytics.reset();
 
     try {
       // Clear JWT token first

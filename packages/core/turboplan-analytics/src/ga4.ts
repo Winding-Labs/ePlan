@@ -1,3 +1,5 @@
+import { readCookieValue } from "./attribution";
+
 /**
  * GA4-side helpers shared by gtag (browser) and the Measurement Protocol
  * (server): the param sanitizer and the `_ga` cookie parsers. Pure — no
@@ -82,30 +84,11 @@ export const toGa4Params = (
   return params;
 };
 
-const readCookie = (
-  cookieHeader: string | null | undefined,
-  name: string,
-): string | null => {
-  if (!cookieHeader) {
-    return null;
-  }
-  for (const part of cookieHeader.split(";")) {
-    const separator = part.indexOf("=");
-    if (separator === -1) {
-      continue;
-    }
-    if (part.slice(0, separator).trim() === name) {
-      return part.slice(separator + 1).trim();
-    }
-  }
-  return null;
-};
-
 /** `_ga=GA1.1.1234567890.1727862000` → `1234567890.1727862000`. */
 export const parseGa4ClientId = (
   cookieHeader: string | null | undefined,
 ): string | null => {
-  const value = readCookie(cookieHeader, "_ga");
+  const value = readCookieValue(cookieHeader, "_ga");
   const match = value?.match(/^GA\d+\.\d+\.(\d+\.\d+)$/);
   return match?.[1] ?? null;
 };
@@ -120,7 +103,7 @@ export const parseGa4SessionId = (
   cookieHeader: string | null | undefined,
   measurementId: string,
 ): string | null => {
-  const value = readCookie(
+  const value = readCookieValue(
     cookieHeader,
     `_ga_${measurementId.replace(/^G-/, "")}`,
   );

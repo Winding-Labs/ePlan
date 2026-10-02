@@ -1,4 +1,9 @@
 import {
+  ANALYTICS_EVENTS,
+  type AnalyticsContext,
+} from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
+import {
   assertSeatAvailable,
   BillingError,
   syncSubscriptionSeatsSafe,
@@ -13,6 +18,7 @@ import {
 } from "@wildfires-org/turboplan-db/queries";
 import { getRBACService } from "@wildfires-org/turboplan-rbac/server";
 
+import { actorContext } from "../analytics-helpers";
 import { getOfficeById } from "../offices/queries";
 import { getProjectById } from "../projects/queries";
 import { sendInvitationEmail } from "./email";
@@ -44,6 +50,21 @@ import {
   generateSecureToken,
   hashInvitationToken,
 } from "./utils";
+
+/** The analytics scope of an invitation's target entity. */
+const invitationScope = (
+  entityType: InvitationEntityType,
+  entityId: string,
+  organizationId: string | null,
+): Pick<AnalyticsContext, "organizationId" | "officeId" | "projectId"> => {
+  if (entityType === "organization") {
+    return { organizationId: entityId };
+  }
+  if (entityType === "office") {
+    return { organizationId, officeId: entityId };
+  }
+  return { organizationId, projectId: entityId };
+};
 
 /**
  * InvitationService handles all invitation business logic
@@ -256,6 +277,25 @@ export class InvitationService {
     // Mark invitation as accepted
     await updateInvitationStatus(invitation.id, "accepted");
 
+    // Keyed by the JOINING user — the invitee's own person funnel.
+    trackAnalyticsEvent(
+      ANALYTICS_EVENTS.MEMBER_JOINED,
+      actorContext(
+        userId,
+        invitationScope(
+          invitation.entityType as InvitationEntityType,
+          invitation.entityId,
+          seatOrganizationId,
+        ),
+      ),
+      {
+        entity_type: invitation.entityType,
+        via: "invite",
+        member_user_id: userId,
+        role: invitation.role,
+      },
+    );
+
     return {
       success: true,
       userId,
@@ -333,6 +373,14 @@ export class InvitationService {
     const [newUser] = await createMagicLinkUser(email);
     const userId = newUser.id;
     await markEmailAsVerified(userId);
+
+    // This flow creates the account, so it owns the signup event. It runs in
+    // the web server, whose sink attaches the visitor's UTM/link attribution.
+    trackAnalyticsEvent(
+      ANALYTICS_EVENTS.USER_SIGNED_UP,
+      { distinctId: userId, userId, source: "web" },
+      { signup_flow: "invite", method: "invite" },
+    );
 
     // 3. Accept the invitation (this adds membership)
     try {

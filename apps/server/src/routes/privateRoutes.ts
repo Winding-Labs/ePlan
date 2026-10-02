@@ -20,7 +20,6 @@ import { permissionsRouter } from "@wildfires-org/turboplan-rbac/server";
 import { uploadRouter } from "@wildfires-org/turboplan-upload/server";
 import {
   commentsRouter,
-  configureWorkspaceAnalytics,
   invitationsRouter,
   officesRouter,
   organizationSigningConfigRouter,
@@ -30,7 +29,6 @@ import {
   usersRouter,
 } from "@wildfires-org/turboplan-workspace/server";
 
-import { captureEvent } from "../middleware/posthog.js";
 import { featurePackageError } from "../utils/feature-package-error.js";
 import { authRouter } from "./auth.js";
 import { documentExportRouter } from "./document-export.js";
@@ -44,13 +42,6 @@ import { validateProjectPromptRouter } from "./validate-project-prompt.js";
  * IMPORTANT: Auth and admin middleware must be applied BEFORE calling this function.
  */
 export async function registerPrivateRoutes(router: Hono) {
-  // Workspace event names are a subset of the analytics taxonomy — pass
-  // through. Wired unconditionally (unlike billing) since the workspace
-  // package is always mounted.
-  configureWorkspaceAnalytics(({ distinctId, event, properties }) => {
-    captureEvent(distinctId, event, properties);
-  });
-
   // Auth routes (user session management)
   router.route("/api/auth", authRouter);
 
@@ -199,13 +190,9 @@ export async function registerPrivateRoutes(router: Hono) {
   // Conditionally add billing router if feature is enabled
   if (isBillingPackageEnabled()) {
     try {
-      const { billingRouter, configureBillingAnalytics } = await import(
+      const { billingRouter } = await import(
         "@wildfires-org/turboplan-billing/server"
       );
-      // Billing event names are a subset of the analytics taxonomy — pass through.
-      configureBillingAnalytics(({ distinctId, event, properties }) => {
-        captureEvent(distinctId, event, properties);
-      });
       router.route("/api/billing", billingRouter);
     } catch (error) {
       throw featurePackageError(

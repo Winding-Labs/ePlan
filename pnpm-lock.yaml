@@ -313,6 +313,9 @@ importers:
       '@sentry/cloudflare':
         specifier: ^10.70.0
         version: 10.70.0(@cloudflare/workers-types@4.20260511.1)(wrangler@4.94.0(@cloudflare/workers-types@4.20260511.1)(bufferutil@4.0.9))
+      '@wildfires-org/turboplan-analytics':
+        specifier: workspace:*
+        version: link:../../packages/core/turboplan-analytics
       '@wildfires-org/turboplan-api-client':
         specifier: workspace:*
         version: link:../../packages/core/turboplan-api-client
@@ -1606,6 +1609,9 @@ importers:
       '@wildfires-org/turboplan-ai':
         specifier: workspace:*
         version: link:../turboplan-ai
+      '@wildfires-org/turboplan-analytics':
+        specifier: workspace:*
+        version: link:../turboplan-analytics
       '@wildfires-org/turboplan-api-client':
         specifier: workspace:*
         version: link:../turboplan-api-client
@@ -2153,6 +2159,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.4.0
         version: 5.4.0(react-hook-form@7.75.0(react@19.1.7))
+      '@wildfires-org/turboplan-analytics':
+        specifier: workspace:*
+        version: link:../../core/turboplan-analytics
       '@wildfires-org/turboplan-api-client':
         specifier: workspace:*
         version: link:../../core/turboplan-api-client
@@ -2226,6 +2235,9 @@ importers:
       '@wildfires-org/turboplan-ai':
         specifier: workspace:*
         version: link:../../core/turboplan-ai
+      '@wildfires-org/turboplan-analytics':
+        specifier: workspace:*
+        version: link:../../core/turboplan-analytics
       '@wildfires-org/turboplan-api-client':
         specifier: workspace:*
         version: link:../../core/turboplan-api-client
@@ -2532,6 +2544,9 @@ importers:
 
   packages/modules/turboplan-timeline-records:
     dependencies:
+      '@wildfires-org/turboplan-analytics':
+        specifier: workspace:*
+        version: link:../../core/turboplan-analytics
       '@wildfires-org/turboplan-db':
         specifier: workspace:*
         version: link:../../core/turboplan-db

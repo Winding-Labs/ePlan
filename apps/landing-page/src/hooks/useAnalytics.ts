@@ -1,4 +1,5 @@
-import { trackEvent } from "@wildfires-org/turboplan-analytics/client";
+import type { AnalyticsEvent } from "@wildfires-org/turboplan-analytics";
+import { analytics } from "@wildfires-org/turboplan-analytics/client";
 
 import { useAnalyticsContext } from "@/context/analytics";
 
@@ -12,13 +13,13 @@ export const useAnalytics = () => {
    * clicks, which should use `captureEvent`.
    */
   const captureCurrentUserEvent = (
-    eventName: string,
+    eventName: AnalyticsEvent,
     properties?: Record<string, string>,
   ) => {
     if (!user) {
       return;
     }
-    trackEvent(eventName, properties);
+    analytics.event(eventName, properties);
   };
 
   /**
@@ -28,10 +29,10 @@ export const useAnalytics = () => {
    * every configured destination and no-ops for the rest.
    */
   const captureEvent = (
-    eventName: string,
+    eventName: AnalyticsEvent,
     properties?: Record<string, string>,
   ) => {
-    trackEvent(eventName, properties);
+    analytics.event(eventName, properties);
   };
 
   return {

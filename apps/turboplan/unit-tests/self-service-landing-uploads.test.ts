@@ -108,7 +108,7 @@ describe("createUserWithOrganization landing uploads", () => {
     },
   });
   mock.module(appModule("lib/server-analytics.ts"), {
-    namedExports: { aliasAnonymousId: () => {}, captureServerEvent: () => {} },
+    namedExports: { aliasAnonymousId: () => {}, trackAnalyticsEvent: () => {} },
   });
   mock.module(appModule("app/(auth)/actions.ts"), {
     namedExports: { buildMagicLinkUrl: () => "https://app.test/magic" },

@@ -1,6 +1,8 @@
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import * as Sentry from "@sentry/cloudflare";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import { hashPAT, isPATToken } from "@wildfires-org/turboplan-api-client";
 import { runWithWorkerConnection } from "@wildfires-org/turboplan-db/db-client";
 import {
@@ -9,6 +11,7 @@ import {
 } from "@wildfires-org/turboplan-db/queries";
 
 import { createServer } from "./server.js";
+import { runWithAnalytics } from "./utils/analytics.js";
 import {
   exceedsUploadCallLimit,
   extractToolCall,
@@ -16,6 +19,10 @@ import {
   MAX_UPLOAD_CALLS_PER_REQUEST,
   type ToolCall,
 } from "./utils/request-charges.js";
+import {
+  toolCallNamesById,
+  toolCallResponseOutcome,
+} from "./utils/tool-call-outcome.js";
 import type { McpUserContext } from "./utils/types.js";
 
 type Env = {
@@ -44,6 +51,8 @@ type Env = {
   SENTRY_DSN?: string;
   RELEASE_VERSION?: string;
   POSTHOG_API_KEY?: string;
+  GA_MEASUREMENT_ID?: string;
+  GA_API_SECRET?: string;
   RATE_LIMITER_READ: RateLimit;
   RATE_LIMITER_WRITE: RateLimit;
   RATE_LIMITER_GLOBAL: RateLimit;
@@ -73,6 +82,9 @@ const ENV_BRIDGE_KEYS = [
   "IS_RESEARCH_AGENT_INTEGRATION_PACKAGE_ENABLED",
   // Sentry error monitoring — optional, monitoring disabled when unset
   "SENTRY_DSN",
+  // GA4 Measurement Protocol — optional, server-side GA4 off when unset
+  "GA_MEASUREMENT_ID",
+  "GA_API_SECRET",
 ] as const;
 
 const MAX_BODY_SIZE = 1024 * 1024;
@@ -139,45 +151,6 @@ const bridgeEnv = (env: Env) => {
       process.env[key] = value;
     }
   }
-};
-
-/**
- * PostHog capture via raw HTTP — posthog-node's buffering doesn't fit
- * stateless Workers. Fired through ctx.waitUntil so it never delays the
- * response; no-ops when POSTHOG_API_KEY is unset.
- */
-const capturePosthogEvent = (
-  env: Env,
-  ctx: ExecutionContext,
-  distinctId: string,
-  event: string,
-  properties?: Record<string, unknown>,
-) => {
-  if (!env.POSTHOG_API_KEY) {
-    return;
-  }
-  ctx.waitUntil(
-    fetch("https://us.i.posthog.com/i/v0/e/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        api_key: env.POSTHOG_API_KEY,
-        distinct_id: distinctId,
-        event,
-        properties: { service: "mcp", ...properties },
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          console.error(
-            `PostHog capture rejected (${response.status}) for event "${event}"`,
-          );
-        }
-      })
-      .catch((error) => {
-        console.error("PostHog capture failed:", error);
-      }),
-  );
 };
 
 const SENSITIVE_SENTRY_HEADERS = ["authorization", "cookie", "set-cookie"];
@@ -370,22 +343,6 @@ export default Sentry.withSentry(
           }),
         );
 
-        // One event per tools/call element so a batch of N calls counts as N.
-        for (const name of toolNames) {
-          capturePosthogEvent(
-            env,
-            ctx,
-            authResult.user.userId,
-            "mcp_tool_called",
-            {
-              tool_name: name,
-              is_write: isWriteTool(name),
-              source: "mcp",
-              batch_size: toolNames.length,
-            },
-          );
-        }
-
         const server = createServer(authResult.user, {
           publicUrl: env.R2_PUBLIC_URL,
         });
@@ -393,8 +350,44 @@ export default Sentry.withSentry(
           sessionIdGenerator: undefined,
         });
 
+        // One mcp_tool_called per tools/call element (a batch of N calls
+        // counts as N), captured once the tool has run: when its JSON-RPC
+        // response goes out, which carries the outcome.
+        const pendingToolCalls = toolCallNamesById(elements);
+        const sendResponse = transport.send.bind(transport);
+        transport.send = async (message, options) => {
+          const response = toolCallResponseOutcome(message);
+          const toolName = response && pendingToolCalls.get(response.id);
+          if (response && toolName) {
+            pendingToolCalls.delete(response.id);
+            trackAnalyticsEvent(
+              ANALYTICS_EVENTS.MCP_TOOL_CALLED,
+              {
+                distinctId: authResult.user.userId,
+                userId: authResult.user.userId,
+              },
+              {
+                tool_name: toolName,
+                is_write: isWriteTool(toolName),
+                outcome: response.outcome,
+                batch_size: toolNames.length,
+              },
+            );
+          }
+          return sendResponse(message, options);
+        };
+
         await server.connect(transport);
-        return transport.handleRequest(request, { parsedBody });
+        // Tool handlers (and the packages they call) run inside this scope,
+        // so every event they emit is delivered with this request's
+        // waitUntil.
+        return runWithAnalytics(
+          {
+            posthogApiKey: env.POSTHOG_API_KEY,
+            waitUntil: (promise) => ctx.waitUntil(promise),
+          },
+          () => transport.handleRequest(request, { parsedBody }),
+        );
       } catch (err) {
         console.error(
           JSON.stringify({

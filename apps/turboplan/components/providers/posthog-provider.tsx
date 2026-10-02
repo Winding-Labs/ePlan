@@ -5,24 +5,21 @@ import type { ReactNode } from "react";
 import { posthog } from "posthog-js";
 import { PostHogProvider as PHProvider } from "posthog-js/react";
 
-import {
-  initBrowserAnalytics,
-  isPostHogEnabled,
-} from "@wildfires-org/turboplan-analytics/client";
+import { analytics } from "@wildfires-org/turboplan-analytics/client";
 
 // Module-level init (not useEffect): child effects run before parent effects,
 // so an effect-based init would race identify/group calls in nested providers
 // on a hard page load. Import time is before any effect. No
 // NEXT_PUBLIC_POSTHOG_KEY → PostHog stays uninitialized and every capture
 // no-ops.
-initBrowserAnalytics(posthog, { service: "web" });
+analytics.init(posthog, { service: "web" });
 
 interface PostHogProviderProps {
   children: ReactNode;
 }
 
 export const PostHogProvider = ({ children }: PostHogProviderProps) => {
-  if (!isPostHogEnabled()) {
+  if (!analytics.isPostHogEnabled()) {
     return <>{children}</>;
   }
 

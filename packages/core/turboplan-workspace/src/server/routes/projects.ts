@@ -1,6 +1,8 @@
 import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import { assertProjectCreationAllowed } from "@wildfires-org/turboplan-billing/server";
 import {
   isOwnershipStatusPubliclyVisible,
@@ -37,6 +39,7 @@ import {
 import { deleteFile } from "@wildfires-org/turboplan-upload/server";
 import { generateUniqueSlug } from "@wildfires-org/turboplan-utils/server";
 
+import { actorContext } from "../analytics-helpers";
 import { getOfficeBySlug } from "../offices/queries";
 import { getOrganizationById } from "../organizations/queries";
 import { resolveProjectCreationFlags } from "../projects/creation-policy";
@@ -362,6 +365,18 @@ projectsRouter.post("/", async (c) => {
       organizationId: officeRecord.organizationId,
     });
     if (!entitlement.allowed) {
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.PLAN_LIMIT_REACHED,
+        actorContext(user.userId, {
+          organizationId: officeRecord.organizationId,
+          officeId: officeRecord.id,
+        }),
+        {
+          limit: "projects",
+          surface: "create_project",
+          plan: entitlement.plan,
+        },
+      );
       return c.json(
         {
           error: "Upgrade required",
@@ -456,6 +471,16 @@ projectsRouter.post("/", async (c) => {
       entityName: newProject.name,
       action: "created",
     });
+
+    trackAnalyticsEvent(
+      ANALYTICS_EVENTS.PROJECT_CREATED,
+      actorContext(user.userId, {
+        organizationId: officeRecord.organizationId,
+        officeId: officeRecord.id,
+        projectId: newProject.id,
+      }),
+      { from_template: false, is_template: isTemplate },
+    );
 
     return c.json({ ...newProject, initialChatId }, 201);
   } catch (error) {
@@ -562,6 +587,11 @@ projectsRouter.post(
         .update(project)
         .set({ isResearchPhaseCompleted: true })
         .where(eq(project.id, id));
+
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.RESEARCH_PHASE_COMPLETED,
+        actorContext(c.get("user").userId, { projectId: id }),
+      );
 
       return c.json({ success: true });
     } catch (error) {
@@ -684,6 +714,19 @@ projectsRouter.put(
             organizationId: orgRow.organizationId,
           });
           if (!entitlement.allowed) {
+            trackAnalyticsEvent(
+              ANALYTICS_EVENTS.PLAN_LIMIT_REACHED,
+              actorContext(user.userId, {
+                organizationId: orgRow.organizationId,
+                officeId: projectRecord.officeId,
+                projectId: id,
+              }),
+              {
+                limit: "projects",
+                surface: "convert_template",
+                plan: entitlement.plan,
+              },
+            );
             return c.json(
               {
                 error: "Upgrade required",
@@ -840,6 +883,16 @@ projectsRouter.patch(
       }
 
       await softDeleteProject(id, authUser.userId);
+
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.PROJECT_DELETED,
+        actorContext(authUser.userId, {
+          officeId: projectRecord.officeId,
+          projectId: id,
+        }),
+        { hard: false, is_template: projectRecord.isTemplate },
+      );
+
       return c.json({ message: "Project deleted successfully" });
     } catch (error) {
       console.error("Failed to soft delete project:", error);
@@ -871,6 +924,15 @@ projectsRouter.delete(
 
       // Delete project (cascades to timeline records and other related DB records)
       await deleteProject(id);
+
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.PROJECT_DELETED,
+        actorContext(c.get("user").userId, {
+          officeId: projectRecord.officeId,
+          projectId: id,
+        }),
+        { hard: true, is_template: projectRecord.isTemplate },
+      );
 
       // Then cleanup blob files (non-critical if fails)
       if (imagesToDelete.length > 0) {

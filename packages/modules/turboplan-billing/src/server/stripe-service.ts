@@ -386,11 +386,13 @@ const createCheckoutSessionUnlocked = async ({
  * The DB row is optimistically updated (plan, seats, item ids); the
  * `customer.subscription.updated` webhook re-projects the full state
  * (discounts, period) with its deep expand and stays authoritative.
+ *
+ * Returns the plan the subscription was switched away from.
  */
 export const changeSubscriptionPlan = async (
   organizationId: string,
   newPlan: PaidPlanKey,
-): Promise<void> => {
+): Promise<{ fromPlan: PaidPlanKey }> => {
   const existing = await getSubscriptionByOrganizationId(organizationId);
   if (
     !existing?.stripeSubscriptionId ||
@@ -497,6 +499,8 @@ export const changeSubscriptionPlan = async (
       updatedAt: new Date(),
     })
     .where(eq(subscription.organizationId, organizationId));
+
+  return { fromPlan: currentPlan };
 };
 
 /**

@@ -4,7 +4,7 @@ import { createContext, type ReactNode, useContext, useEffect } from "react";
 
 import type { User } from "next-auth";
 
-import { identifyUser } from "@wildfires-org/turboplan-analytics/client";
+import { analytics } from "@wildfires-org/turboplan-analytics/client";
 import type { Profile } from "@wildfires-org/turboplan-db/types";
 
 interface UserContext {
@@ -26,7 +26,7 @@ export function UserProvider({ children, user, profile }: UserProviderProps) {
     // tracking plan). Fans out to PostHog and GA4 (user_id); no-ops for any
     // provider that is not configured.
     if (user?.id) {
-      identifyUser(user.id, {
+      analytics.set(user.id, {
         role: profile?.userRole ?? undefined,
       });
     }

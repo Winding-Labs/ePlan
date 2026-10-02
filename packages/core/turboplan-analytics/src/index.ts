@@ -1,4 +1,29 @@
 export {
+  buildUtmCookie,
+  cookieDomain,
+  LINK_COOKIE_KEYS,
+  LINK_COOKIE_NAME,
+  type LinkAttribution,
+  linkAttributionProperties,
+  parseLinkCookie,
+  parseUtmCookie,
+  readCookieAttribution,
+  readCookieValue,
+  signupAttributionProperties,
+  UTM_COOKIE_NAME,
+  UTM_KEYS,
+  type UtmProperties,
+} from "./attribution";
+export {
+  type AnalyticsContext,
+  type AnalyticsSource,
+  compactProps,
+  distinctIdIsPerson,
+  type ProjectedAnalyticsEvent,
+  projectAnalyticsEvent,
+  toAnalyticsContext,
+} from "./context";
+export {
   type AnalyticsDestinations,
   resolveAnalyticsDestinations,
 } from "./destinations";
@@ -7,6 +32,9 @@ export {
   type AnalyticsEvent,
   GA4_EVENT_NAME_MAP,
   GA4_KEY_EVENTS,
+  TRACKING_PLAN,
+  type TrackingPlanCategory,
+  type TrackingPlanEntry,
   toGa4EventName,
 } from "./events";
 export {

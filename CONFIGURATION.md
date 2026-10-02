@@ -352,7 +352,7 @@ missing.
 | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | api | Required only when billing is enabled |
 | `DOCUMENSO_API_KEY`, `DOCUMENSO_WEBHOOK_SECRET` | api | Required only when signing is enabled; pair with the `DOCUMENSO_API_URL` variable |
 | `RESEARCH_AGENT_SERVICE_API_KEY` | api | Required only when the research agent is enabled |
-| `GA_API_SECRET` | api, web | Optional — GA4 Measurement Protocol secret for server-side events; set per environment, see [Analytics](#analytics) |
+| `GA_API_SECRET` | api, web, mcp | Optional — GA4 Measurement Protocol secret for server-side events; set per environment, see [Analytics](#analytics) |
 | `SENTRY_AUTH_TOKEN` | web, landing builds | Optional — enables sourcemap upload |
 | `NEON_API_KEY` | Preview deploys | Optional — used with the `NEON_PROJECT_ID` variable to create and reset a per-PR database branch |
 | `VERCEL_TOKEN` | Build step | Optional — this is the **Turborepo remote cache** token (`TURBO_TOKEN`), not a deploy target |
@@ -410,11 +410,11 @@ development sends nothing unless you set the same names in `.env.local`.
 
 | Name | Kind | Reaches | Purpose |
 | --- | --- | --- | --- |
-| `POSTHOG_API_KEY` | variable | api, web, landing (runtime) | PostHog project token for server-side capture |
+| `POSTHOG_API_KEY` | variable | api, web, landing, mcp (runtime) | PostHog project token for server-side capture |
 | `NEXT_PUBLIC_POSTHOG_KEY` | variable | web, landing (build) | The same token for the browser |
-| `GA_MEASUREMENT_ID` | variable | api as `GA_MEASUREMENT_ID`; web and landing builds as `NEXT_PUBLIC_GA_MEASUREMENT_ID` | GA4 web stream (`G-…`) |
+| `GA_MEASUREMENT_ID` | variable | api and mcp as `GA_MEASUREMENT_ID`; web and landing builds as `NEXT_PUBLIC_GA_MEASUREMENT_ID` | GA4 web stream (`G-…`) |
 | `GOOGLE_ADS_TAG_ID` | variable | web and landing builds as `NEXT_PUBLIC_GOOGLE_ADS_TAG_ID` | Google Ads tag (`AW-…`). **Production only**, so staging traffic never trains Ads audiences |
-| `GA_API_SECRET` | secret | api and web Workers (encrypted secret) | That stream's Measurement Protocol `api_secret`. Server-only; server-side GA4 (including `sign_up` and `purchase`) is off without it |
+| `GA_API_SECRET` | secret | api, web and mcp Workers (encrypted secret) | That stream's Measurement Protocol `api_secret`. Server-only; server-side GA4 (including `sign_up` and `purchase`) is off without it |
 
 Server-side events join the visitor's browser session through the `_ga`
 cookies, which is what lets Google Ads import `sign_up` and `purchase` from GA4.

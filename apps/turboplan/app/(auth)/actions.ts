@@ -25,7 +25,7 @@ import {
   checkMagicLinkVerifyLimit,
 } from "@/lib/auth/rate-limit";
 import { sendMagicLinkEmail } from "@/lib/email/send-magic-link";
-import { aliasAnonymousId, captureServerEvent } from "@/lib/server-analytics";
+import { aliasAnonymousId, trackAnalyticsEvent } from "@/lib/server-analytics";
 import {
   buildAttributionEventProperties,
   parseSignupAttribution,
@@ -222,11 +222,15 @@ export const requestRegistrationLink = async (
     if (attribution?.ph_did) {
       aliasAnonymousId(newUser.id, attribution.ph_did);
     }
-    captureServerEvent(newUser.id, ANALYTICS_EVENTS.USER_SIGNED_UP, {
-      signup_flow: "register",
-      method: "register",
-      ...buildAttributionEventProperties(attribution),
-    });
+    trackAnalyticsEvent(
+      ANALYTICS_EVENTS.USER_SIGNED_UP,
+      { distinctId: newUser.id, userId: newUser.id },
+      {
+        signup_flow: "register",
+        method: "register",
+        ...buildAttributionEventProperties(attribution),
+      },
+    );
 
     // Generate verification token
     const token = await createVerificationToken(
@@ -300,11 +304,15 @@ export const requestLoginLink = async (
       if (attribution?.ph_did) {
         aliasAnonymousId(newUser.id, attribution.ph_did);
       }
-      captureServerEvent(newUser.id, ANALYTICS_EVENTS.USER_SIGNED_UP, {
-        signup_flow: "login_auto_register",
-        method: "login_auto_register",
-        ...buildAttributionEventProperties(attribution),
-      });
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.USER_SIGNED_UP,
+        { distinctId: newUser.id, userId: newUser.id },
+        {
+          signup_flow: "login_auto_register",
+          method: "login_auto_register",
+          ...buildAttributionEventProperties(attribution),
+        },
+      );
       const token = await createVerificationToken(
         newUser.id,
         "email_verification",
@@ -446,6 +454,10 @@ export const verifyMagicLink = async (
     const isFirstVerification = type === "verification" && !user.emailVerified;
     if (isFirstVerification) {
       await markEmailAsVerified(userId);
+      trackAnalyticsEvent(ANALYTICS_EVENTS.EMAIL_VERIFIED, {
+        distinctId: userId,
+        userId,
+      });
     }
 
     // Re-evaluate the user's affiliation from the email domain before signing

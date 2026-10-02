@@ -132,3 +132,17 @@ OPENROUTER_MODEL_IMAGE_LITE=
 # Sentry DSN for this worker.
 # If unset: Sentry is disabled entirely and the server runs unchanged.
 SENTRY_DSN=
+
+# =============================================================================
+# ANALYTICS (PostHog + GA4) — OPTIONAL
+# =============================================================================
+# Leave all three empty locally so dev traffic never reaches a real project.
+
+# PostHog project token for server-side capture.
+# If unset: no PostHog events are sent.
+POSTHOG_API_KEY=
+
+# GA4 web stream id (`G-…`) and its Measurement Protocol secret.
+# If either is unset: no server-side GA4 hits are sent.
+GA_MEASUREMENT_ID=
+GA_API_SECRET=

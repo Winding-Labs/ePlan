@@ -2,6 +2,8 @@ import { and, eq, isNull } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import {
   assertSeatAvailable,
   syncSubscriptionSeatsSafe,
@@ -34,6 +36,7 @@ import { RBACService } from "@wildfires-org/turboplan-rbac/server";
 import { createTimelineRecord } from "@wildfires-org/turboplan-timeline-records/server";
 
 import type { MemberWithInheritance, PendingInvitation } from "../../types";
+import { actorContext } from "../analytics-helpers";
 import { ROLE_LEVEL } from "../constants";
 import { sendMemberAddedNotification } from "../invitations/email";
 import { getEntityInvitationsWithInviter } from "../invitations/queries";
@@ -288,18 +291,21 @@ projectMembersRouter.post(
       const users = await getUser(email);
 
       // Starter seat cap: project owners/editors are org-billable seats. Gate
-      // before BOTH branches (direct add and invitation).
+      // before BOTH branches (direct add and invitation). The resolved org
+      // also scopes the invitation event below (viewer adds skip the lookup).
+      let organizationId: string | undefined;
       if (role !== "viewer") {
         const orgRow = await resolveProjectOrgRow(projectId);
         if (!orgRow) {
           return c.json({ error: "Project not found" }, 404);
         }
+        organizationId = orgRow.organizationId;
         const seatDecision = await assertSeatAvailable({
-          organizationId: orgRow.organizationId,
+          organizationId,
           userId: users[0]?.id,
         });
         if (!seatDecision.allowed) {
-          return seatLimitResponse(c, seatDecision);
+          return seatLimitResponse(c, seatDecision, organizationId);
         }
       }
 
@@ -409,6 +415,18 @@ projectMembersRouter.post(
           return c.json({ error: "Failed to create invitation" }, 500);
         }
 
+        // Only the invitation is emitted here: direct adds, role changes and
+        // removals write member timeline records, which the recorder maps to
+        // member_joined / member_role_changed / member_removed. A repeat
+        // invite returns the pending one — not a new invitation.
+        if (!result.isExisting) {
+          trackAnalyticsEvent(
+            ANALYTICS_EVENTS.MEMBER_INVITED,
+            actorContext(authUser.userId, { organizationId, projectId }),
+            { entity_type: "project", role },
+          );
+        }
+
         return c.json({
           success: true,
           type: "invitation",
@@ -470,7 +488,7 @@ projectMembersRouter.patch(
           userId,
         });
         if (!seatDecision.allowed) {
-          return seatLimitResponse(c, seatDecision);
+          return seatLimitResponse(c, seatDecision, orgRow.organizationId);
         }
       }
 

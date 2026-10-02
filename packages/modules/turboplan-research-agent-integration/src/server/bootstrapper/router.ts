@@ -3,6 +3,8 @@ import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import {
   consumeCredits,
   gateCreditsOr402,
@@ -79,6 +81,34 @@ const isMessageTypeEnabled = (type: ResearchAgentMessageTypeValue): boolean => {
 };
 
 const bootstrapperRouter = new Hono<RBACContext>();
+
+type ResearchResultKind =
+  | "fields"
+  | "context"
+  | "documents"
+  | "milestones"
+  | "timeline";
+
+/**
+ * research_results_saved — what the user kept from a research run. `count`
+ * is the number of saved items (tasks, for milestones); a save that wrote
+ * nothing is not reported.
+ */
+const trackResultsSaved = (
+  userId: string,
+  projectId: string,
+  kind: ResearchResultKind,
+  count: number,
+) => {
+  if (count === 0) {
+    return;
+  }
+  trackAnalyticsEvent(
+    ANALYTICS_EVENTS.RESEARCH_RESULTS_SAVED,
+    { distinctId: userId, userId, projectId, source: "web" },
+    { kind, count },
+  );
+};
 
 const projectParams = z.object({ projectId: z.string().uuid() });
 const projectMessageParams = projectParams.extend({
@@ -161,12 +191,11 @@ bootstrapperRouter.post(
 
       const webhookSecret = randomBytes(32).toString("hex");
       let researchAgentRecord = null;
+      const isRetry =
+        existingChat?.status === ResearchAgentChatStatus.FAILED ||
+        existingChat?.status === ResearchAgentChatStatus.CANCELLED;
 
-      if (
-        existingChat &&
-        (existingChat.status === ResearchAgentChatStatus.FAILED ||
-          existingChat.status === ResearchAgentChatStatus.CANCELLED)
-      ) {
+      if (existingChat && isRetry) {
         // Retry path: only transition failed/cancelled records back to initializing.
         researchAgentRecord = await resetResearchAgentChatForRetry({
           chatId,
@@ -206,10 +235,23 @@ bootstrapperRouter.post(
         currentStep: `Starting research for "${project.name}"...`,
       });
 
+      const user = c.get("user");
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.RESEARCH_REQUESTED,
+        {
+          distinctId: user.userId,
+          userId: user.userId,
+          organizationId: billingOrgId,
+          projectId,
+          chatId,
+          source: "web",
+        },
+        { trigger: isRetry ? "retry" : "initial" },
+      );
+
       // Charge the flat run cost now that a run WILL start (a retry of a
       // failed run is a fresh external run and bills again).
       if (billingOrgId) {
-        const user = c.get("user");
         await consumeCredits({
           organizationId: billingOrgId,
           userId: user?.userId,
@@ -439,6 +481,12 @@ bootstrapperRouter.post(
         projectId,
         itemIndices,
       );
+      trackResultsSaved(
+        c.get("user").userId,
+        projectId,
+        "fields",
+        result.savedCount,
+      );
       return c.json(result);
     } catch (error) {
       if (error instanceof SaveError) {
@@ -471,6 +519,7 @@ bootstrapperRouter.post(
         itemIndices,
         userId,
       );
+      trackResultsSaved(userId, projectId, "context", result.savedCount);
       return c.json(result);
     } catch (error) {
       if (error instanceof SaveError) {
@@ -506,6 +555,7 @@ bootstrapperRouter.post(
         itemIndices,
         user.userId,
       );
+      trackResultsSaved(user.userId, projectId, "documents", result.savedCount);
       return c.json(result);
     } catch (error) {
       if (error instanceof SaveError) {
@@ -603,6 +653,7 @@ bootstrapperRouter.post(
         selections,
         userId,
       );
+      trackResultsSaved(userId, projectId, "milestones", result.savedCount);
       return c.json(result);
     } catch (error) {
       if (error instanceof SaveError) {
@@ -635,6 +686,7 @@ bootstrapperRouter.post(
         itemIndices,
         userId,
       );
+      trackResultsSaved(userId, projectId, "timeline", result.savedCount);
       return c.json(result);
     } catch (error) {
       if (error instanceof SaveError) {

@@ -3,34 +3,22 @@ import { tryGetContext } from "hono/context-storage";
 import { PostHog } from "posthog-node";
 
 import {
-  GA4_CLIENT_ID_PROPERTY,
-  GA4_SESSION_ID_PROPERTY,
   readGa4Identity,
   resolveAnalyticsDestinations,
 } from "@wildfires-org/turboplan-analytics";
 import {
+  configureServerAnalytics,
   flushGa4Events,
-  getGa4ServerConfig,
-  sendGa4Event,
+  trackServerEvent,
 } from "@wildfires-org/turboplan-analytics/server";
 import { getApiEnv } from "@wildfires-org/turboplan-env";
 
 import { redactSensitiveUrl } from "../utils/sentry.js";
-import type {
-  AnalyticsEvent,
-  AnalyticsEventProperties,
-} from "./analytics-events.js";
 
 /** The request-scoped variables analytics reads (set by the auth middleware). */
 type AnalyticsRequestEnv = {
   Variables: { user?: { userId?: string } };
 };
-
-/** GA4 identity carriers — lifted into the MP payload, never sent to PostHog. */
-const GA4_IDENTITY_PROPERTIES = new Set([
-  GA4_CLIENT_ID_PROPERTY,
-  GA4_SESSION_ID_PROPERTY,
-]);
 
 // Singleton PostHog client instance
 let posthogClient: PostHog | null = null;
@@ -76,90 +64,44 @@ export const posthogMiddleware = async (c: Context, next: Next) => {
   }
 };
 
-const capturePostHogEvent = (
-  distinctId: string,
-  event: AnalyticsEvent,
-  properties?: AnalyticsEventProperties,
-) => {
-  const client = getPostHogClient();
-  if (!client) {
-    return;
-  }
-
-  const posthogProperties = Object.fromEntries(
-    Object.entries(properties ?? {}).filter(
-      ([key]) => !GA4_IDENTITY_PROPERTIES.has(key),
-    ),
-  );
-
-  try {
-    client.capture({
-      distinctId,
-      event,
-      properties: {
-        service: "api",
-        environment: getApiEnv().NODE_ENV,
-        ...posthogProperties,
-      },
-    });
-  } catch (error) {
-    console.error("PostHog captureEvent failed:", error);
-  }
-};
-
 /**
- * GA4 Measurement Protocol half of the fan-out. Identity comes from the
- * current request when there is one: the `_ga` cookies join the hit to the
- * visitor's GA session (and through it to the ad click), and the
- * authenticated user becomes GA4 `user_id`. Background calls with no request
- * fall back to identity carried in the properties (e.g. the ids stashed in
- * Stripe metadata at checkout).
+ * Registers this process's sink behind `trackAnalyticsEvent` — the one
+ * pathway every package emits through. Identity comes from the current
+ * request when there is one (Hono context storage): the authenticated user
+ * fills `userId` (GA4 `user_id`) when the caller left it out, and the `_ga`
+ * cookies join the GA4 hit to the visitor's session, and through it to the
+ * ad click. Background calls with no request (e.g. the Stripe webhook's
+ * purchase) carry their GA4 identity in the event properties instead.
+ * Delivery is guaranteed by `posthogMiddleware`, which wraps every route.
+ *
+ * `environment` is resolved once by the caller at bootstrap, so no emit
+ * depends on re-reading the validated env.
  */
-const captureGa4Event = (
-  distinctId: string,
-  event: AnalyticsEvent,
-  properties?: AnalyticsEventProperties,
-) => {
-  try {
-    const ga4 = getGa4ServerConfig();
-    if (!ga4) {
-      return;
-    }
+export const registerApiAnalyticsSink = ({
+  environment,
+}: {
+  environment: string;
+}) => {
+  const baseProperties = { service: "api", environment };
 
+  configureServerAnalytics((event, context, extra) => {
     const c = tryGetContext<AnalyticsRequestEnv>();
-    const { clientId, sessionId } = readGa4Identity(
+    const ga4Identity = readGa4Identity(
       c?.req.header("cookie"),
-      ga4.measurementId,
+      resolveAnalyticsDestinations().ga4?.measurementId,
     );
-    const propertyUserId =
-      typeof properties?.user_id === "string" ? properties.user_id : null;
 
-    sendGa4Event(ga4, {
+    trackServerEvent(
+      { posthog: getPostHogClient(), baseProperties },
       event,
-      distinctId,
-      userId: propertyUserId ?? c?.get("user")?.userId ?? null,
-      clientId,
-      sessionId,
-      properties,
-    });
-  } catch (error) {
-    console.error("GA4 captureEvent failed:", error);
-  }
-};
-
-/**
- * Captures a product analytics event and fans it out to PostHog and GA4.
- * Fire-and-forget — never throws; each destination no-ops when it is not
- * configured. Delivery is guaranteed by the flush middleware, which is
- * registered before every route group.
- */
-export const captureEvent = (
-  distinctId: string,
-  event: AnalyticsEvent,
-  properties?: AnalyticsEventProperties,
-) => {
-  capturePostHogEvent(distinctId, event, properties);
-  captureGa4Event(distinctId, event, properties);
+      {
+        ...context,
+        userId: context.userId ?? c?.get("user")?.userId ?? null,
+      },
+      extra,
+      ga4Identity,
+    );
+  });
 };
 
 /**
