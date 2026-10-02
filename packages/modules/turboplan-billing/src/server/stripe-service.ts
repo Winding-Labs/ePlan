@@ -23,6 +23,10 @@ import {
   planFromLookupKey,
   seatLookupKey,
 } from "../types";
+import {
+  buildCheckoutSessionMetadata,
+  type CheckoutAttribution,
+} from "./analytics";
 import { countBillableSeats, getSubscriptionByOrganizationId } from "./queries";
 import { planSeatItemTransition, transitionChangesStripe } from "./seat-items";
 import { classifyItems } from "./webhook-helpers";
@@ -243,6 +247,7 @@ export const createCheckoutSession = async (params: {
   name?: string;
   successUrl: string;
   cancelUrl: string;
+  attribution?: CheckoutAttribution;
 }): Promise<string> =>
   // Same-process double-click/double-tab guard: serializes concurrent
   // checkout attempts for the same org so the second one observes the
@@ -258,6 +263,7 @@ const createCheckoutSessionUnlocked = async ({
   name,
   successUrl,
   cancelUrl,
+  attribution,
 }: {
   organizationId: string;
   plan: PlanKey;
@@ -265,6 +271,7 @@ const createCheckoutSessionUnlocked = async ({
   name?: string;
   successUrl: string;
   cancelUrl: string;
+  attribution?: CheckoutAttribution;
 }): Promise<string> => {
   const planConfig = PLANS[plan];
   if (!("lookup_key" in planConfig)) {
@@ -340,6 +347,9 @@ const createCheckoutSessionUnlocked = async ({
     mode: "subscription",
     customer: customerId,
     client_reference_id: organizationId,
+    // Read back by the checkout.session.completed webhook to attribute the
+    // purchase to the user and GA4 session that started it.
+    metadata: buildCheckoutSessionMetadata(organizationId, plan, attribution),
     line_items: lineItems,
     subscription_data: subscriptionData,
     payment_method_collection: "always",
@@ -376,11 +386,13 @@ const createCheckoutSessionUnlocked = async ({
  * The DB row is optimistically updated (plan, seats, item ids); the
  * `customer.subscription.updated` webhook re-projects the full state
  * (discounts, period) with its deep expand and stays authoritative.
+ *
+ * Returns the plan the subscription was switched away from.
  */
 export const changeSubscriptionPlan = async (
   organizationId: string,
   newPlan: PaidPlanKey,
-): Promise<void> => {
+): Promise<{ fromPlan: PaidPlanKey }> => {
   const existing = await getSubscriptionByOrganizationId(organizationId);
   if (
     !existing?.stripeSubscriptionId ||
@@ -487,6 +499,8 @@ export const changeSubscriptionPlan = async (
       updatedAt: new Date(),
     })
     .where(eq(subscription.organizationId, organizationId));
+
+  return { fromPlan: currentPlan };
 };
 
 /**

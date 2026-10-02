@@ -363,7 +363,8 @@ router.post(
         entityId: task.id,
         entityName: task.title,
         action: "created",
-        metadata: { milestoneId: task.milestoneId },
+        // `restored` keeps an undo out of the task_created analytics count.
+        metadata: { milestoneId: task.milestoneId, restored: true },
       });
 
       return c.json({ task }, 201);

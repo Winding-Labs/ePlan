@@ -331,6 +331,8 @@ router.post(
         entityId: milestone.id,
         entityName: milestone.title,
         action: "created",
+        // `restored` keeps an undo out of the milestone_created analytics count.
+        metadata: { restored: true },
       });
 
       return c.json({ milestone }, 201);

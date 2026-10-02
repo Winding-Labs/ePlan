@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 
+import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
 import {
   activateStarterPlan,
   assertProjectCreationAllowed,
@@ -26,7 +27,7 @@ import {
 } from "@wildfires-org/turboplan-workspace/types";
 
 import { sendMagicLinkEmail } from "@/lib/email/send-magic-link";
-import { aliasAnonymousId, captureServerEvent } from "@/lib/server-analytics";
+import { aliasAnonymousId, trackAnalyticsEvent } from "@/lib/server-analytics";
 import { buildAttributionEventProperties } from "@/lib/signup-attribution";
 import { buildMagicLinkUrl } from "../(auth)/actions";
 import {
@@ -120,10 +121,15 @@ export async function createUserWithOrganization(
     if (attribution?.ph_did) {
       aliasAnonymousId(newUser.id, attribution.ph_did);
     }
-    captureServerEvent(newUser.id, "user_signed_up", {
-      signup_flow: "self_service",
-      ...buildAttributionEventProperties(attribution),
-    });
+    trackAnalyticsEvent(
+      ANALYTICS_EVENTS.USER_SIGNED_UP,
+      { distinctId: newUser.id, userId: newUser.id },
+      {
+        signup_flow: "self_service",
+        method: "self_service",
+        ...buildAttributionEventProperties(attribution),
+      },
+    );
 
     // The project is always created in the user's PERSONAL workspace: the
     // personal org plus its single "My Projects" office, both created together
@@ -220,6 +226,18 @@ export async function createUserWithOrganization(
     });
 
     const { targetOrg, targetOffice, newProject } = result;
+
+    trackAnalyticsEvent(
+      ANALYTICS_EVENTS.PROJECT_CREATED,
+      {
+        distinctId: newUser.id,
+        userId: newUser.id,
+        organizationId: targetOrg.id,
+        officeId: targetOffice.id,
+        projectId: newProject.id,
+      },
+      { from_template: false, flow: "self_service" },
+    );
 
     // No billing gate here by design: this is the signup flow creating the
     // FIRST project in a brand-new personal org, always within the Starter

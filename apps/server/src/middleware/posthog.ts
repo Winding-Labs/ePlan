@@ -1,30 +1,41 @@
 import type { Context, Next } from "hono";
+import { tryGetContext } from "hono/context-storage";
 import { PostHog } from "posthog-node";
 
+import {
+  readGa4Identity,
+  resolveAnalyticsDestinations,
+} from "@wildfires-org/turboplan-analytics";
+import {
+  configureServerAnalytics,
+  flushGa4Events,
+  trackServerEvent,
+} from "@wildfires-org/turboplan-analytics/server";
 import { getApiEnv } from "@wildfires-org/turboplan-env";
 
 import { redactSensitiveUrl } from "../utils/sentry.js";
-import type {
-  AnalyticsEvent,
-  AnalyticsEventProperties,
-} from "./analytics-events.js";
 
-const ENV = getApiEnv();
+/** The request-scoped variables analytics reads (set by the auth middleware). */
+type AnalyticsRequestEnv = {
+  Variables: { user?: { userId?: string } };
+};
 
 // Singleton PostHog client instance
 let posthogClient: PostHog | null = null;
 
 /**
  * Returns the PostHog client instance.
- * Returns null if POSTHOG_API_KEY is not configured.
+ * Returns null when no PostHog project token is configured (see
+ * `resolveAnalyticsDestinations`).
  */
 export const getPostHogClient = (): PostHog | null => {
-  if (!ENV.POSTHOG_API_KEY) {
+  const token = resolveAnalyticsDestinations().posthog?.token;
+  if (!token) {
     return null;
   }
 
   if (!posthogClient) {
-    posthogClient = new PostHog(ENV.POSTHOG_API_KEY, {
+    posthogClient = new PostHog(token, {
       host: "https://us.i.posthog.com",
       enableExceptionAutocapture: true,
     });
@@ -33,47 +44,64 @@ export const getPostHogClient = (): PostHog | null => {
   return posthogClient;
 };
 
+const flushPostHog = async (): Promise<void> => {
+  await getPostHogClient()?.flush();
+};
+
 /**
- * Middleware that flushes PostHog events after each request.
+ * Middleware that flushes PostHog and GA4 events after each request.
  * This ensures events are sent even for short-lived serverless functions.
+ * A failed flush is logged, never surfaced to the response.
  */
 export const posthogMiddleware = async (c: Context, next: Next) => {
   await next();
 
-  const client = getPostHogClient();
-  if (client) {
-    await client.flush();
+  const results = await Promise.allSettled([flushPostHog(), flushGa4Events()]);
+  for (const result of results) {
+    if (result.status === "rejected") {
+      console.error("[analytics] flush failed:", result.reason);
+    }
   }
 };
 
 /**
- * Captures a product analytics event. Fire-and-forget — never throws, no-ops
- * when POSTHOG_API_KEY is unset. Delivery is guaranteed by the flush
- * middleware, which is registered before every route group.
+ * Registers this process's sink behind `trackAnalyticsEvent` — the one
+ * pathway every package emits through. Identity comes from the current
+ * request when there is one (Hono context storage): the authenticated user
+ * fills `userId` (GA4 `user_id`) when the caller left it out, and the `_ga`
+ * cookies join the GA4 hit to the visitor's session, and through it to the
+ * ad click. Background calls with no request (e.g. the Stripe webhook's
+ * purchase) carry their GA4 identity in the event properties instead.
+ * Delivery is guaranteed by `posthogMiddleware`, which wraps every route.
+ *
+ * `environment` is resolved once by the caller at bootstrap, so no emit
+ * depends on re-reading the validated env.
  */
-export const captureEvent = (
-  distinctId: string,
-  event: AnalyticsEvent,
-  properties?: AnalyticsEventProperties,
-) => {
-  const client = getPostHogClient();
-  if (!client) {
-    return;
-  }
+export const registerApiAnalyticsSink = ({
+  environment,
+}: {
+  environment: string;
+}) => {
+  const baseProperties = { service: "api", environment };
 
-  try {
-    client.capture({
-      distinctId,
+  configureServerAnalytics((event, context, extra) => {
+    const c = tryGetContext<AnalyticsRequestEnv>();
+    const ga4Identity = readGa4Identity(
+      c?.req.header("cookie"),
+      resolveAnalyticsDestinations().ga4?.measurementId,
+    );
+
+    trackServerEvent(
+      { posthog: getPostHogClient(), baseProperties },
       event,
-      properties: {
-        service: "api",
-        environment: ENV.NODE_ENV,
-        ...properties,
+      {
+        ...context,
+        userId: context.userId ?? c?.get("user")?.userId ?? null,
       },
-    });
-  } catch (error) {
-    console.error("PostHog captureEvent failed:", error);
-  }
+      extra,
+      ga4Identity,
+    );
+  });
 };
 
 /**
@@ -85,7 +113,7 @@ export const capturePosthogError = (error: Error) => {
   if (!client) return;
 
   client.captureException(error, "system", {
-    environment: ENV.NODE_ENV,
+    environment: getApiEnv().NODE_ENV,
   });
 };
 
@@ -107,7 +135,7 @@ export const capturePosthogException = async (
   const userId = distinctId || c.get("user")?.userId || "anonymous";
 
   client.captureException(error, userId, {
-    environment: ENV.NODE_ENV,
+    environment: getApiEnv().NODE_ENV,
     path: c.req.path,
     method: c.req.method,
     // Redact sensitive query params (upload/magic-link tokens) before they

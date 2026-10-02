@@ -4,6 +4,12 @@ import { type Context, Hono } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { z } from "zod";
 
+import {
+  ANALYTICS_EVENTS,
+  readGa4Identity,
+  resolveAnalyticsDestinations,
+} from "@wildfires-org/turboplan-analytics";
+import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
 import { organization } from "@wildfires-org/turboplan-db";
 import { db } from "@wildfires-org/turboplan-db/db-client";
 import { getApiEnv } from "@wildfires-org/turboplan-env";
@@ -31,7 +37,7 @@ import {
   PLANS,
   type PlanKey,
 } from "../types";
-import { buildCheckoutStartedEvent, emitBillingAnalytics } from "./analytics";
+import { billingActorContext, buildCheckoutStartedEvent } from "./analytics";
 import { getCreditUsage } from "./credits";
 import {
   getProjectCreationEntitlement,
@@ -452,6 +458,14 @@ billingRouter.post(
           ? `${landingBase}/?checkout=cancelled`
           : `${env.TURBOPLAN_URL}/organizations/${org.slug}/billing?checkout=cancelled`;
 
+    // The browser's GA4 client + session (from the `_ga` cookies, sent with
+    // the credentialed request) travel in the session metadata, so the
+    // webhook's purchase event lands on the same GA session as the ad click.
+    const ga4Identity = readGa4Identity(
+      c.req.header("cookie"),
+      resolveAnalyticsDestinations().ga4?.measurementId,
+    );
+
     try {
       const url = await createCheckoutSession({
         organizationId,
@@ -460,14 +474,26 @@ billingRouter.post(
         name: org.name,
         successUrl,
         cancelUrl,
+        attribution: {
+          userId: user.userId,
+          gaClientId: ga4Identity.clientId,
+          gaSessionId: ga4Identity.sessionId,
+        },
       });
 
       // Keyed by the user who started checkout, so it joins the person funnel
-      // that leads here. organization_id rides in the properties, which is how
+      // that leads here. The organization rides in the context, which is how
       // it joins the webhook-side subscription events (those are org-keyed —
       // Stripe gives them no user context).
-      emitBillingAnalytics(
-        buildCheckoutStartedEvent(organizationId, user.userId, plan),
+      const checkoutStarted = buildCheckoutStartedEvent(
+        organizationId,
+        user.userId,
+        plan,
+      );
+      trackAnalyticsEvent(
+        checkoutStarted.event,
+        checkoutStarted.context,
+        checkoutStarted.extra,
       );
 
       return c.json({ url });
@@ -499,6 +525,11 @@ billingRouter.post(
 
     try {
       await activateStarterPlan(organizationId);
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.PLAN_SELECTED,
+        billingActorContext(c.get("user").userId, organizationId),
+        { plan: "starter" },
+      );
       return c.json({ ok: true });
     } catch (error) {
       return billingErrorResponse(c, error);
@@ -548,7 +579,12 @@ billingRouter.post(
     }
 
     try {
-      await changeSubscriptionPlan(organizationId, plan);
+      const { fromPlan } = await changeSubscriptionPlan(organizationId, plan);
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.PLAN_CHANGED,
+        billingActorContext(c.get("user").userId, organizationId),
+        { from_plan: fromPlan, to_plan: plan },
+      );
       return c.json({ ok: true, plan });
     } catch (error) {
       return billingErrorResponse(c, error);
@@ -620,6 +656,10 @@ billingRouter.post(
 
     try {
       const result = await cancelSubscriptionAtPeriodEnd(organizationId);
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.SUBSCRIPTION_CANCEL_REQUESTED,
+        billingActorContext(c.get("user").userId, organizationId),
+      );
       return c.json({ success: true, ...result });
     } catch (error) {
       // Map billing-domain guards (NO_ACTIVE_SUBSCRIPTION / ALREADY_CANCELING) to
@@ -647,6 +687,10 @@ billingRouter.post(
 
     try {
       const result = await resumeSubscription(organizationId);
+      trackAnalyticsEvent(
+        ANALYTICS_EVENTS.SUBSCRIPTION_RESUMED,
+        billingActorContext(c.get("user").userId, organizationId),
+      );
       return c.json({ success: true, ...result });
     } catch (error) {
       return billingErrorResponse(c, error);
