@@ -34,10 +34,17 @@ export { useProjectDocuments } from "./hooks/use-project-documents";
 // Types
 export type {
   ProjectDocument,
+  ProjectDocumentExtractionStatus,
   ProjectDocumentSource,
+  ProjectDocumentText,
   ProjectDocumentUploader,
   UseProjectDocumentsOptions,
   UseProjectDocumentsReturn,
 } from "./types";
 // Non-hook helpers
+export {
+  EXTRACTION_STALE_AFTER_MS,
+  getMsUntilExtractionStale,
+  isExtractionStale,
+} from "./types";
 export { uploadBlobToProject } from "./upload-blob-to-project";
