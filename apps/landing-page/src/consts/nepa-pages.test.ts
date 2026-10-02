@@ -1,6 +1,7 @@
 import { PLANS } from "@wildfires-org/turboplan-billing/types";
 
 import { orderCitations } from "@/lib/nepa-citations";
+import { DESCRIPTION_MAX_LENGTH, TITLE_MAX_LENGTH } from "@/lib/site-url";
 import { NEPA_GUIDE_LINKS } from "./nepa-guide-links";
 import {
   NEPA_PAGES,
@@ -45,8 +46,13 @@ describe("NEPA guide pages", () => {
       expect(new Set(values).size).toBe(values.length);
     }
     NEPA_PAGES.forEach((page) => {
-      expect(page.title.length).toBeLessThanOrEqual(60);
-      expect(page.description.length).toBeLessThanOrEqual(160);
+      // The rendered <title> carries the brand suffix.
+      expect(`${page.title} | ePlan.ai`.length).toBeLessThanOrEqual(
+        TITLE_MAX_LENGTH,
+      );
+      expect(page.description.length).toBeLessThanOrEqual(
+        DESCRIPTION_MAX_LENGTH,
+      );
     });
   });
 

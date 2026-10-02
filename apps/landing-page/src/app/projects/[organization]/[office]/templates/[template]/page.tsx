@@ -25,6 +25,7 @@ import { PublicModuleSection } from "@/components/public-project/public-module-s
 import { PublicTasksSection } from "@/components/public-project/public-tasks-section";
 import { ReadOnlyModulesRenderer } from "@/components/public-project/read-only-modules-renderer";
 import { brand } from "@/lib/brand";
+import { indexableRobots } from "@/lib/site-url";
 import { cn } from "@/lib/utils";
 import { routing } from "@/utils/routing";
 
@@ -170,8 +171,9 @@ export async function generateMetadata({
   return {
     title,
     description,
-    // Server-rendered detail page: opt back in from the catalog's noindex.
-    robots: { index: true, follow: true },
+    // Server-rendered detail page: opt back in from the catalog's noindex
+    // (on production only).
+    robots: indexableRobots(),
     alternates: {
       canonical: routing.catalogTemplate({
         organizationSlug: organization,

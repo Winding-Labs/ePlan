@@ -448,7 +448,7 @@ function SourcesSection({ sourceKeys }: { sourceKeys: SourceKey[] }) {
           <h2 className={H2_CLASS}>Where each statement comes from</h2>
           <p className={cn(SECTION_LEAD_CLASS, "font-normal")}>
             Legal statements cite the statute, the Federal Register, agency
-            procedures or court opinions; product statements cite the maker's
+            procedures or court opinions; product statements cite the maker’s
             own pages. Each source was read on{" "}
             {formatDate(NEPA_SOURCES_READ_ON)}.
           </p>

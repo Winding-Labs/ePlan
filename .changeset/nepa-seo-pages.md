@@ -19,6 +19,12 @@ Add SEO basics and six NEPA guide pages to the landing page.
   opens the existing signup flow prefilled per page (or from the
   `projectDescription` URL param), the product showcase, pricing, an FAQ with
   FAQPage JSON-LD, BreadcrumbList JSON-LD and related guides.
+- Metadata resolves before the `<head>` is sent for every user agent
+  (`htmlLimitedBots: /.*/`), so titles and canonicals are never streamed into
+  `<body>`. Pages link the existing favicon (16–48px). Only https://eplan.ai is
+  indexable: elsewhere robots.txt disallows everything and pages carry
+  `noindex`. The prompt textarea and the hero's file input have accessible
+  labels.
 - The footer links every guide page. `Faq` takes `items`, `CtaBottom` can skip
   its footer, and `FeatureShowcase` can show a subset of slides; the home page
   is unchanged.

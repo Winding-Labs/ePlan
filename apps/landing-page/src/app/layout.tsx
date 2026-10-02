@@ -30,6 +30,7 @@ import AnalyticsContextProvider, {
 import GlobalProvider from "@/context/global";
 import { brand } from "@/lib/brand";
 import { resolveMetadataBase } from "@/lib/metadata-base";
+import { indexableRobots } from "@/lib/site-url";
 import { cn } from "@/lib/utils";
 import "../globals.css";
 dotenv.config();
@@ -118,6 +119,12 @@ export const metadata: Metadata = {
     title: `${APP_TITLE} | ${APP_TAGLINE}`,
     description: APP_DESCRIPTION,
     images: [brand.ogImage],
+  },
+  // Only eplan.ai is indexed; staging and PR previews get noindex.
+  robots: indexableRobots(),
+  // public/favicon.ico holds 16, 32 and 48px images.
+  icons: {
+    icon: [{ url: "/favicon.ico", sizes: "16x16 32x32 48x48" }],
   },
 };
 

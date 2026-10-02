@@ -31,6 +31,7 @@ import { PublicTasksSection } from "@/components/public-project/public-tasks-sec
 import { PublicTimelineSection } from "@/components/public-project/public-timeline-section";
 import { ReadOnlyModulesRenderer } from "@/components/public-project/read-only-modules-renderer";
 import { brand } from "@/lib/brand";
+import { indexableRobots } from "@/lib/site-url";
 import { routing } from "@/utils/routing";
 
 interface PublicProjectDetail {
@@ -246,8 +247,9 @@ export async function generateMetadata({
   return {
     title,
     description,
-    // Server-rendered detail page: opt back in from the catalog's noindex.
-    robots: { index: true, follow: true },
+    // Server-rendered detail page: opt back in from the catalog's noindex
+    // (on production only).
+    robots: indexableRobots(),
     alternates: {
       canonical: routing.catalogProject({
         organizationSlug: organization,

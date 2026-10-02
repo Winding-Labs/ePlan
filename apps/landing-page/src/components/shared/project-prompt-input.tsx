@@ -206,6 +206,7 @@ export function ProjectPromptInput({
               }
             }}
             placeholder={placeholder}
+            aria-label="Describe your project"
             className={cn(
               baseInputClassName,
               "textarea-nowrap leading-snug md:leading-normal",
@@ -219,6 +220,7 @@ export function ProjectPromptInput({
             value={inputValue}
             onChange={handleChange}
             placeholder={placeholder}
+            aria-label="Describe your project"
             className={cn(baseInputClassName, inputClassName)}
           />
         )}

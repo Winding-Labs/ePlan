@@ -414,7 +414,7 @@ const categoricalExclusions: NepaPageEntry = {
   name: "Categorical exclusions",
   title: "NEPA Categorical Exclusion Checklist & Examples",
   description:
-    "What a NEPA categorical exclusion is, how extraordinary circumstances are checked, what a CE decision memo contains, and CE examples, cited to current law.",
+    "What a NEPA categorical exclusion is, how extraordinary circumstances are screened, what a CE decision memo contains, with examples and sources.",
   eyebrow: "Categorical exclusions",
   h1: "NEPA categorical exclusions: checklist, examples and the CE decision memo",
   answer:
@@ -556,7 +556,7 @@ const nepaProcess: NepaPageEntry = {
   name: "NEPA process",
   title: "NEPA Process & Documentation: CE, EA, EIS, ROD",
   description:
-    "How a NEPA review works after the 2023 amendments and the 2025 removal of CEQ's rules: threshold checks, CE, EA and FONSI, EIS and the record of decision.",
+    "How a NEPA review works since the 2023 amendments and CEQ's 2025 rule removal: threshold check, CE, EA and FONSI, EIS, record of decision.",
   eyebrow: "NEPA process",
   h1: "The NEPA process: from the first check to the record of decision",
   answer:
@@ -691,7 +691,7 @@ const environmentalAssessment: NepaPageEntry = {
   name: "Environmental assessment",
   title: "NEPA Environmental Assessment (EA) & FONSI Guide",
   description:
-    "When an EA is required, the 75-page and one-year limits, what an EA and a FONSI contain, and a section-by-section EA outline, cited to current law.",
+    "When an EA is required, its 75-page and one-year limits, what an EA and FONSI contain, and a section-by-section EA template, with sources.",
   eyebrow: "Environmental assessment",
   h1: "NEPA environmental assessments and the FONSI",
   answer:
@@ -930,7 +930,7 @@ const scopingLetter: NepaPageEntry = {
 const nepaSoftware: NepaPageEntry = {
   path: "/nepa-software",
   name: "NEPA software",
-  title: "NEPA Software: AI Drafting for Environmental Review",
+  title: "NEPA Software: AI Environmental Review Drafting",
   description:
     "ePlan drafts scoping letters, CE decision memos and EAs that cite the regulation and project location they come from. People review and decide.",
   eyebrow: "NEPA software",

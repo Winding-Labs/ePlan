@@ -10,11 +10,10 @@ import { Hero } from "@/components/home-v2/hero";
 import { LogoMarquee } from "@/components/home-v2/logo-marquee";
 import { Pricing } from "@/components/home-v2/pricing";
 import { Skeleton } from "@/components/ui/skeleton";
+import { HOME_DESCRIPTION, HOME_TAGLINE } from "@/consts/home-metadata";
 import { brand } from "@/lib/brand";
 
-const HOME_TITLE = `${brand.name} | AI NEPA Workspace for Environmental Planning`;
-const HOME_DESCRIPTION =
-  "The AI-native NEPA workspace: draft scoping letters, categorical exclusion decision memos and environmental assessments that cite the regulation and project location they were built from.";
+const HOME_TITLE = `${brand.name} | ${HOME_TAGLINE}`;
 
 // A server component so it can export metadata; every section below is its
 // own client component.
