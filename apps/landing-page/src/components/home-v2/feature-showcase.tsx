@@ -47,9 +47,19 @@ const TAB_SHRINK_DURATION_MS = 250;
 interface FeatureShowcaseProps {
   // Entrance delay, so the card can join a surrounding reveal sequence.
   revealDelay?: number;
+  // Which slides to show, in order. Defaults to all four (the homepage).
+  slides?: SlideType[];
 }
 
-export function FeatureShowcase({ revealDelay = 0 }: FeatureShowcaseProps) {
+export function FeatureShowcase({
+  revealDelay = 0,
+  slides,
+}: FeatureShowcaseProps) {
+  const tabs = slides
+    ? TABS.filter((tab) => slides.includes(tab.type)).sort(
+        (a, b) => slides.indexOf(a.type) - slides.indexOf(b.type),
+      )
+    : TABS;
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { amount: 0.4 });
   const prefersReducedMotion = useReducedMotion();
@@ -92,7 +102,7 @@ export function FeatureShowcase({ revealDelay = 0 }: FeatureShowcaseProps) {
 
   const handleTabEnd = () => {
     setExiting(active);
-    setActive((prev) => (prev + 1) % TABS.length);
+    setActive((prev) => (prev + 1) % tabs.length);
     setPhase((p) => p + 1);
   };
 
@@ -109,7 +119,7 @@ export function FeatureShowcase({ revealDelay = 0 }: FeatureShowcaseProps) {
         <div className={PAGE_CONTAINER}>
           <div className="glass-card flex w-full flex-col items-center gap-4 rounded-[28px] p-2.5">
             <ShowcaseTabs
-              tabs={TABS}
+              tabs={tabs}
               active={active}
               exiting={exiting}
               phase={phase}
@@ -124,7 +134,7 @@ export function FeatureShowcase({ revealDelay = 0 }: FeatureShowcaseProps) {
                 tallest one and tab switches never change the card height; the
                 active one crossfades in while the others go `invisible`. */}
             <div className="grid w-full max-w-[640px] px-4">
-              {TABS.map((tab, index) => (
+              {tabs.map((tab, index) => (
                 <p
                   key={tab.type}
                   aria-hidden={index !== active}
@@ -148,7 +158,7 @@ export function FeatureShowcase({ revealDelay = 0 }: FeatureShowcaseProps) {
                 window fit on one screen below the sticky navbar; `/ var(--ui-scale)` undoes the body
                 zoom that viewport units would otherwise get twice. */}
             <div className="relative h-[540px] w-full overflow-hidden rounded-2xl md:h-[600px] lg:h-[clamp(520px,calc(100svh/var(--ui-scale)_-_250px),640px)]">
-              {TABS.map((tab, index) => {
+              {tabs.map((tab, index) => {
                 const isActive = index === active;
                 return (
                   <div
