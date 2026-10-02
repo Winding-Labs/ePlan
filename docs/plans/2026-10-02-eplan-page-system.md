@@ -113,12 +113,18 @@ number is inflated by grouping.
 - **#35's template and URL scheme are the system.** ePlan #34 (analytics, open) also adds
   five `/templates/<slug>` pages for the same keywords. That would put two pages on each
   keyword.
-  - **Resolution:** #34 drops its `/templates` route and data file before it merges, and
-    keeps the analytics, root title and description.
-  - The two documents #35 lacks (EIS, CEQA Initial Study) move into #35's data file at the
-    URLs below. #34's outlines become their outline sections.
-  - If #34 merges first, R1 deletes the route and 308s each `/templates/<slug>` to its
-    guide URL.
+  - **Resolution, in one move:** #34 merges with `/templates` as it is, and nothing links
+    to it yet. eplan-89's SEO fix pack 1 (branched from #34's 87c5651) does the cutover
+    in a single PR:
+    1. ports the EIS and CEQA Initial Study content out of
+       `consts/document-templates.ts` into #35's data file;
+    2. 308s every `/templates/<slug>` to its guide URL;
+    3. updates the sitemap;
+    4. deletes the `/templates` route and data file.
+
+    So there is no window where a page exists on neither path, and no content is pulled
+    from under the port. Nothing is live (0 campaigns), so a short-lived `/templates`
+    costs nothing.
 - **One rename from #35: `/categorical-exclusions` → `/nepa/categorical-exclusion`.** It
   sits under the NEPA family and uses the singular the keyword uses ("nepa categorical
   exclusion" 390). The old path and `/templates/categorical-exclusion-decision-memo` 308 to
@@ -325,7 +331,7 @@ Each group also pins its keyword headline, for example "NEPA Categorical Exclusi
 
 | Round | Builds | Done when |
 |---|---|---|
-| **R0** | `/privacy`, `/terms`, the www redirect, app.eplan.ai noindex. The citation/location claim fixed in the eplan.ai copy. #35 and #34 merge with **one** page system (#34 drops `/templates`). ash spec v1.1: final URLs, a display path per group, the headline bank above. Search Console. | All four R0 URLs answer 200 or redirect. `/templates/*` is absent or 308s. Tag Assistant shows the #34 tags on eplan.ai. GA4 is linked to Ads. ash `bootstrap eplan` (PAUSED) → `conversions-setup` → **owner go** → enable 4 groups + Brand. |
+| **R0** | `/privacy`, `/terms`, the www redirect, app.eplan.ai noindex. The citation/location claim fixed in the eplan.ai copy. #35 and #34 merge (#34 keeps `/templates` until fix pack 1 cuts it over). ash spec v1.1: final URLs, a display path per group, the headline bank above. Search Console. | All four R0 URLs answer 200 or redirect. `/templates/*` is absent or 308s. Tag Assistant shows the #34 tags on eplan.ai. GA4 is linked to Ads. ash `bootstrap eplan` (PAUSED) → `conversions-setup` → **owner go** → enable 4 groups + Brand. |
 | **R1** (eplan-89's SEO fix pack 1 covers the URL half) | Template registry, page kinds, per-family data files and the keyword-contract test. The `/nepa/categorical-exclusion` rename + 308s. `/nepa/environmental-impact-statement`. `/ceqa/initial-study`. Corrected keywords on #35's six pages (§3). | The keyword test goes red on an injected duplicate primary keyword (canary). Both new pages answer 200. Old paths 308. Enable Initial Study & MND. |
 | **R2** | `/ceqa`, `/ceqa/exemptions`, `/ceqa/environmental-impact-report`, `/ceqa/ceqa-and-nepa`, `/nepa/regulations` | 200s plus GSC indexing requested. CEQA documents (→ `/ceqa`) and NEPA regulations are enabled. An EIR/NOD group is added on `/ceqa/environmental-impact-report`. The exemptions group waits for the product to draft an NOE. |
 | **R3** | `/section-106`, `/hud-environmental-review`, `/esa-section-7`, six `/nepa/agencies/*` pages | 200s. Each probe group is enabled only once the product drafts that document (owner decides the order). |
@@ -358,8 +364,8 @@ Every round is checked the way #35 checked itself:
 
 ## 7. Owner decisions
 
-1. **Approve one page system on #35's URLs.** #34 drops `/templates`, and the ads move to
-   #35's URLs.
+1. **Approve one page system on #35's URLs.** Fix pack 1 moves `/templates` to them with
+   308s, and the ads land on the new URLs.
 2. **Who writes `/privacy` and `/terms`?** This is a legal call: template or counsel.
    Nothing can spend until both exist.
 3. **The order in which the product learns new documents.** The R3/R4 ad groups wait on
