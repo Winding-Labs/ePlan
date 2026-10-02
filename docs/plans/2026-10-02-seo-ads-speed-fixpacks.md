@@ -1,6 +1,6 @@
 # eplan.ai: SEO, ad landing pages and speed, in fix-pack rounds (2026-10-02)
 
-Status: **Round 1 in progress** (branch `feat/seo-fixpack-1`, stacked on #34).
+Status: **Round 1 in review as #37** (branch `feat/seo-fixpack-1`, base `develop`; #34 merged 2026-10-02).
 Builds on `2026-10-02-seo-ads-analytics-audit.md` (technical SEO basics, shipped in
 #34) and `2026-10-02-analytics-master-pattern.md` (tracking, #34). This plan covers
 what those leave open outside the page system, which dash-0b owns (#35/#36): legal
@@ -108,9 +108,8 @@ Each round is one PR (one fix pack). The steps:
   browser is idle.
 - `src/app/icon.png` (≥ 192 px) + `apple-icon.png`; resize the og image to
   1200×630 and under 300 KB.
-- Slug truncation fix plus a 301 for the broken office URL. Server-render the
-  catalog lists (SWR `fallback`), and generate a dynamic sitemap from the public
-  API.
+- Server-render the catalog lists (SWR `fallback`), and generate a dynamic sitemap
+  from the public API. (#34 already fixed the broken office slug in migration 0003.)
 - Ask dash-0b, who owns the hero: render the hero H1 visible on first paint.
   Today `ScrollReveal` server-renders it with `opacity:0`, which is most of the
   mobile LCP.
