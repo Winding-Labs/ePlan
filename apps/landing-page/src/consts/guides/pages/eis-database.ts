@@ -43,7 +43,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/eis-database",
   title: "EIS Database: How to Search EPA's EIS Records",
   description:
-    "How to search EPA's EIS database by title, agency and state, read a record, and download EISs and comment letters.",
+    "How to search EPA's EIS database by title, agency and state, read a record, and download the EISs and comment letters it holds.",
   eyebrow: "EIS database",
   h1: "The EPA EIS database: search, read and download environmental impact statements",
   primaryKeyword: "eis database",

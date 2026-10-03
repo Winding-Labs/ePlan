@@ -123,7 +123,7 @@ export const MANUAL_COMPARISON_BASE: ManualComparisonRow[] = [
   },
   {
     label: "Cost to start",
-    eplan: `Scoping letters on the free plan; EAs, EIRs and decision memos on Max at $${PLANS.max.price_usd} a month`,
+    eplan: `Scoping letters are free. EAs, EIRs and decision memos are on Max at $${PLANS.max.price_usd} a month`,
     manual: "Staff or consultant hours for every draft",
   },
 ];

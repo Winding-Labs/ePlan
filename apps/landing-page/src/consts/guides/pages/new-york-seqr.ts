@@ -76,9 +76,9 @@ export const sources = {
 
 export const entry: GuideContent<GuidePath> = {
   path: "/for/new-york-seqr",
-  title: "SEQRA Guide: Full EAF, Type II & 2026 Changes",
+  title: "SEQRA and SEQR Guide: Full EAF, Type II, 2026",
   description:
-    "New York SEQRA step by step: Type I, Type II and Unlisted actions, the Full EAF, declarations and the 2026 amendments.",
+    "New York SEQRA and SEQR step by step: Type I, Type II and Unlisted actions, the Full EAF, declarations and the 2026 amendments.",
   eyebrow: "New York SEQRA",
   h1: "SEQRA guide: New York's environmental review, from the Full EAF to findings",
   primaryKeyword: "seqra",

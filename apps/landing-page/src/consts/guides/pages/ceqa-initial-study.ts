@@ -92,7 +92,7 @@ export const entry: GuideContent<GuidePath> = {
   description:
     "What a CEQA initial study contains, the Appendix G checklist, when it leads to an ND, an MND or an EIR, and review periods.",
   eyebrow: "Initial study",
-  h1: "The CEQA initial study: Appendix G checklist, negative declarations and MNDs",
+  h1: "The CEQA initial study: Appendix G, negative declarations and mitigated negative declarations",
   primaryKeyword: "ceqa initial study",
   secondaryKeywords: [
     "mitigated negative declaration",

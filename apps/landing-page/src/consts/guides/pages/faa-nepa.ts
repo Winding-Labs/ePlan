@@ -50,7 +50,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/faa-nepa",
   title: "FAA NEPA: Order 1050.1G, CATEXs & Airport EAs",
   description:
-    "FAA NEPA under Order 1050.1G: when NEPA applies to FAA actions, categorical exclusions, and airport EAs and EISs.",
+    "FAA NEPA under Order 1050.1G: when NEPA applies to FAA actions, categorical exclusions (CATEXs), and airport EAs and EISs.",
   eyebrow: "FAA and airports",
   h1: "FAA NEPA: Order 1050.1G, categorical exclusions and airport environmental assessments",
   primaryKeyword: "faa nepa",

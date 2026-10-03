@@ -121,7 +121,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/hud-environmental-review",
   title: "24 CFR Part 58: HUD Environmental Review Guide",
   description:
-    "How a HUD environmental review works under 24 CFR Part 58: levels of review, the ERR, public notices and the RROF.",
+    "How a HUD environmental review works under 24 CFR Part 58: exemptions, levels of review, the ERR, public notices and the RROF.",
   eyebrow: "HUD environmental review",
   h1: "24 CFR Part 58: how a HUD environmental review works, from exemption to release of funds",
   primaryKeyword: "24 cfr part 58",

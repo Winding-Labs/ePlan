@@ -46,7 +46,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/nepassist",
   title: "NEPAssist: EPA's Environmental Screening Map",
   description:
-    "What EPA's NEPAssist screening tool reports, the layers it maps, and how to use its report in an affected environment.",
+    "What EPA's NEPAssist screening tool reports, the map layers it draws on, and how to use its report in an affected environment section.",
   eyebrow: "NEPAssist",
   h1: "NEPAssist: what EPA's screening map reports and how to use it in a NEPA review",
   primaryKeyword: "nepassist",

@@ -84,7 +84,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/esa-section-7",
   title: "ESA Section 7: Consultation Steps & BA Guide",
   description:
-    "How ESA section 7 consultation works: IPaC species lists, biological assessments, informal vs formal consultation, timelines.",
+    "How Endangered Species Act section 7 consultation works: IPaC species lists, biological assessments, informal vs formal, timelines.",
   eyebrow: "ESA Section 7",
   h1: "ESA section 7 consultation: biological assessments, opinions and timelines",
   primaryKeyword: "esa section 7",
@@ -93,7 +93,6 @@ export const entry: GuideContent<GuidePath> = {
     "biological assessment",
     "endangered species act section 7",
     "biological opinion",
-    "ipac",
   ],
   document: "Biological Assessment",
   answer:

@@ -11,11 +11,7 @@ const nepaSoftware: GuideContent<GuidePath> = {
   eyebrow: "NEPA software",
   h1: "NEPA software that drafts the document and marks what to check",
   primaryKeyword: "nepa software",
-  secondaryKeywords: [
-    "nepa ai",
-    "environmental review software",
-    "ai permitting",
-  ],
+  secondaryKeywords: ["nepa ai", "environmental review software"],
   document: "NEPA Document",
   answer:
     "ePlan is NEPA software, or environmental review software, for agency staff and environmental consultants. Describe a project and it drafts the scoping letter, categorical exclusion decision memo or [environmental assessment](/for/nepa-environmental-assessment) from a reference document, marking every fact it could not confirm. Your team reviews, edits and signs; ePlan does not make NEPA determinations.",
@@ -96,7 +92,7 @@ const nepaSoftware: GuideContent<GuidePath> = {
     },
     {
       label: "Plans",
-      value: "Free for scoping letters; Max for EAs, EIRs and decision memos",
+      value: "Scoping letters are free. Max for EAs, EIRs and decision memos",
     },
   ],
   hero: {
@@ -133,11 +129,11 @@ const compareAiTools: GuideContent<GuidePath> = {
   path: "/for/nepa-ai-tools",
   title: "AI Tools for NEPA Review Compared (2026)",
   description:
-    "AI tools for NEPA compared from their own pages: PermitAI, NEPATEC, Radial Spatial, Transect, PermitFlow and ePlan.",
+    "AI tools for NEPA compared from their own pages: PermitAI, NEPATEC, Radial Spatial, Transect, PermitFlow and ePlan, side by side.",
   eyebrow: "Compare",
   h1: "AI tools for NEPA review, compared",
   primaryKeyword: "ai tools for nepa",
-  secondaryKeywords: ["permitai", "nepatec", "nepa ai"],
+  secondaryKeywords: ["permitai", "nepatec"],
   document: "NEPA Document",
   answer:
     "AI tools for NEPA are still few. PNNL's DOE-funded PermitAI offers search, comment and drafting tools, several in beta for federal users [[permitai]] [[permitaiApps]]; NEPATEC is PNNL's open dataset of NEPA documents [[nepatec2]]. Radial Spatial's NEPA AI predicts review pathways from location [[radial]]. Transect screens sites [[transect]]; PermitFlow handles construction permits [[permitflow]]. [ePlan](/for/nepa-software) drafts scoping letters, CE memos and EAs.",

@@ -43,7 +43,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/doe-nepa",
   title: "DOE NEPA: 10 CFR 1021, Procedures and CXs",
   description:
-    "DOE NEPA in 2026: what stays in 10 CFR 1021, the DOE NEPA procedures, categorical exclusions and CX determinations.",
+    "DOE NEPA in 2026: what stays in 10 CFR 1021, the 2026 DOE NEPA procedures, its categorical exclusions and CX determinations.",
   eyebrow: "Department of Energy",
   h1: "DOE NEPA: 10 CFR 1021, the 2026 procedures and CX determinations",
   primaryKeyword: "doe nepa",

@@ -57,7 +57,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/hawaii-hepa",
   title: "HEPA Hawaii: Chapter 343 EA and EIS Guide",
   description:
-    "HEPA Hawaii: what triggers HRS Chapter 343 review, exemptions, the environmental assessment, and a FONSI or EISPN.",
+    "HEPA Hawaii: what triggers HRS Chapter 343 review, its exemptions, the environmental assessment, and a FONSI or an EISPN.",
   eyebrow: "Hawaii HEPA",
   h1: "HEPA Hawaii: when HRS Chapter 343 requires an environmental assessment",
   primaryKeyword: "hepa hawaii",

@@ -105,7 +105,7 @@ export function Navbar() {
   const navLinks: NavLink[] = [
     {
       label: "Pricing",
-      href: routing.pricing(),
+      href: routing.pricingOn(pathname),
       event: events.PRICING_NAV_CLICKED,
       active: false,
     },
@@ -179,7 +179,7 @@ export function Navbar() {
 
   const handleCreateProject = () => {
     captureEvent(events.TRY_IT_CLICKED);
-    router.push(routing.home({ tryIt: "true" }));
+    router.push(routing.tryIt(pathname));
   };
 
   const handleMobileCreateProject = () => {

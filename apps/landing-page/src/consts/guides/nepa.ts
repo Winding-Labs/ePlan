@@ -4,18 +4,18 @@ import type { GuideContent } from "./types";
 
 const nepaProcess: GuideContent<GuidePath> = {
   path: "/for/nepa",
-  title: "What Is NEPA? The NEPA Process, Step by Step",
+  title: "What Is NEPA? NEPA Process & NEPA Documents",
   description:
-    "How a NEPA review works since CEQ's rules were removed: the threshold check, CE, EA and FONSI, EIS and the record of decision.",
+    "How a NEPA review works and the NEPA documents it produces: the threshold check, CE, EA and FONSI, EIS and record of decision.",
   eyebrow: "NEPA process",
   h1: "What is NEPA? The NEPA process, from the first check to the record of decision",
   primaryKeyword: "what is nepa",
   secondaryKeywords: [
     "nepa process",
     "national environmental policy act",
-    "record of decision",
     "nepa review",
     "nepa documentation",
+    "nepa documents",
     "nepa compliance",
   ],
   document: "NEPA Documents",
@@ -236,7 +236,6 @@ const categoricalExclusions: GuideContent<GuidePath> = {
     "categorical exclusion checklist",
     "decision memo",
     "extraordinary circumstances",
-    "23 cfr 771.117",
   ],
   document: "CE Decision Memo",
   answer:
@@ -462,10 +461,8 @@ const environmentalAssessment: GuideContent<GuidePath> = {
     "finding of no significant impact",
     "fonsi",
     "ea vs eis",
-    "environmental assessment example",
     "environmental assessment template",
     "environmental assessment",
-    "environmental assessments",
   ],
   document: "Environmental Assessment",
   answer:
@@ -650,7 +647,7 @@ const scopingLetter: GuideContent<GuidePath> = {
   path: "/for/nepa-scoping-letter",
   title: "NEPA Scoping Letter: Template, Example & Outline",
   description:
-    "What a NEPA scoping letter should include, what the law requires for scoping and comment, and an outline to draft from.",
+    "What a NEPA scoping letter should include, what the law requires for scoping and public comment, and an outline to draft from.",
   eyebrow: "Scoping",
   h1: "NEPA scoping letters: what to include",
   primaryKeyword: "scoping letter",

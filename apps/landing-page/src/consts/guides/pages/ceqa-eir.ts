@@ -222,7 +222,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/ceqa-environmental-impact-report",
   title: "Environmental Impact Report (EIR): CEQA Guide",
   description:
-    "When CEQA requires an EIR, the NOP and scoping, AB 52 consultation, draft and final EIR contents, findings and the NOD.",
+    "When CEQA requires an EIR, the NOP and scoping, AB 52 consultation, draft and final EIR contents, and the notice of determination.",
   eyebrow: "CEQA EIR",
   h1: "The CEQA environmental impact report, from notice of preparation to notice of determination",
   primaryKeyword: "environmental impact report",
