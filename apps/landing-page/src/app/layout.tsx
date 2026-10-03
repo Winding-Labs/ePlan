@@ -6,7 +6,10 @@ import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
-import { AnalyticsPageView } from "@wildfires-org/turboplan-analytics/client";
+import {
+  AhrefsAnalytics,
+  AnalyticsPageView,
+} from "@wildfires-org/turboplan-analytics/client";
 import { getLandingPageEnv } from "@wildfires-org/turboplan-env";
 
 import LayoutWrapper from "@/app/layoutWrapper";
@@ -92,6 +95,7 @@ const inter = Inter({
 const APP_TITLE = brand.name;
 const APP_TAGLINE = SITE_TAGLINE;
 const APP_DESCRIPTION = SITE_DESCRIPTION;
+const AHREFS_SITE_VERIFICATION = getLandingPageEnv().AHREFS_SITE_VERIFICATION;
 
 // Pages set only their own part of the title (or `buildPageMetadata` from
 // lib/seo); the template appends the brand. No canonical here: a
@@ -120,6 +124,12 @@ export const metadata: Metadata = {
   },
   // Only eplan.ai is indexed; staging and PR previews get noindex.
   robots: indexableRobots(),
+  // Proves ownership to Ahrefs Site Audit. Production only.
+  ...(AHREFS_SITE_VERIFICATION && {
+    verification: {
+      other: { "ahrefs-site-verification": AHREFS_SITE_VERIFICATION },
+    },
+  }),
   // public/favicon.ico holds 16, 32 and 48px images.
   icons: {
     icon: [{ url: "/favicon.ico", sizes: "16x16 32x32 48x48" }],
@@ -206,6 +216,7 @@ export default function RootLayout({
         <Suspense>
           <AnalyticsPageView />
         </Suspense>
+        <AhrefsAnalytics />
       </body>
     </html>
   );

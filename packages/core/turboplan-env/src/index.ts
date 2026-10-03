@@ -171,6 +171,9 @@ type LandingPageEnvType = {
   // Server-side only: Required for verifying session cookies from turboplan
   // Must match the AUTH_SECRET used by turboplan app
   AUTH_SECRET: string;
+
+  /** Ahrefs ownership token, rendered as `ahrefs-site-verification` (public). */
+  AHREFS_SITE_VERIFICATION?: string;
 };
 
 export type ResearchAgentEnvType = {
@@ -572,6 +575,8 @@ const loadLandingPageEnv = (): LandingPageEnvType => {
     LANDING_URL:
       process.env.LANDING_URL || process.env.NEXT_PUBLIC_LANDING_URL || "",
     AUTH_SECRET: isServerSide() ? process.env.AUTH_SECRET! : "",
+    AHREFS_SITE_VERIFICATION:
+      process.env.NEXT_PUBLIC_AHREFS_SITE_VERIFICATION || undefined,
   };
 };
 
@@ -881,6 +886,8 @@ export type AnalyticsEnvType = {
   GA_API_SECRET?: string;
   /** Google Ads tag (`AW-…`, public by design). Production only. */
   GOOGLE_ADS_TAG_ID?: string;
+  /** Ahrefs Web Analytics `data-key` (public by design). Production only. */
+  AHREFS_ANALYTICS_KEY?: string;
 };
 
 /**
@@ -905,6 +912,8 @@ export const getAnalyticsEnv = (): AnalyticsEnvType => {
       undefined,
     GA_API_SECRET: process.env.GA_API_SECRET || undefined,
     GOOGLE_ADS_TAG_ID: process.env.NEXT_PUBLIC_GOOGLE_ADS_TAG_ID || undefined,
+    AHREFS_ANALYTICS_KEY:
+      process.env.NEXT_PUBLIC_AHREFS_ANALYTICS_KEY || undefined,
   };
 };
 

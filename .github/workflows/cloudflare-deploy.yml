@@ -378,6 +378,8 @@ jobs:
           NEXT_PUBLIC_POSTHOG_KEY: ${{ vars.NEXT_PUBLIC_POSTHOG_KEY }}
           NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
           NEXT_PUBLIC_GOOGLE_ADS_TAG_ID: ${{ vars.GOOGLE_ADS_TAG_ID }}
+          NEXT_PUBLIC_AHREFS_ANALYTICS_KEY: ${{ vars.AHREFS_ANALYTICS_KEY }}
+          NEXT_PUBLIC_AHREFS_SITE_VERIFICATION: ${{ vars.AHREFS_SITE_VERIFICATION }}
           R2_PUBLIC_URL: ${{ vars.R2_PUBLIC_URL }}
           NEXT_PUBLIC_SENTRY_DSN: ${{ vars.SENTRY_DSN_LANDING }}
           # /checkout (the pricing buttons' target) renders "Billing is not
@@ -411,6 +413,8 @@ jobs:
           NEXT_PUBLIC_POSTHOG_KEY: ${{ vars.NEXT_PUBLIC_POSTHOG_KEY }}
           NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
           NEXT_PUBLIC_GOOGLE_ADS_TAG_ID: ${{ vars.GOOGLE_ADS_TAG_ID }}
+          NEXT_PUBLIC_AHREFS_ANALYTICS_KEY: ${{ vars.AHREFS_ANALYTICS_KEY }}
+          NEXT_PUBLIC_AHREFS_SITE_VERIFICATION: ${{ vars.AHREFS_SITE_VERIFICATION }}
           R2_PUBLIC_URL: ${{ vars.R2_PUBLIC_URL }}
           NEXT_PUBLIC_IS_BILLING_PACKAGE_ENABLED: ${{ vars.FF_IS_BILLING_PACKAGE_ENABLED }}
           # Sentry (optional — monitoring/sourcemap upload disabled when unset)
