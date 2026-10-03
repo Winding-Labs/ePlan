@@ -380,6 +380,9 @@ jobs:
           NEXT_PUBLIC_GOOGLE_ADS_TAG_ID: ${{ vars.GOOGLE_ADS_TAG_ID }}
           R2_PUBLIC_URL: ${{ vars.R2_PUBLIC_URL }}
           NEXT_PUBLIC_SENTRY_DSN: ${{ vars.SENTRY_DSN_LANDING }}
+          # /checkout (the pricing buttons' target) renders "Billing is not
+          # enabled" without it. Same flag as the web build.
+          NEXT_PUBLIC_IS_BILLING_PACKAGE_ENABLED: ${{ vars.FF_IS_BILLING_PACKAGE_ENABLED }}
 
       - name: Deploy
         id: deploy
@@ -409,6 +412,7 @@ jobs:
           NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
           NEXT_PUBLIC_GOOGLE_ADS_TAG_ID: ${{ vars.GOOGLE_ADS_TAG_ID }}
           R2_PUBLIC_URL: ${{ vars.R2_PUBLIC_URL }}
+          NEXT_PUBLIC_IS_BILLING_PACKAGE_ENABLED: ${{ vars.FF_IS_BILLING_PACKAGE_ENABLED }}
           # Sentry (optional — monitoring/sourcemap upload disabled when unset)
           NEXT_PUBLIC_SENTRY_DSN: ${{ vars.SENTRY_DSN_LANDING }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}

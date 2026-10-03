@@ -27,6 +27,12 @@ export const routing = {
   docs() {
     return "/docs";
   },
+  privacy() {
+    return "/privacy";
+  },
+  terms() {
+    return "/terms";
+  },
   catalog() {
     return "/projects";
   },

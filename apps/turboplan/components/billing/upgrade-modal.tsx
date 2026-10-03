@@ -18,6 +18,7 @@ import {
   PLANS,
   type PlanKey,
 } from "@wildfires-org/turboplan-billing/types";
+import { getLandingUrl } from "@wildfires-org/turboplan-env";
 import { Action, EntityType } from "@wildfires-org/turboplan-rbac";
 import { useEntityPermission } from "@wildfires-org/turboplan-rbac/hooks";
 import {
@@ -365,8 +366,25 @@ export function UpgradeModal({
                   aria-label="Agree to Terms of Service and Privacy Policy"
                 />
                 <span>
-                  I understand and agree to the Terms of Service and Privacy
-                  Policy.
+                  I understand and agree to the{" "}
+                  <a
+                    href={`${getLandingUrl()}/terms`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline"
+                  >
+                    Terms of Service
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href={`${getLandingUrl()}/privacy`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline"
+                  >
+                    Privacy Policy
+                  </a>
+                  .
                 </span>
               </label>
 
