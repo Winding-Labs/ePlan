@@ -8,6 +8,10 @@ import { expect, test } from "@playwright/test";
  * layout at phone width, and the hero handing its prompt to signup.
  */
 const LANDING_URL = process.env.LANDING_PAGE_URL || "http://localhost:3002";
+// Only https://eplan.ai is crawlable and indexable (lib/seo.ts PRODUCTION_ORIGIN);
+// every other host (local, previews, staging) must be neither. The suite runs on
+// both: in CI and after each release against production.
+const IS_PRODUCTION = new URL(LANDING_URL).origin === "https://eplan.ai";
 
 const GUIDE_PATHS = [
   "/for/nepa",
@@ -51,10 +55,12 @@ test.describe("Landing Page - guide pages", () => {
   test("serves robots.txt and a sitemap listing every guide page", async ({
     request,
   }) => {
-    // Only https://eplan.ai is crawlable; this suite runs on another host.
     const robots = await request.get(`${LANDING_URL}/robots.txt`);
     expect(robots.status()).toBe(200);
-    expect(await robots.text()).toMatch(/^Disallow: \/$/m);
+    const blocksAll = /^Disallow: \/$/m.test(await robots.text());
+    expect(blocksAll, `robots.txt Disallow: / on ${LANDING_URL}`).toBe(
+      !IS_PRODUCTION,
+    );
 
     const sitemap = await request.get(`${LANDING_URL}/sitemap.xml`);
     expect(sitemap.status()).toBe(200);
@@ -105,9 +111,9 @@ test.describe("Landing Page - guide pages", () => {
       await expect(page.locator("h1"), path).toHaveCount(1);
 
       titles.add(await page.title());
-      await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+      await expect(page.locator('meta[name="robots"]'), path).toHaveAttribute(
         "content",
-        /noindex/,
+        IS_PRODUCTION ? /^index, follow/ : /noindex/,
       );
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
         "href",
