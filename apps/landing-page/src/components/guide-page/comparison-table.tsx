@@ -30,7 +30,7 @@ const CELL_CLASS =
 
 // Column label shown inside each cell on phones, where the table stacks.
 const MOBILE_LABEL_CLASS =
-  "mb-1 block font-heading text-[11px] font-medium uppercase tracking-[0.08em] text-egray-500 md:hidden";
+  "mb-1 block font-heading text-[11px] font-medium uppercase tracking-[0.08em] text-egray-600 md:hidden";
 
 /**
  * "How ePlan compares to drafting by hand": one table on desktop, one card

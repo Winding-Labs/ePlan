@@ -168,12 +168,22 @@ type MockScreenProps = {
 function MockScreen({ tab, playKey, reduce }: MockScreenProps) {
   const { type } = tab;
   return (
+    // A picture of the app, not UI: one image named by the tab's description.
+    // `inert` keeps its mock text out of focus and the accessibility tree
+    // (WCAG 1.4.3 exempts text that is part of a picture from contrast).
     // Remount on activation so entrance animations replay.
-    <div key={playKey} className="h-full w-full">
-      {type === "research" && <ResearchSlide reduce={reduce} />}
-      {type === "draft" && <DraftSlide reduce={reduce} mock={tab.mock} />}
-      {type === "plan" && <PlanSlide reduce={reduce} />}
-      {type === "collab" && <CollaborateSlide reduce={reduce} />}
+    <div
+      key={playKey}
+      role="img"
+      aria-label={tab.description}
+      className="h-full w-full"
+    >
+      <div inert className="h-full w-full">
+        {type === "research" && <ResearchSlide reduce={reduce} />}
+        {type === "draft" && <DraftSlide reduce={reduce} mock={tab.mock} />}
+        {type === "plan" && <PlanSlide reduce={reduce} />}
+        {type === "collab" && <CollaborateSlide reduce={reduce} />}
+      </div>
     </div>
   );
 }
