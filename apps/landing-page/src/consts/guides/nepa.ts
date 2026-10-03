@@ -454,7 +454,7 @@ const environmentalAssessment: GuideContent<GuidePath> = {
   path: "/for/nepa-environmental-assessment",
   title: "NEPA Environmental Assessment (EA) & FONSI Guide",
   description:
-    "When a NEPA EA is required, its 75-page and one-year limits, what an EA and FONSI contain, and an outline to draft from.",
+    "What a NEPA environmental assessment (EA) is, when one is required, its 75-page and one-year limits, and what a FONSI contains.",
   eyebrow: "Environmental assessment",
   h1: "NEPA environmental assessments and the FONSI",
   primaryKeyword: "nepa environmental assessment",
@@ -464,6 +464,8 @@ const environmentalAssessment: GuideContent<GuidePath> = {
     "ea vs eis",
     "environmental assessment example",
     "environmental assessment template",
+    "environmental assessment",
+    "environmental assessments",
   ],
   document: "Environmental Assessment",
   answer:

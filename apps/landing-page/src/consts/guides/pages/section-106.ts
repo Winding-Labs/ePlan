@@ -80,10 +80,12 @@ export const entry: GuideContent<GuidePath> = {
     "section 106 consultation",
     "section 106 process",
     "shpo review",
+    "shpo",
+    "state historic preservation officer",
   ],
   document: "Section 106 Consultation Letter",
   answer:
-    "Section 106 of the National Historic Preservation Act requires a federal agency to take into account a project's effects on historic properties, and let the Advisory Council on Historic Preservation (ACHP) comment, before approving federal funds or a license [[s106Usc306108]]. The Section 106 process, 36 CFR part 800, is mostly consultation with the State or Tribal Historic Preservation Officer (SHPO/THPO) [[s106Cfr800]] [[s106Citizen]].",
+    "Section 106 of the National Historic Preservation Act requires a federal agency to consider a project's effects on historic properties, and let the Advisory Council on Historic Preservation (ACHP) comment, before approving federal funds or a license [[s106Usc306108]]. The process, 36 CFR part 800, is mostly consultation with the State Historic Preservation Officer (SHPO), or the THPO on tribal lands [[s106Cfr800]] [[s106Citizen]].",
   glance: [
     {
       label: "Legal basis",
@@ -220,9 +222,10 @@ export const entry: GuideContent<GuidePath> = {
       ],
     },
     {
-      heading: "Who takes part in Section 106 consultation?",
+      heading: "What is a SHPO? Who takes part in Section 106",
       paragraphs: [
-        "The agency is responsible for every finding, even when an applicant or consultant prepares the analysis. It consults the SHPO, or the THPO on tribal lands where a tribe has assumed the SHPO's duties [[s106Cfr8002]]. It must make a reasonable and good faith effort to identify and invite tribes and Native Hawaiian organizations that may attach religious and cultural significance to affected properties [[s106Cfr8003]].",
+        "The SHPO, or State Historic Preservation Officer, is the official appointed to administer the state historic preservation program; a THPO takes on the SHPO's role on tribal lands [[s106Cfr80016]]. The agency consults the SHPO or THPO and is responsible for every finding, even when an applicant or consultant prepares the analysis [[s106Cfr8002]].",
+        "It must make a reasonable and good faith effort to identify and invite tribes and Native Hawaiian organizations that may attach religious and cultural significance to affected properties [[s106Cfr8003]].",
       ],
     },
     {
