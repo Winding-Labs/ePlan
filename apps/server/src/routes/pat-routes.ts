@@ -3,7 +3,7 @@ import { Hono } from "hono";
 
 import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
 import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
-import { generatePAT } from "@wildfires-org/turboplan-api-client";
+import { generatePAT } from "@wildfires-org/turboplan-api-client/server";
 import {
   createPersonalAccessToken,
   listPATsByUser,

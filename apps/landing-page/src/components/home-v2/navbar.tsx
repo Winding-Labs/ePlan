@@ -12,6 +12,7 @@ import type { AnalyticsEvent } from "@wildfires-org/turboplan-analytics";
 import { useSession } from "@wildfires-org/turboplan-auth/client";
 import { OmniSearch } from "@wildfires-org/turboplan-search/client";
 
+import { useSessionLoaded } from "@/components/providers/client-session-provider";
 import { useSearch } from "@/hooks/use-search";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import useBreakpoint from "@/hooks/useBreakpoint";
@@ -86,6 +87,7 @@ export function Navbar() {
   const { captureEvent } = useAnalytics();
 
   const session = useSession();
+  const isSessionLoaded = useSessionLoaded();
   const isAuthenticated = !!session?.user;
 
   const isLargeScreen = useBreakpoint("lg");
@@ -251,10 +253,14 @@ export function Navbar() {
             {isAuthenticated && session ? (
               <UserAvatarDropdown session={session} />
             ) : (
+              // Hidden (but holding its width) until the session request
+              // settles, so a signed-in visitor never sees "Sign In" flash.
               <Link
                 href={routing.signIn()}
                 onClick={handleSignInClick}
-                className={linkClasses}
+                className={cn(linkClasses, !isSessionLoaded && "invisible")}
+                aria-hidden={!isSessionLoaded}
+                tabIndex={isSessionLoaded ? undefined : -1}
               >
                 Sign In
               </Link>
