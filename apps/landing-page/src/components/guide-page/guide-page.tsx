@@ -27,10 +27,15 @@ import {
 } from "@/consts/guides";
 import { comparisonRows, guideBenefits } from "@/consts/guides/shared";
 import type { GuideEntry, ToolComparisonRow } from "@/consts/guides/types";
+import { RESEARCH_COPY, researchFocus } from "@/consts/research-focus";
 import { HOME_TABS } from "@/consts/showcase-tabs";
 import { brand } from "@/lib/brand";
 import { guideLinks, orderCitations, stripCitations } from "@/lib/citations";
-import { buildPageMetadata, toAbsoluteUrl } from "@/lib/seo";
+import {
+  buildPageMetadata,
+  organizationJsonLd,
+  toAbsoluteUrl,
+} from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { CitedText } from "./cited-text";
 import { ComparisonTable } from "./comparison-table";
@@ -112,7 +117,11 @@ export const guideHeroContent = (page: GuideEntry): HeroContent => ({
       description: page.draft.description,
       mock: page.draft.mock,
     },
-    ...HOME_TABS.filter((tab) => tab.type !== "draft"),
+    ...HOME_TABS.filter((tab) => tab.type !== "draft").map((tab) =>
+      tab.type === "research"
+        ? { ...tab, description: RESEARCH_COPY[researchFocus(page.family)].tab }
+        : tab,
+    ),
   ],
   analytics: { surface: "guide_page", guide: page.path },
 });
@@ -184,16 +193,8 @@ export function GuidePage({ path }: GuidePageProps) {
           // Every source was read on this date; the page was written from them.
           datePublished: GUIDE_SOURCES_READ_ON,
           dateModified: GUIDE_SOURCES_READ_ON,
-          author: {
-            "@type": "Organization",
-            name: brand.name,
-            url: toAbsoluteUrl("/"),
-          },
-          publisher: {
-            "@type": "Organization",
-            name: brand.name,
-            logo: { "@type": "ImageObject", url: toAbsoluteUrl(brand.logo) },
-          },
+          author: organizationJsonLd(),
+          publisher: organizationJsonLd(),
           citation: sourceKeys.map((key) => SOURCES[key].url),
         }}
       />
@@ -219,7 +220,7 @@ export function GuidePage({ path }: GuidePageProps) {
 
       {page.tools && <ToolCards rows={page.tools} numberOf={numberOf} />}
 
-      <Features />
+      <Features researchFocus={researchFocus(page.family)} />
 
       <article className={cn(PAGE_GUTTER, SECTION_Y)}>
         <div className={cn(READING_CLASS, "flex flex-col gap-12")}>

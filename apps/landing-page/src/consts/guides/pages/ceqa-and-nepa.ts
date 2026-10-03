@@ -76,7 +76,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/ceqa-and-nepa",
   title: "CEQA and NEPA: Joint EIR/EIS and Key Differences",
   description:
-    "When CEQA and NEPA both apply, how the two reviews differ, which documents match, and how to prepare a joint EIR/EIS.",
+    "When CEQA and NEPA both apply to a project, how the two reviews differ, which documents match, and how to prepare a joint EIR/EIS.",
   eyebrow: "CEQA and NEPA",
   h1: "CEQA and NEPA: when both apply and how to prepare one joint document",
   primaryKeyword: "ceqa and nepa",
@@ -112,13 +112,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Start a",
+    prefix: "Start a Joint Review for",
     placeholder: "I'm preparing CEQA and NEPA documents for…",
     examples: [
       {
         emoji: "🛣️",
         label: "Highway Interchange",
-        heading: "Joint Review for Highway Interchange",
+        heading: "Highway Interchange",
         eyebrow: "STATE HIGHWAY",
         prompt:
           "I'm an environmental planner at a county transportation authority in San Joaquin County starting a joint EIR/EIS for a new interchange on a state highway, with Caltrans as NEPA lead.",
@@ -126,7 +126,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🚆",
         label: "Rail Station",
-        heading: "Joint Review for Commuter Rail Station",
+        heading: "Commuter Rail Station",
         eyebrow: "PUBLIC TRANSIT",
         prompt:
           "I'm a planner at a regional transit agency in Alameda County preparing a joint CEQA/NEPA document for a new commuter rail station funded with FTA grants.",
@@ -134,7 +134,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌊",
         label: "Levee Repair",
-        heading: "Joint Review for Levee Improvements",
+        heading: "Levee Improvements",
         eyebrow: "FLOOD CONTROL",
         prompt:
           "I'm with a reclamation district in the Sacramento-San Joaquin Delta preparing an IS/MND and EA for strengthening 3 miles of levee that needs a U.S. Army Corps of Engineers permit.",
@@ -142,7 +142,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🥾",
         label: "Regional Trail",
-        heading: "Joint Review for Regional Trail",
+        heading: "Regional Trail",
         eyebrow: "PARKS AND TRAILS",
         prompt:
           "I'm a park district planner in San Bernardino County preparing CEQA and NEPA documents for a 6-mile regional trail that crosses BLM land.",
@@ -150,7 +150,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "✈️",
         label: "Runway Extension",
-        heading: "Joint Review for Runway Extension",
+        heading: "Runway Extension",
         eyebrow: "AIRPORT PLANNING",
         prompt:
           "I'm an environmental consultant for a county airport in Kern County preparing an initial study and EA for a 1,000-foot runway extension that needs FAA approval.",

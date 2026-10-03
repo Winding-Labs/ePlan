@@ -83,3 +83,26 @@ Median score **92/100** (A) across the pages audited. The issues to fix were tem
 1. Re-run SEOmator on the same 34 URLs and run `seomator compare eplan.ai`. Every row in §2 should flip.
 2. Run the Rich Results Test on one guide (Article, Breadcrumb).
 3. In Search Console (after the owner verifies the domain), submit `sitemap.xml`. `llms.txt` is not part of the sitemap.
+
+## 4. Round 3 (2026-10-03): ads ↔ pages audit + SEOmator re-audit
+
+**Inputs:**
+- eplan-36's round-3 audit of the 26 ad final URLs against the live account.
+- The SEOmator re-audit of all 34 URLs after release #48. Median 92 → 92 (max 95). Description-width fails went **29 → 0**, inline-JS fails 17 → 4, and the skip link, main landmark, content dates, OG image and sitemap lastmod all flipped to pass.
+
+| Finding | Fix |
+|---|---|
+| Phone: no guide showed a signup action in the first screen ("Draft yours" at y=787–946 on a 664 px iPhone 13) | "Draft yours with ePlan" renders right under the H1 below `sm` (y=330–411); from `sm` up it stays in the pair. One visible copy per breakpoint. |
+| Nav "Create Project", the bottom CTA and Starter's "Start free" all sent a guide's visitor to `/` | **Meta root cause:** every try-it button hard-coded `routing.home({tryIt})`. Now there is one helper: `routing.tryIt(pathname)` uses this page's own prompt (home and every guide), and the hero scrolls to the prompt, not the page top. Nav "Pricing" uses `routing.pricingOn(pathname)` (the guide's own `#pricing`). |
+| Two guides targeting the same query: "23 cfr 771.117" (CE + FHWA), "record of decision" (NEPA + EIS), "decision memo", "categorical exclusion examples", "environmental assessment/EIS example(s)", "ipac", "nepa ai" | Test: **every keyword belongs to exactly one page** (plural-folded). Each keyword was resolved to the page whose subject it is. |
+| "seqr" passed the secondary-keyword check only as part of "seqra" | Keywords match whole words, plural allowed (canaried: a planted "nepa doc" goes RED). |
+| Top ad keywords missing from the title/H1 | `/for/nepa` "NEPA Process & NEPA Documents"; SEQR title "SEQRA and SEQR"; FHWA title "23 CFR 771.117"; EIS title "NEPA … (EIS)"; CEQA H1 "What is CEQA?"; initial study H1 spells out "mitigated negative declarations"; the ESA, Section 106 and EIR descriptions spell out the act and the notice of determination. |
+| 15 descriptions shorter than 120 characters (SEOmator `core-description-length`) | Test: `DESCRIPTION_MIN_LENGTH = 120`, alongside the ≤920 px width. All 15 were rewritten. |
+| The shared price line "Scoping letters on the free plan; EAs, EIRs…" matched the ads `banned_copy` free-EA rule, so an ad could not quote it | "Scoping letters are free. EAs, EIRs and decision memos are on Max at $199 a month" |
+| `/for` listed 32 `Article` nodes with no author or dates (`schema-article` fail) | `CollectionPage.mainEntity` is an `ItemList` of links; each guide's own page carries its Article. |
+| Two Organization nodes per guide, with no `@id` (`schema-entity-id`) | One `organizationJsonLd()` with `@id` `/#organization`, used by home, the WebSite publisher and every Article's author and publisher. |
+
+**Left as is:**
+- Link density (`content-article-links`, 34 pages): the full footer is the owner's call.
+- HTML cache policy: HTML is cached at the edge (`s-maxage`), not in browsers, by design.
+- Font preloads (10 files): a design change, not a fix.

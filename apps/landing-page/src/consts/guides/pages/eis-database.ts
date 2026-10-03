@@ -43,7 +43,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/eis-database",
   title: "EIS Database: How to Search EPA's EIS Records",
   description:
-    "How to search EPA's EIS database by title, agency and state, read a record, and download EISs and comment letters.",
+    "How to search EPA's EIS database by title, agency and state, read a record, and download the EISs and comment letters it holds.",
   eyebrow: "EIS database",
   h1: "The EPA EIS database: search, read and download environmental impact statements",
   primaryKeyword: "eis database",
@@ -84,13 +84,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft an",
+    prefix: "Draft an EIS Outline From",
     placeholder: "I'm outlining an EIS and need a precedent for…",
     examples: [
       {
         emoji: "☀️",
         label: "Solar and Storage",
-        heading: "EIS Outline From a Solar Precedent",
+        heading: "a Solar Precedent",
         eyebrow: "UTILITY SOLAR",
         prompt:
           "I'm a NEPA specialist at USDA's Rural Utilities Service starting an EIS on a cooperative's 200-MW solar and battery storage project on 1,800 acres of farmland in northern Alabama.",
@@ -98,7 +98,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🚢",
         label: "LNG Expansion",
-        heading: "EIS Outline From an LNG Precedent",
+        heading: "an LNG Precedent",
         eyebrow: "NATURAL GAS",
         prompt:
           "I'm an environmental consultant supporting a FERC application to add a liquefaction train at an existing LNG export terminal on the Louisiana coast.",
@@ -106,7 +106,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "✈️",
         label: "Aircraft Basing",
-        heading: "EIS Outline From a Basing Precedent",
+        heading: "a Basing Precedent",
         eyebrow: "MILITARY BASING",
         prompt:
           "I'm a NEPA planner at an Air National Guard base in the Mountain West preparing an EIS for basing 18 new training aircraft and building two hangars.",
@@ -114,7 +114,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "⛏️",
         label: "Mine Expansion",
-        heading: "EIS Outline From a Mine Precedent",
+        heading: "a Mine Precedent",
         eyebrow: "HARDROCK MINING",
         prompt:
           "I'm a BLM project lead in central Nevada starting an EIS on a plan of operations to expand an open-pit gold mine onto 1,200 more acres of public land.",
@@ -122,7 +122,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🛣️",
         label: "Highway Corridor",
-        heading: "EIS Outline From a Highway Precedent",
+        heading: "a Highway Precedent",
         eyebrow: "NEW HIGHWAY",
         prompt:
           "I'm an environmental manager at a state DOT working with our FHWA division office on an EIS for a 15-mile, four-lane highway on new location in southern Georgia.",

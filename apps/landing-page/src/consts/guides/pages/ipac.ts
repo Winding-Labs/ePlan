@@ -84,13 +84,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a Biological Assessment for",
     placeholder: "I'm preparing a biological assessment for…",
     examples: [
       {
         emoji: "🛢️",
         label: "Gas Pipeline",
-        heading: "Biological Assessment for a Pipeline",
+        heading: "a Pipeline",
         eyebrow: "GAS PIPELINE",
         prompt:
           "I'm an environmental consultant for a gas utility preparing the biological assessment for replacing 12 miles of natural gas pipeline in western Pennsylvania that needs an Army Corps Section 404 permit, starting from our IPaC official species list.",
@@ -98,7 +98,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌉",
         label: "Bridge Replacement",
-        heading: "Biological Assessment for a Bridge",
+        heading: "a Bridge",
         eyebrow: "HIGHWAY BRIDGE",
         prompt:
           "I'm a biologist at a state DOT district office preparing a biological assessment for an FHWA-funded replacement of a two-lane bridge over a creek with listed freshwater mussels in Tennessee.",
@@ -106,7 +106,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "☀️",
         label: "Solar Farm",
-        heading: "Biological Assessment for a Solar Farm",
+        heading: "a Solar Farm",
         eyebrow: "RENEWABLE ENERGY",
         prompt:
           "I'm a consultant preparing the biological assessment for a 400-acre solar project on BLM land in southern Nevada within desert tortoise habitat.",
@@ -114,7 +114,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌊",
         label: "Levee Repair",
-        heading: "Biological Assessment for a Levee Repair",
+        heading: "a Levee Repair",
         eyebrow: "FLOOD CONTROL",
         prompt:
           "I'm an environmental planner at an Army Corps of Engineers district drafting the biological assessment for repairing 2 miles of levee along a river in California's Central Valley.",
@@ -122,7 +122,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌲",
         label: "Forest Thinning",
-        heading: "Biological Assessment for Forest Thinning",
+        heading: "Forest Thinning",
         eyebrow: "FOREST MANAGEMENT",
         prompt:
           "I'm a Forest Service wildlife biologist preparing the biological assessment for 1,200 acres of commercial thinning on a national forest in western Oregon with northern spotted owl habitat.",
@@ -195,7 +195,7 @@ export const entry: GuideContent<GuidePath> = {
       heading: "Critical habitat and NWI wetlands in an IPaC report",
       paragraphs: [
         "The species list covers listed, proposed and candidate species, experimental populations and species listed for similarity of appearance [[esaIpac]]. For each, the report says whether final or proposed critical habitat exists and whether your location overlaps it; effects to critical habitat must be analyzed with the species [[ipacResourceList]].",
-        "Wetlands come from the National Wetlands Inventory (NWI), which may be out of date; the report says a site visit should confirm their extent and that impacts may be regulated under Clean Water Act Section 404 [[ipacResourceList]]. NWI maps a biological definition of wetlands that may not match Clean Water Act boundaries, so check with the Army Corps regulatory office [[ipacNwiLimits]].",
+        "Wetlands come from the National Wetlands Inventory (NWI), which may be out of date; the report says a site visit should confirm their extent and that impacts may be regulated under [Clean Water Act Section 404](/for/environmental-permitting) [[ipacResourceList]]. NWI maps a biological definition of wetlands that may not match Clean Water Act boundaries, so check with the Army Corps regulatory office [[ipacNwiLimits]].",
       ],
     },
     {

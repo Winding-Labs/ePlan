@@ -4,18 +4,18 @@ import type { GuideContent } from "./types";
 
 const nepaProcess: GuideContent<GuidePath> = {
   path: "/for/nepa",
-  title: "What Is NEPA? The NEPA Process, Step by Step",
+  title: "What Is NEPA? NEPA Process & NEPA Documents",
   description:
-    "How a NEPA review works since CEQ's rules were removed: the threshold check, CE, EA and FONSI, EIS and the record of decision.",
+    "How a NEPA review works and the NEPA documents it produces: the threshold check, CE, EA and FONSI, EIS and record of decision.",
   eyebrow: "NEPA process",
   h1: "What is NEPA? The NEPA process, from the first check to the record of decision",
   primaryKeyword: "what is nepa",
   secondaryKeywords: [
     "nepa process",
     "national environmental policy act",
-    "record of decision",
     "nepa review",
     "nepa documentation",
+    "nepa documents",
     "nepa compliance",
   ],
   document: "NEPA Documents",
@@ -58,7 +58,7 @@ const nepaProcess: GuideContent<GuidePath> = {
   outline: {
     heading: "NEPA documentation, in order",
     intro:
-      "The documents a review can produce, following CEQ's January 2026 process chart [[ceqFlowchart]]. Many actions stop at the first or second step. Most reviews start with a [scoping letter](/for/nepa-scoping-letter), and past documents for the same kind of action are in [NEPA examples](/for/nepa-examples). ePlan's [NEPA software](/for/nepa-software) drafts these documents, and [AI tools for NEPA](/for/nepa-ai-tools) compares the alternatives.",
+      "The documents a review can produce, following CEQ's January 2026 process chart [[ceqFlowchart]]. Many actions stop at the first or second step. Most reviews start with a [scoping letter](/for/nepa-scoping-letter), and past documents for the same kind of action are in [NEPA examples](/for/nepa-examples). ePlan's [NEPA software](/for/nepa-software) drafts these documents, and [AI tools for NEPA](/for/nepa-ai-tools) compares the alternatives. NEPA is the federal [environmental impact assessment](/for/environmental-impact-assessment) process [[stateCeqList]]; our guides to [environmental permitting](/for/environmental-permitting) and [environmental planning](/for/environmental-planning) cover the permits and planning work around it.",
     items: [
       {
         title: "Proposed action, purpose and need",
@@ -117,41 +117,41 @@ const nepaProcess: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Start a",
+    prefix: "Start a NEPA Review for",
     placeholder: "I'm starting the NEPA review for…",
     examples: [
       {
         emoji: "🌉",
         label: "Bridge Replacement",
-        heading: "NEPA Review for a Bridge",
+        heading: "a Bridge",
         eyebrow: "TRANSPORTATION",
         prompt: PROMPTS.bridge,
       },
       {
         emoji: "🥾",
         label: "Trail Reconstruction",
-        heading: "NEPA Review for Trail Work",
+        heading: "Trail Work",
         eyebrow: "PUBLIC LANDS",
         prompt: PROMPTS.trailCe,
       },
       {
         emoji: "🐄",
         label: "Grazing Permit",
-        heading: "NEPA Review for Grazing",
+        heading: "Grazing",
         eyebrow: "RANGELAND",
         prompt: PROMPTS.grazing,
       },
       {
         emoji: "🌲",
         label: "Forest Restoration",
-        heading: "NEPA Review for Thinning",
+        heading: "Thinning",
         eyebrow: "FOREST MANAGEMENT",
         prompt: PROMPTS.vegEa,
       },
       {
         emoji: "🌊",
         label: "Flood Repair",
-        heading: "NEPA Review for Flood Repairs",
+        heading: "Flood Repairs",
         eyebrow: "DISASTER RECOVERY",
         prompt: PROMPTS.floodRoad,
       },
@@ -236,7 +236,6 @@ const categoricalExclusions: GuideContent<GuidePath> = {
     "categorical exclusion checklist",
     "decision memo",
     "extraordinary circumstances",
-    "23 cfr 771.117",
   ],
   document: "CE Decision Memo",
   answer:
@@ -343,41 +342,41 @@ const categoricalExclusions: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a CE Decision Memo for",
     placeholder: "I need a categorical exclusion for…",
     examples: [
       {
         emoji: "🥾",
         label: "Trail Reconstruction",
-        heading: "CE Decision Memo for Trail Work",
+        heading: "Trail Work",
         eyebrow: "PUBLIC LANDS",
         prompt: PROMPTS.trailCe,
       },
       {
         emoji: "🚦",
         label: "Traffic Signals",
-        heading: "CE Decision Memo for Signals",
+        heading: "Signals",
         eyebrow: "HIGHWAY SAFETY",
         prompt: PROMPTS.signalsCe,
       },
       {
         emoji: "☀️",
         label: "Rooftop Solar",
-        heading: "CE Decision Memo for Solar",
+        heading: "Solar",
         eyebrow: "ENERGY",
         prompt: PROMPTS.solarCe,
       },
       {
         emoji: "🔥",
         label: "Fuel Break",
-        heading: "CE Decision Memo for a Fuel Break",
+        heading: "a Fuel Break",
         eyebrow: "WILDFIRE",
         prompt: PROMPTS.fuelBreakCe,
       },
       {
         emoji: "💡",
         label: "Campground Lighting",
-        heading: "CE Decision Memo for Lighting",
+        heading: "Lighting",
         eyebrow: "NATIONAL PARKS",
         prompt: PROMPTS.campground,
       },
@@ -454,7 +453,7 @@ const environmentalAssessment: GuideContent<GuidePath> = {
   path: "/for/nepa-environmental-assessment",
   title: "NEPA Environmental Assessment (EA) & FONSI Guide",
   description:
-    "When a NEPA EA is required, its 75-page and one-year limits, what an EA and FONSI contain, and an outline to draft from.",
+    "What a NEPA environmental assessment (EA) is, when one is required, its 75-page and one-year limits, and what a FONSI contains.",
   eyebrow: "Environmental assessment",
   h1: "NEPA environmental assessments and the FONSI",
   primaryKeyword: "nepa environmental assessment",
@@ -462,8 +461,8 @@ const environmentalAssessment: GuideContent<GuidePath> = {
     "finding of no significant impact",
     "fonsi",
     "ea vs eis",
-    "environmental assessment example",
     "environmental assessment template",
+    "environmental assessment",
   ],
   document: "Environmental Assessment",
   answer:
@@ -538,41 +537,41 @@ const environmentalAssessment: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft an",
+    prefix: "Draft an EA for",
     placeholder: "I'm preparing an EA for…",
     examples: [
       {
         emoji: "🌲",
         label: "Forest Restoration",
-        heading: "EA for Forest Restoration",
+        heading: "Forest Restoration",
         eyebrow: "FOREST MANAGEMENT",
         prompt: PROMPTS.vegEa,
       },
       {
         emoji: "☀️",
         label: "Solar on BLM Land",
-        heading: "EA for a Solar Project",
+        heading: "a Solar Project",
         eyebrow: "RENEWABLE ENERGY",
         prompt: PROMPTS.solarEa,
       },
       {
         emoji: "💧",
         label: "Pipeline Replacement",
-        heading: "EA for Pipeline Replacement",
+        heading: "Pipeline Replacement",
         eyebrow: "WATER INFRASTRUCTURE",
         prompt: PROMPTS.pipelineEa,
       },
       {
         emoji: "🌉",
         label: "Bridge Replacement",
-        heading: "EA for Bridge Replacement",
+        heading: "Bridge Replacement",
         eyebrow: "TRANSPORTATION",
         prompt: PROMPTS.bridge,
       },
       {
         emoji: "🏕️",
         label: "Campground Expansion",
-        heading: "EA for Campground Expansion",
+        heading: "Campground Expansion",
         eyebrow: "RECREATION",
         prompt:
           "I'm a recreation planner at Sawtooth National Forest preparing an EA for expanding a 40-site campground near Stanley, Idaho.",
@@ -648,7 +647,7 @@ const scopingLetter: GuideContent<GuidePath> = {
   path: "/for/nepa-scoping-letter",
   title: "NEPA Scoping Letter: Template, Example & Outline",
   description:
-    "What a NEPA scoping letter should include, what the law requires for scoping and comment, and an outline to draft from.",
+    "What a NEPA scoping letter should include, what the law requires for scoping and public comment, and an outline to draft from.",
   eyebrow: "Scoping",
   h1: "NEPA scoping letters: what to include",
   primaryKeyword: "scoping letter",
@@ -738,13 +737,13 @@ const scopingLetter: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a Scoping Letter for",
     placeholder: "I need a scoping letter for…",
     examples: [
       {
         emoji: "🚧",
         label: "Guardrail Repair",
-        heading: "Scoping Letter for Guardrail Repair",
+        heading: "Guardrail Repair",
         eyebrow: "HIGHWAY SAFETY",
         prompt:
           "I'm an environmental planner with the Eldorado National Forest and need a scoping letter for replacing 2 miles of damaged guardrail along a forest highway near Pollock Pines, California.",
@@ -752,7 +751,7 @@ const scopingLetter: GuideContent<GuidePath> = {
       {
         emoji: "🌊",
         label: "Channel Dredging",
-        heading: "Scoping Letter for Channel Dredging",
+        heading: "Channel Dredging",
         eyebrow: "WATERWAYS",
         prompt:
           "I'm a NEPA coordinator with a port district and need a scoping letter for maintenance dredging of a 1.5-mile navigation channel that needs a Corps of Engineers permit.",
@@ -760,21 +759,21 @@ const scopingLetter: GuideContent<GuidePath> = {
       {
         emoji: "🔥",
         label: "Forest Thinning",
-        heading: "Scoping Letter for Forest Thinning",
+        heading: "Forest Thinning",
         eyebrow: "WILDFIRE",
         prompt: PROMPTS.thinningScoping,
       },
       {
         emoji: "🥾",
         label: "Trail Repair",
-        heading: "Scoping Letter for Trail Repair",
+        heading: "Trail Repair",
         eyebrow: "NATIONAL PARKS",
         prompt: PROMPTS.trailScoping,
       },
       {
         emoji: "🚜",
         label: "Road Repair",
-        heading: "Scoping Letter for Road Repair",
+        heading: "Road Repair",
         eyebrow: "PUBLIC LANDS",
         prompt: PROMPTS.roadScoping,
       },

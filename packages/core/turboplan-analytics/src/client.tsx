@@ -21,6 +21,7 @@ declare global {
   interface Window {
     dataLayer?: unknown[];
     gtag?: (...args: unknown[]) => void;
+    AhrefsAnalytics?: { sendEvent: (name: string) => void };
   }
 }
 
@@ -59,6 +60,27 @@ const withPostHog = (callback: (client: PostHog) => void) => {
   if (posthogClient?.__loaded) {
     callback(posthogClient);
   }
+};
+
+const AHREFS_SCRIPT_ID = "ahrefs-analytics";
+
+/**
+ * Ahrefs Web Analytics pageview. The script's own pageviews are off (they
+ * report the raw URL, `?token=` included), so this hands it the redacted URL
+ * through the `data-page-location` attribute it reads on every event. Until
+ * the script has run, the pageview waits for its load event.
+ */
+const sendAhrefsPageView = () => {
+  const script = document.getElementById(AHREFS_SCRIPT_ID);
+  if (!script) {
+    return;
+  }
+  if (!window.AhrefsAnalytics) {
+    script.addEventListener("load", sendAhrefsPageView, { once: true });
+    return;
+  }
+  script.setAttribute("data-page-location", redactUrl(window.location.href));
+  window.AhrefsAnalytics.sendEvent("pageview");
 };
 
 /** Redacted page params for the current location — see buildPageViewParams. */
@@ -330,6 +352,7 @@ export const analytics = {
           ...setRedactedPage(gtag),
         });
       }
+      sendAhrefsPageView();
     } catch (error) {
       console.error("[analytics] page failed:", error);
     }
@@ -372,6 +395,29 @@ export const AnalyticsPageView = () => {
     <Script
       id="google-tag"
       src={`https://www.googletagmanager.com/gtag/js?id=${loaderId}`}
+    />
+  );
+};
+
+/**
+ * The Ahrefs Web Analytics script, when configured. A plain async script, so
+ * it is in the server HTML (React hoists it into <head>) and needs no
+ * Suspense. `data-no-pageview-auto` turns its own pageviews off;
+ * `analytics.page()` sends redacted ones (see sendAhrefsPageView).
+ */
+export const AhrefsAnalytics = () => {
+  const ahrefs = resolveAnalyticsDestinations().ahrefs;
+  if (!ahrefs) {
+    return null;
+  }
+
+  return (
+    <script
+      id={AHREFS_SCRIPT_ID}
+      src="https://analytics.ahrefs.com/analytics.js"
+      data-key={ahrefs.key}
+      data-no-pageview-auto=""
+      async
     />
   );
 };

@@ -330,8 +330,10 @@ const HeroUrlParams = ({ onProjectDescription }: HeroUrlParamsProps) => {
       return;
     }
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    getPromptTextarea()?.focus({ preventScroll: true });
+    // The prompt, not the page top: on a guide the hero sits below the header.
+    const prompt = getPromptTextarea();
+    prompt?.scrollIntoView({ behavior: "smooth", block: "center" });
+    prompt?.focus({ preventScroll: true });
 
     // Strip the param only after the smooth scroll has finished — an
     // immediate replace cancels the scroll animation.

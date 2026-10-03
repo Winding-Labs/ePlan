@@ -129,13 +129,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a Notice of Determination for",
     placeholder: "I'm filing a notice of determination for…",
     examples: [
       {
         emoji: "💧",
         label: "Water Tank",
-        heading: "Notice of Determination for a Water Tank",
+        heading: "a Water Tank",
         eyebrow: "WATER DISTRICT",
         prompt:
           "I'm an environmental planner at a county water district in Placer County filing the notice of determination for a 2-million-gallon water storage tank after our board adopted the mitigated negative declaration.",
@@ -143,7 +143,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏘️",
         label: "Subdivision",
-        heading: "Notice of Determination for a Subdivision",
+        heading: "a Subdivision",
         eyebrow: "CITY PLANNING",
         prompt:
           "I'm a city planner in Stanislaus County preparing the notice of determination for a 120-lot subdivision the city council approved with a certified EIR and a statement of overriding considerations.",
@@ -151,7 +151,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌉",
         label: "Bridge Replacement",
-        heading: "Notice of Determination for a Bridge",
+        heading: "a Bridge",
         eyebrow: "COUNTY PUBLIC WORKS",
         prompt:
           "I'm with a county public works department in Humboldt County drafting the notice of determination for a creek bridge replacement approved with a mitigated negative declaration.",
@@ -159,7 +159,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏫",
         label: "Middle School",
-        heading: "Notice of Determination for a School",
+        heading: "a School",
         eyebrow: "SCHOOL DISTRICT",
         prompt:
           "I'm a facilities planner at a school district in San Bernardino County filing the notice of determination for a new 600-student middle school after the board certified the EIR.",
@@ -167,7 +167,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "☀️",
         label: "Solar Facility",
-        heading: "Notice of Determination for a Solar Farm",
+        heading: "a Solar Farm",
         eyebrow: "COUNTY PLANNING",
         prompt:
           "I'm a consultant to a county planning department in Kern County preparing the notice of determination for a 20-megawatt solar facility approved with a conditional use permit and a certified EIR.",

@@ -415,6 +415,8 @@ development sends nothing unless you set the same names in `.env.local`.
 | `GA_MEASUREMENT_ID` | variable | api and mcp as `GA_MEASUREMENT_ID`; web and landing builds as `NEXT_PUBLIC_GA_MEASUREMENT_ID` | GA4 web stream (`G-…`) |
 | `GOOGLE_ADS_TAG_ID` | variable | web and landing builds as `NEXT_PUBLIC_GOOGLE_ADS_TAG_ID` | Google Ads tag (`AW-…`). **Production only**, so staging traffic never trains Ads audiences |
 | `GA_API_SECRET` | secret | api, web and mcp Workers (encrypted secret) | That stream's Measurement Protocol `api_secret`. Server-only; server-side GA4 (including `sign_up` and `purchase`) is off without it |
+| `AHREFS_ANALYTICS_KEY` | variable | landing build as `NEXT_PUBLIC_AHREFS_ANALYTICS_KEY` | Ahrefs Web Analytics `data-key`. **Production only**. Pageviews carry the same redacted URL as GA4 |
+| `AHREFS_SITE_VERIFICATION` | variable | landing build as `NEXT_PUBLIC_AHREFS_SITE_VERIFICATION` | Ahrefs ownership token for the `ahrefs-site-verification` meta tag. **Production only** |
 
 Server-side events join the visitor's browser session through the `_ga`
 cookies, which is what lets Google Ads import `sign_up` and `purchase` from GA4.

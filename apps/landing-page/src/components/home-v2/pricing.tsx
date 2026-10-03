@@ -2,7 +2,7 @@
 
 import { ArrowUpRight, Check, Sparkles, Tag } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import {
   CATALOG,
@@ -70,13 +70,12 @@ const planFacts = (plan: CatalogPlan): string[] => {
 
 export function Pricing() {
   const router = useRouter();
+  const pathname = usePathname();
   const { captureEvent } = useAnalytics();
   const enterprise = CATALOG.billing.enterprise;
 
   const planCtaHref = (plan: PlanKey): string =>
-    plan === "starter"
-      ? routing.home({ tryIt: "true" })
-      : routing.checkout({ plan });
+    plan === "starter" ? routing.tryIt(pathname) : routing.checkout({ plan });
 
   const handlePlanClick = (plan: PlanKey) => {
     captureEvent(events.PRICING_PLAN_CLICKED, { plan });

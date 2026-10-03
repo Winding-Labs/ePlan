@@ -143,12 +143,14 @@ describe("resolveAnalyticsDestinations", () => {
         GA_MEASUREMENT_ID: "G-TEST",
         GA_API_SECRET: "secret",
         GOOGLE_ADS_TAG_ID: "AW-1",
+        AHREFS_ANALYTICS_KEY: "ahrefs-key",
       }),
     );
     assert.deepEqual(d, {
       posthog: { token: "phc_test", host: "/ingest" },
       ga4: { measurementId: "G-TEST", apiSecret: "secret" },
       googleAds: { tagId: "AW-1" },
+      ahrefs: { key: "ahrefs-key" },
     });
   });
 
@@ -157,6 +159,7 @@ describe("resolveAnalyticsDestinations", () => {
       posthog: null,
       ga4: null,
       googleAds: null,
+      ahrefs: null,
     });
   });
 

@@ -127,7 +127,7 @@ export const entry: GuideContent<GuidePath> = {
   ],
   document: "EHP Review Narrative",
   answer:
-    "FEMA EHP review is FEMA's environmental planning and historic preservation review of the projects it funds, including Public Assistance and Hazard Mitigation grants, under NEPA and other federal environmental and historic preservation laws [[femaEhpGuidance]] [[femaPappg]] [[femaHmaGuide]]. Each project gets a statutory exclusion, a [categorical exclusion](/for/nepa-categorical-exclusion), an EA or an EIS, and the review must be complete before funds are released [[femaInstruction]] [[femaEhpGuidance]].",
+    "FEMA EHP review is FEMA's [environmental planning](/for/environmental-planning) and historic preservation review of the projects it funds, including Public Assistance and Hazard Mitigation grants, under NEPA and other federal environmental and historic preservation laws [[femaEhpGuidance]] [[femaPappg]] [[femaHmaGuide]]. Each project gets a statutory exclusion, a [categorical exclusion](/for/nepa-categorical-exclusion), an EA or an EIS, and the review must be complete before funds are released [[femaInstruction]] [[femaEhpGuidance]].",
   glance: [
     {
       label: "Procedures",
@@ -155,13 +155,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft an",
+    prefix: "Draft an EHP Review Narrative for",
     placeholder: "I need FEMA EHP review for…",
     examples: [
       {
         emoji: "🌊",
         label: "Flood Repair",
-        heading: "EHP Review Narrative for Flood Repair",
+        heading: "Flood Repair",
         eyebrow: "PUBLIC ASSISTANCE",
         prompt:
           "I'm a county public works engineer in eastern Kentucky applying for FEMA Public Assistance to repair a flood-damaged 1950s concrete bridge over a creek in place, to its pre-disaster design.",
@@ -169,7 +169,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏚️",
         label: "Home Buyouts",
-        heading: "EHP Review Narrative for Buyouts",
+        heading: "Buyouts",
         eyebrow: "HAZARD MITIGATION",
         prompt:
           "I'm the hazard mitigation officer for a small city in Missouri seeking Hazard Mitigation Grant Program funds to buy out and demolish 14 repeatedly flooded homes and keep the lots as open space.",
@@ -177,7 +177,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🛡️",
         label: "Tornado Safe Room",
-        heading: "EHP Review Narrative for a Safe Room",
+        heading: "a Safe Room",
         eyebrow: "TORNADO SAFETY",
         prompt:
           "I'm a school district facilities director in Oklahoma applying for hazard mitigation funds to build a 6,000-square-foot community safe room on our middle school campus.",
@@ -185,7 +185,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "⚡",
         label: "Backup Generator",
-        heading: "EHP Review Narrative for a Generator",
+        heading: "a Generator",
         eyebrow: "CRITICAL FACILITIES",
         prompt:
           "I'm the emergency manager for a small city in Louisiana installing a 500-kW backup generator on a new concrete pad at our wastewater treatment plant with hazard mitigation funds.",
@@ -193,7 +193,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🐟",
         label: "Culvert Upsizing",
-        heading: "EHP Review Narrative for a Culvert",
+        heading: "a Culvert",
         eyebrow: "STORMWATER",
         prompt:
           "I'm a consultant to a town in Vermont replacing an undersized culvert on a trout stream with a larger box culvert, funded through FEMA hazard mitigation.",

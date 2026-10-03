@@ -1,11 +1,11 @@
 import type { Tab } from "@/components/home-v2/feature-showcase/types";
+import { RESEARCH_COPY } from "@/consts/research-focus";
 
 /** The home page's showcase. Guide pages start from it (see `guideTabs`). */
 export const HOME_TABS: Tab[] = [
   {
     label: "Research projects with AI",
-    description:
-      "Automatically surface relevant project context. Our AI reads your uploads, finds the right Categorical Exclusions, and references past online documents.",
+    description: RESEARCH_COPY["legal-pathway"].tab,
     type: "research",
   },
   {

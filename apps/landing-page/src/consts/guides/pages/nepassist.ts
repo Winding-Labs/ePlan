@@ -46,7 +46,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/nepassist",
   title: "NEPAssist: EPA's Environmental Screening Map",
   description:
-    "What EPA's NEPAssist screening tool reports, the layers it maps, and how to use its report in an affected environment.",
+    "What EPA's NEPAssist screening tool reports, the map layers it draws on, and how to use its report in an affected environment section.",
   eyebrow: "NEPAssist",
   h1: "NEPAssist: what EPA's screening map reports and how to use it in a NEPA review",
   primaryKeyword: "nepassist",
@@ -85,13 +85,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft the",
+    prefix: "Draft the Affected Environment for",
     placeholder: "I have a NEPAssist report for…",
     examples: [
       {
         emoji: "💧",
         label: "Water Main",
-        heading: "Affected Environment for a Water Main",
+        heading: "a Water Main",
         eyebrow: "DRINKING WATER",
         prompt:
           "I'm a consultant preparing an EA for a rural water district's 14-mile water main replacement in eastern Kentucky, funded by USDA Rural Development, and I have a NEPAssist report for the route.",
@@ -99,7 +99,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌉",
         label: "Bridge Replacement",
-        heading: "Affected Environment for a Bridge",
+        heading: "a Bridge",
         eyebrow: "HIGHWAY BRIDGE",
         prompt:
           "I'm a state DOT environmental planner writing an EA for replacing a two-lane bridge over a trout stream in western Pennsylvania, and I ran NEPAssist with a half-mile buffer.",
@@ -107,7 +107,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏘️",
         label: "Affordable Housing",
-        heading: "Affected Environment for a Housing Project",
+        heading: "a Housing Project",
         eyebrow: "HOUSING",
         prompt:
           "I'm the environmental officer for a county housing authority reviewing a 60-unit affordable housing project on a 4-acre infill lot in central Ohio, and I exported the NEPAssist report to Excel.",
@@ -115,7 +115,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "✈️",
         label: "Runway Extension",
-        heading: "Affected Environment for a Runway",
+        heading: "a Runway",
         eyebrow: "AIRPORTS",
         prompt:
           "I'm an airport planner drafting an EA with our FAA district office for a 1,000-foot runway extension at a general aviation airport in coastal South Carolina.",
@@ -123,7 +123,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🛤️",
         label: "Rail Siding",
-        heading: "Affected Environment for a Rail Siding",
+        heading: "a Rail Siding",
         eyebrow: "FREIGHT RAIL",
         prompt:
           "I'm a consultant to a short-line railroad preparing an EA for a 2-mile passing siding next to wetlands in the Mississippi Delta, and I have a NEPAssist report for the corridor.",

@@ -57,7 +57,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/hawaii-hepa",
   title: "HEPA Hawaii: Chapter 343 EA and EIS Guide",
   description:
-    "HEPA Hawaii: what triggers HRS Chapter 343 review, exemptions, the environmental assessment, and a FONSI or EISPN.",
+    "HEPA Hawaii: what triggers HRS Chapter 343 review, its exemptions, the environmental assessment, and a FONSI or an EISPN.",
   eyebrow: "Hawaii HEPA",
   h1: "HEPA Hawaii: when HRS Chapter 343 requires an environmental assessment",
   primaryKeyword: "hepa hawaii",
@@ -97,13 +97,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a Hawaii EA for",
     placeholder: "I'm preparing a draft EA for…",
     examples: [
       {
         emoji: "🌊",
         label: "Shoreline Project",
-        heading: "Hawaii EA for a Shoreline Project",
+        heading: "a Shoreline Project",
         eyebrow: "SHORELINE AREA",
         prompt:
           "I'm a planner at an environmental consulting firm preparing a draft EA for a homeowners' association replacing a failing 400-foot rock revetment in the shoreline area on Maui's north shore.",
@@ -111,7 +111,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "💧",
         label: "Wastewater Plant",
-        heading: "Hawaii EA for a Wastewater Plant",
+        heading: "a Wastewater Plant",
         eyebrow: "COUNTY WASTEWATER",
         prompt:
           "I'm an engineer with a county wastewater division preparing a draft EA for upgrading a treatment plant that serves 3,000 homes on Hawaii Island to produce recycled water.",
@@ -119,7 +119,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏫",
         label: "School Expansion",
-        heading: "Hawaii EA for a School Expansion",
+        heading: "a School Expansion",
         eyebrow: "STATE FUNDS",
         prompt:
           "I'm a facilities planner with a state agency preparing a draft EA for a state-funded two-story classroom building on an existing high school campus on Oahu.",
@@ -127,7 +127,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏨",
         label: "Waikiki Hotel",
-        heading: "Hawaii EA for a Waikiki Hotel Upgrade",
+        heading: "a Waikiki Hotel Upgrade",
         eyebrow: "WAIKIKI DISTRICT",
         prompt:
           "I'm a land use consultant preparing a draft EA for a hotel owner renovating a 300-room tower and adding a rooftop pool deck in the Waikiki Special District.",
@@ -135,7 +135,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌿",
         label: "Watershed Fence",
-        heading: "Hawaii EA for a Watershed Fence",
+        heading: "a Watershed Fence",
         eyebrow: "CONSERVATION DISTRICT",
         prompt:
           "I'm a natural resource manager with a state watershed program preparing a draft EA for 6 miles of ungulate-exclusion fence in a conservation district on Kauai.",

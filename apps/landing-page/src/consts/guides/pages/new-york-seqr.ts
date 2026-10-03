@@ -76,9 +76,9 @@ export const sources = {
 
 export const entry: GuideContent<GuidePath> = {
   path: "/for/new-york-seqr",
-  title: "SEQRA Guide: Full EAF, Type II & 2026 Changes",
+  title: "SEQRA and SEQR Guide: Full EAF, Type II, 2026",
   description:
-    "New York SEQRA step by step: Type I, Type II and Unlisted actions, the Full EAF, declarations and the 2026 amendments.",
+    "New York SEQRA and SEQR step by step: Type I, Type II and Unlisted actions, the Full EAF, declarations and the 2026 amendments.",
   eyebrow: "New York SEQRA",
   h1: "SEQRA guide: New York's environmental review, from the Full EAF to findings",
   primaryKeyword: "seqra",
@@ -116,13 +116,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a Full EAF for",
     placeholder: "I'm preparing a Full EAF Part 1 for…",
     examples: [
       {
         emoji: "☀️",
         label: "Solar Farm",
-        heading: "Full EAF for Solar Farm",
+        heading: "Solar Farm",
         eyebrow: "COMMUNITY SOLAR",
         prompt:
           "I'm an environmental consultant preparing the Full EAF Part 1 for a 5-megawatt community solar farm on 28 acres of hayfield in Ulster County that needs a town planning board special use permit and site plan approval.",
@@ -130,7 +130,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏘️",
         label: "Townhouse Community",
-        heading: "Full EAF for Townhouse Community",
+        heading: "Townhouse Community",
         eyebrow: "NEW HOUSING",
         prompt:
           "I'm a consultant for a developer preparing the Full EAF Part 1 for a 240-unit townhouse community on 60 wooded acres in Saratoga County that will connect to public water and sewer.",
@@ -138,7 +138,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏭",
         label: "Distribution Warehouse",
-        heading: "Full EAF for Distribution Warehouse",
+        heading: "Distribution Warehouse",
         eyebrow: "LOGISTICS",
         prompt:
           "I'm a civil engineer preparing the Full EAF Part 1 for a 300,000-square-foot distribution warehouse with 400 truck and car spaces on 35 acres in Orange County.",
@@ -146,7 +146,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "💧",
         label: "Water Treatment",
-        heading: "Full EAF for Water Treatment Plant",
+        heading: "Water Treatment Plant",
         eyebrow: "PUBLIC WATER",
         prompt:
           "I'm the project engineer for a Long Island water district planning a new 4-million-gallon-per-day wellfield and treatment plant on 12 acres in Suffolk County.",
@@ -154,7 +154,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🗺️",
         label: "Corridor Rezoning",
-        heading: "Full EAF for Zoning Amendment",
+        heading: "Zoning Amendment",
         eyebrow: "LAND USE",
         prompt:
           "I'm a town planner in Dutchess County preparing the Full EAF for a town board rezoning that would allow mixed-use development on 120 acres along a state highway corridor.",

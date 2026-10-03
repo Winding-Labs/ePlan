@@ -94,15 +94,14 @@ export const sources = {
 
 export const entry: GuideContent<GuidePath> = {
   path: "/for/environmental-impact-statement",
-  title: "Environmental Impact Statement: Steps & Examples",
+  title: "NEPA Environmental Impact Statement (EIS) Guide",
   description:
-    "What an environmental impact statement covers, when NEPA requires one, page limits, the steps to a ROD and real examples.",
+    "What an environmental impact statement (EIS) means, when NEPA requires one, page limits, the steps to a ROD and real examples.",
   eyebrow: "Environmental impact statement",
   h1: "Environmental impact statements: steps, page limits and real examples",
   primaryKeyword: "environmental impact statement",
   secondaryKeywords: [
     "what is an environmental impact statement",
-    "environmental impact statement example",
     "record of decision",
     "notice of intent",
     "draft and final EIS",
@@ -140,13 +139,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft an",
+    prefix: "Draft an EIS Outline for",
     placeholder: "I'm starting an EIS for…",
     examples: [
       {
         emoji: "⚡",
         label: "Transmission Line",
-        heading: "EIS Outline for Transmission Line",
+        heading: "Transmission Line",
         eyebrow: "ENERGY TRANSMISSION",
         prompt:
           "I'm a NEPA project manager at a BLM district office in Idaho starting an EIS on a utility's right-of-way application for a 90-mile, 500-kV transmission line across public land.",
@@ -154,7 +153,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🛣️",
         label: "Highway Bypass",
-        heading: "EIS Outline for Highway Bypass",
+        heading: "Highway Bypass",
         eyebrow: "NEW HIGHWAY",
         prompt:
           "I'm an environmental manager at a state DOT working with our FHWA division office on an EIS for a 12-mile, four-lane highway bypass on new location around a small town in eastern Kansas.",
@@ -162,7 +161,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌲",
         label: "Forest Plan Revision",
-        heading: "EIS Outline for Forest Plan Revision",
+        heading: "Forest Plan Revision",
         eyebrow: "FOREST PLANNING",
         prompt:
           "I'm the planning staff officer on a 2-million-acre national forest in western Montana and need a programmatic EIS for our land management plan revision.",
@@ -170,7 +169,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🚆",
         label: "Light Rail Extension",
-        heading: "EIS Outline for Light Rail Extension",
+        heading: "Light Rail Extension",
         eyebrow: "PUBLIC TRANSIT",
         prompt:
           "I'm a consultant to a regional transit agency preparing an EIS with FTA for a 9-mile light rail extension on a new alignment outside existing right-of-way in central Arizona.",
@@ -178,7 +177,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "💧",
         label: "Reservoir Expansion",
-        heading: "EIS Outline for Reservoir Expansion",
+        heading: "Reservoir Expansion",
         eyebrow: "WATER STORAGE",
         prompt:
           "I'm a Bureau of Reclamation planner in Utah and need an EIS for raising an existing dam 40 feet to add 60,000 acre-feet of reservoir storage.",
@@ -237,7 +236,7 @@ export const entry: GuideContent<GuidePath> = {
   sections: [
     {
       heading:
-        "What is an environmental impact statement, and when is one required?",
+        "What is an environmental impact statement (EIS), and when is one required?",
       paragraphs: [
         "If no significant effect is reasonably foreseeable, or its significance is unknown, the agency prepares an environmental assessment instead, unless a categorical exclusion applies. No environmental document is needed if the action is not final agency action, is excluded, would clearly and fundamentally conflict with another law, or is nondiscretionary [[usc4336]].",
         "Recent filings show the range: EPA's September 25, 2026 notice lists EISs for a TVA solar and storage project, Air Force F-35A training basing and a FERC liquefaction project [[eisNoa20260925]]. Some agencies list actions that normally need one; FHWA, FRA and FTA name these, among others [[eisFhwa771115]]:",

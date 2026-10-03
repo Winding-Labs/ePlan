@@ -1,5 +1,7 @@
 import { getLandingPageEnv } from "@wildfires-org/turboplan-env";
 
+import { GUIDE_PATHS } from "@/consts/guides/paths";
+
 /**
  * Get the current landing page URL for redirect callbacks.
  * In browser, uses window.location.origin. On server, returns empty string.
@@ -11,9 +13,25 @@ const getLandingPageUrl = (): string => {
   return "";
 };
 
+/** Home and every guide render the hero prompt and the pricing section. */
+const hasPromptHero = (pathname: string) =>
+  pathname === "/" || (GUIDE_PATHS as readonly string[]).includes(pathname);
+
 export const routing = {
   home(params?: Record<string, string>) {
     return `/${params ? "?" + new URLSearchParams(params).toString() : ""}`;
+  },
+  /**
+   * Every "Create Project" / "Start free" button: this page's own prompt when
+   * it has one, else home's. A visitor who landed on a guide (most ad clicks)
+   * stays on that guide's document-specific prompt instead of being sent home.
+   */
+  tryIt(pathname: string) {
+    return `${hasPromptHero(pathname) ? pathname : "/"}?tryIt=true`;
+  },
+  /** This page's pricing section when it has one, else home's. */
+  pricingOn(pathname: string) {
+    return `${hasPromptHero(pathname) ? pathname : "/"}#pricing`;
   },
   contact() {
     return "/#contact";

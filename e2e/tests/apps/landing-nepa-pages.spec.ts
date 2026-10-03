@@ -16,6 +16,9 @@ const GUIDE_PATHS = [
   "/for/environmental-impact-statement",
   "/for/nepa-scoping-letter",
   "/for/nepa-regulations",
+  "/for/environmental-impact-assessment",
+  "/for/environmental-permitting",
+  "/for/environmental-planning",
   "/for/ceqa",
   "/for/ceqa-initial-study",
   "/for/ceqa-exemptions",
@@ -62,6 +65,11 @@ test.describe("Landing Page - guide pages", () => {
     // The old top-level /templates pages 308 to /for; catalog project
     // templates (/projects/<org>/<office>/templates/<slug>) are listed.
     expect(xml).not.toMatch(/<loc>https?:\/\/[^/]+\/templates/);
+    // Office pages (/projects/<org>/<office>) are noindex, so a sitemap entry
+    // for one would be a conflicting signal.
+    expect(xml).not.toMatch(
+      /<loc>https?:\/\/[^/]+\/projects\/[^/<]+\/[^/<]+<\/loc>/,
+    );
   });
 
   test("permanently redirects the moved guide URLs", async ({ request }) => {
@@ -174,6 +182,45 @@ test.describe("Landing Page - guide pages", () => {
         .evaluate((html) => html.scrollWidth);
       expect(scrollWidth, path).toBeLessThanOrEqual(390);
     }
+  });
+
+  // Ads land on guides, mostly on phones: the draft action must be inside the
+  // first screen (it sat at y=787-946 on a 664px iPhone 13, eplan-36 audit
+  // 2026-10-03), and shown once per breakpoint.
+  test("shows the draft action inside a phone's first screen", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 664 });
+    for (const path of GUIDE_PATHS) {
+      await page.goto(`${LANDING_URL}${path}`);
+      const cta = page
+        .getByRole("link", { name: "Draft yours with ePlan" })
+        .filter({ visible: true });
+      await expect(cta, path).toHaveCount(1);
+      const box = await cta.boundingBox();
+      expect((box?.y ?? Infinity) + (box?.height ?? 0), path).toBeLessThan(664);
+    }
+  });
+
+  // "Create Project" and "Pricing" used to send a guide's visitor to the home
+  // page; they now use the guide's own prompt and pricing section.
+  test("keeps the nav's Create Project and Pricing on the guide", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const path = "/for/nepa-scoping-letter";
+    await page.goto(`${LANDING_URL}${path}`);
+    const nav = page.getByRole("navigation", { name: "Main navigation" });
+    await expect(nav.getByRole("link", { name: "Pricing" })).toHaveAttribute(
+      "href",
+      `${path}#pricing`,
+    );
+
+    await nav.getByRole("button", { name: "Create Project" }).click();
+    const prompt = page.locator("#project-prompt-input textarea");
+    await expect(prompt).toBeFocused();
+    await expect(prompt).toBeInViewport();
+    await expect(page).toHaveURL(new RegExp(`${path}$`));
   });
 
   // Ad and search traffic is anonymous. (Signed in, the prompt waits on

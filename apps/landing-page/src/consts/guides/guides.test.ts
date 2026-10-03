@@ -7,6 +7,7 @@ import { guideLinks, orderCitations, stripCitations } from "@/lib/citations";
 import {
   DESCRIPTION_MAX_LENGTH,
   DESCRIPTION_MAX_PX,
+  DESCRIPTION_MIN_LENGTH,
   snippetWidthPx,
   TITLE_MAX_LENGTH,
 } from "@/lib/seo";
@@ -74,6 +75,13 @@ const keywordHaystack = (page: GuideEntry): string =>
   ]
     .map(lower)
     .join("\n");
+
+// A keyword counts as a whole word or phrase, plural allowed: "seqr" used to
+// pass on the SEQR page only as part of "seqra" (eplan-36 audit, 2026-10-03).
+const mentions = (haystack: string, keyword: string): boolean =>
+  new RegExp(
+    `(^|[^a-z0-9])${keyword.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(s|es)?($|[^a-z0-9])`,
+  ).test(haystack);
 
 const words = (text: string) =>
   stripCitations(text).split(/\s+/).filter(Boolean).length;
@@ -250,6 +258,13 @@ describe("guide pages", () => {
     expect(wide).toEqual([]);
   });
 
+  it("writes every description long enough to fill the result", () => {
+    const short = GUIDES.filter(
+      (page) => page.description.length < DESCRIPTION_MIN_LENGTH,
+    ).map((page) => `${page.path} ${page.description.length}`);
+    expect(short).toEqual([]);
+  });
+
   it("gives each page its own primary keyword, in its title and H1", () => {
     const primaries = GUIDES.map((page) => page.primaryKeyword.toLowerCase());
     expect(new Set(primaries).size).toBe(primaries.length);
@@ -270,7 +285,7 @@ describe("guide pages", () => {
         expect({
           page: page.path,
           keyword,
-          found: haystack.includes(keyword.toLowerCase()),
+          found: mentions(haystack, keyword),
         }).toEqual({
           page: page.path,
           keyword,
@@ -280,8 +295,41 @@ describe("guide pages", () => {
     });
   });
 
+  // One keyword, one page: two guides targeting the same query split its
+  // ranking (eplan-36 audit, 2026-10-03: "23 cfr 771.117" on the CE and FHWA
+  // pages, "record of decision" on the NEPA and EIS pages, and five more).
+  it("gives every keyword to exactly one page", () => {
+    const owners = new Map<string, string[]>();
+    GUIDES.forEach((page) =>
+      [page.primaryKeyword, ...page.secondaryKeywords].forEach((keyword) => {
+        const key = keyword.toLowerCase().replace(/s$/, "");
+        owners.set(key, [...new Set([...(owners.get(key) ?? []), page.path])]);
+      }),
+    );
+    expect(
+      [...owners]
+        .filter(([, paths]) => paths.length > 1)
+        .map(([keyword, paths]) => `${keyword}: ${paths.join(", ")}`),
+    ).toEqual([]);
+  });
+
   it("keeps every page within its reading budget", () => {
     expect(GUIDES.flatMap(budgetViolations)).toEqual([]);
+  });
+
+  // Owner, 2026-10-02: "less words in the animation". The document goes in
+  // the static prefix ("Start a CEQA Review for"); only the project types out.
+  it("animates only the project in the hero, never the document", () => {
+    const long = GUIDES.flatMap((page) =>
+      page.hero.examples
+        .filter(
+          (example) =>
+            / for /.test(example.heading) ||
+            example.heading.split(/\s+/).length > 4,
+        )
+        .map((example) => `${page.path}: ${example.heading}`),
+    );
+    expect(long).toEqual([]);
   });
 
   it("gives every page five hero examples whose pills and headings are distinct", () => {

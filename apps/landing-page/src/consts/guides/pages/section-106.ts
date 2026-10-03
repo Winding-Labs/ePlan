@@ -69,7 +69,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/section-106",
   title: "Section 106: NHPA Review Steps & 36 CFR 800",
   description:
-    "What Section 106 of the NHPA requires: the 36 CFR part 800 steps, SHPO and tribal consultation, and how it runs with NEPA.",
+    "What Section 106 of the National Historic Preservation Act requires: the 36 CFR part 800 steps, SHPO and tribal consultation.",
   eyebrow: "Section 106",
   h1: "Section 106 review: the NHPA process, step by step",
   primaryKeyword: "section 106",
@@ -80,10 +80,12 @@ export const entry: GuideContent<GuidePath> = {
     "section 106 consultation",
     "section 106 process",
     "shpo review",
+    "shpo",
+    "state historic preservation officer",
   ],
   document: "Section 106 Consultation Letter",
   answer:
-    "Section 106 of the National Historic Preservation Act requires a federal agency to take into account a project's effects on historic properties, and let the Advisory Council on Historic Preservation (ACHP) comment, before approving federal funds or a license [[s106Usc306108]]. The Section 106 process, 36 CFR part 800, is mostly consultation with the State or Tribal Historic Preservation Officer (SHPO/THPO) [[s106Cfr800]] [[s106Citizen]].",
+    "Section 106 of the National Historic Preservation Act requires a federal agency to consider a project's effects on historic properties, and let the Advisory Council on Historic Preservation (ACHP) comment, before approving federal funds or a license [[s106Usc306108]]. The process, 36 CFR part 800, is mostly consultation with the State Historic Preservation Officer (SHPO), or the THPO on tribal lands [[s106Cfr800]] [[s106Citizen]].",
   glance: [
     {
       label: "Legal basis",
@@ -109,13 +111,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a Section 106 Letter for",
     placeholder: "I'm starting Section 106 consultation for…",
     examples: [
       {
         emoji: "🌉",
         label: "Bridge Work",
-        heading: "Section 106 Letter for Bridge Work",
+        heading: "Bridge Work",
         eyebrow: "BRIDGE REPLACEMENT",
         prompt:
           "I'm a cultural resources specialist at the Iowa DOT starting Section 106 consultation for an FHWA-funded replacement of a 1950s two-lane bridge over a creek in rural Iowa.",
@@ -123,7 +125,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏘️",
         label: "Housing Rehab",
-        heading: "Section 106 Letter for Housing Rehab",
+        heading: "Housing Rehab",
         eyebrow: "AFFORDABLE HOUSING",
         prompt:
           "I'm a housing program manager for a city in Ohio using HUD HOME funds to rehabilitate a 1920s three-story apartment building in a National Register-listed neighborhood.",
@@ -131,7 +133,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌊",
         label: "Levee Repair",
-        heading: "Section 106 Letter for Levee Repair",
+        heading: "Levee Repair",
         eyebrow: "FLOOD PROTECTION",
         prompt:
           "I'm a regulatory project manager at a U.S. Army Corps of Engineers district reviewing a permit for a 2-mile levee repair along a river in Missouri with known archaeological sites nearby.",
@@ -139,7 +141,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "☀️",
         label: "Solar Project",
-        heading: "Section 106 Letter for Solar Project",
+        heading: "Solar Project",
         eyebrow: "RENEWABLE ENERGY",
         prompt:
           "I'm an archaeologist at a BLM field office in Nevada reviewing a right-of-way application for a 3,000-acre solar project on public land near historic trail segments.",
@@ -147,7 +149,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "✈️",
         label: "Runway Extension",
-        heading: "Section 106 Letter for Runway Extension",
+        heading: "Runway Extension",
         eyebrow: "AIRPORT IMPROVEMENT",
         prompt:
           "I'm an environmental planner at a regional airport in Georgia preparing the Section 106 consultation letter for FAA on a 1,500-foot runway extension near a historic farmstead.",
@@ -220,9 +222,10 @@ export const entry: GuideContent<GuidePath> = {
       ],
     },
     {
-      heading: "Who takes part in Section 106 consultation?",
+      heading: "What is a SHPO? Who takes part in Section 106",
       paragraphs: [
-        "The agency is responsible for every finding, even when an applicant or consultant prepares the analysis. It consults the SHPO, or the THPO on tribal lands where a tribe has assumed the SHPO's duties [[s106Cfr8002]]. It must make a reasonable and good faith effort to identify and invite tribes and Native Hawaiian organizations that may attach religious and cultural significance to affected properties [[s106Cfr8003]].",
+        "The SHPO, or State Historic Preservation Officer, is the official appointed to administer the state historic preservation program; a THPO takes on the SHPO's role on tribal lands [[s106Cfr80016]]. The agency consults the SHPO or THPO and is responsible for every finding, even when an applicant or consultant prepares the analysis [[s106Cfr8002]].",
+        "It must make a reasonable and good faith effort to identify and invite tribes and Native Hawaiian organizations that may attach religious and cultural significance to affected properties [[s106Cfr8003]].",
       ],
     },
     {

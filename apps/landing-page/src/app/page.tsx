@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/shared/json-ld";
 import { brand } from "@/lib/brand";
 import {
   buildPageMetadata,
+  organizationJsonLd,
   SITE_DESCRIPTION,
   SITE_TITLE,
   toAbsoluteUrl,
@@ -22,10 +23,7 @@ export default function Home() {
       <JsonLd
         data={{
           "@context": "https://schema.org",
-          "@type": "Organization",
-          name: brand.name,
-          url: toAbsoluteUrl("/"),
-          logo: toAbsoluteUrl(brand.logo),
+          ...organizationJsonLd(),
           description: SITE_DESCRIPTION,
         }}
       />
@@ -33,8 +31,10 @@ export default function Home() {
         data={{
           "@context": "https://schema.org",
           "@type": "WebSite",
+          "@id": toAbsoluteUrl("/#website"),
           name: brand.name,
           url: toAbsoluteUrl("/"),
+          publisher: { "@id": organizationJsonLd()["@id"] },
         }}
       />
       <HomePage />

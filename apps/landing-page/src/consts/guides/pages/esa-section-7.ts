@@ -84,7 +84,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/esa-section-7",
   title: "ESA Section 7: Consultation Steps & BA Guide",
   description:
-    "How ESA section 7 consultation works: IPaC species lists, biological assessments, informal vs formal consultation, timelines.",
+    "How Endangered Species Act section 7 consultation works: IPaC species lists, biological assessments, informal vs formal, timelines.",
   eyebrow: "ESA Section 7",
   h1: "ESA section 7 consultation: biological assessments, opinions and timelines",
   primaryKeyword: "esa section 7",
@@ -93,7 +93,6 @@ export const entry: GuideContent<GuidePath> = {
     "biological assessment",
     "endangered species act section 7",
     "biological opinion",
-    "ipac",
   ],
   document: "Biological Assessment",
   answer:
@@ -126,13 +125,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a Biological Assessment for",
     placeholder: "I'm writing a biological assessment for…",
     examples: [
       {
         emoji: "🥾",
         label: "Trail Work",
-        heading: "Biological Assessment for Trail Work",
+        heading: "Trail Work",
         eyebrow: "RECREATION TRAILS",
         prompt:
           "I'm a wildlife biologist on a ranger district in western Oregon writing a biological assessment for a 4-mile trail reroute and footbridge replacement in spotted owl habitat.",
@@ -140,7 +139,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🐟",
         label: "Fish Passage",
-        heading: "Biological Assessment for Fish Passage",
+        heading: "Fish Passage",
         eyebrow: "CULVERT REPLACEMENT",
         prompt:
           "I'm an environmental coordinator at a state DOT in Washington preparing a biological assessment for FHWA on replacing a culvert with a bridge on a salmon-bearing stream.",
@@ -148,7 +147,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "⚓",
         label: "Dock Permit",
-        heading: "Biological Assessment for Dock Permit",
+        heading: "Dock Permit",
         eyebrow: "COASTAL PERMIT",
         prompt:
           "I'm a consultant preparing a biological assessment for a Corps permit to build a 300-foot marina dock in a Florida lagoon used by manatees and sea turtles.",
@@ -156,7 +155,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌬️",
         label: "Wind Project",
-        heading: "Biological Assessment for Wind Project",
+        heading: "Wind Project",
         eyebrow: "WIND ENERGY",
         prompt:
           "I'm the NEPA lead at a BLM field office in Wyoming preparing a biological assessment for a 200-turbine wind project on public land.",
@@ -164,7 +163,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "💧",
         label: "Canal Lining",
-        heading: "Biological Assessment for Canal Lining",
+        heading: "Canal Lining",
         eyebrow: "WATER DELIVERY",
         prompt:
           "I'm a Bureau of Reclamation biologist in California writing a biological assessment for lining 12 miles of an irrigation canal near giant garter snake habitat.",

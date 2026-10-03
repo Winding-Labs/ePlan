@@ -121,7 +121,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/hud-environmental-review",
   title: "24 CFR Part 58: HUD Environmental Review Guide",
   description:
-    "How a HUD environmental review works under 24 CFR Part 58: levels of review, the ERR, public notices and the RROF.",
+    "How a HUD environmental review works under 24 CFR Part 58: exemptions, levels of review, the ERR, public notices and the RROF.",
   eyebrow: "HUD environmental review",
   h1: "24 CFR Part 58: how a HUD environmental review works, from exemption to release of funds",
   primaryKeyword: "24 cfr part 58",
@@ -164,13 +164,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft an",
+    prefix: "Draft an Environmental Review Record for",
     placeholder: "I need a Part 58 environmental review for…",
     examples: [
       {
         emoji: "🏠",
         label: "Home Rehab",
-        heading: "Environmental Review Record for Home Rehab",
+        heading: "Home Rehab",
         eyebrow: "CDBG HOUSING",
         prompt:
           "I'm the housing rehab coordinator in a city community development department in Ohio, using CDBG funds to rehabilitate a 1920s owner-occupied duplex with a new roof, furnace and windows.",
@@ -178,7 +178,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🚰",
         label: "Water Main",
-        heading: "Environmental Review Record for Water Main",
+        heading: "Water Main",
         eyebrow: "PUBLIC FACILITIES",
         prompt:
           "I'm a grants administrator for a rural county in Georgia replacing 4,000 feet of aging water main in the same alignment and size with CDBG funds.",
@@ -186,7 +186,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏘️",
         label: "Infill Townhomes",
-        heading: "Environmental Review Record for Townhomes",
+        heading: "Townhomes",
         eyebrow: "HOME PROGRAM",
         prompt:
           "I'm a consultant to a nonprofit developer building 16 affordable townhomes with HOME funds on a vacant 2-acre infill lot in a small Indiana city, which is the responsible entity.",
@@ -194,7 +194,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🛏️",
         label: "Motel Shelter",
-        heading: "Environmental Review Record for Shelter",
+        heading: "Shelter",
         eyebrow: "HOMELESS SERVICES",
         prompt:
           "I'm on the community development staff of a city in New Mexico reviewing a nonprofit's conversion of a vacant motel into a 40-bed emergency shelter with Emergency Solutions Grant funds.",
@@ -202,7 +202,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏡",
         label: "Tribal Housing",
-        heading: "Environmental Review Record for New Homes",
+        heading: "New Homes",
         eyebrow: "TRIBAL HOUSING",
         prompt:
           "I'm the environmental reviewer for a tribe in South Dakota using Indian Housing Block Grant funds to build eight single-family homes on one site on trust land.",

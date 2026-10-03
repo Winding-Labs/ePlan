@@ -222,7 +222,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/ceqa-environmental-impact-report",
   title: "Environmental Impact Report (EIR): CEQA Guide",
   description:
-    "When CEQA requires an EIR, the NOP and scoping, AB 52 consultation, draft and final EIR contents, findings and the NOD.",
+    "When CEQA requires an EIR, the NOP and scoping, AB 52 consultation, draft and final EIR contents, and the notice of determination.",
   eyebrow: "CEQA EIR",
   h1: "The CEQA environmental impact report, from notice of preparation to notice of determination",
   primaryKeyword: "environmental impact report",
@@ -266,13 +266,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a Notice of Preparation for",
     placeholder: "I'm preparing an EIR for…",
     examples: [
       {
         emoji: "💧",
         label: "Water Storage",
-        heading: "Notice of Preparation for Water Storage",
+        heading: "Water Storage",
         eyebrow: "WATER SUPPLY",
         prompt:
           "I'm an environmental planner at a county water district preparing an EIR for a 5-million-gallon storage reservoir and 1.4 miles of pipeline on 12 acres of grazing land in Placer County.",
@@ -280,7 +280,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏙️",
         label: "Downtown Plan",
-        heading: "Notice of Preparation for Downtown Plan",
+        heading: "Downtown Plan",
         eyebrow: "LAND USE PLANNING",
         prompt:
           "I'm a senior planner with a city in Riverside County preparing a program EIR for a downtown specific plan that allows 2,400 new homes on 180 acres.",
@@ -288,7 +288,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "☀️",
         label: "Solar Facility",
-        heading: "Notice of Preparation for Solar Facility",
+        heading: "Solar Facility",
         eyebrow: "RENEWABLE ENERGY",
         prompt:
           "I'm a consultant preparing an EIR for a county planning department on a 300-megawatt solar and battery storage facility on 2,000 acres of farmland in Kern County.",
@@ -296,7 +296,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🛣️",
         label: "Highway Widening",
-        heading: "Notice of Preparation for Highway Widening",
+        heading: "Highway Widening",
         eyebrow: "TRANSPORTATION",
         prompt:
           "I'm an environmental planner at a county transportation authority adding an auxiliary lane to 4 miles of a state highway in San Mateo County.",
@@ -304,7 +304,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🎓",
         label: "Campus Expansion",
-        heading: "Notice of Preparation for Campus Expansion",
+        heading: "Campus Expansion",
         eyebrow: "HIGHER EDUCATION",
         prompt:
           "I'm a campus planner at a state university preparing an EIR for a long-range development plan that adds 3,000 student beds and two academic buildings.",
