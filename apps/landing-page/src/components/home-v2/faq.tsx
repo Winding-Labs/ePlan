@@ -15,7 +15,7 @@ import { ScrollReveal } from "@/components/home-v2/ui/scroll-reveal";
 import { SectionHeader } from "@/components/home-v2/ui/section-header";
 import { cn } from "@/lib/utils";
 
-type FaqItem = {
+export type FaqItem = {
   question: string;
   answer: string;
 };
@@ -57,7 +57,12 @@ const PANEL_TRANSITION = { duration: 0.2, ease: EASE_OUT } as const;
 const PANEL_HIDDEN = { height: 0, opacity: 0 };
 const PANEL_HIDDEN_REDUCED = { opacity: 0 };
 
-export function Faq() {
+interface FaqProps {
+  // Defaults to the homepage questions; the NEPA guide pages pass their own.
+  items?: FaqItem[];
+}
+
+export function Faq({ items = FAQ_ITEMS }: FaqProps) {
   // Single, collapsible: at most one item open; first one open by default.
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
@@ -88,7 +93,7 @@ export function Faq() {
       </ScrollReveal>
 
       <ul className="flex w-full max-w-[760px] flex-col gap-3">
-        {FAQ_ITEMS.map((item, index) => (
+        {items.map((item, index) => (
           <li key={item.question}>
             <ScrollReveal
               direction="up"

@@ -29,7 +29,16 @@ test.describe("Landing Page - legal pages", () => {
         "href",
         new RegExp(`${path}$`),
       );
-      await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
+      // Indexable exactly like the home page: the site-wide robots default
+      // (index on production, noindex on previews), nothing page-specific.
+      const robots = await page
+        .locator('meta[name="robots"]')
+        .getAttribute("content");
+      await page.goto(LANDING_URL);
+      expect(
+        await page.locator('meta[name="robots"]').getAttribute("content"),
+      ).toBe(robots);
+      await page.goto(`${LANDING_URL}${path}`);
 
       // A real support address, and a link to the other legal page.
       await expect(page.locator('a[href^="mailto:"]').first()).toBeVisible();
