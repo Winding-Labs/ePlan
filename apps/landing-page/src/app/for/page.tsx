@@ -10,32 +10,55 @@ import {
   SECTION_LEAD_CLASS,
   SECTION_TITLE_CLASS,
 } from "@/components/home-v2/ui/section-header";
-import { GUIDES } from "@/consts/guides";
-import type { GuideFamily } from "@/consts/guides/types";
-import { buildPageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/shared/json-ld";
+import { GUIDE_FAMILIES, GUIDES } from "@/consts/guides";
+import { buildPageMetadata, toAbsoluteUrl } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "NEPA & CEQA Guides for Environmental Planners",
   description:
-    "Guides to NEPA and CEQA documents, federal and state environmental reviews, agency procedures and research tools, each cited to current law.",
+    "NEPA and CEQA guides: documents, federal and state reviews, agency procedures and research tools, each cited to current law.",
   path: "/for",
 });
-
-const FAMILIES: { family: GuideFamily; title: string }[] = [
-  { family: "nepa", title: "NEPA documents" },
-  { family: "ceqa", title: "CEQA documents" },
-  { family: "federal", title: "Reviews alongside NEPA" },
-  { family: "agency", title: "Agency NEPA procedures" },
-  { family: "state", title: "State environmental review" },
-  { family: "tools", title: "Research tools and examples" },
-  { family: "product", title: "ePlan" },
-];
 
 /** Every guide page, grouped by family: the hub that links them all. */
 export default function GuidesIndex() {
   return (
     <div className="w-full overflow-x-clip bg-brandAlt-100">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "NEPA and CEQA guides",
+          url: toAbsoluteUrl("/for"),
+          hasPart: GUIDES.map((guide) => ({
+            "@type": "Article",
+            headline: guide.h1,
+            url: toAbsoluteUrl(guide.path),
+          })),
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: toAbsoluteUrl("/"),
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Guides",
+              item: toAbsoluteUrl("/for"),
+            },
+          ],
+        }}
+      />
       <section
         className={cn(PAGE_GUTTER, "pt-10 sm:pt-14 lg:pt-16 flex flex-col")}
       >
@@ -53,7 +76,7 @@ export default function GuidesIndex() {
           </p>
         </div>
       </section>
-      {FAMILIES.map(({ family, title }) => {
+      {GUIDE_FAMILIES.map(({ family, title }) => {
         const guides = GUIDES.filter((guide) => guide.family === family);
         if (guides.length === 0) {
           return null;

@@ -116,6 +116,9 @@ const SPARKLE_TRANSITION = {
 const getPromptTextarea = () =>
   document.getElementById("project-prompt-input")?.querySelector("textarea");
 
+const HERO_HEADING_CLASS =
+  "font-heading text-[36px] font-normal leading-[1.15] tracking-[-2px] text-[#1A1A1A] md:text-[48px] md:tracking-[-2.8px] lg:text-[60px] lg:tracking-[-3.6px]";
+
 interface HeroProps {
   content?: HeroContent;
 }
@@ -215,25 +218,37 @@ export function Hero({ content = HOME_HERO }: HeroProps) {
               </div>
 
               {/* H1 — no fixed min-height: every heading word is laid out
-                  invisibly in the same grid cell as the live text, so the
-                  block always reserves the longest wrap at any width. */}
-              <HeadingTag className="font-heading text-[36px] font-normal leading-[1.15] tracking-[-2px] text-[#1A1A1A] md:text-[48px] md:tracking-[-2.8px] lg:text-[60px] lg:tracking-[-3.6px]">
-                {/* Stable accessible name — the typewriter below mutates every
-                    few ms and would spam screen readers. */}
-                <span className="sr-only">{content.label}</span>
-                <span aria-hidden="true" className="block">
-                  {content.prefix}
-                </span>
-                <span aria-hidden="true" className="grid">
-                  {uniqueHeadingWords.map((word) => (
-                    <span
-                      key={word}
-                      className="invisible col-start-1 row-start-1"
-                    >
-                      <HeadingLine text={word} />
-                    </span>
-                  ))}
-                  <span className="col-start-1 row-start-1">
+                  invisibly in the same grid cell as the heading, so the block
+                  always reserves the longest wrap at any width. The sizing
+                  copies sit beside the heading, not in it: inside, crawlers
+                  read every example run together as the page's heading. */}
+              <div className="grid">
+                <div
+                  aria-hidden="true"
+                  className={cn(
+                    HERO_HEADING_CLASS,
+                    "invisible col-start-1 row-start-1",
+                  )}
+                >
+                  <span className="block">{content.prefix}</span>
+                  <span className="grid">
+                    {uniqueHeadingWords.map((word) => (
+                      <span key={word} className="col-start-1 row-start-1">
+                        <HeadingLine text={word} />
+                      </span>
+                    ))}
+                  </span>
+                </div>
+                <HeadingTag
+                  className={cn(HERO_HEADING_CLASS, "col-start-1 row-start-1")}
+                >
+                  {/* Stable accessible name — the typewriter below mutates
+                      every few ms and would spam screen readers. */}
+                  <span className="sr-only">{content.label}</span>
+                  <span aria-hidden="true" className="block">
+                    {content.prefix}
+                  </span>
+                  <span aria-hidden="true" className="block">
                     <HeadingLine
                       text={displayText}
                       sparkleKey={sparkleKey}
@@ -241,8 +256,8 @@ export function Hero({ content = HOME_HERO }: HeroProps) {
                       prefersReducedMotion={Boolean(prefersReducedMotion)}
                     />
                   </span>
-                </span>
-              </HeadingTag>
+                </HeadingTag>
+              </div>
             </div>
           </div>
 

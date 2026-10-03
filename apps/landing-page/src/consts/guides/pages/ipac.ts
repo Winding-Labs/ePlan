@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 /**
  * /for/ipac — USFWS IPaC (Information for Planning and Consultation).
@@ -46,14 +46,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/ipac",
-  parent: "/for/nepa",
-  family: "tools",
-  name: "IPaC",
   title: "USFWS IPaC: Species Lists, DKeys and Section 7",
   description:
-    "How USFWS IPaC works: official species list vs. resource list, the 90-day validity, critical habitat, NWI wetlands, determination keys and section 7.",
+    "How USFWS IPaC works: official species lists vs resource lists, 90-day validity, critical habitat and determination keys.",
   eyebrow: "IPaC",
   h1: "USFWS IPaC: reading an official species list and using it in section 7 review",
   primaryKeyword: "usfws ipac",
@@ -212,7 +209,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "Biological assessment: the sections",
     intro:
-      "Contents are at the federal agency's discretion [[esaCfr40212]]. This order follows what the Services' rules list for an assessment and a formal consultation request [[esaCfr40212]] [[esaCfr40214]], which IPaC's Consultation Package Builder also walks through [[esaIpac]].",
+      "Contents are at the federal agency's discretion [[esaCfr40212]]. This order follows what the Services' rules list for an assessment and a formal consultation request [[esaCfr40212]] [[esaCfr40214]], which IPaC's Consultation Package Builder also walks through [[esaIpac]]. [NEPAssist](/for/nepassist) screens the same project area for other resources.",
     items: [
       {
         title: "Proposed action and conservation measures",
@@ -252,7 +249,7 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Supporting documents",
         detail:
-          "The official species list and any determination key analyses [[esaIpac]], plus relevant reports such as EAs and EISs [[esaCfr40214]].",
+          "The official species list and any determination key analyses [[esaIpac]], plus relevant reports such as [EAs](/for/nepa-environmental-assessment) and EISs [[esaCfr40214]].",
       },
     ],
   },

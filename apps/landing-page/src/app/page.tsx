@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 
 import { HomePage } from "@/components/home-v2/home-page";
-import { buildPageMetadata, SITE_DESCRIPTION, SITE_TITLE } from "@/lib/seo";
+import { JsonLd } from "@/components/shared/json-ld";
+import { brand } from "@/lib/brand";
+import {
+  buildPageMetadata,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  toAbsoluteUrl,
+} from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
   title: SITE_TITLE,
@@ -10,5 +17,27 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default function Home() {
-  return <HomePage />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: brand.name,
+          url: toAbsoluteUrl("/"),
+          logo: toAbsoluteUrl(brand.logo),
+          description: SITE_DESCRIPTION,
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: brand.name,
+          url: toAbsoluteUrl("/"),
+        }}
+      />
+      <HomePage />
+    </>
+  );
 }

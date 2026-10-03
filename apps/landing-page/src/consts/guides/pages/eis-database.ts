@@ -2,7 +2,7 @@ import type { GuidePath } from "../paths";
 // /for/eis-database. Reused source keys: eisEpaDatabase, eisEpaFiling,
 // eisEpa309, eisEpaCopy (pages/environmental-impact-statement.ts); usc4332,
 // usc4336a, usda1b7, ceqIfr (shared NEPA sources).
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 const READ = "2026-10-02";
 
@@ -39,14 +39,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/eis-database",
-  parent: "/for/nepa",
-  family: "tools",
-  name: "EIS database",
   title: "EIS Database: How to Search EPA's EIS Records",
   description:
-    "How to search EPA's EIS database by title, agency and state, read a record, download EISs and comment letters, and track weekly notices.",
+    "How to search EPA's EIS database by title, agency and state, read a record, and download EISs and comment letters.",
   eyebrow: "EIS database",
   h1: "The EPA EIS database: search, read and download environmental impact statements",
   primaryKeyword: "eis database",
@@ -58,7 +55,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "EIS Outline",
   answer:
-    "EPA's EIS database is the public record of the environmental impact statements federal agencies file with EPA, with the EIS documents and EPA's comment letters on them [[eisEpaDatabase]]. Agencies file through e-NEPA, and EPA's weekly Federal Register notice of availability starts each comment or review period [[eisEpaFiling]].",
+    "EPA's EIS database is the public record of the [environmental impact statements](/for/environmental-impact-statement) federal agencies file with EPA, with the EIS documents and EPA's comment letters on them [[eisEpaDatabase]]. Agencies file through e-NEPA, and EPA's weekly Federal Register notice of availability starts each comment or review period [[eisEpaFiling]].",
   glance: [
     {
       label: "Holds",
@@ -190,13 +187,13 @@ export const entry: GuideEntry<GuidePath> = {
       heading: "What is in EPA's environmental impact statement database?",
       paragraphs: [
         "Besides the EISs, it posts the letters EPA writes on every draft EIS under Clean Air Act section 309 [[eisEpa309]]. Search-page shortcuts list EISs filed the previous week, EISs open for comment, EPA comments from the past 60 days and EISs published in the last 30 days. For questions about a project, EPA sends you to the lead agency [[eisEpaDatabase]].",
-        "It holds no environmental assessments: e-NEPA takes EISs only, not EAs or stand-alone records of decision [[eisdbEnepaGuide]]. Find EAs, FONSIs and decision documents on the preparing agency's project pages.",
+        "It holds no [environmental assessments](/for/nepa-environmental-assessment): e-NEPA takes EISs only, not EAs or stand-alone records of decision [[eisdbEnepaGuide]]. Find EAs, FONSIs and decision documents on the preparing agency's project pages.",
       ],
     },
     {
       heading: "How to search the EPA EIS database and read a record",
       paragraphs: [
-        "You can include EISs where an agency was co-lead or cooperating, or limit results to EISs with EPA comment letters; a search returns at most 500 records [[eisEpaDatabase]], exportable to CSV, Excel, XML or HTML [[eisdbLastWeek]]. For a precedent, search by the agency that does your kind of work and your state, then narrow by title words such as solar, pipeline or highway.",
+        "You can include EISs where an agency was co-lead or cooperating, or limit results to EISs with EPA comment letters; a search returns at most 500 records [[eisEpaDatabase]], exportable to CSV, Excel, XML or HTML [[eisdbLastWeek]]. For a [precedent](/for/nepa-examples), search by the agency that does your kind of work and your state, then narrow by title words such as solar, pipeline or highway.",
         "A record shows the document type, Federal Register and comment due dates, the notice of intent date, EPA's letter date, lead agency and a contact. TVA's Hope Solar and Storage draft EIS (No. 20260126), for example, lists a 189-page PDF and EPA's one-page letter. EPA stopped rating draft EISs in October 2018 [[eisdbHopeSolar]].",
       ],
     },

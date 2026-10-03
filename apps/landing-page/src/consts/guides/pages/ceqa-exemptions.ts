@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 // /for/ceqa-exemptions. Reused keys from nepa-pages.ts SOURCES: none.
 // Sources defined here and reused by ceqa-eir.ts: exPrc21080, exPrc21108,
@@ -151,14 +151,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/ceqa-exemptions",
-  parent: "/for/ceqa",
-  family: "ceqa",
-  name: "CEQA exemptions",
   title: "CEQA Exemption Guide: Classes, NOE & 2025 Laws",
   description:
-    "How a CEQA exemption works: statutory and categorical exemptions, the exceptions, the Notice of Exemption's 35-day clock, and 2025's AB 130 and SB 131.",
+    "How CEQA exemptions work: statutory and categorical exemptions, the exceptions, the Notice of Exemption and AB 130 and SB 131.",
   eyebrow: "CEQA exemptions",
   h1: "CEQA exemption guide: statutory and categorical exemptions and the Notice of Exemption",
   primaryKeyword: "ceqa exemption",
@@ -178,7 +175,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       label: "Legal basis",
       value:
-        "Pub. Resources Code §21080(b) (statutory) and §21084 (categorical); CEQA Guidelines §15061 [[exPrc21080]] [[exPrc21084]] [[exCcr15061]]",
+        "Pub. Resources Code §21080(b) (statutory) and §21084 (categorical); [CEQA Guidelines](/for/ceqa) §15061 [[exPrc21080]] [[exPrc21084]] [[exCcr15061]]",
     },
     {
       label: "Categorical classes",
@@ -346,7 +343,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "What a Notice of Exemption contains",
     intro:
-      "The contents Guidelines §15062 requires; Appendix E of the Guidelines has a form [[exCcr15062]]. Notices filed with the State Clearinghouse are published on CEQAnet [[ceqaLciStart]] [[exCeqanet]].",
+      "The contents Guidelines §15062 requires; Appendix E of the Guidelines has a form [[exCcr15062]]. Notices filed with the State Clearinghouse are published on [CEQAnet](/for/ceqanet) [[ceqaLciStart]] [[exCeqanet]]. A project that is not exempt usually starts with an [initial study](/for/ceqa-initial-study).",
     items: [
       {
         title: "Project description",
