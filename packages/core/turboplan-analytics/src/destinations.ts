@@ -16,6 +16,7 @@ export type AnalyticsDestinations = {
   posthog: { token: string; host: string } | null;
   ga4: { measurementId: string; apiSecret: string | null } | null;
   googleAds: { tagId: string } | null;
+  ahrefs: { key: string } | null;
 };
 
 export const resolveAnalyticsDestinations = (
@@ -32,5 +33,6 @@ export const resolveAnalyticsDestinations = (
         }
       : null,
     googleAds: env.GOOGLE_ADS_TAG_ID ? { tagId: env.GOOGLE_ADS_TAG_ID } : null,
+    ahrefs: env.AHREFS_ANALYTICS_KEY ? { key: env.AHREFS_ANALYTICS_KEY } : null,
   };
 };

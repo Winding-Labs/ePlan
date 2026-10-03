@@ -64,6 +64,8 @@ const GOOGLE_ADS_FRAME_HOSTS = [
   "https://td.doubleclick.net",
   "https://www.googletagmanager.com",
 ];
+// Ahrefs Web Analytics: the script and its event endpoint share one host.
+const AHREFS_ANALYTICS_HOST = "https://analytics.ahrefs.com";
 
 // Report-only for now: violations surface in the browser console without
 // breaking anything. Tighten and promote to an enforced policy once clean.
@@ -79,6 +81,7 @@ const contentSecurityPolicyReportOnly = [
     !isProduction && "'unsafe-eval'",
     "https://www.googletagmanager.com",
     ...GOOGLE_ADS_SCRIPT_HOSTS,
+    AHREFS_ANALYTICS_HOST,
   )}`,
   // Next.js, Leaflet and framer-motion all write inline styles.
   "style-src 'self' 'unsafe-inline'",
@@ -109,6 +112,7 @@ const contentSecurityPolicyReportOnly = [
     "https://*.google-analytics.com",
     "https://*.analytics.google.com",
     ...GOOGLE_ADS_CONNECT_HOSTS,
+    AHREFS_ANALYTICS_HOST,
     !isProduction && "ws:",
   )}`,
   `frame-src ${cspSources("'self'", ...GOOGLE_ADS_FRAME_HOSTS)}`,
