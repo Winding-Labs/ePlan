@@ -131,7 +131,11 @@ export type GuideEntry<Path extends string = string> = {
   };
   /** The showcase's first tab: "Create AI draft of <document>". */
   draft: { description: string; mock: DraftMock };
-  /** Page-specific comparison rows, shown before the shared ones. */
+  /**
+   * Page-specific comparison rows. A row labeled like a shared row
+   * (`MANUAL_COMPARISON_BASE`: "Starting point", "Precedent research",
+   * "Missing facts", …) replaces it; any other label adds a topic.
+   */
   comparison?: ManualComparisonRow[];
   /** Tool cards (the AI-tools comparison page only). */
   tools?: ToolComparisonRow[];

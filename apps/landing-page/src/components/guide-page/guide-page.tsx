@@ -27,7 +27,7 @@ import {
   getGuide,
   SOURCES,
 } from "@/consts/guides";
-import { guideBenefits, MANUAL_COMPARISON_BASE } from "@/consts/guides/shared";
+import { comparisonRows, guideBenefits } from "@/consts/guides/shared";
 import type { GuideEntry, ToolComparisonRow } from "@/consts/guides/types";
 import { HOME_TABS } from "@/consts/showcase-tabs";
 import { orderCitations, stripCitations } from "@/lib/citations";
@@ -191,7 +191,7 @@ export function GuidePage({ path }: GuidePageProps) {
 
       <ComparisonTable
         document={page.document}
-        rows={[...(page.comparison ?? []), ...MANUAL_COMPARISON_BASE]}
+        rows={comparisonRows(page.comparison)}
       />
 
       {page.tools && <ToolCards rows={page.tools} numberOf={numberOf} />}

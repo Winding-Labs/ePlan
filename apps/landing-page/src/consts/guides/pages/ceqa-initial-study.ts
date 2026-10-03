@@ -6,21 +6,6 @@ import type { GuideEntry, Source } from "../types";
 const READ = "2026-10-02";
 
 export const sources = {
-  isCcr15063: {
-    title: "14 CCR § 15063 - Initial Study (CEQA Guidelines)",
-    publisher: "California Code of Regulations, Title 14 (Westlaw)",
-    url: "https://govt.westlaw.com/calregs/Document/I87A7E72C5B4D11EC976B000D3A7C4BC3",
-    published: "2018-12-28",
-    read: READ,
-  },
-  isCcr15064: {
-    title:
-      "14 CCR § 15064 - Determining the Significance of the Environmental Effects Caused by a Project (CEQA Guidelines)",
-    publisher: "California Code of Regulations, Title 14 (Westlaw)",
-    url: "https://govt.westlaw.com/calregs/Document/I87B888FD5B4D11EC976B000D3A7C4BC3",
-    published: "2018-12-28",
-    read: READ,
-  },
   isCcr15070: {
     title:
       "14 CCR § 15070 - Decision to Prepare a Negative or Mitigated Negative Declaration (CEQA Guidelines)",
@@ -75,51 +60,12 @@ export const sources = {
     published: "2018-12-28",
     read: READ,
   },
-  isCcr15084: {
-    title: "14 CCR § 15084 - Preparing the Draft EIR (CEQA Guidelines)",
-    publisher: "California Code of Regulations, Title 14 (Westlaw)",
-    url: "https://govt.westlaw.com/calregs/Document/I886B5E3A5B4D11EC976B000D3A7C4BC3",
-    published: "2005-10-06",
-    read: READ,
-  },
-  isCcr15097: {
-    title:
-      "14 CCR § 15097 - Mitigation Monitoring or Reporting (CEQA Guidelines)",
-    publisher: "California Code of Regulations, Title 14 (Westlaw)",
-    url: "https://govt.westlaw.com/calregs/Document/I88DC21695B4D11EC976B000D3A7C4BC3",
-    published: "2005-10-06",
-    read: READ,
-  },
   isAppG: {
     title:
       "14 CCR Div. 6, Ch. 3, Appendix G - Environmental Checklist Form (CEQA Guidelines)",
     publisher: "California Code of Regulations, Title 14 (Westlaw)",
     url: "https://govt.westlaw.com/calregs/Document/I8EA91DA75B4D11EC976B000D3A7C4BC3",
     published: "2018-12-28",
-    read: READ,
-  },
-  isPrc21080: {
-    title:
-      "Public Resources Code § 21080 - Projects subject to CEQA; negative declarations; when an EIR is required",
-    publisher: "California Legislative Information",
-    url: "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=21080.&lawCode=PRC",
-    published: "2025-09-17",
-    read: READ,
-  },
-  isPrc210801: {
-    title:
-      "Public Resources Code § 21080.1 - Lead agency determinations; housing projects that miss an exemption by a single condition",
-    publisher: "California Legislative Information",
-    url: "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=21080.1.&lawCode=PRC",
-    published: "2025-10-11",
-    read: READ,
-  },
-  isPrc2108031: {
-    title:
-      "Public Resources Code § 21080.3.1 - Consultation with California Native American tribes",
-    publisher: "California Legislative Information",
-    url: "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=21080.3.1.&lawCode=PRC",
-    published: "2015-01-01",
     read: READ,
   },
   isPrc210816: {
@@ -161,21 +107,21 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Initial Study",
   answer:
-    "A CEQA initial study is the preliminary analysis a lead agency conducts, after its preliminary review of a project, to determine whether the project may have a significant effect on the environment; it gives the agency the basis for choosing between an environmental impact report (EIR) and a negative declaration [[isCcr15063]]. If the study finds no substantial evidence of a significant effect, the agency prepares a negative declaration; if applicant-agreed revisions would clearly avoid or mitigate the effects it identifies, a mitigated negative declaration (MND) [[isCcr15070]]. Substantial evidence that the project may have a significant effect requires an EIR [[isCcr15064]].",
+    "A CEQA initial study is the preliminary analysis a lead agency conducts, after its preliminary review of a project, to determine whether the project may have a significant effect on the environment; it gives the agency the basis for choosing between an environmental impact report (EIR) and a negative declaration [[eirCcr15063]]. If the study finds no substantial evidence of a significant effect, the agency prepares a negative declaration; if applicant-agreed revisions would clearly avoid or mitigate the effects it identifies, a mitigated negative declaration (MND) [[isCcr15070]]. Substantial evidence that the project may have a significant effect requires an EIR [[eirCcr15064]].",
   glance: [
     {
       label: "Legal basis",
-      value: "CEQA Guidelines section 15063, 14 CCR [[isCcr15063]]",
+      value: "CEQA Guidelines section 15063, 14 CCR [[eirCcr15063]]",
     },
     {
       label: "Prepared by",
       value:
-        "The lead agency, which may use staff, a contractor or an applicant's draft; the released study must reflect its independent judgment [[isCcr15063]] [[isCcr15084]]",
+        "The lead agency, which may use staff, a contractor or an applicant's draft; the released study must reflect its independent judgment [[eirCcr15063]] [[eirCcr15084]]",
     },
     {
       label: "Leads to",
       value:
-        "A negative declaration, a mitigated negative declaration or an EIR [[isCcr15063]] [[isCcr15070]]",
+        "A negative declaration, a mitigated negative declaration or an EIR [[eirCcr15063]] [[isCcr15070]]",
     },
     {
       label: "Checklist",
@@ -189,7 +135,7 @@ export const entry: GuideEntry<GuidePath> = {
     },
     {
       label: "Level of detail",
-      value: "Brief; not the level of detail of an EIR [[isCcr15063]]",
+      value: "Brief; not the level of detail of an EIR [[eirCcr15063]]",
     },
   ],
   hero: {
@@ -274,7 +220,7 @@ export const entry: GuideEntry<GuidePath> = {
   },
   comparison: [
     {
-      label: "Start from",
+      label: "Starting point",
       eplan:
         "A reference initial study from an analog project the research agent finds, for example on CEQAnet",
       manual: "Copy a past initial study and rewrite it by hand",
@@ -289,19 +235,19 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "When does a lead agency prepare an initial study?",
       paragraphs: [
-        "After its preliminary review of a project, the lead agency conducts an initial study to determine whether the project may have a significant effect on the environment, considering all phases of planning, implementation and operation. If the agency can already tell that an EIR will clearly be required, an initial study is not required, though it may still be useful [[isCcr15063]].",
-        "Once it decides a study is needed, the lead agency consults informally with responsible and trustee agencies on whether an EIR or a negative declaration fits, and may require a private applicant to submit data [[isCcr15063]]. Before releasing a negative declaration, MND or EIR, it must begin consultation with any traditionally and culturally affiliated California Native American tribe that asked in writing to be notified and requested consultation within 30 days of receiving the agency's formal notice [[isPrc2108031]].",
-        "Two 2025 laws changed the picture for housing. AB 130 added a statutory exemption for qualifying infill housing projects [[ceqaAb130]]. SB 131 provides that when a housing development project would be exempt but for a single condition, an initial study or EIR need only examine the effects caused solely by that condition [[ceqaSb131]]; the rule, as amended later in 2025, is Public Resources Code section 21080.1(b) [[isPrc210801]].",
+        "After its preliminary review of a project, the lead agency conducts an initial study to determine whether the project may have a significant effect on the environment, considering all phases of planning, implementation and operation. If the agency can already tell that an EIR will clearly be required, an initial study is not required, though it may still be useful [[eirCcr15063]].",
+        "Once it decides a study is needed, the lead agency consults informally with responsible and trustee agencies on whether an EIR or a negative declaration fits, and may require a private applicant to submit data [[eirCcr15063]]. Before releasing a negative declaration, MND or EIR, it must begin consultation with any traditionally and culturally affiliated California Native American tribe that asked in writing to be notified and requested consultation within 30 days of receiving the agency's formal notice [[ceqaPrc21080dot3dot1]].",
+        "Two 2025 laws changed the picture for housing. AB 130 added a statutory exemption for qualifying infill housing projects [[ceqaAb130]]. SB 131 provides that when a housing development project would be exempt but for a single condition, an initial study or EIR need only examine the effects caused solely by that condition [[ceqaSb131]]; the rule, as amended later in 2025, is Public Resources Code section 21080.1(b) [[ceqaPrc21080dot1]].",
       ],
     },
     {
       heading: "What does a CEQA initial study contain?",
       paragraphs: [
-        "Section 15063(d) lists six contents, in brief form. The study may rely on expert opinion supported by facts, technical studies or other substantial evidence, but it does not need an EIR's level of detail. A lead agency may also use a NEPA environmental assessment or similar analysis to meet these requirements [[isCcr15063]].",
-        "The agency can prepare the study with its own staff, a contractor, or a draft from the applicant or the applicant's consultant [[isCcr15084]], but the initial study released for public review must reflect the lead agency's independent judgment [[isCcr15063]].",
+        "Section 15063(d) lists six contents, in brief form. The study may rely on expert opinion supported by facts, technical studies or other substantial evidence, but it does not need an EIR's level of detail. A lead agency may also use a NEPA environmental assessment or similar analysis to meet these requirements [[eirCcr15063]].",
+        "The agency can prepare the study with its own staff, a contractor, or a draft from the applicant or the applicant's consultant [[eirCcr15084]], but the initial study released for public review must reflect the lead agency's independent judgment [[eirCcr15063]].",
       ],
       bullets: [
-        "A description of the project, including its location [[isCcr15063]]",
+        "A description of the project, including its location [[eirCcr15063]]",
         "The environmental setting",
         "The environmental effects, identified by a checklist, matrix or other method, with each entry briefly explained to show some evidence supports it",
         "Ways to mitigate any significant effects identified",
@@ -312,7 +258,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "What is the CEQA Appendix G checklist?",
       paragraphs: [
-        "Appendix G is the sample environmental checklist form in the CEQA Guidelines. Agencies may tailor it or use a different format, but should normally address the checklist questions relevant to the project, and must also consider substantial evidence of impacts the form does not list. Its sample questions do not necessarily represent thresholds of significance [[isAppG]]. Section 15063(f) points to the sample forms in Appendices G and H, which together can serve as the initial study when each entry is briefly explained [[isCcr15063]].",
+        "Appendix G is the sample environmental checklist form in the CEQA Guidelines. Agencies may tailor it or use a different format, but should normally address the checklist questions relevant to the project, and must also consider substantial evidence of impacts the form does not list. Its sample questions do not necessarily represent thresholds of significance [[isAppG]]. Section 15063(f) points to the sample forms in Appendices G and H, which together can serve as the initial study when each entry is briefly explained [[eirCcr15063]].",
         "Each question is answered in one of four columns: potentially significant impact, less than significant with mitigation incorporated, less than significant impact, or no impact. Every answer needs a brief explanation except a no-impact answer adequately supported by the sources cited, and answers must account for off-site, cumulative, indirect and construction impacts [[isAppG]].",
       ],
       bullets: [
@@ -326,15 +272,15 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "Negative declaration or mitigated negative declaration?",
       paragraphs: [
-        "An agency prepares a proposed negative declaration when the initial study shows no substantial evidence, in light of the whole record, that the project may have a significant effect. It prepares a mitigated negative declaration when the study identifies potentially significant effects, but revisions made or agreed to by the applicant before public release would avoid or mitigate them to a point where clearly no significant effect would occur, and no substantial evidence shows the revised project may still have one [[isCcr15070]] [[isPrc21080]].",
+        "An agency prepares a proposed negative declaration when the initial study shows no substantial evidence, in light of the whole record, that the project may have a significant effect. It prepares a mitigated negative declaration when the study identifies potentially significant effects, but revisions made or agreed to by the applicant before public release would avoid or mitigate them to a point where clearly no significant effect would occur, and no substantial evidence shows the revised project may still have one [[isCcr15070]] [[ceqaPrc21080]].",
         "The negative declaration circulated for review includes a brief project description, the location and proponent, a proposed finding of no significant effect, the attached initial study, and any mitigation measures included in the project [[isCcr15071]]. Appendix G's determination block also covers an EIR, an EIR limited to effects not addressed earlier, and a finding that nothing further is required because an earlier EIR or negative declaration already covered every potentially significant effect [[isAppG]].",
       ],
     },
     {
       heading: "When is an EIR required instead? The fair argument standard",
       paragraphs: [
-        "If there is substantial evidence, in light of the whole record, that a project may have a significant effect, the lead agency prepares an EIR [[isPrc21080]]. The Guidelines put it another way: an agency presented with a fair argument that a project may have a significant effect must prepare an EIR even if it also has other substantial evidence that the project will not [[isCcr15064]]. On the Appendix G form, one or more potentially significant impact entries at the time of determination means an EIR is required [[isAppG]].",
-        "Substantial evidence includes facts, reasonable assumptions predicated on facts, and expert opinion supported by facts; argument, speculation, unsubstantiated opinion and clearly inaccurate evidence do not qualify, and public controversy alone does not require an EIR. In marginal cases, when experts disagree, with facts behind them, about whether an effect is significant, the agency treats it as significant [[isCcr15064]].",
+        "If there is substantial evidence, in light of the whole record, that a project may have a significant effect, the lead agency prepares an EIR [[ceqaPrc21080]]. The Guidelines put it another way: an agency presented with a fair argument that a project may have a significant effect must prepare an EIR even if it also has other substantial evidence that the project will not [[eirCcr15064]]. On the Appendix G form, one or more potentially significant impact entries at the time of determination means an EIR is required [[isAppG]].",
+        "Substantial evidence includes facts, reasonable assumptions predicated on facts, and expert opinion supported by facts; argument, speculation, unsubstantiated opinion and clearly inaccurate evidence do not qualify, and public controversy alone does not require an EIR. In marginal cases, when experts disagree, with facts behind them, about whether an effect is significant, the agency treats it as significant [[eirCcr15064]].",
       ],
     },
     {
@@ -349,14 +295,14 @@ export const entry: GuideEntry<GuidePath> = {
       heading: "The mitigation monitoring and reporting program (MMRP)",
       paragraphs: [
         "When it adopts an MND, the lead agency also adopts a program for reporting on or monitoring the project changes and mitigation measures it required [[isCcr15074]]. The program is designed to ensure compliance during project implementation, and mitigation measures must be fully enforceable through permit conditions, agreements or other measures [[isPrc210816]].",
-        "The agency chooses monitoring, reporting or both. Reporting suits readily measurable measures; monitoring suits complex ones such as wetlands restoration or archaeological protection. The agency may delegate the work to another public agency or a private entity, but remains responsible for implementation until the measures are complete [[isCcr15097]].",
+        "The agency chooses monitoring, reporting or both. Reporting suits readily measurable measures; monitoring suits complex ones such as wetlands restoration or archaeological protection. The agency may delegate the work to another public agency or a private entity, but remains responsible for implementation until the measures are complete [[eirCcr15097]].",
       ],
     },
   ],
   outline: {
     heading: "Initial study checklist: the sections",
     intro:
-      "Built from the contents required by CEQA Guidelines section 15063(d) and the Appendix G sample form, which agencies may tailor [[isCcr15063]] [[isAppG]]. Use your agency's format if it has one.",
+      "Built from the contents required by CEQA Guidelines section 15063(d) and the Appendix G sample form, which agencies may tailor [[eirCcr15063]] [[isAppG]]. Use your agency's format if it has one.",
     items: [
       {
         title: "Project information and description",
@@ -366,7 +312,7 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Environmental setting",
         detail:
-          "Surrounding land uses and setting, described briefly [[isCcr15063]] [[isAppG]].",
+          "Surrounding land uses and setting, described briefly [[eirCcr15063]] [[isAppG]].",
       },
       {
         title: "Other approvals and tribal consultation",
@@ -391,7 +337,7 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Mitigation measures",
         detail:
-          "Ways to mitigate the significant effects identified, and how each brings an effect below significance [[isCcr15063]] [[isAppG]].",
+          "Ways to mitigate the significant effects identified, and how each brings an effect below significance [[eirCcr15063]] [[isAppG]].",
       },
       {
         title: "Mandatory findings of significance",
@@ -401,7 +347,7 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Plan consistency, sources and preparers",
         detail:
-          "Consistency with zoning, plans and other land use controls, the sources relied on, and who prepared or participated in the study [[isCcr15063]] [[isAppG]].",
+          "Consistency with zoning, plans and other land use controls, the sources relied on, and who prepared or participated in the study [[eirCcr15063]] [[isAppG]].",
       },
     ],
   },

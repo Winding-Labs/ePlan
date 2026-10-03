@@ -95,7 +95,7 @@ export const guideBenefits = (document: string): string[] => [
   "A Word download, plus tasks and a Gantt timeline on Pro and Max",
 ];
 
-/** Rows every page shows under its own in "How ePlan compares". */
+/** The shared rows of "How ePlan compares"; a page row with the same label replaces one. */
 export const MANUAL_COMPARISON_BASE: ManualComparisonRow[] = [
   {
     label: "Starting point",
@@ -133,6 +133,21 @@ export const MANUAL_COMPARISON_BASE: ManualComparisonRow[] = [
     manual: "Staff or consultant hours for every draft",
   },
 ];
+
+/**
+ * A page's comparison: its rows on topics the shared rows don't cover, then
+ * the shared rows, each replaced by the page's row with the same label.
+ */
+export const comparisonRows = (
+  own: ManualComparisonRow[] = [],
+): ManualComparisonRow[] => {
+  const sharedLabels = new Set(MANUAL_COMPARISON_BASE.map((row) => row.label));
+  const byLabel = new Map(own.map((row) => [row.label, row]));
+  return [
+    ...own.filter((row) => !sharedLabels.has(row.label)),
+    ...MANUAL_COMPARISON_BASE.map((row) => byLabel.get(row.label) ?? row),
+  ];
+};
 
 /** Product-level examples (the software and comparison pages). */
 export const PRODUCT_EXAMPLES: GuideExample[] = [

@@ -361,7 +361,7 @@ export const entry: GuideEntry<GuidePath> = {
   },
   comparison: [
     {
-      label: "Start from",
+      label: "Starting point",
       eplan:
         "Your description and files, plus CEQAnet documents for up to two similar projects",
       manual: "A blank notice or the last project's file",

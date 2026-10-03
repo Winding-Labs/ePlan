@@ -333,12 +333,12 @@ export const entry: GuideEntry<GuidePath> = {
   },
   comparison: [
     {
-      label: "Start from",
+      label: "Starting point",
       eplan: "A project description or uploaded PDFs, Word files and GIS files",
       manual: "A blank template or a past document on the shared drive",
     },
     {
-      label: "Precedent",
+      label: "Precedent research",
       eplan: "Searches CEQAnet for the project and up to two analog projects",
       manual: "Search CEQAnet and agency sites by hand",
     },

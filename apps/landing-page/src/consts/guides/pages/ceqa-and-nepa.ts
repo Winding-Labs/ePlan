@@ -204,7 +204,7 @@ export const entry: GuideEntry<GuidePath> = {
   },
   comparison: [
     {
-      label: "Research",
+      label: "Precedent research",
       eplan:
         "Searches CEQAnet, the Federal Register and EPA's EIS database for the project and up to two analog projects",
       manual: "Search state and federal databases one at a time",

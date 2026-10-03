@@ -7,7 +7,11 @@ import { orderCitations, stripCitations } from "@/lib/citations";
 import { DESCRIPTION_MAX_LENGTH, TITLE_MAX_LENGTH } from "@/lib/seo";
 import { GUIDE_LINKS } from "../guide-links";
 import { GUIDE_PATHS, GUIDES, guideSlug, SOURCES } from "./index";
-import { MANUAL_COMPARISON_BASE, PRICING_SUMMARY } from "./shared";
+import {
+  comparisonRows,
+  MANUAL_COMPARISON_BASE,
+  PRICING_SUMMARY,
+} from "./shared";
 import type { GuideEntry } from "./types";
 
 // Every string a visitor can read on a guide page.
@@ -150,6 +154,15 @@ describe("guide pages", () => {
     Object.keys(SOURCES).forEach((key) => expect(cited).toContain(key));
   });
 
+  it("lists each source URL once (pages share a source by its key)", () => {
+    const keysByUrl = new Map<string, string[]>();
+    for (const [key, source] of Object.entries(SOURCES)) {
+      keysByUrl.set(source.url, [...(keysByUrl.get(source.url) ?? []), key]);
+    }
+    const repeated = [...keysByUrl.values()].filter((keys) => keys.length > 1);
+    expect(repeated).toEqual([]);
+  });
+
   it("dates every source and links it over https", () => {
     Object.values(SOURCES).forEach((source) => {
       expect(source.url).toMatch(/^https:\/\//);
@@ -207,6 +220,21 @@ describe("guide pages", () => {
     });
     expect(PRICING_SUMMARY).toContain(`$${PLANS.pro.price_usd} a month`);
     expect(PRICING_SUMMARY).toContain(`$${PLANS.max.price_usd} a month`);
+  });
+
+  it("gives each comparison topic one row (a page row on a shared topic takes the shared label)", () => {
+    const shared = new Set(MANUAL_COMPARISON_BASE.map((row) => row.label));
+    GUIDES.forEach((page) => {
+      const labels = comparisonRows(page.comparison).map((row) => row.label);
+      expect(new Set(labels).size).toBe(labels.length);
+      (page.comparison ?? [])
+        .filter((row) => !shared.has(row.label))
+        .forEach((row) => {
+          expect(row.label).not.toMatch(
+            /\b(start\w*|precedent|research|missing|unconfirmed|gaps?|tasks?|timeline|hand-?off|download|cost|price)\b/i,
+          );
+        });
+    });
   });
 
   it("gives every page a draft mock with placeholders, comparison rows and an FAQ", () => {

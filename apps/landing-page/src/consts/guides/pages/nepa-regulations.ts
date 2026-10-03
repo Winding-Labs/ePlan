@@ -228,14 +228,14 @@ export const entry: GuideEntry<GuidePath> = {
   },
   comparison: [
     {
-      label: "Start from",
+      label: "Starting point",
       eplan:
         "A project description or uploaded files; the research agent searches agency project pages, the Federal Register and eCFR",
       manual:
         "Tracking down each agency's current rule, handbook and Federal Register notice by hand",
     },
     {
-      label: "Unconfirmed facts",
+      label: "Missing facts",
       eplan: "Left as highlighted [INSERT: …] placeholders for you to fill",
       manual: "Easy to carry over from an older memo without noticing",
     },

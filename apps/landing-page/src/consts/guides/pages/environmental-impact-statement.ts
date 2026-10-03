@@ -240,13 +240,13 @@ export const entry: GuideEntry<GuidePath> = {
   },
   comparison: [
     {
-      label: "Start from",
+      label: "Starting point",
       eplan:
         "An EIS outline that follows a precedent EIS's structure, with your project facts filled in and gaps marked",
       manual: "A blank document or your office's last EIS",
     },
     {
-      label: "Precedent EISs",
+      label: "Precedent research",
       eplan:
         "The research agent searches EPA's EIS database and agency project pages for up to two analog projects",
       manual: "Searching the EIS database by title, agency and state yourself",

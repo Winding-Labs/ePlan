@@ -284,13 +284,13 @@ export const entry: GuideEntry<GuidePath> = {
   },
   comparison: [
     {
-      label: "Precedent",
+      label: "Precedent research",
       eplan:
         "Searches CEQAnet and agency project pages for your project and up to two similar ones",
       manual: "Search CEQAnet by hand for comparable notices",
     },
     {
-      label: "Output",
+      label: "Exemption memo and notice",
       eplan:
         "Exemption memo and notice text, downloadable as Word, with every gap marked",
       manual: "Fill in the notice form and write the memo from scratch",
