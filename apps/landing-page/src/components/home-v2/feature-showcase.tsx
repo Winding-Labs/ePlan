@@ -6,40 +6,14 @@ import { useInView, useReducedMotion } from "framer-motion";
 
 import { PAGE_CONTAINER } from "@/components/home-v2/ui/layout";
 import { ScrollReveal } from "@/components/home-v2/ui/scroll-reveal";
+import { HOME_TABS } from "@/consts/showcase-tabs";
 import { cn } from "@/lib/utils";
 import { CollaborateSlide } from "./feature-showcase/collaborate-slide";
 import { DraftSlide } from "./feature-showcase/draft-slide";
 import { PlanSlide } from "./feature-showcase/plan-slide";
 import { ResearchSlide } from "./feature-showcase/research-slide";
 import { ShowcaseTabs } from "./feature-showcase/showcase-tabs";
-import type { SlideType, Tab } from "./feature-showcase/types";
-
-const TABS: Tab[] = [
-  {
-    label: "Research projects with AI",
-    description:
-      "Automatically surface relevant project context. Our AI reads your uploads, finds the right Categorical Exclusions, and references past online documents.",
-    type: "research",
-  },
-  {
-    label: "Draft NEPA documents",
-    description:
-      "Turn a blank page into a structured NEPA document in seconds. We auto-generate scoping letters and decision memos with correct locations, intents, and citations.",
-    type: "draft",
-  },
-  {
-    label: "Plan projects with AI",
-    description:
-      "Track every detail — from botany surveys to GIS boundaries — on an interactive Gantt of milestones and tasks.",
-    type: "plan",
-  },
-  {
-    label: "Collaborate with partners",
-    description:
-      "A secure workspace for members, comments, and a full activity timeline. External partners submit and review work directly with your agency.",
-    type: "collab",
-  },
-];
+import type { Tab } from "./feature-showcase/types";
 
 // Matches the `showcase-tab-shrink` duration in showcase-tabs.tsx.
 const TAB_SHRINK_DURATION_MS = 250;
@@ -47,19 +21,14 @@ const TAB_SHRINK_DURATION_MS = 250;
 interface FeatureShowcaseProps {
   // Entrance delay, so the card can join a surrounding reveal sequence.
   revealDelay?: number;
-  // Which slides to show, in order. Defaults to all four (the homepage).
-  slides?: SlideType[];
+  // The tabs, in order. Defaults to the home page's four.
+  tabs?: Tab[];
 }
 
 export function FeatureShowcase({
   revealDelay = 0,
-  slides,
+  tabs = HOME_TABS,
 }: FeatureShowcaseProps) {
-  const tabs = slides
-    ? TABS.filter((tab) => slides.includes(tab.type)).sort(
-        (a, b) => slides.indexOf(a.type) - slides.indexOf(b.type),
-      )
-    : TABS;
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { amount: 0.4 });
   const prefersReducedMotion = useReducedMotion();
@@ -136,7 +105,7 @@ export function FeatureShowcase({
             <div className="grid w-full max-w-[640px] px-4">
               {tabs.map((tab, index) => (
                 <p
-                  key={tab.type}
+                  key={`${tab.type}-${index}`}
                   aria-hidden={index !== active}
                   className={cn(
                     "col-start-1 row-start-1 text-center font-inter text-[15px] font-medium leading-[24px] text-egray-700 transition-[opacity,translate,visibility] duration-200 ease-out-expo motion-reduce:translate-y-0",
@@ -162,7 +131,7 @@ export function FeatureShowcase({
                 const isActive = index === active;
                 return (
                   <div
-                    key={tab.type}
+                    key={`${tab.type}-${index}`}
                     role="tabpanel"
                     id={`showcase-panel-${index}`}
                     aria-labelledby={`showcase-tab-${index}`}
@@ -175,7 +144,7 @@ export function FeatureShowcase({
                     )}
                   >
                     <MockScreen
-                      type={tab.type}
+                      tab={tab}
                       playKey={isActive ? `active-${phase}` : "idle"}
                       reduce={Boolean(prefersReducedMotion)}
                     />
@@ -191,17 +160,18 @@ export function FeatureShowcase({
 }
 
 type MockScreenProps = {
-  type: SlideType;
+  tab: Tab;
   playKey: string;
   reduce: boolean;
 };
 
-function MockScreen({ type, playKey, reduce }: MockScreenProps) {
+function MockScreen({ tab, playKey, reduce }: MockScreenProps) {
+  const { type } = tab;
   return (
     // Remount on activation so entrance animations replay.
     <div key={playKey} className="h-full w-full">
       {type === "research" && <ResearchSlide reduce={reduce} />}
-      {type === "draft" && <DraftSlide reduce={reduce} />}
+      {type === "draft" && <DraftSlide reduce={reduce} mock={tab.mock} />}
       {type === "plan" && <PlanSlide reduce={reduce} />}
       {type === "collab" && <CollaborateSlide reduce={reduce} />}
     </div>

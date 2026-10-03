@@ -816,6 +816,19 @@ export const getAdminEmails = (): string => {
 };
 
 /**
+ * The marketing site's origin, for links from the app or a shared package to
+ * its pages (privacy, terms). Reads LANDING_URL (server) or
+ * NEXT_PUBLIC_LANDING_URL (client); empty when unset, so links stay relative.
+ */
+export const getLandingUrl = (): string => {
+  return (
+    process.env.LANDING_URL ||
+    process.env.NEXT_PUBLIC_LANDING_URL ||
+    ""
+  ).replace(/\/+$/, "");
+};
+
+/**
  * Reads SUPPORT_EMAIL (server) or NEXT_PUBLIC_SUPPORT_EMAIL (client).
  */
 export const getSupportEmail = (): string => {

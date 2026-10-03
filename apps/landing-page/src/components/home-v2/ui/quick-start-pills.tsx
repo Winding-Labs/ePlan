@@ -17,6 +17,10 @@ import { events } from "@/types/analytics";
 
 type QuickStartPillsProps = {
   onSelect: (prompt: string) => void;
+  /** Defaults to the home examples; guide pages pass their own. */
+  examples?: QuickStartExample[];
+  /** Extra properties for the selection event (e.g. the guide page). */
+  eventProps?: Record<string, string>;
 };
 
 type EmblaOptions = NonNullable<Parameters<typeof useEmblaCarousel>[0]>;
@@ -49,7 +53,11 @@ const SLIDES_PER_ARROW_CLICK = 3;
 const ARROW_CLASSES =
   "glass press absolute top-1/2 z-10 hidden size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full text-[#262626] opacity-0 hover:bg-white/80 focus-visible:opacity-100 group-hover:opacity-100 group-focus-within:opacity-100 sm:flex";
 
-export function QuickStartPills({ onSelect }: QuickStartPillsProps) {
+export function QuickStartPills({
+  onSelect,
+  examples = QUICK_START_EXAMPLES,
+  eventProps,
+}: QuickStartPillsProps) {
   const prefersReducedMotion = useReducedMotion();
   const { captureEvent } = useAnalytics();
 
@@ -61,7 +69,10 @@ export function QuickStartPills({ onSelect }: QuickStartPillsProps) {
   // Only the pill's label is sent — the prompts are predefined marketing
   // copy, so the label identifies the example without shipping prompt text.
   const handleSelect = (example: QuickStartExample) => {
-    captureEvent(events.QUICK_START_SELECTED, { pill: example.label });
+    captureEvent(events.QUICK_START_SELECTED, {
+      pill: example.label,
+      ...eventProps,
+    });
     onSelect(example.prompt);
   };
 
@@ -112,7 +123,7 @@ export function QuickStartPills({ onSelect }: QuickStartPillsProps) {
               scale are separate properties (Tailwind v4), so both compose
               with Embla's transform, and `press` never transitions it. */}
           {/* Pills get a tighter drop than `glass` so it fits the clip. */}
-          {QUICK_START_EXAMPLES.map((tag) => (
+          {examples.map((tag) => (
             <button
               key={tag.label}
               type="button"

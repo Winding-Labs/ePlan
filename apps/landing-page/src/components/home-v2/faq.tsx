@@ -24,7 +24,7 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     question: "Which NEPA documents can eplan.ai draft?",
     answer:
-      "Scoping letters, Categorical Exclusion decision memos, Environmental Assessments and supporting reports. Every draft cites the regulation and the project location it was built from.",
+      "Scoping letters, Categorical Exclusion decision memos, Environmental Assessments and supporting reports. Every draft follows a reference document, and every detail ePlan could not confirm is marked for you to fill in.",
   },
   {
     question: "How does it pick the right Categorical Exclusion?",

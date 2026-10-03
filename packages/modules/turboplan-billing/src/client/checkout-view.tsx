@@ -9,6 +9,7 @@ import useSWRMutation from "swr/mutation";
 
 import { fetcher, postFetcher } from "@wildfires-org/turboplan-api-client";
 import { useSession } from "@wildfires-org/turboplan-auth/client";
+import { getLandingUrl } from "@wildfires-org/turboplan-env";
 import {
   Badge,
   Button,
@@ -524,13 +525,23 @@ function CheckoutFooter({
         />
         <span>
           I understand and agree to{" "}
-          <Link href="#" className="text-brand-700 underline">
+          <a
+            href={`${getLandingUrl()}/terms`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-brand-700 underline"
+          >
             Terms of Service
-          </Link>{" "}
+          </a>{" "}
           and{" "}
-          <Link href="#" className="text-brand-700 underline">
+          <a
+            href={`${getLandingUrl()}/privacy`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-brand-700 underline"
+          >
             Privacy Policy
-          </Link>
+          </a>
           .
         </span>
       </label>

@@ -78,19 +78,34 @@ function AppRail({ active }: { active: ModuleKey }) {
 // Breadcrumb bar — polished, plausible agency hierarchy (org / office / project
 // / module), styled like the hero preview. When `crumb` is omitted the project
 // name itself is the bold final crumb (overview), never duplicated.
-function AppTopBar({ crumb }: { crumb?: string }) {
+/** Org / office / project shown in the breadcrumb; defaults to the home demo. */
+export type AppPath = { org: string; office: string; project: string };
+
+const HOME_APP_PATH: AppPath = {
+  org: "USDA Forest Service",
+  office: "Tahoe Ranger District",
+  project: "Canyon Three Fuels Reduction",
+};
+
+function AppTopBar({
+  crumb,
+  path = HOME_APP_PATH,
+}: {
+  crumb?: string;
+  path?: AppPath;
+}) {
   return (
     <div className="flex h-11 shrink-0 items-center gap-1.5 border-b border-egray-100/80 bg-white/60 px-4 font-inter text-[12px] leading-none">
-      <span className="shrink-0 text-egray-500">USDA Forest Service</span>
+      <span className="shrink-0 text-egray-500">{path.org}</span>
       <span className="text-egray-300">/</span>
       <span className="hidden shrink-0 text-egray-500 sm:inline">
-        Tahoe Ranger District
+        {path.office}
       </span>
       <span className="hidden text-egray-300 sm:inline">/</span>
       {crumb ? (
         <>
           <span className="hidden shrink-0 text-egray-500 md:inline">
-            Canyon Three Fuels Reduction
+            {path.project}
           </span>
           <span className="hidden text-egray-300 md:inline">/</span>
           <span className="truncate font-medium text-neutral-black">
@@ -99,7 +114,7 @@ function AppTopBar({ crumb }: { crumb?: string }) {
         </>
       ) : (
         <span className="truncate font-medium text-neutral-black">
-          Canyon Three Fuels Reduction
+          {path.project}
         </span>
       )}
     </div>
@@ -108,11 +123,13 @@ function AppTopBar({ crumb }: { crumb?: string }) {
 
 export function AppWindow({
   crumb,
+  path,
   active,
   children,
   contentClassName,
 }: {
   crumb?: string;
+  path?: AppPath;
   active: ModuleKey;
   children: React.ReactNode;
   contentClassName?: string;
@@ -121,7 +138,7 @@ export function AppWindow({
     <div className="flex h-full w-full overflow-hidden rounded-2xl border border-white/85 bg-white/70 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <AppRail active={active} />
       <div className="flex min-w-0 flex-1 flex-col">
-        <AppTopBar crumb={crumb} />
+        <AppTopBar crumb={crumb} path={path} />
         <div className={cn("min-h-0 flex-1 overflow-hidden", contentClassName)}>
           {children}
         </div>
