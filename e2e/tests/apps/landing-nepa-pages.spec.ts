@@ -79,6 +79,11 @@ test.describe("Landing Page - guide pages", () => {
       ["/nepa/scoping-letter", "/for/nepa-scoping-letter"],
       ["/ceqa/initial-study", "/for/ceqa-initial-study"],
       ["/nepa", "/for/nepa"],
+      // Google Ads display paths, one per family (next.config.ts lists all).
+      ["/nepa/categorical", "/for/nepa-categorical-exclusion"],
+      ["/ceqa/eir", "/for/ceqa-environmental-impact-report"],
+      ["/fema/ehp", "/for/fema-ehp"],
+      ["/new-york/seqr", "/for/new-york-seqr"],
     ]) {
       const response = await request.get(`${LANDING_URL}${from}`, {
         maxRedirects: 0,
