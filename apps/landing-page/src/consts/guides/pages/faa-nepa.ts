@@ -1,6 +1,5 @@
 import type { GuidePath } from "../paths";
-// Reused source keys: fhwa774 (23 CFR part 774, defined in this round's
-// fhwa-nepa.ts). No FAA sources existed in consts/guides before this page.
+// /for/faa-nepa. No FAA sources existed in consts/guides before this page.
 import type { GuideEntry, Source } from "../types";
 
 const READ = "2026-10-02";
@@ -45,13 +44,6 @@ export const sources = {
     published: "2006-04-28",
     read: READ,
   },
-  faaUsc303: {
-    title:
-      "49 U.S.C. 303 - Policy on lands, wildlife and waterfowl refuges, and historic sites (Section 4(f))",
-    publisher: "United States Code, 2024 edition (GovInfo)",
-    url: "https://www.govinfo.gov/content/pkg/USCODE-2024-title49/html/USCODE-2024-title49-subtitleI-chap3-subchapI-sec303.htm",
-    read: READ,
-  },
 } satisfies Record<string, Source>;
 
 export const entry: GuideEntry<GuidePath> = {
@@ -61,7 +53,7 @@ export const entry: GuideEntry<GuidePath> = {
   name: "FAA NEPA",
   title: "FAA NEPA: Order 1050.1G, CATEXs & Airport EAs",
   description:
-    "FAA NEPA under Order 1050.1G, which replaced 1050.1F in 2025: when NEPA applies, FAA categorical exclusions, airport EAs, Order 5050.4 and Section 4(f).",
+    "FAA NEPA under Order 1050.1G, which replaced 1050.1F in 2025: when NEPA applies, FAA categorical exclusions, airport EAs and EISs, and Order 5050.4.",
   eyebrow: "FAA and airports",
   h1: "FAA NEPA: Order 1050.1G, categorical exclusions and airport environmental assessments",
   primaryKeyword: "faa nepa",
@@ -73,32 +65,27 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Environmental Assessment",
   answer:
-    "FAA NEPA is how the Federal Aviation Administration reviews the environmental effects of its actions, from airport grants and airport layout plan approvals to air traffic procedures and commercial space licenses [[faa1050g]]. Since June 30, 2025, FAA Order 1050.1G, FAA National Environmental Policy Act Implementing Procedures, has replaced Order 1050.1F; projects already underway then continue under 1050.1F [[faa1050gFr]] [[faaEnvPolicy]]. Most airport environmental documents are prepared by airport sponsors under FAA supervision [[faaArpNepa]] [[faa1050g]].",
+    "FAA NEPA is how the Federal Aviation Administration reviews the environmental effects of its actions, such as airport grants, airport layout plan approvals, air traffic procedures and commercial space licenses [[faa1050g]]. Its procedures are FAA Order 1050.1G, which replaced FAA Order 1050.1F on June 30, 2025; projects already underway continue under 1050.1F [[faa1050gFr]] [[faaEnvPolicy]].",
   glance: [
     {
-      label: "Procedures",
-      value: "FAA Order 1050.1G, effective June 30, 2025 [[faa1050g]]",
-    },
-    {
-      label: "Replaced",
-      value:
-        "Order 1050.1F (2015), still followed for projects already underway [[faaEnvPolicy]]",
-    },
-    {
-      label: "Airport instructions",
-      value:
-        "Order 5050.4B (2006), with portions superseded [[faaOrder5050]] [[faaArpNepa]]",
-    },
-    {
-      label: "Prepared by",
-      value:
-        "Mostly airport sponsors, under FAA supervision [[faaArpNepa]] [[faa1050g]]",
+      label: "Categorical exclusions",
+      value: "Appendix B of Order 1050.1G [[faa1050g]]",
     },
     { label: "EA limits", value: "75 pages and 1 year [[faa1050g]]" },
     {
       label: "EIS limits",
       value:
         "150 pages, or 300 if extraordinarily complex, and 2 years [[faa1050g]]",
+    },
+    {
+      label: "Significant noise",
+      value:
+        "A DNL 1.5 dB or greater increase in noise-sensitive areas at or above DNL 65 dB [[faa1050g]]",
+    },
+    {
+      label: "Notice and filing",
+      value:
+        "FONSI notice in local media, Federal Register or project website; EISs filed with EPA [[faa1050g]]",
     },
   ],
   hero: {
@@ -198,76 +185,51 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   sections: [
     {
-      heading: "What replaced FAA Order 1050.1F?",
-      paragraphs: [
-        "FAA Order 1050.1G took effect June 30, 2025 and cancels Order 1050.1F, issued July 16, 2015 [[faa1050g]]. FAA issued it after CEQ's NEPA regulations at 40 CFR parts 1500-1508 were removed, to align with the 2023 NEPA amendments and the Supreme Court's Seven County decision, and took public comment through August 4, 2025 [[faa1050gFr]].",
-        "The order applies to actions initiated on or after its effective date and does not alter earlier decisions [[faa1050g]]. FAA's environmental policy page says projects already underway continue to follow 1050.1F, the 1050.1 Desk Reference is being updated, and a crosswalk tool posted September 28, 2026 maps 1050.1G to 1050.1F and DOT Order 5610.1D [[faaEnvPolicy]].",
-        "FAA's notice says the reorganization renumbered the CATEXs without revising them, added two statutory CATEX presumptions from section 788 of the FAA Reauthorization Act of 2024, and kept the significance thresholds with one minor change [[faa1050gFr]].",
-      ],
-    },
-    {
       heading: "When does NEPA apply to an FAA action?",
       paragraphs: [
-        "FAA presumes that airport layout plan (ALP) approvals within its authority, airport development funded with federal grants or passenger facility charges, and commercial space launch site and vehicle licenses are major Federal actions. It presumes that projects with FAA funding of 14 percent or less and little ongoing federal control are not, except airport development funded by those grants or charges, and treats advisory actions such as 14 CFR part 77 airspace determinations as outside NEPA [[faa1050g]].",
-        "If NEPA applies, FAA applies a CATEX where one fits, prepares an EA if significant effects are unlikely or their significance is unknown, and prepares an EIS if significant effects are likely and cannot be reduced below significance. Every NEPA document considers thirteen resource categories, from air quality and biological resources to noise, Section 4(f) and water resources [[faa1050g]].",
+        "FAA presumes that airport layout plan (ALP) approvals, airport development funded with federal grants or passenger facility charges, and commercial space launch site and vehicle licenses are major Federal actions. Other projects with 14 percent or less FAA funding and little federal control are presumed not to be, and advisory actions such as 14 CFR part 77 airspace determinations fall outside NEPA [[faa1050g]].",
+        "Where NEPA applies, FAA uses a CATEX if one fits, an EA if significant effects are unlikely or unknown, and an EIS if they are likely [[faa1050g]].",
       ],
     },
     {
       heading:
         "FAA categorical exclusions (CATEXs) and extraordinary circumstances",
       paragraphs: [
-        "FAA's CATEXs are listed in appendix B of Order 1050.1G, grouped as administrative, certification, equipment, facility, procedural and regulatory actions. FAA may apply several CATEXs to one action if no extraordinary circumstances arise for the project as a whole [[faa1050g]].",
-        "An extraordinary circumstance exists when an action involves a listed circumstance, such as an adverse effect on historic properties, an effect on Section 4(f) resources or listed species, noise in noise-sensitive areas, or high controversy on environmental grounds, and may have a significant effect. FAA may still use the CATEX if further analysis shows no potential for significance or the action is modified. Documentation has no prescribed format but should be concise and name the CATEX used [[faa1050g]]. Airport examples:",
+        "Order 1050.1G renumbered the CATEXs without revising them [[faa1050gFr]]; FAA's crosswalk maps the new numbers to 1050.1F [[faaEnvPolicy]]. Several CATEXs may cover one action if no extraordinary circumstance arises for the project as a whole [[faa1050g]].",
+        "An extraordinary circumstance is a listed condition, such as an adverse effect on historic properties, effects on Section 4(f) resources or listed species, noise in noise-sensitive areas, or high environmental controversy, that may cause a significant effect; further analysis or project changes can still allow the CATEX. Documentation has no set format but names the CATEX used [[faa1050g]]. Airport examples:",
       ],
       bullets: [
-        "B-2.4(e): building, extending or widening a taxiway, apron or runway safety area, or reconstructing or extending an existing runway, without significant erosion, noise or air quality effects [[faa1050g]]",
+        "B-2.4(e): taxiway, apron and safety area work, or runway extensions, without significant noise, erosion or air impacts [[faa1050g]]",
         "B-2.4(f): hangars, storage buildings, small parking areas, signs, fences and similar minor development [[faa1050g]]",
-        "B-2.4(bb): land purchase or an avigation easement for a runway protection zone, with no land disturbance [[faa1050g]]",
-        "B-2.4(gg): airport projects with limited federal funding, under dollar thresholds FAA updates each year for inflation [[faa1050g]] [[faaArpNepa]]",
-        "B-2.4(hh): presumed coverage for repair or reconstruction of facilities damaged in a declared emergency, in the same location and design, begun within two years [[faa1050g]]",
+        "B-2.4(bb): land or avigation easements for a runway protection zone, with no land disturbance [[faa1050g]]",
+        "B-2.4(gg): airport projects with limited federal funding, under inflation-adjusted dollar thresholds [[faa1050g]] [[faaArpNepa]]",
+        "B-2.4(hh): presumed for rebuilding facilities damaged in a declared emergency, same location and design, within two years [[faa1050g]]",
       ],
     },
     {
       heading:
         "Airport environmental review: the sponsor's role and Order 5050.4",
       paragraphs: [
-        "FAA says most airport environmental documents are prepared by airport sponsors, while block-grant states or FAA prepare some, depending on the funding arrangement and level of impact [[faaArpNepa]]. An airport sponsor is a public agency, or the private owner of a public-use airport, that applies for federal airport development grants [[faa1050g]].",
-        "Under Part 5 of the order, an applicant or its contractor prepares the document under FAA supervision. FAA helps define the purpose and need and alternatives, sets the schedule with the applicant, takes part in contractor selection and the scope of work, and independently evaluates and takes responsibility for the content. Before FAA sets the EA's start date, an applicant must supply a sufficient scope of work and its consultants' credentials and, for grant-funded airport projects, show it can fund the non-federal share [[faa1050g]].",
-        "Order 5050.4B, NEPA Implementing Instructions for Airport Actions, dates to April 28, 2006 and is still listed as active [[faaOrder5050]]. FAA notes that portions are superseded by recent executive orders, CEQ guidance and the latest 1050.1 update, to be folded into a future 5050.4 [[faaArpNepa]]; 1050.1G prevails over line-of-business orders where they conflict [[faa1050g]].",
+        "Most airport environmental documents are prepared by the airport sponsor, the public agency or private owner of a public-use airport seeking federal grants; block-grant states or FAA prepare some [[faaArpNepa]] [[faa1050g]]. FAA helps define the purpose, need and alternatives, takes part in consultant selection and scope, and independently evaluates and takes responsibility for the content [[faa1050g]].",
+        "Before FAA sets the EA's start date, the sponsor must supply a sufficient scope of work and its consultants' credentials and, for grant-funded projects, show it can fund the non-federal share [[faa1050g]]. Order 5050.4B, FAA's 2006 NEPA instructions for airport actions, is still active, but FAA says parts are superseded; 1050.1G prevails where they conflict [[faaOrder5050]] [[faaArpNepa]] [[faa1050g]].",
       ],
     },
     {
-      heading: "FAA environmental assessments: contents, 75 pages and one year",
+      heading: "Which airport projects need an EA or an EIS?",
       paragraphs: [
-        "An FAA EA briefly discusses the purpose and need, based on FAA's authority and informed by an applicant's goals; the proposed action and alternatives; reasonably foreseeable effects; and anything else the responsible official needs to decide between a FONSI, a mitigated FONSI or an EIS [[faa1050g]].",
-        "Actions that normally need an EA include a new general aviation airport, a new runway at an airport outside a metropolitan statistical area, runway strengthening that could significantly increase off-airport noise, and new air traffic procedures routing aircraft over noise-sensitive areas below 3,000 feet [[faa1050g]].",
-        "The text may not exceed 75 pages, excluding citations and appendices, and the EA is due one year from the earliest statutory trigger. A responsible official adds declarations on the page limit and the deadline to the EA. A FONSI states its reasons and any mitigation, and notice may run in the Federal Register, local media or on a project website [[faa1050g]].",
-      ],
-    },
-    {
-      heading: "When does an airport project need an EIS?",
-      paragraphs: [
-        "FAA presumes an EIS for ALP approval of, or federal funding for, a new commercial service airport in a metropolitan statistical area, a new air carrier runway at a commercial service airport there, or a major runway extension, and for a launch or reentry site license that requires building on undeveloped land [[faa1050g]].",
-        "For noise, a significant impact is an increase of DNL 1.5 dB or more for a noise-sensitive area exposed at or above DNL 65 dB, or newly exposed at that level, compared with no action [[faa1050g]]. An EIS is limited to 150 pages, or 300 for extraordinary complexity, and is due two years from the notice of intent to the Federal Register notice of availability of the final EIS; FAA files it with EPA [[faa1050g]].",
-      ],
-    },
-    {
-      heading: "Section 4(f) for FAA and other DOT agencies",
-      paragraphs: [
-        "Section 4(f), now 49 U.S.C. 303, lets the Secretary of Transportation approve a project that uses a significant public park, recreation area, wildlife or waterfowl refuge, or historic site only if there is no prudent and feasible alternative and the project includes all possible planning to minimize harm, unless the impact is de minimis [[faaUsc303]].",
-        "FHWA, FRA and FTA carry this out through 23 CFR part 774 [[fhwa774]]. FAA's order lists Section 4(f) among the resources every NEPA document considers, requires reporting on its status, and treats an effect on Section 4(f) resources as a possible extraordinary circumstance for a CATEX [[faa1050g]].",
+        "Actions that normally need an EA include a new general aviation airport, a new runway at an airport outside a metropolitan statistical area, runway strengthening that could significantly increase off-airport noise, and new procedures routing aircraft over noise-sensitive areas below 3,000 feet [[faa1050g]].",
+        "FAA presumes an EIS for ALP approval of, or funding for, a new commercial service airport or new air carrier runway in a metropolitan statistical area, a major runway extension, and a launch or reentry site license that requires building on undeveloped land [[faa1050g]].",
       ],
     },
   ],
   outline: {
     heading: "Airport EA outline: what an FAA environmental assessment covers",
-    intro:
-      "Order 1050.1G sets these elements for every FAA EA [[faa1050g]]. Airport sponsors also use the Office of Airports' Order 5050.4B, parts of which FAA says are superseded [[faaArpNepa]].",
+    intro: "Order 1050.1G sets these elements for every FAA EA [[faa1050g]].",
     items: [
       {
         title: "Purpose and need",
         detail:
-          "Based on FAA's statutory authority and, for a sponsor's request, informed by the sponsor's goals [[faa1050g]].",
+          "Based on FAA's statutory authority and informed by the sponsor's goals [[faa1050g]].",
       },
       {
         title: "Proposed action and alternatives",
@@ -282,60 +244,50 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Environmental consequences",
         detail:
-          "Reasonably foreseeable effects of each alternative, measured against FAA's significance thresholds, such as the DNL 1.5 dB noise threshold [[faa1050g]].",
+          "Reasonably foreseeable effects of each alternative, measured against FAA's significance thresholds [[faa1050g]].",
       },
       {
         title: "Scope of analysis",
         detail:
-          "Where and how FAA drew a reasonable line on effects outside the project area or later in time [[faa1050g]].",
+          "Where FAA drew a reasonable line on effects outside the project area or later in time [[faa1050g]].",
       },
       {
         title: "Special purpose laws",
         detail:
-          "Status of Endangered Species Act section 7, National Historic Preservation Act section 106, Section 4(f) and Coastal Zone Management Act consultations [[faa1050g]].",
+          "Status of ESA section 7, NHPA section 106, Section 4(f) and Coastal Zone Management Act consultations [[faa1050g]].",
       },
       {
         title: "Mitigation",
         detail:
-          "Measures that avoid, minimize or compensate for effects, with their authority, if FAA is to issue a mitigated FONSI [[faa1050g]].",
+          "Measures that avoid, minimize or compensate for effects, with their authority, for a mitigated FONSI [[faa1050g]].",
       },
       {
         title: "Declarations",
         detail:
-          "The responsible official's page-limit and deadline declarations, incorporated into the EA [[faa1050g]].",
+          "The responsible official's page-limit and deadline declarations [[faa1050g]].",
       },
       {
         title: "Appendices",
         detail:
-          "Voluminous data such as tables and calculations that support the analysis, not additional analysis [[faa1050g]].",
+          "Supporting data such as tables and calculations, not additional analysis [[faa1050g]].",
       },
     ],
   },
   faq: [
     {
-      question: "What is FAA Order 1050.1G?",
+      question: "How long can an FAA environmental assessment be?",
       answer:
-        "FAA's National Environmental Policy Act implementing procedures, effective June 30, 2025. It cancels Order 1050.1F and sets how FAA decides whether NEPA applies, uses categorical exclusions, and prepares environmental assessments and environmental impact statements.",
+        "No more than 75 pages of text, excluding citations and appendices, single-spaced in 12-point type. It is due within one year of the earliest statutory trigger, and the responsible official adds declarations on both limits to the EA.",
     },
     {
-      question: "Is FAA Order 1050.1F still used?",
+      question: "Does every airport project need an environmental assessment?",
       answer:
-        "Only for projects that were already underway when Order 1050.1G took effect on June 30, 2025, according to FAA's environmental policy page. Projects started on or after that date follow 1050.1G.",
+        "No. Minor projects such as hangars, apron and taxiway work, and runway protection zone land purchases can fit a categorical exclusion if no extraordinary circumstance arises. An EA is for actions whose effects are unknown or unlikely to be significant; an EIS for those likely to be significant.",
     },
     {
       question: "Who prepares an airport environmental assessment?",
       answer:
-        "Usually the airport sponsor, often with a consultant. FAA supervises the work, helps define the purpose and need and alternatives, independently evaluates the document and takes responsibility for its content. Block-grant states or FAA prepare some documents, depending on funding and impact.",
-    },
-    {
-      question: "What is an FAA categorical exclusion?",
-      answer:
-        "A category of actions FAA has found normally has no significant effect, listed in appendix B of Order 1050.1G, such as taxiway and apron work, hangars and runway protection zone land purchases. FAA checks each action for extraordinary circumstances before applying one.",
-    },
-    {
-      question: "How long can an FAA environmental assessment be?",
-      answer:
-        "No more than 75 pages of text, excluding citations and appendices, single-spaced in 12-point type, and it is due within one year. An EIS is limited to 150 pages, or 300 for extraordinary complexity, and two years.",
+        "Usually the airport sponsor, often with a consultant. FAA supervises the work, helps define the purpose and need and alternatives, independently evaluates the document and takes responsibility for its content.",
     },
     {
       question: "Can ePlan draft an airport EA?",

@@ -8,10 +8,9 @@ import type { GuideEntry, Source } from "../types";
  * - guides/sources.ts: sevenCounty
  * - pages/ceqa.ts: ceqaPrc21002
  * - pages/massachusetts-mepa.ts: mepaMgl61, mepaMgl62b, mepaRegs
- * - pages/hawaii-hepa.ts: hepaHrs3432, hepaHrs3435, hepaHar
+ * - pages/hawaii-hepa.ts: hepaHrs3432, hepaHrs3435
  *
- * Prose links to sibling guides use `[label](/for/slug)`; the page renderer
- * must turn them into links (CitedText does not parse them yet).
+ * Prose links to sibling guides use `[label](/for/slug)`.
  */
 
 const READ = "2026-10-02";
@@ -101,12 +100,6 @@ export const sources = {
     url: "https://mca.legmt.gov/bills/mca/title_0750/chapter_0010/part_0020/section_0110/0750-0010-0020-0110.html",
     read: READ,
   },
-  stateMt2023: {
-    title: "2023 Natural Resource Legislation Summary",
-    publisher: "Montana Legislature",
-    url: "https://archive.legmt.gov/content/Committees/Interim/2023-2024/Energy-and-Telecommunications/Meetings/aug-1-2023/3-2023NATURAL_RESOURCE_LEGISLATION_SUMMARY.pdf",
-    read: READ,
-  },
   stateHeld: {
     title: "Held v. State of Montana, 2024 MT 312, No. DA 23-0575 (opinion)",
     publisher: "Supreme Court of the State of Montana",
@@ -134,21 +127,12 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "State Environmental Review Document",
   answer:
-    "State environmental policy acts are state laws that require an environmental impact assessment, similar to NEPA's, for a state or local government's own activities and decisions; CEQ lists 19 such state, local and regional requirements, from California's CEQA to Washington's SEPA [[stateCeqList]]. NEPA itself is purely procedural [[sevenCounty]], and so, by its own terms, is Montana's act [[stateMt102]]. Others go further: California's law says agencies should not approve projects as proposed when feasible alternatives or mitigation would substantially lessen significant effects [[ceqaPrc21002]], and Washington's lets agencies condition a proposal to mitigate identified impacts, or deny it [[stateRcw060]].",
+    "State environmental policy acts, or little NEPAs, are state laws requiring NEPA-style environmental review of a state or local government's own actions and decisions [[stateCeqList]]. Unlike NEPA, which is purely procedural [[sevenCounty]], several also require agencies to avoid or mitigate significant effects, or let them deny a project [[ceqaPrc21002]] [[stateRcw060]].",
   glance: [
     {
       label: "On CEQ's list",
       value:
-        "19 state, local and regional requirements, including New York City's CEQR and the Tahoe Regional Planning Compact [[stateCeqList]]",
-    },
-    {
-      label: "Substantive rules",
-      value:
-        "A duty or power to avoid, mitigate or deny in California, New York, Washington, Massachusetts and Minnesota law [[ceqaPrc21002]] [[stateNyEcl80109]] [[stateRcw060]] [[mepaMgl61]] [[stateMn116d04]]",
-    },
-    {
-      label: "Procedural only",
-      value: "Montana's MEPA, by statute [[stateMt102]]",
+        "19 requirements: 16 states, DC, New York City and the Tahoe region [[stateCeqList]]",
     },
     {
       label: "First document",
@@ -158,7 +142,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       label: "Who decides",
       value:
-        "The state or local agency acting on the project: an RGU in Minnesota, the proposing or approving agency in Hawaii [[stateEqbAbout]] [[hepaHrs3435]]",
+        "The state or local agency acting on it: Minnesota's RGU, Hawaii's proposing or approving agency [[stateEqbAbout]] [[hepaHrs3435]]",
     },
   ],
   hero: {
@@ -256,7 +240,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "Which states have a little NEPA?",
       paragraphs: [
-        "NEPA sets the environmental review process for federal agency decisions. A number of states, tribes and localities have their own laws requiring similar environmental impact assessment for their own activities or decisions, and CEQ keeps a list of the state and local requirements that are similar to NEPA [[stateCeqList]]:",
+        "CEQ lists these state and local requirements similar to NEPA, and encourages agencies to coordinate them with NEPA reviews to avoid duplication [[stateCeqList]]; for California, see [CEQA and NEPA](/for/ceqa-and-nepa).",
       ],
       bullets: [
         "California (CEQA), Connecticut (CEPA), the District of Columbia (DCEPA), Georgia (GEPA) and Hawaii (HEPA) [[stateCeqList]]",
@@ -269,66 +253,44 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "How do state environmental policy acts differ from NEPA?",
       paragraphs: [
-        "NEPA is a purely procedural statute: it requires agencies to study effects, not to choose a particular result [[sevenCounty]]. Montana's act says the same of itself [[stateMt102]], and Hawaii defines its environmental impact statement as an informational document [[hepaHrs3432]]. Several other states add a substantive duty or authority to act on what the review finds:",
+        "Montana's act is procedural, like NEPA [[stateMt102]], and [Hawaii's HEPA](/for/hawaii-hepa) defines its EIS as an informational document [[hepaHrs3432]]. Others add a duty or power to act on what the review finds:",
       ],
       bullets: [
-        "California: agencies should not approve projects as proposed if feasible alternatives or mitigation measures would substantially lessen significant effects [[ceqaPrc21002]]",
-        "New York: consistent with social, economic and other essential considerations, agencies must choose alternatives that minimize or avoid adverse effects to the maximum extent practicable, and make an explicit finding saying so [[stateNyEcl80109]]",
-        "Washington: agencies may condition a proposal to mitigate specific impacts identified in the review, or deny it when a final EIS finds significant impacts that reasonable mitigation cannot address [[stateRcw060]]",
-        "Massachusetts: every agency determination must find that all feasible measures have been taken to avoid or minimize the impact [[mepaMgl61]]",
-        "Minnesota: no state action that is likely to pollute, impair or destroy natural resources may be allowed while a feasible and prudent alternative exists [[stateMn116d04]]",
-      ],
-    },
-    {
-      heading: "CEQA, SEQR and SEPA: California, New York and Washington",
-      paragraphs: [
-        "[California's CEQA](/for/ceqa) pairs its review procedures with a stated policy that agencies should not approve projects as proposed when feasible alternatives or mitigation would substantially lessen their significant effects [[ceqaPrc21002]].",
-        "Under [New York's SEQR](/for/new-york-seqr), agencies prepare an environmental impact statement on any action they propose or approve that may have a significant effect. The statement covers the setting, impacts, unavoidable effects, alternatives, mitigation and effects on disadvantaged communities [[stateNyEcl80109]].",
-        "[Washington's SEPA](/for/washington-sepa) requires a detailed statement on major actions significantly affecting the quality of the environment [[stateRcw030]], and lets agencies condition or deny proposals on the basis of policies they have formally designated [[stateRcw060]].",
-      ],
-    },
-    {
-      heading: "Massachusetts MEPA and Hawaii HEPA",
-      paragraphs: [
-        "[Massachusetts' MEPA](/for/massachusetts-mepa) is threshold-driven: a project that needs a state agency action and meets a review threshold in 301 CMR 11.03 files an Environmental Notification Form, and the Secretary of Energy and Environmental Affairs decides in a Certificate whether an environmental impact report is required [[mepaRegs]]. Projects near environmental justice populations face added EIR requirements [[mepaMgl62b]].",
-        "[Hawaii's HEPA](/for/hawaii-hepa) is trigger-driven: an environmental assessment is required for actions such as using state or county lands or funds, or any use in a conservation district, shoreline area or historic site, and the assessment decides whether a full EIS follows [[hepaHrs3435]].",
+        "[California's CEQA](/for/ceqa): no approval as proposed if feasible alternatives or mitigation would substantially lessen significant effects [[ceqaPrc21002]]",
+        "[New York's SEQR](/for/new-york-seqr): agencies must choose alternatives that minimize or avoid adverse effects to the maximum extent practicable [[stateNyEcl80109]]",
+        "[Washington's SEPA](/for/washington-sepa): agencies may condition a proposal to mitigate identified impacts, or deny it [[stateRcw060]]",
+        "[Massachusetts' MEPA](/for/massachusetts-mepa): agencies must find all feasible measures were taken to avoid or minimize impact [[mepaMgl61]]",
+        "Minnesota: no state action likely to pollute, impair or destroy natural resources if a feasible, prudent alternative exists [[stateMn116d04]]",
       ],
     },
     {
       heading: "What is a Minnesota environmental assessment worksheet (EAW)?",
       paragraphs: [
-        "An EAW is a brief document that sets out the basic facts needed to decide whether an EIS is required [[stateMn116d04]]. It is mandatory for projects that meet a category in Minn. R. 4410.4300, and may also be ordered by a governmental unit, by petition or at the proposer's request [[stateMnR1000]] [[stateMnR4410]]. A responsible governmental unit (RGU) prepares it with the proposer, using the EQB's standard form [[stateEqbAbout]], whose December 2022 version includes climate adaptation and greenhouse gas items [[stateEqbEawForm]].",
-        "After notice, comments on the need for an EIS run for 30 days, and the RGU must decide within 15 days after they close, unless the EQB chair extends the deadline [[stateMn116d04]]. Its decision is a negative or positive declaration, published in the EQB Monitor [[stateMnR1700]]. An EIS, when ordered, must be analytical rather than encyclopedic, and its adequacy determined within 280 days unless extended [[stateMn116d04]].",
+        "An EAW is a brief document setting out the basic facts needed to decide whether an EIS is required [[stateMn116d04]]. It is mandatory for projects in a category of Minn. R. 4410.4300, and can also be ordered by petition, by a governmental unit or at the proposer's request [[stateMnR1000]] [[stateMnR4410]]. The responsible governmental unit (RGU) prepares it with the proposer on the EQB's form [[stateEqbAbout]], which includes climate and greenhouse gas items [[stateEqbEawForm]].",
+        "After notice, comments on the need for an EIS run 30 days, and the RGU decides within 15 days after they close unless the EQB chair extends the deadline [[stateMn116d04]]. Its decision, a negative or positive declaration, is published in the EQB Monitor [[stateMnR1700]].",
       ],
     },
     {
-      heading: "Montana MEPA after the 2023 amendments",
+      heading: "Montana MEPA: what the act requires today",
       paragraphs: [
-        "Montana MEPA requires a detailed statement on major state actions significantly affecting the environment, covering proximate impacts, reasonable and economically feasible alternatives, regulatory impacts on private property, and irreversible commitments of resources [[stateMt201]]. In 2023 the Legislature passed HB 971, excluding greenhouse gas emissions from MEPA analyses, and SB 557, limiting who may challenge a review and providing that a challenge may not vacate or delay a permit without an injunction [[stateMt2023]].",
-        "On December 18, 2024, the Montana Supreme Court in Held v. State affirmed a ruling that declared unconstitutional the MEPA limitation on greenhouse gas review in section 75-1-201(2)(a) and a 2023 provision limiting remedies in greenhouse gas challenges [[stateHeld]]. As amended in 2025, the statute lets an agency include a greenhouse gas assessment when it finds one necessary and requires one for fossil fuel activities [[stateMt201]] [[stateMt211]]. Challenges are limited to commenters and the issues they raised, and must be filed within 60 days [[stateMt201]].",
-      ],
-    },
-    {
-      heading: "When a project needs both NEPA and state environmental review",
-      paragraphs: [
-        "A federal decision can require both a NEPA review and a state, tribal or local review, and CEQ has long encouraged agencies to coordinate the two to avoid duplication [[stateCeqList]]. Hawaii requires its agencies to cooperate with federal agencies, including through joint EISs, so that one document meets all applicable laws [[hepaHrs3435]], but a federal FONSI does not automatically satisfy its law [[hepaHar]]. Minnesota's RGUs must avoid duplication between state and federal review where practicable [[stateMn116d04]]. For California, see [CEQA and NEPA](/for/ceqa-and-nepa).",
+        "Montana MEPA requires a detailed statement on major state actions significantly affecting the environment [[stateMt201]]. In Held v. State (2024), the Montana Supreme Court affirmed that the act's limit on greenhouse gas review was unconstitutional [[stateHeld]]; as amended in 2025, the act lets an agency include a greenhouse gas assessment when necessary and requires one for fossil fuel activities [[stateMt201]] [[stateMt211]]. Only commenters may challenge a review, on issues they raised, within 60 days [[stateMt201]].",
       ],
     },
   ],
   outline: {
     heading: "What a state EIS covers: the common elements",
     intro:
-      "Compiled from the detailed-statement requirements in New York, Washington, Montana, Massachusetts, Minnesota and Hawaii law. Each state adds items of its own, and first-stage documents such as an EAW, ENF or EA are shorter [[stateNyEcl80109]] [[stateRcw030]] [[stateMt201]] [[mepaMgl62b]].",
+      "Drawn from the New York, Washington, Montana, Massachusetts, Minnesota and Hawaii statutes; each state adds its own items, and an EAW, ENF or EA is shorter [[stateNyEcl80109]] [[stateRcw030]] [[stateMt201]] [[mepaMgl62b]].",
     items: [
       {
         title: "Project description and setting",
         detail:
-          "The proposed action and its environmental setting, or the nature and extent of the project [[stateNyEcl80109]] [[mepaMgl62b]].",
+          "The proposed action and its environmental setting [[stateNyEcl80109]] [[mepaMgl62b]].",
       },
       {
         title: "Environmental impacts",
         detail:
-          "The environmental impact of the action, short- and long-term in New York, proximate impacts in Montana [[stateNyEcl80109]] [[stateRcw030]] [[stateMt201]].",
+          "Short- and long-term impacts in New York; proximate impacts in Montana [[stateNyEcl80109]] [[stateRcw030]] [[stateMt201]].",
       },
       {
         title: "Unavoidable adverse effects",
@@ -338,27 +300,27 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Alternatives",
         detail:
-          "Alternatives to the proposed action; Montana requires them to be reasonable and economically feasible, plus a no-action analysis [[stateRcw030]] [[stateMt201]] [[stateMn116d04]].",
+          "Alternatives to the action; Montana requires reasonable, economically feasible ones and a no-action analysis [[stateRcw030]] [[stateMt201]] [[stateMn116d04]].",
       },
       {
         title: "Mitigation measures",
         detail:
-          "Measures proposed to minimize or mitigate adverse impacts [[stateNyEcl80109]] [[mepaMgl62b]] [[stateMn116d04]].",
+          "Measures to minimize or mitigate adverse impacts [[stateNyEcl80109]] [[mepaMgl62b]] [[stateMn116d04]].",
       },
       {
         title: "Irreversible commitments of resources",
         detail:
-          "Irreversible and irretrievable commitments of resources the action would involve [[stateNyEcl80109]] [[stateRcw030]] [[stateMt201]].",
+          "Irreversible and irretrievable commitments of resources [[stateNyEcl80109]] [[stateRcw030]] [[stateMt201]].",
       },
       {
         title: "Economic, social and cultural effects",
         detail:
-          "Economic, employment and sociological effects in Minnesota; effects on economic welfare, social welfare and cultural practices in Hawaii [[stateMn116d04]] [[hepaHrs3432]].",
+          "Economic, employment and sociological effects in Minnesota; effects on economic and social welfare and cultural practices in Hawaii [[stateMn116d04]] [[hepaHrs3432]].",
       },
       {
         title: "State-specific topics",
         detail:
-          "Such as growth-inducing, energy and disadvantaged-community effects in New York, environmental justice in Massachusetts, and private property impacts in Montana [[stateNyEcl80109]] [[mepaMgl62b]] [[stateMt201]].",
+          "Growth-inducing, energy and disadvantaged-community effects in New York, environmental justice in Massachusetts, private property in Montana [[stateNyEcl80109]] [[mepaMgl62b]] [[stateMt201]].",
       },
       {
         title: "Comments and responses",
@@ -369,36 +331,26 @@ export const entry: GuideEntry<GuidePath> = {
   },
   faq: [
     {
-      question: "What is a little NEPA?",
-      answer:
-        "It is an informal name for a state environmental policy act: a state law that, like the National Environmental Policy Act, requires environmental review of government actions, in this case the state's or a local government's own decisions. Examples include California's CEQA, New York's SEQRA and Washington's SEPA.",
-    },
-    {
-      question: "Which states have their own environmental policy act?",
-      answer:
-        "CEQ's list includes California, Connecticut, the District of Columbia, Georgia, Hawaii, Indiana, Maryland, Massachusetts, Minnesota, Montana, New Jersey, New York, North Carolina, South Dakota, Virginia, Washington and Wisconsin, plus New York City and the Tahoe Regional Planning Compact. The requirements range from full statutes to an executive order.",
-    },
-    {
       question: "Does state environmental review apply to private projects?",
       answer:
-        "Often, when a state or local agency approves, permits or funds them. Massachusetts reviews projects that need a state permit, financial assistance or a land transfer; Hawaii requires an applicant to prepare an assessment when its action needs agency approval and meets a trigger; and New York covers actions agencies approve as well as their own.",
+        "Often, when a state or local agency approves, permits or funds them. Massachusetts reviews projects needing a state permit, financial assistance or land transfer, and Hawaii requires an applicant to prepare an assessment when its action needs agency approval and meets a trigger.",
     },
     {
       question: "Does a NEPA document satisfy state environmental review?",
       answer:
-        "Not automatically. Hawaii's rules, for example, say a federal FONSI does not by itself satisfy Chapter 343, though a federal EIS can be used if it meets Hawaii's content requirements. Hawaii and California, among others, allow joint documents so one review can serve both laws.",
+        "Not automatically. Each state applies its own rules: Hawaii's, for example, say a federal FONSI does not by itself satisfy Chapter 343, though a federal EIS that meets Hawaii's content requirements can be used.",
     },
     {
       question:
         "What is the difference between Montana MEPA and Massachusetts MEPA?",
       answer:
-        "They are separate laws that share an acronym. Montana's act is procedural and covers state agency actions, requiring a detailed statement for major actions that significantly affect the environment. The Massachusetts act is threshold-based: projects needing a state agency action file an Environmental Notification Form, and agencies acting on a project must find that all feasible measures were taken to avoid or minimize damage.",
+        "They are separate laws that share an acronym. Montana's covers state agency actions and is procedural. Massachusetts' is threshold-based: a project needing a state agency action that meets a review threshold files an Environmental Notification Form, and the Secretary decides whether an environmental impact report is required.",
     },
     {
       question:
         "Can ePlan draft documents for any state's environmental review?",
       answer:
-        "ePlan drafts any agency document by name from your project description and a reference document it finds or you upload, such as an EAW, an ENF, a Hawaii EA or a SEPA checklist response. It marks every fact it could not confirm and downloads the draft as Word. It does not file anything, and the responsible agency makes every determination.",
+        "Yes. From your project description and a reference document it finds or you upload, ePlan drafts any agency document by name, such as an EAW, ENF, Hawaii EA or SEPA checklist, and marks every fact it could not confirm. It files nothing; the agency makes every determination.",
     },
   ],
 };

@@ -27,7 +27,7 @@ const FEATURES = [
     heading: "Turn a blank page into a",
     headingAccent: "NEPA draft",
     description:
-      "Turn a blank page into a structured NEPA document in seconds. We draft Scoping Letters that follow your reference letter and mark every detail to confirm.",
+      "Turn a blank page into a structured NEPA document in seconds. We draft Scoping Letters that follow your reference letter and mark every detail they can't confirm.",
     visualSrc: "/images/features/aidrafting.webp",
     visualAlt: "AI drafting interface",
     beaverSrc: "/images/beavers/beaver_aidrafting.png",

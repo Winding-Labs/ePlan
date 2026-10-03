@@ -130,11 +130,6 @@ export const sources = {
     "I8CEE273B5B4D11EC976B000D3A7C4BC3",
     "1998-10-26",
   ),
-  exCcr15306: CCR(
-    "15306",
-    "Information Collection (Class 6)",
-    "I8CFA0E1A5B4D11EC976B000D3A7C4BC3",
-  ),
   exCcr15332: CCR(
     "15332",
     "In-Fill Development Projects (Class 32)",
@@ -178,7 +173,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Notice of Exemption",
   answer:
-    "A CEQA exemption means CEQA's environmental review does not apply to a project: the Legislature exempted it by statute, it falls in a categorical exemption class that no exception bars, or it can be seen with certainty that it cannot have a significant effect on the environment [[exCcr15061]]. The lead agency decides whether a project is exempt, and that decision is final unless challenged in court within CEQA's time limits [[exPrc210801]]. After approving an exempt project, the agency may file a Notice of Exemption, which cuts the time to sue over the exemption from 180 days to 35 [[exPrc21167]] [[exCcr15062]].",
+    "A project qualifies for a CEQA exemption when the Legislature exempted it by statute, it falls in a categorical class that no exception bars, or it can be seen with certainty it cannot have a significant effect [[exCcr15061]]. The lead agency decides [[exPrc210801]], and after approval may file a Notice of Exemption, cutting the time to sue from 180 days to 35 [[exPrc21167]] [[exCcr15062]].",
   glance: [
     {
       label: "Legal basis",
@@ -186,23 +181,19 @@ export const entry: GuideEntry<GuidePath> = {
         "Pub. Resources Code §21080(b) (statutory) and §21084 (categorical); CEQA Guidelines §15061 [[exPrc21080]] [[exPrc21084]] [[exCcr15061]]",
     },
     {
-      label: "Decided by",
-      value: "The lead agency [[exPrc210801]]",
+      label: "Categorical classes",
+      value:
+        "Class 1 to Class 33, CEQA Guidelines §§15301–15333 [[exCcr15300]]",
     },
     {
-      label: "Document",
+      label: "Notice of Exemption",
       value:
-        "Notice of Exemption, filed only after the project is approved; Guidelines Appendix E has a form [[exCcr15062]]",
+        "Optional for most exemptions; filed only after approval; Guidelines Appendix E has a form [[exCcr15062]]",
     },
     {
       label: "Filed with",
       value:
-        "County clerk and State Clearinghouse (local agency); Office of Planning and Research, now LCI (state agency) [[exPrc21152]] [[exPrc21108]] [[ceqaLciAbout]]",
-    },
-    {
-      label: "Challenge window",
-      value:
-        "35 days after the notice is filed; 180 days if none is [[exPrc21167]]",
+        "County clerk and State Clearinghouse (local agency); LCI, formerly OPR (state agency) [[exPrc21152]] [[exPrc21108]] [[ceqaLciAbout]]",
     },
   ],
   hero: {
@@ -298,89 +289,64 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   sections: [
     {
-      heading: "What is a CEQA exemption?",
-      paragraphs: [
-        "CEQA applies to discretionary projects that public agencies carry out or approve, unless the project is exempt [[exPrc21080]]. Once a lead agency decides an activity is a project, it decides whether the project is exempt by statute, falls under a categorical exemption that no exception bars, is covered by the common-sense exemption, or will be rejected or disapproved [[exCcr15061]].",
-        "The common-sense exemption, Guidelines §15061(b)(3), rests on the rule that CEQA applies only to projects that could cause a significant effect: where it can be seen with certainty that there is no possibility the activity may have one, the activity is not subject to CEQA. Each agency should list the exempt projects it handles often in its own implementing procedures [[exCcr15061]].",
-      ],
-    },
-    {
       heading: "Statutory exemptions: what the Legislature exempted",
       paragraphs: [
-        "Statutory exemptions are granted by the Legislature: some are complete exemptions from CEQA, while others cover only part of its requirements or only its timing [[exCcr15260]]. Article 18 of the Guidelines, beginning with §15260, describes them. Many sit in their own sections, including the 2025 exemptions below [[exPrc2108066]] [[ceqaSb131]]. Section 21080(b) lists these, among others [[exPrc21080]]:",
+        "Statutory exemptions come from the Legislature and may cover all of CEQA or only part of it [[exCcr15260]]. Many have their own code sections, like the 2025 exemptions below; section 21080(b) lists these, among others [[exPrc21080]]:",
       ],
       bullets: [
-        "Ministerial projects. Unless the governing law has a discretionary provision, building permits, business licenses and final subdivision maps are presumed ministerial [[exCcr15268]]",
-        "Emergency repairs to public service facilities necessary to maintain service",
-        "Projects to repair, restore or replace facilities damaged in a disaster where the Governor has proclaimed a state of emergency",
-        "Specific actions necessary to prevent or mitigate an emergency",
+        "Ministerial projects; building permits, business licenses and final subdivision maps are presumed ministerial [[exCcr15268]]",
+        "Emergency repairs to public service facilities, and actions to prevent or mitigate an emergency",
+        "Repairing or replacing facilities damaged in a disaster for which the Governor proclaimed a state of emergency",
         "Projects a public agency rejects or disapproves",
-        "All classes of projects designated as categorically exempt under section 21084",
       ],
     },
     {
-      heading: "Categorical exemption classes and examples",
+      heading:
+        "CEQA categorical exemption classes and the Class 32 infill exemption",
       paragraphs: [
-        "Categorical exemptions are classes of projects the Secretary of the Natural Resources Agency has found do not have a significant effect on the environment [[exPrc21084]]. Article 19 of the Guidelines lists them, numbered from Class 1 (§15301) to Class 33 (§15333) [[exCcr15300]] [[exCcr15301]] [[exCcr15333]]. Each agency lists the activities that fit each class in its own procedures, and it may not require an EIR for a project in a class except under the §15300.2 exceptions [[exCcr153004]].",
-        "Some of the classes, with limits taken from their text:",
+        "Categorical exemptions are classes of projects the Secretary of the Natural Resources Agency has found do not have a significant effect [[exPrc21084]] [[exCcr15300]]. An agency may not require an EIR for a project in a class unless a §15300.2 exception applies [[exCcr153004]].",
+        "Class 32 covers infill development that is consistent with the general plan and zoning; within city limits on a site of five acres or less, substantially surrounded by urban uses; of no value as habitat for endangered, rare or threatened species; free of significant traffic, noise, air or water quality effects; and served by all required utilities and public services [[exCcr15332]]. Other classes include:",
       ],
       bullets: [
-        "Class 1, existing facilities (§15301): operation, repair, maintenance, permitting, leasing, licensing or minor alteration of existing structures and facilities with negligible or no expansion of use [[exCcr15301]]",
-        "Class 2, replacement or reconstruction (§15302): a new structure on the same site with substantially the same purpose and capacity [[exCcr15302]]",
-        "Class 3, new construction or conversion of small structures (§15303): for example one single-family home (up to three in urbanized areas), or a store or office of up to 2,500 square feet of floor area [[exCcr15303]]",
-        "Class 4, minor alterations to land (§15304): for example grading on slopes under 10 percent outside waterways, wetlands and other listed areas, new landscaping, and fuel management within 30 feet of structures [[exCcr15304]]",
-        "Class 6, information collection (§15306): data collection, research and resource evaluation that do not seriously disturb an environmental resource [[exCcr15306]]",
-        "Class 33, small habitat restoration (§15333): projects of up to five acres to maintain, restore or protect habitat, with no significant effect on listed species and no hazardous materials disturbed [[exCcr15333]]",
-      ],
-    },
-    {
-      heading: "The Class 32 infill exemption",
-      paragraphs: [
-        "Class 32 covers in-fill development that meets five conditions: it is consistent with the general plan designation and policies and with zoning; it is within city limits on a site of no more than five acres substantially surrounded by urban uses; the site has no value as habitat for endangered, rare or threatened species; approval would not cause significant traffic, noise, air quality or water quality effects; and the site can be served by all required utilities and public services [[exCcr15332]].",
-        "Like every categorical exemption, Class 32 cannot be used where a §15300.2 exception applies [[exCcr15061]]. Since SB 131, a housing development project that would qualify under Class 32, certain other classes or a statutory exemption but for a single condition gets a CEQA review limited to the effects of that condition, with exclusions such as projects on natural and protected lands [[exPrc210801]] [[ceqaSb131]].",
+        "Class 1, existing facilities: repair, maintenance or minor alteration with negligible or no expansion of use [[exCcr15301]]",
+        "Class 2, replacement: a new structure on the same site, with substantially the same purpose and capacity [[exCcr15302]]",
+        "Class 3, small structures: one home (three in urbanized areas), or a store up to 2,500 square feet [[exCcr15303]]",
+        "Class 4, minor alterations to land, such as grading on slopes under 10 percent and new landscaping [[exCcr15304]]",
+        "Class 33, small habitat restoration: up to five acres, with no significant effect on listed species [[exCcr15333]]",
       ],
     },
     {
       heading: "Exceptions to categorical exemptions",
       paragraphs: [
-        "Guidelines §15300.2 lists six exceptions; when one applies, the categorical exemption cannot be used [[exCcr153002]]. The statute itself bars categorical exemptions for projects that may damage scenic resources on an official state scenic highway, projects on listed hazardous waste sites, and projects that may cause a substantial adverse change to a historical resource [[exPrc21084]].",
+        "If any of the six exceptions in Guidelines §15300.2 applies, the categorical exemption cannot be used [[exCcr153002]]. The last three are also written into the statute [[exPrc21084]].",
       ],
       bullets: [
-        "Location: Classes 3, 4, 5, 6 and 11 do not apply where the project may affect an environmental resource of hazardous or critical concern that is designated, precisely mapped and officially adopted [[exCcr153002]]",
-        "Cumulative impact: the exemptions do not apply when successive projects of the same type in the same place have a significant cumulative impact over time [[exCcr153002]]",
-        "Significant effect: there is a reasonable possibility of a significant effect due to unusual circumstances [[exCcr153002]]",
-        "Scenic highways: the project may damage scenic resources, such as trees, historic buildings or rock outcroppings, within an officially designated state scenic highway [[exCcr153002]]",
-        "Hazardous waste sites: the site is on a list compiled under Government Code §65962.5 [[exCcr153002]]",
-        "Historical resources: the project may cause a substantial adverse change in the significance of a historical resource [[exCcr153002]]",
-      ],
-    },
-    {
-      heading: "Filing a Notice of Exemption and the 35-day clock",
-      paragraphs: [
-        "Filing is optional for most exemptions, and the notice may be filed only after the project is approved. It contains a brief project description, the location, a finding that the project is exempt citing the Guidelines section or statute, a brief statement of reasons, and the applicant's name [[exCcr15062]].",
-        "A local agency files with the county clerk of each county where the project is located and with the State Clearinghouse; a state agency files with the Office of Planning and Research, renamed LCI in 2024. An applicant may file instead, attaching the agency's certificate of determination [[exPrc21152]] [[exPrc21108]] [[ceqaLciAbout]]. LCI runs the State Clearinghouse; notices filed with it go through CEQA Submit and are published on CEQAnet [[ceqaLciStart]] [[exCeqanet]].",
-        "Filing starts a 35-day period to challenge the exemption in court. Without a notice, the period is 180 days from the decision to approve the project, or from the start of the project if there was no formal decision [[exPrc21167]] [[exCcr15062]].",
+        "Location (Classes 3, 4, 5, 6, 11): may affect an officially designated, mapped resource of critical concern",
+        "Cumulative impact: successive projects of the same type in the same place add up to a significant impact",
+        "Unusual circumstances: a reasonable possibility of a significant effect due to unusual circumstances",
+        "Scenic highways: may damage scenic resources, such as trees or rock outcroppings, on an official state scenic highway",
+        "Hazardous waste sites: the site is on a list compiled under Government Code §65962.5",
+        "Historical resources: may cause a substantial adverse change in a historical resource's significance",
       ],
     },
     {
       heading: "AB 130 and SB 131: the 2025 exemptions",
       paragraphs: [
-        "The Governor signed AB 130 (Chapter 22) and SB 131 (Chapter 24) on June 30, 2025, and both took effect immediately [[ceqaAb130]] [[ceqaSb131]]. AB 130 added §21080.66, a statutory exemption for housing development projects on sites of up to 20 acres (four for a builder's remedy project) in a city or Census urban area, previously developed or largely surrounded by urban uses, consistent with the general plan and zoning, at half or more of the density in Government Code §65583.2(c)(3)(B), and demolishing no registered historic structure, among other conditions [[exPrc2108066]].",
-        "A project using §21080.66 requires the local government to invite affiliated California Native American tribes to consult, and the lead agency must file a Notice of Exemption. SB 158 added that filing rule in October 2025 and lowered the builder's remedy limit from five acres to four [[exPrc2108066]] [[exSb158]]. SB 131 added these exemptions, each with conditions in its text [[ceqaSb131]]:",
+        "AB 130 added §21080.66, exempting housing on urban sites of up to 20 acres that meet conditions on prior use, zoning, density and historic structures; a lead agency using it must file a Notice of Exemption [[ceqaAb130]] [[exPrc2108066]] [[exSb158]]. SB 131 limits review of housing that misses an exemption by a single condition to that condition's effects [[exPrc210801]], and added these exemptions, each with conditions [[ceqaSb131]]:",
       ],
       bullets: [
-        "Rezonings that implement the schedule of actions in an approved housing element, except those allowing distribution centers, oil and gas infrastructure, or construction on natural and protected lands (§21080.085)",
-        "Wildfire risk reduction: prescribed fire or fuel reduction of up to 50 contiguous acres within half a mile of a subdivision of 30 or more homes, defensible space along evacuation routes and around structures in high or very high hazard zones, and fuel breaks up to 200 feet from structures (§21080.49)",
-        "Day care centers outside residential areas, rural health clinics and federally qualified health centers under 50,000 square feet, and nonprofit food banks and advanced manufacturing on sites zoned only for industrial use, none on natural and protected lands (§21080.69)",
-        "New farmworker housing that meets funding and other conditions, and repair or maintenance of existing farmworker housing (renumbered §21080.45 by SB 158) [[exSb158]]",
-        "Public park and nonmotorized trail facilities funded in whole or part by the Safe Drinking Water, Wildfire Prevention, Drought Preparedness, and Clean Air Bond Act of 2024, and high-speed rail maintenance facilities and stations that meet conditions tied to earlier EIRs (§§21080.57, 21080.70)",
+        "Rezonings that implement an approved housing element (§21080.085)",
+        "Wildfire risk reduction near homes, such as prescribed fire, defensible space and fuel breaks (§21080.49)",
+        "Day care centers, health clinics, food banks and advanced manufacturing (§21080.69)",
+        "Farmworker housing, new or repaired (§21080.45) [[exSb158]]",
+        "Bond-funded parks and trails; high-speed rail facilities (§§21080.57, 21080.70)",
       ],
     },
   ],
   outline: {
     heading: "What a Notice of Exemption contains",
     intro:
-      "The contents Guidelines §15062 requires, with the filing rules from the statute. Appendix E of the Guidelines provides a form [[exCcr15062]].",
+      "The contents Guidelines §15062 requires; Appendix E of the Guidelines has a form [[exCcr15062]]. Notices filed with the State Clearinghouse are published on CEQAnet [[ceqaLciStart]] [[exCeqanet]].",
     items: [
       {
         title: "Project description",
@@ -389,7 +355,7 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Location",
         detail:
-          "A street address and cross street in an urbanized area, or a specific map, preferably a USGS 15-minute or 7.5-minute topographic quadrangle [[exCcr15062]].",
+          "A street address and cross street in an urbanized area, otherwise a specific map, preferably a USGS topographic quadrangle [[exCcr15062]].",
       },
       {
         title: "Exemption claimed",
@@ -402,51 +368,32 @@ export const entry: GuideEntry<GuidePath> = {
           "A brief statement supporting the finding. For a categorical exemption, address the §15300.2 exceptions, since any one of them bars the exemption [[exCcr153002]].",
       },
       {
-        title: "Applicant",
-        detail: "The applicant's name, if any [[exCcr15062]].",
+        title: "Applicant and other parties",
+        detail:
+          "The applicant's name, if any, and, if different, the person receiving public funding, a lease, permit or other entitlement for the project [[exCcr15062]].",
       },
       {
-        title: "Person carrying out the project",
+        title: "Filing",
         detail:
-          "If different from the applicant, the person receiving public funding, or a lease, permit or other entitlement, for the project [[exCcr15062]].",
-      },
-      {
-        title: "Filing after approval",
-        detail:
-          "A local agency files with the county clerk and the State Clearinghouse; a state agency files with the Office of Planning and Research [[exCcr15062]] [[exPrc21152]] [[exPrc21108]].",
-      },
-      {
-        title: "Applicant filing",
-        detail:
-          "An applicant may file the notice instead, attaching the agency's certificate of determination [[exPrc21152]].",
+          "After approval, by the lead agency, or by the applicant with the agency's certificate of determination attached [[exPrc21152]] [[exPrc21108]].",
       },
     ],
   },
   faq: [
     {
-      question: "What is a CEQA categorical exemption?",
-      answer:
-        "A class of projects listed in Article 19 of the CEQA Guidelines that the Secretary of the Natural Resources Agency has found do not have a significant effect on the environment, such as Class 1 for existing facilities or Class 32 for in-fill development. A categorical exemption cannot be used when one of the exceptions in Guidelines section 15300.2 applies.",
-    },
-    {
       question: "Is a Notice of Exemption required?",
       answer:
-        "Usually not. Filing is optional for most exemptions, but it shortens the time to challenge the exemption in court from 180 days to 35 days. Since October 2025, the AB 130 housing exemption (Public Resources Code section 21080.66) has required the lead agency to file one.",
-    },
-    {
-      question: "What does the Class 32 infill exemption require?",
-      answer:
-        "Consistency with the general plan and zoning; a site of no more than five acres within city limits, substantially surrounded by urban uses; no value as habitat for endangered, rare or threatened species; no significant traffic, noise, air quality or water quality effects; and adequate utilities and public services. None of the exceptions in Guidelines section 15300.2 may apply.",
-    },
-    {
-      question: "What exemptions did SB 131 add?",
-      answer:
-        "Among others: rezonings that carry out an approved housing element; wildfire risk reduction projects such as small prescribed burns, defensible space and fuel breaks; day care centers, rural health clinics and federally qualified health centers; food banks and advanced manufacturing on industrial land; farmworker housing; and some park, trail and high-speed rail projects. Each comes with conditions.",
+        "Usually not. Filing is optional for most exemptions, but without a notice the time to challenge the exemption is 180 days instead of 35. A lead agency using the AB 130 housing exemption must file one.",
     },
     {
       question: "What is the common-sense exemption?",
       answer:
         "CEQA Guidelines section 15061(b)(3): where it can be seen with certainty that there is no possibility an activity may have a significant effect on the environment, the activity is not subject to CEQA.",
+    },
+    {
+      question: "Where can I find past notices of exemption?",
+      answer:
+        "On CEQAnet, the State Clearinghouse's public database, which publishes the notices filed with the Clearinghouse. Search it for similar projects to see which exemption other agencies relied on.",
     },
     {
       question: "Does ePlan file the Notice of Exemption?",

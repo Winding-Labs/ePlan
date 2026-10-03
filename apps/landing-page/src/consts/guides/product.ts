@@ -1,11 +1,6 @@
 import { HOME_DRAFT_MOCK } from "@/consts/draft-mocks";
 import type { GuidePath } from "./paths";
-import {
-  PRICING_FAQ,
-  PRICING_SUMMARY,
-  PRODUCT_EXAMPLES,
-  RESPONSIBLE_OFFICIAL_FAQ,
-} from "./shared";
+import { PRICING_FAQ, PRICING_SUMMARY, PRODUCT_EXAMPLES } from "./shared";
 import type { GuideEntry } from "./types";
 
 const nepaSoftware: GuideEntry<GuidePath> = {
@@ -25,22 +20,22 @@ const nepaSoftware: GuideEntry<GuidePath> = {
   ],
   document: "NEPA Document",
   answer:
-    "ePlan is NEPA software, or environmental review software, for agency staff and environmental consultants. Describe a project and it drafts the scoping letter, categorical exclusion decision memo or environmental assessment from a reference document, marking every fact it could not confirm for your team to fill in. Research, tasks, maps and comments sit in the same workspace. Your team reviews, edits and signs; ePlan does not make NEPA determinations.",
+    "ePlan is NEPA software, or environmental review software, for agency staff and environmental consultants. Describe a project and it drafts the scoping letter, categorical exclusion decision memo or environmental assessment from a reference document, marking every fact it could not confirm. Your team reviews, edits and signs; ePlan does not make NEPA determinations.",
   sections: [
     {
       heading: "What NEPA software has to keep up with",
       paragraphs: [
-        "The rules moved twice in three years. The Fiscal Responsibility Act of 2023 added page limits, deadlines and CE adoption to the statute [[fra2023]] [[usc4336a]] [[usc4336c]]. CEQ then removed its government-wide regulations, effective April 11, 2025 [[ceqIfr]] [[ceqFinal]], and agencies issued their own procedures through 2026 [[usdaFinal]] [[doiFinal]] [[fhwaFinal]]. A tool that still cites 40 CFR parts 1500-1508 as current law, after they were removed, misleads the people relying on it.",
+        "The 2023 amendments added page limits, deadlines and CE adoption to the statute [[fra2023]] [[usc4336a]] [[usc4336c]]. CEQ's regulations were removed effective April 11, 2025 [[ceqIfr]] [[ceqFinal]], and agencies issued their own procedures through 2026 [[usdaFinal]] [[doiFinal]] [[fhwaFinal]]. A tool that still cites 40 CFR parts 1500-1508 as current law, after they were removed, misleads the people relying on it.",
       ],
     },
     {
       heading: "What ePlan does",
       paragraphs: ["One workspace per project:"],
       bullets: [
-        "Research: reads your uploads, finds candidate categorical exclusions, and references past decisions and documents, each with its citation.",
-        "Drafting: scoping letters, CE decision memos and EAs, with the location, purpose and citations filled in and the details it still needs marked.",
+        "Research: reads your uploads, finds candidate categorical exclusions, and references past decisions and documents, each cited.",
+        "Drafting: location and purpose filled in; every citation or detail it can't confirm marked for your team.",
         "Planning: a Gantt of milestones and tasks, from botany surveys to GIS boundaries.",
-        "Collaboration: members, comments and an activity timeline; partners can submit project applications to your agency, and public projects get a comment page.",
+        "Collaboration: comments and an activity timeline; partners submit project applications, and public projects get a comment page.",
       ],
     },
     {
@@ -49,22 +44,11 @@ const nepaSoftware: GuideEntry<GuidePath> = {
         "NEPA keeps responsibility with the agency. When a project sponsor prepares an EA or EIS, the lead agency must independently evaluate it and take responsibility for its contents [[usc4336a]], and Interior bars applicants and contractors from preparing decision documents such as a record of decision [[doi46107]]. ePlan works the same way: it drafts, and people decide.",
       ],
     },
-    {
-      heading: "Looking for EIS software?",
-      paragraphs: [
-        "ePlan drafts scoping letters, CE decision memos and EAs. On projects headed for an EIS, teams use it for the scoping letter, precedent research and the task plan. By statute an EIS is capped at 150 pages, or 300 for extraordinary complexity, and two years [[usc4336a]].",
-      ],
-    },
   ],
   outline: {
     heading: "What to check in any NEPA software",
     intro: "Questions worth asking before you pilot a tool, ePlan included.",
     items: [
-      {
-        title: "Current law",
-        detail:
-          "Does it cite the amended statute and your agency's procedures, not CEQ's removed regulations?",
-      },
       {
         title: "Sources you can check",
         detail:
@@ -129,25 +113,19 @@ const nepaSoftware: GuideEntry<GuidePath> = {
     {
       question: "What can NEPA AI tools do today?",
       answer:
-        "They search past NEPA documents, suggest review pathways and draft documents. ePlan drafts scoping letters, CE decision memos, EAs and CEQA documents from a project description, and marks every fact it could not confirm. A person still reviews and signs every document.",
+        "They search past NEPA documents, predict review pathways, help process public comments and draft documents. The agency still makes the NEPA determination, and a person reviews and signs every document.",
     },
     {
-      question: "What is NEPA software?",
+      question: "Is NEPA software the same as AI permitting software?",
       answer:
-        "Software that helps agencies and consultants prepare NEPA reviews: finding the right categorical exclusion, drafting scoping letters, CE records and EAs, tracking the work, and keeping the project record together.",
+        "Not quite. AI permitting tools such as PermitFlow target building and construction permits. NEPA software supports the environmental review an agency completes before it decides; ePlan drafts those documents and does not issue permits.",
     },
     {
-      question: "Is ePlan AI permitting software?",
+      question: "Can NEPA software draft an EIS?",
       answer:
-        "ePlan focuses on NEPA environmental review: it drafts scoping letters, CE decision memos and EAs and tracks the work around them. It does not issue permits; agencies do.",
-    },
-    {
-      question: "Who is ePlan for?",
-      answer:
-        "Federal agency staff, and the consultants and applicants who prepare NEPA documents with them.",
+        "ePlan drafts scoping letters, CE decision memos and EAs, not full EISs. On projects headed for an EIS, teams use it for the scoping letter, precedent research and the task plan.",
     },
     PRICING_FAQ,
-    RESPONSIBLE_OFFICIAL_FAQ,
   ],
 };
 
@@ -164,7 +142,7 @@ const compareAiTools: GuideEntry<GuidePath> = {
   secondaryKeywords: ["permitai", "nepatec", "nepa ai"],
   document: "NEPA Document",
   answer:
-    "Few AI tools aim at NEPA itself. PNNL's PermitAI, funded by DOE, offers NEPA search, comment and drafting tools to agencies, several in beta for federal users [[permitai]] [[permitaiApps]]. NEPATEC is PNNL's open dataset of NEPA documents [[nepatec2]]. Radial Spatial's NEPA AI predicts likely NEPA pathways from a project's location [[radial]]. Transect screens sites for energy developers [[transect]], and PermitFlow is an AI platform for construction permitting, not NEPA [[permitflow]]. ePlan drafts scoping letters, CE decision memos and EAs.",
+    "AI tools for NEPA are still few. PNNL's DOE-funded PermitAI offers search, comment and drafting tools, several in beta for federal users [[permitai]] [[permitaiApps]]; NEPATEC is PNNL's open dataset of NEPA documents [[nepatec2]]. Radial Spatial's NEPA AI predicts review pathways from location [[radial]]. Transect screens sites [[transect]]; PermitFlow handles construction permits [[permitflow]]. ePlan drafts scoping letters, CE memos and EAs.",
   tools: [
     {
       name: "PermitAI",
@@ -227,34 +205,16 @@ const compareAiTools: GuideEntry<GuidePath> = {
   ],
   sections: [
     {
-      heading: "How we compared",
-      paragraphs: [
-        "We read each tool's own public pages and list only what those pages state, with links. Where a page gives no price, we say so rather than guess. Products change; check the vendor's page before you decide.",
-      ],
-    },
-    {
       heading: "PermitAI and NEPATEC",
       paragraphs: [
-        "PNNL describes PermitAI as a combined one-stop data platform and suite of AI tools to streamline reviews for critical federal infrastructure, funded by DOE's Office of Policy and Office of Critical Minerals and Energy Innovation [[permitai]]. Its applications page says SearchNEPA launched in late 2024 and is in beta testing with more than 500 users across federal agencies [[permitaiApps]].",
-        "NEPATEC, the NEPA text corpus behind it, is open. Version 1.0 was published under the PolicyAI name and held 28,212 documents from 2,917 projects [[nepatec1]]; version 2.0 covers CE, EA and EIS documents from more than 60 agencies [[nepatec2]].",
+        "PNNL describes PermitAI as a one-stop data platform and suite of AI tools to streamline reviews for critical federal infrastructure, funded by DOE's Office of Policy and Office of Critical Minerals and Energy Innovation [[permitai]]. SearchNEPA launched in late 2024 and is in beta testing with more than 500 users across federal agencies [[permitaiApps]].",
+        "NEPATEC, the NEPA text corpus behind it, is open. Version 1.0 was published under the PolicyAI name and held 28,212 documents from 2,917 projects [[nepatec1]].",
       ],
     },
     {
       heading: "Radial Spatial NEPA AI",
       paragraphs: [
-        "Radial Spatial, a service-disabled veteran-owned small business, describes NEPA AI as a geospatial AI platform that cross-references past CATEX, EA and EIS documents from the same watershed to predict NEPA pathways, mitigation requirements and permitting costs [[radial]]. Esri lists it as a partner solution [[radialEsri]].",
-      ],
-    },
-    {
-      heading: "Transect and PermitFlow",
-      paragraphs: [
-        "Transect helps developers identify and assess project sites [[transect]], and its NEPA article says the platform gives site-specific, NEPA-focused data, regulations and permits for a project [[transectNepa]]. PermitFlow calls itself an AI pre-construction platform for construction and trades [[permitflow]]; we found no NEPA documents described on its site.",
-      ],
-    },
-    {
-      heading: "ePlan",
-      paragraphs: [
-        "ePlan drafts the documents themselves: scoping letters, CE decision memos and EAs, each following a reference document and marking every fact it could not confirm, inside a project workspace with research, tasks, maps and comments. Your team reviews and signs.",
+        "Radial Spatial, a service-disabled veteran-owned small business, says NEPA AI cross-references past CATEX, EA and EIS documents from the same watershed to predict NEPA pathways, mitigation requirements and permitting costs [[radial]]. Esri lists it as a partner solution [[radialEsri]].",
       ],
     },
   ],
@@ -313,7 +273,7 @@ const compareAiTools: GuideEntry<GuidePath> = {
     {
       question: "What is PermitAI?",
       answer:
-        "A PNNL platform of AI tools for federal environmental review, funded by DOE's Office of Policy and Office of Critical Minerals and Energy Innovation. Its SearchNEPA and CommentNEPA tools are in beta for federal government users.",
+        "A PNNL platform of AI tools for federal environmental review, funded by DOE. Its SearchNEPA and CommentNEPA tools are in beta for federal government users.",
     },
     {
       question: "What is NEPATEC?",
@@ -330,7 +290,6 @@ const compareAiTools: GuideEntry<GuidePath> = {
       answer:
         "ePlan drafts the NEPA documents themselves (scoping letters, CE decision memos and EAs) with their citations, in a project workspace your team and partners share.",
     },
-    PRICING_FAQ,
   ],
 };
 

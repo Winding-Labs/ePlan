@@ -3,7 +3,8 @@ import type { GuideEntry, Source } from "../types";
 
 // /for/ceqa-environmental-impact-report. Reused keys from nepa-pages.ts SOURCES: none.
 // Reused keys defined in ceqa-exemptions.ts: exPrc21080, exPrc21108,
-// exPrc21152, exPrc21167, exCeqanet, exLciAbout.
+// exPrc21152, exPrc21167; from ceqa.ts: ceqaLciAbout.
+// eirCcr15097 and eirCeqanetSearch are defined here but cited only by other pages.
 
 const READ = "2026-10-02";
 
@@ -69,11 +70,6 @@ export const sources = {
     "Notice of Preparation and Determination of Scope of EIR",
     "I88584B665B4D11EC976B000D3A7C4BC3",
     "2018-12-28",
-  ),
-  eirCcr15083: CCR(
-    "15083",
-    "Early Public Consultation",
-    "I8861C1485B4D11EC976B000D3A7C4BC3",
   ),
   eirCcr15084: CCR(
     "15084",
@@ -244,17 +240,17 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Notice of Preparation",
   answer:
-    "An environmental impact report (EIR) is the detailed statement a lead agency prepares under CEQA to describe and analyze a project's significant environmental effects and discuss ways to mitigate or avoid them [[eirCcr15362]]. It is required when there is substantial evidence, in light of the whole record, that a project may have a significant effect on the environment [[exPrc21080]] [[eirCcr15064]]. The process runs from a notice of preparation through a draft EIR, public review and a final EIR to certification, findings and a notice of determination [[eirCcr15082]] [[eirCcr15090]] [[eirCcr15094]].",
+    "An environmental impact report (EIR) is the detailed statement a lead agency prepares under CEQA to analyze a project's significant environmental effects and ways to mitigate or avoid them [[eirCcr15362]]. It is required when substantial evidence shows a project may have a significant effect [[exPrc21080]]. The process runs from a notice of preparation to a notice of determination [[eirCcr15082]] [[eirCcr15094]].",
   glance: [
     {
       label: "Legal basis",
       value:
-        "Pub. Resources Code §§21100 and 21151; CEQA Guidelines Article 9, from §15120 [[eirPrc21100]] [[eirPrc21151]] [[eirCcr15120]]",
+        "Pub. Resources Code §§21100 and 21151; CEQA Guidelines Article 9 [[eirPrc21100]] [[eirPrc21151]] [[eirCcr15120]]",
     },
     {
       label: "Prepared by",
       value:
-        "The lead agency, with its own staff or under contract; any draft must reflect its independent judgment [[eirCcr15084]]",
+        "The lead agency or its consultant; the draft must reflect the agency's independent judgment [[eirCcr15084]]",
     },
     {
       label: "Typical length",
@@ -264,17 +260,12 @@ export const entry: GuideEntry<GuidePath> = {
     {
       label: "Public review",
       value:
-        "30 to 60 days; at least 45 when sent to state agencies through the State Clearinghouse [[eirCcr15105]]",
+        "30 to 60 days; at least 45 through the State Clearinghouse [[eirCcr15105]]",
     },
     {
       label: "Time limit",
       value:
-        "For a private project, one year from accepting the application as complete; agency procedures may allow one 90-day extension [[eirCcr15108]]",
-    },
-    {
-      label: "Challenge window",
-      value:
-        "30 days after the notice of determination is filed [[exPrc21167]]",
+        "One year to certify for a private project, from accepting the application as complete [[eirCcr15108]]",
     },
   ],
   hero: {
@@ -377,141 +368,104 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "When is a CEQA EIR required?",
       paragraphs: [
-        "Every lead agency must prepare, or have prepared under contract, and certify an EIR for any project it proposes to carry out or approve that may have a significant effect on the environment [[eirPrc21100]] [[eirPrc21151]]. The test is whether there is substantial evidence, in light of the whole record, that the project may have such an effect [[exPrc21080]].",
-        "Under Guidelines §15064(f), an agency presented with a fair argument that a project may have a significant effect prepares an EIR even if other substantial evidence points the other way. Public controversy alone does not require one, and argument, speculation and unsubstantiated opinion are not substantial evidence [[eirCcr15064]]. The decision usually follows an initial study, which the agency may skip when an EIR will clearly be required [[eirCcr15063]].",
-      ],
-    },
-    {
-      heading: "The notice of preparation and scoping",
-      paragraphs: [
-        "Immediately after deciding an EIR is required, the lead agency sends a notice of preparation (NOP) to the Office of Planning and Research (renamed LCI in 2024), each responsible and trustee agency and every federal agency involved, and files it with the county clerk. At a minimum, the NOP describes the project, its location and its probable environmental effects [[eirCcr15082]] [[ceqaLciAbout]].",
-        "Those agencies have 30 days after receiving the NOP to tell the lead agency what environmental information the EIR must cover for their statutory responsibilities [[eirPrc210804]]. The lead agency may start drafting right away but may not circulate the draft EIR until that period ends, and a project of statewide, regional or areawide significance needs at least one scoping meeting [[eirCcr15082]].",
-        "Scoping helps identify the range of actions, alternatives, mitigation measures and significant effects to study in depth, and it is necessary for a joint EIR/EIS with a federal agency [[eirCcr15083]]. The State Clearinghouse number issued for the NOP identifies every later document on the project [[eirCcr15082]].",
-      ],
-    },
-    {
-      heading: "AB 52 tribal consultation",
-      paragraphs: [
-        "AB 52 added Public Resources Code §21080.3.1, effective January 1, 2015. Before releasing a negative declaration, mitigated negative declaration or EIR, the lead agency must begin consultation with a California Native American tribe traditionally and culturally affiliated with the project area if the tribe has asked in writing to be notified of projects there and then requests consultation [[eirPrc2108031]].",
-        "Within 14 days of deciding to undertake a project or finding an application complete, the lead agency sends formal notice to those tribes. Each tribe has 30 days to request consultation, and the agency must begin within 30 days of a request [[eirPrc2108031]]. A public EIR may not reveal the location of archaeological sites or sacred lands [[eirCcr15120]].",
-      ],
-    },
-    {
-      heading: "What goes in a draft EIR?",
-      paragraphs: [
-        "A draft EIR must contain the information required by Guidelines §§15122 through 15131. The format can vary, but every element must be covered, and when elements are not in separate sections the document must say where each is discussed [[eirCcr15120]]. The outline below lists them.",
-        "The text should normally run under 150 pages, or under 300 for proposals of unusual scope or complexity [[eirCcr15141]], and the summary should normally not exceed 15 pages [[eirCcr15123]]. The lead agency may write the draft itself, contract it out, or start from a draft by the applicant or its consultant, but the draft sent out for review must reflect the lead agency's independent judgment [[eirCcr15084]].",
-      ],
-    },
-    {
-      heading: "Public review and the final EIR",
-      paragraphs: [
-        "The lead agency gives public notice that the draft EIR is available when it sends a notice of completion to the Office of Planning and Research [[eirCcr15087]]. Review lasts at least 30 days and normally no more than 60; when state agencies review the draft through the State Clearinghouse, at least 45 days unless the Clearinghouse allows a shorter period of at least 30 [[eirCcr15105]]. The agency must accept comments by email [[eirPrc21091]].",
-        "The agency responds in writing to comments raising significant environmental issues, with good-faith, reasoned analysis rather than conclusory statements, and sends proposed responses to commenting public agencies at least 10 days before certifying the EIR [[eirCcr15088]].",
-        "The final EIR, prepared before the project is approved, consists of the draft or a revision of it, the comments received, a list of commenters, the lead agency's responses and any other information it adds [[eirCcr15089]] [[eirCcr15132]].",
+        "The test is the fair argument standard: if the lead agency is presented with a fair argument that the project may have a significant effect, it prepares an EIR even if other substantial evidence points the other way. Public controversy alone does not require one [[eirCcr15064]]. An initial study usually comes first; the agency may skip it when an EIR is clearly required [[eirCcr15063]].",
       ],
     },
     {
       heading:
-        "Certification, findings and the statement of overriding considerations",
+        "The notice of preparation, scoping and AB 52 tribal consultation",
       paragraphs: [
-        "Before approving the project, the lead agency certifies that the final EIR was completed in compliance with CEQA, that its decision-making body reviewed and considered it, and that it reflects the agency's independent judgment [[eirCcr15090]].",
-        "For each significant effect the EIR identifies, the agency makes written findings, supported by substantial evidence: changes to the project avoid or substantially lessen the effect, another agency is responsible for those changes, or specific considerations make the mitigation or alternatives infeasible [[eirPrc21081]] [[eirCcr15091]]. When it requires mitigation, it adopts a program to report on or monitor it [[eirCcr15097]].",
-        "If significant effects remain unavoidable, the agency may still approve the project by finding that its specific economic, legal, social, technological or other benefits outweigh them. It states its reasons in a written statement of overriding considerations, supported by substantial evidence and mentioned in the notice of determination; the statement does not replace the findings [[eirCcr15093]].",
+        "After deciding an EIR is required, the lead agency sends a notice of preparation (NOP) describing the project, location and probable effects to the Office of Planning and Research (now LCI) and to responsible, trustee and involved federal agencies [[eirCcr15082]] [[ceqaLciAbout]]. Those agencies have 30 days to say what the EIR must cover [[eirPrc210804]]. The draft can't circulate before then, and a project of statewide, regional or areawide significance needs a scoping meeting [[eirCcr15082]].",
+        "Under AB 52, a California Native American tribe affiliated with the project area that has asked in writing to be notified gets formal notice within 14 days of the agency deciding to undertake the project or finding the application complete. The tribe has 30 days to request consultation, which must begin within 30 days of the request and before the EIR is released [[eirPrc2108031]].",
       ],
     },
     {
-      heading:
-        "Filing the notice of determination and finding past EIRs on CEQAnet",
+      heading: "Draft EIR review and the final EIR",
       paragraphs: [
-        "The lead agency files a notice of determination within five working days after approving the project. It identifies the project and its State Clearinghouse number, states whether the project will have a significant effect and that an EIR was prepared and certified, and says whether mitigation, findings and a statement of overriding considerations were part of the approval [[eirCcr15094]].",
-        "A local agency files with the county clerk of each county where the project is located and with the State Clearinghouse; a state agency files with the Office of Planning and Research [[exPrc21152]] [[exPrc21108]]. Filing starts a 30-day period for a lawsuit alleging the EIR does not comply with CEQA [[exPrc21167]].",
-        "To find past EIRs, search CEQAnet, the State Clearinghouse database. It holds key information on CEQA documents submitted to the Clearinghouse since 1990, with full text since March 2019, but it is not complete, because not every document goes to the Clearinghouse [[exCeqanet]]. Its advanced search filters by State Clearinghouse number and by document type, such as NOP, draft EIR, final document or NOD [[eirCeqanetSearch]].",
+        "When the draft EIR is done, the lead agency files a notice of completion with the Office of Planning and Research and gives public notice that it is available [[eirCcr15087]]. It must accept comments by email [[eirPrc21091]] and answer those raising significant environmental issues in writing, with reasoned analysis, sending proposed responses to commenting public agencies at least 10 days before certification [[eirCcr15088]].",
+        "The final EIR is the draft or a revision of it plus the comments, a list of commenters and the lead agency's responses [[eirCcr15089]] [[eirCcr15132]].",
+      ],
+    },
+    {
+      heading: "Certification, findings and the notice of determination",
+      paragraphs: [
+        "Before approving the project, the lead agency certifies that the final EIR complies with CEQA, was considered by its decision-makers and reflects its independent judgment [[eirCcr15090]]. For each significant effect it makes written findings: project changes avoid or substantially lessen it, another agency is responsible, or mitigation and alternatives are infeasible [[eirPrc21081]] [[eirCcr15091]]. To approve a project with unavoidable significant effects, it adopts a statement of overriding considerations [[eirCcr15093]].",
+        "Within five working days of approval, the lead agency files a notice of determination stating whether the project will have a significant effect and whether mitigation, findings and a statement of overriding considerations were adopted [[eirCcr15094]]. A local agency files with the county clerk and the State Clearinghouse, a state agency with LCI [[exPrc21152]] [[exPrc21108]]. Filing starts a 30-day window for CEQA lawsuits [[exPrc21167]].",
       ],
     },
   ],
   outline: {
     heading: "Draft EIR outline: the required sections",
     intro:
-      "The elements Guidelines §§15122 through 15131 require in every draft EIR, in Article 9's order. The format can vary as long as each element is covered [[eirCcr15120]].",
+      "Required in every draft EIR by Guidelines §§15122-15131, in Article 9's order; the format can vary if each element is covered [[eirCcr15120]].",
     items: [
       {
         title: "Table of contents or index",
         detail:
-          "At least one, so readers can find each subject and issue [[eirCcr15122]].",
+          "At least one, so readers can find each subject [[eirCcr15122]].",
       },
       {
         title: "Summary",
         detail:
-          "Each significant effect with the mitigation and alternatives that would reduce or avoid it, areas of controversy, and issues to resolve; normally no more than 15 pages [[eirCcr15123]].",
+          "Each significant effect with mitigation and alternatives that would reduce or avoid it, areas of controversy and issues to resolve; normally 15 pages or less [[eirCcr15123]].",
       },
       {
         title: "Project description",
         detail:
-          "A detailed map of the location and boundaries, the objectives including the underlying purpose, the technical, economic and environmental characteristics, and the agencies, permits and approvals that will rely on the EIR [[eirCcr15124]].",
+          "Location and boundaries on a map, objectives and underlying purpose, technical, economic and environmental characteristics, and the approvals relying on the EIR [[eirCcr15124]].",
       },
       {
         title: "Environmental setting",
         detail:
-          "Physical conditions in the vicinity when the NOP is published, which normally form the baseline, and any inconsistencies with applicable general, specific and regional plans [[eirCcr15125]].",
+          "Physical conditions when the NOP is published, normally the baseline, and inconsistencies with general, specific and regional plans [[eirCcr15125]].",
       },
       {
         title: "Environmental impacts",
         detail:
-          "Significant direct and indirect effects, short and long term; effects that cannot be avoided; irreversible changes; and growth-inducing impacts [[eirCcr15126]] [[eirCcr151262]].",
+          "Significant direct and indirect effects, short and long term; unavoidable effects; irreversible changes; growth-inducing impacts [[eirCcr15126]] [[eirCcr151262]].",
       },
       {
         title: "Mitigation measures",
         detail:
-          "Feasible measures for each significant effect, fully enforceable, with details deferred only under the conditions the Guidelines set [[eirCcr151264]].",
+          "Feasible, fully enforceable measures for each significant effect, with details deferred only under the Guidelines' conditions [[eirCcr151264]].",
       },
       {
         title: "Alternatives",
         detail:
-          "A reasonable range that would attain most of the basic objectives while avoiding or substantially lessening significant effects, plus the no project alternative [[eirCcr151266]].",
+          "A reasonable range that meets most basic objectives while avoiding or substantially lessening significant effects, plus no project [[eirCcr151266]].",
       },
       {
         title: "Cumulative impacts and effects found not significant",
         detail:
-          "Cumulative impacts where the project's incremental effect is cumulatively considerable, and brief reasons other possible effects were found not significant [[eirCcr15130]] [[eirCcr15128]].",
+          "Cumulatively considerable impacts, and brief reasons other effects were found not significant [[eirCcr15130]] [[eirCcr15128]].",
       },
       {
         title: "Preparers and persons consulted",
         detail:
-          "The agencies, organizations and individuals consulted, and who prepared the draft EIR [[eirCcr15129]].",
+          "Who prepared the draft and which agencies, organizations and people were consulted [[eirCcr15129]].",
       },
     ],
   },
   faq: [
     {
-      question: "When is a CEQA EIR required?",
+      question: "How long does a CEQA EIR take?",
       answer:
-        "When there is substantial evidence, in light of the whole record, that a project may have a significant effect on the environment. If a lead agency is presented with a fair argument that the project may have such an effect, it prepares an EIR even if other evidence suggests the effect will not be significant.",
+        "For a private project, the lead agency has one year from accepting the application as complete to certify the EIR. Agencies get 30 days to respond to the NOP, and draft EIR review takes 30 to 60 days, or at least 45 through the State Clearinghouse.",
     },
     {
       question: "What is the difference between a draft EIR and a final EIR?",
       answer:
-        "The draft EIR contains the analysis required by CEQA Guidelines sections 15122 through 15131 and goes out for public review. The final EIR adds the comments received, a list of commenters and the lead agency's responses, and the lead agency certifies it before approving the project.",
-    },
-    {
-      question: "How long is the public review period for a draft EIR?",
-      answer:
-        "At least 30 days and normally no more than 60. When the draft goes to state agencies through the State Clearinghouse, at least 45 days, unless the Clearinghouse allows a shorter period of at least 30 days.",
+        "The draft EIR holds the analysis and goes out for public review. The final EIR adds the comments, a list of commenters and the lead agency's responses, and is certified before the project is approved.",
     },
     {
       question: "What is a statement of overriding considerations?",
       answer:
-        "The lead agency's written explanation of why a project's specific economic, legal, social, technological or other benefits outweigh significant environmental effects that cannot be avoided or substantially lessened. It must be supported by substantial evidence and does not replace the required findings.",
-    },
-    {
-      question: "What is a notice of determination?",
-      answer:
-        "The notice a lead agency files within five working days after approving a project. A local agency files it with the county clerk and the State Clearinghouse. Filing starts a 30-day period for lawsuits claiming the EIR does not comply with CEQA.",
+        "The lead agency's written reasons, supported by substantial evidence, why a project's specific benefits outweigh significant effects it cannot avoid or substantially lessen. It lets the agency approve the project anyway, and it does not replace the required findings.",
     },
     {
       question: "Can ePlan write the whole EIR?",
       answer:
-        "No. ePlan drafts the notice of preparation, outlines the EIR's sections and looks up past EIRs for similar projects on CEQAnet, marking every fact it can't confirm. Your team writes and reviews the analysis, and the lead agency certifies the EIR.",
+        "No. ePlan drafts the notice of preparation, outlines the EIR's sections and finds past EIRs for similar projects on CEQAnet, marking every fact it can't confirm. Your team writes the analysis, and the lead agency certifies the EIR.",
     },
   ],
 };

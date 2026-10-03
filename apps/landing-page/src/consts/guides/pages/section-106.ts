@@ -1,6 +1,5 @@
 import type { GuidePath } from "../paths";
-// /for/section-106. Reused source keys (defined in the shared NEPA sources):
-// usc4336, ceqIfr, ceqFinal, ceqProcedures.
+// /for/section-106. Cites only the sources defined below.
 import type { GuideEntry, Source } from "../types";
 
 const READ = "2026-10-02";
@@ -42,14 +41,7 @@ export const sources = {
     "Coordination with the National Environmental Policy Act",
   ),
   s106Cfr80011: CFR800("800.11", "B", "Documentation standards"),
-  s106Cfr80014: CFR800("800.14", "C", "Federal agency program alternatives"),
   s106Cfr80016: CFR800("800.16", "C", "Definitions"),
-  s106AchpIntro: {
-    title: "An Introduction to Section 106",
-    publisher: "Advisory Council on Historic Preservation",
-    url: "https://www.achp.gov/protecting-historic-properties/section-106-process/introduction-section-106",
-    read: READ,
-  },
   s106AchpOverview: {
     title: "Protecting Historic Properties (Section 106 overview)",
     publisher: "Advisory Council on Historic Preservation",
@@ -64,35 +56,11 @@ export const sources = {
     published: "2021-01",
     read: READ,
   },
-  s106Agenda: {
-    title:
-      "Amendments to the Implementing Regulations for Section 106 of the National Historic Preservation Act (RIN 3010-AA10)",
-    publisher:
-      "Advisory Council on Historic Preservation, Unified Agenda (reginfo.gov)",
-    url: "https://www.reginfo.gov/public/do/eAgendaViewRule?pubId=202510&RIN=3010-AA10",
-    read: READ,
-  },
   s106AchpVote: {
     title: "ACHP Votes to Move Forward with Notice of Proposed Rulemaking",
     publisher: "Advisory Council on Historic Preservation",
     url: "https://www.achp.gov/news/achp-votes-move-forward-notice-proposed-rulemaking",
     published: "2026-07-24",
-    read: READ,
-  },
-  s106PcHousing: {
-    title:
-      "Program Comment on Certain Housing, Building, and Transportation Undertakings, 90 FR 14526",
-    publisher: "Advisory Council on Historic Preservation, Federal Register",
-    url: "https://www.federalregister.gov/documents/2025/04/02/2025-05438/program-comment-on-certain-housing-building-and-transportation-undertakings",
-    published: "2025-04-02",
-    read: READ,
-  },
-  s106PcArmy: {
-    title:
-      "Notice of Issuance of the Department of the Army Program Comment for Army Warfighting Readiness and Associated Infrastructure, 91 FR 24249",
-    publisher: "Advisory Council on Historic Preservation, Federal Register",
-    url: "https://www.federalregister.gov/documents/2026/05/05/2026-08674/notice-of-issuance-of-the-department-of-the-army-program-comment-for-army-warfighting-readiness-and",
-    published: "2026-05-05",
     read: READ,
   },
 } satisfies Record<string, Source>;
@@ -118,7 +86,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Section 106 Consultation Letter",
   answer:
-    "Section 106 of the National Historic Preservation Act (NHPA), 54 U.S.C. 306108, requires a federal agency to take into account the effects of a project it carries out, funds or licenses on historic properties, and to give the Advisory Council on Historic Preservation (ACHP) a reasonable opportunity to comment, before it approves federal funds or issues the license [[s106Usc306108]]. The ACHP's regulations, 36 CFR part 800, set the Section 106 process: initiate consultation, identify historic properties, assess adverse effects and resolve them, usually in a memorandum of agreement [[s106Cfr800]] [[s106Cfr8006]] [[s106Citizen]]. Most Section 106 review takes place between the agency and the State or Tribal Historic Preservation Officer [[s106Citizen]].",
+    "Section 106 of the National Historic Preservation Act requires a federal agency to take into account a project's effects on historic properties, and let the Advisory Council on Historic Preservation (ACHP) comment, before approving federal funds or a license [[s106Usc306108]]. The Section 106 process, 36 CFR part 800, is mostly consultation with the State or Tribal Historic Preservation Officer (SHPO/THPO) [[s106Cfr800]] [[s106Citizen]].",
   glance: [
     {
       label: "Legal basis",
@@ -134,19 +102,13 @@ export const entry: GuideEntry<GuidePath> = {
         "Undertakings: projects a federal agency carries out, funds, or permits, licenses or approves [[s106Cfr80016]]",
     },
     {
-      label: "Consult with",
-      value:
-        "The SHPO or THPO, Indian tribes and Native Hawaiian organizations, local governments, applicants and others with a demonstrated interest [[s106Cfr8002]]",
-    },
-    {
       label: "SHPO/THPO review",
-      value:
-        "30 days for a finding of no historic properties affected or no adverse effect [[s106Cfr8004]] [[s106Cfr8005]]",
+      value: "30 days to respond to a finding or determination [[s106Cfr8003]]",
     },
     {
       label: "Ends with",
       value:
-        "A finding of no historic properties affected or no adverse effect, a memorandum of agreement, or ACHP comments to the agency head [[s106Cfr8004]] [[s106Cfr8006]] [[s106Cfr8007]]",
+        "No historic properties affected, no adverse effect, a memorandum of agreement, or ACHP comments [[s106Cfr8004]] [[s106Cfr8005]] [[s106Cfr8006]] [[s106Cfr8007]]",
     },
   ],
   hero: {
@@ -248,111 +210,82 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   sections: [
     {
-      heading: "What is NHPA Section 106?",
-      paragraphs: [
-        "Section 106 applies when a federal agency has direct or indirect jurisdiction over a federal or federally assisted undertaking, or authority to license one. Before it approves spending federal funds or issues the license, the agency must take into account the undertaking's effect on any historic property and give the ACHP a reasonable opportunity to comment [[s106Usc306108]].",
-        "An undertaking is a project, activity or program funded in whole or in part under a federal agency's jurisdiction, including work carried out by or for the agency, with federal financial assistance, or requiring a federal permit, license or approval. A historic property is a district, site, building, structure or object included in, or eligible for, the National Register of Historic Places, including properties of traditional religious and cultural importance to an Indian tribe or Native Hawaiian organization that meet the National Register criteria [[s106Cfr80016]].",
-        "A property need not be formally listed: a consensus that it is eligible is enough, and properties are generally at least 50 years old. Section 106 review encourages, but does not mandate, preservation; it makes agencies weigh preservation values in their decisions and be publicly accountable for them [[s106Citizen]].",
-      ],
-    },
-    {
       heading: "The Section 106 process: four steps in 36 CFR part 800",
       paragraphs: [
-        "The ACHP issues the regulations that implement Section 106 and oversees the process [[s106Cfr8002]]. If an undertaking is a type of activity with no potential to cause effects on historic properties, the agency has no further obligations. The agency and the SHPO/THPO may agree to address several steps in one consultation, as long as consulting parties and the public can still express their views [[s106Cfr8003]].",
-        "Every determination, finding or agreement needs enough documentation for reviewers to understand its basis, and 36 CFR 800.11 lists what each type of finding must include [[s106Cfr80011]]. The four steps:",
+        "Historic properties are those listed in or eligible for the National Register of Historic Places, including places of religious and cultural importance to Indian tribes and Native Hawaiian organizations [[s106Cfr80016]]. They need not be listed and are generally at least 50 years old [[s106Citizen]]. If the undertaking is a type of activity with no potential to cause effects on historic properties, the agency has no further obligations [[s106Cfr8003]].",
+        "The ACHP voted on July 24, 2026 to propose a rewrite of part 800, last amended in 2004; until a new rule is final, the current text applies [[s106AchpVote]] [[s106AchpOverview]] [[s106Cfr800]]. The four steps:",
       ],
       bullets: [
-        "Initiate: establish the undertaking, identify the SHPO and any THPO, plan public involvement and invite consulting parties [[s106Cfr8003]]",
-        "Identify: define and document the area of potential effects, review existing information, survey as needed and apply the National Register criteria [[s106Cfr8004]]",
-        "Assess: apply the criteria of adverse effect, which ask whether the undertaking would diminish the integrity of a property's location, design, setting, materials, workmanship, feeling or association [[s106Cfr8005]]",
-        "Resolve: consult to avoid, minimize or mitigate adverse effects, and record the outcome in a memorandum of agreement [[s106Cfr8006]]",
+        "Initiate: confirm the undertaking, identify the SHPO or THPO, plan public involvement and invite consulting parties [[s106Cfr8003]]",
+        "Identify: define the area of potential effects, review records, survey as needed and apply the National Register criteria [[s106Cfr8004]]",
+        "Assess: apply the criteria of adverse effect, asking whether the undertaking would diminish the integrity of each property [[s106Cfr8005]]",
+        "Resolve: consult to avoid, minimize or mitigate adverse effects, usually recorded in a memorandum of agreement [[s106Cfr8006]]",
       ],
     },
     {
       heading: "Who takes part in Section 106 consultation?",
       paragraphs: [
-        "The federal agency is legally responsible. It may use applicants, consultants or designees to prepare information and analyses, but the agency official remains responsible for every finding and determination [[s106Cfr8002]]. The SHPO, appointed by the governor, coordinates the state's preservation program and consults with agencies [[s106Citizen]]. On tribal lands where a tribe has assumed the SHPO's duties, the agency consults the THPO instead of the SHPO [[s106Cfr8002]].",
-        "The agency must make a reasonable and good faith effort to identify Indian tribes and Native Hawaiian organizations that might attach religious and cultural significance to historic properties in the area of potential effects and invite them; one that asks in writing to be a consulting party is one [[s106Cfr8003]]. Local governments and applicants are entitled to consult, others with a demonstrated interest may join, and the agency must seek the public's views [[s106Cfr8002]].",
-        "The ACHP enters an individual review when it decides its involvement is needed, guided by the criteria in appendix A to part 800 [[s106Cfr8002]]. It must be invited when an undertaking has an adverse effect on a National Historic Landmark or a programmatic agreement will be prepared [[s106Cfr8006]].",
+        "The agency is responsible for every finding, even when an applicant or consultant prepares the analysis. It consults the SHPO, or the THPO on tribal lands where a tribe has assumed the SHPO's duties [[s106Cfr8002]]. It must make a reasonable and good faith effort to identify and invite tribes and Native Hawaiian organizations that may attach religious and cultural significance to affected properties [[s106Cfr8003]].",
       ],
     },
     {
       heading: "How long does SHPO review take?",
       paragraphs: [
-        "The SHPO/THPO has 30 days to respond to a request to review a finding or determination. If it does not respond, the agency may proceed to the next step or consult the ACHP in its place [[s106Cfr8003]].",
-        "For a finding of no historic properties affected, the agency's Section 106 responsibilities are fulfilled if the SHPO/THPO does not object within 30 days of receiving adequate documentation [[s106Cfr8004]]. For a proposed finding of no adverse effect, the agency may proceed after 30 days if the SHPO/THPO agreed or did not respond and no consulting party objected. If someone disagrees, the ACHP can review the finding within 15 days, extendable by 15 [[s106Cfr8005]].",
-        "When an adverse effect is found, the agency notifies the ACHP, which has 15 days to say whether it will join the consultation [[s106Cfr8006]]. The ACHP asks agencies to submit adverse effect notices through its e106 electronic system [[s106AchpOverview]].",
+        "If the SHPO/THPO does not respond within its 30 days, the agency may proceed to the next step or consult the ACHP in its place [[s106Cfr8003]]. A finding of no historic properties affected completes Section 106 if the SHPO/THPO does not object within 30 days of receiving adequate documentation [[s106Cfr8004]].",
+        "With a finding of no adverse effect, the agency may proceed after 30 days if the SHPO/THPO agreed or did not respond and no consulting party objected; if someone disagrees, the ACHP can review it within 15 days, extendable by 15 [[s106Cfr8005]]. An adverse effect is reported to the ACHP, through its e106 system, and the ACHP has 15 days to decide whether to join [[s106Cfr8006]] [[s106AchpOverview]].",
       ],
     },
     {
       heading: "Section 106 review and NEPA: 36 CFR 800.8",
       paragraphs: [
-        "The regulations encourage agencies to coordinate Section 106 with NEPA and to consider historic properties as early as possible in the NEPA process. A finding of adverse effect does not necessarily require an environmental impact statement [[s106Cfr8008]].",
-        "A categorical exclusion under an agency's NEPA procedures does not end Section 106: the agency still decides whether the action is an undertaking that needs review. An agency may instead use its EA or EIS process in place of 36 CFR 800.3 through 800.6 if it notifies the SHPO/THPO and the ACHP in advance and meets the standards in 800.8(c), with binding mitigation commitments in the record of decision or a memorandum of agreement [[s106Cfr8008]].",
-        "Section 800.8 still refers to EAs, FONSIs, EISs and RODs. CEQ's NEPA regulations, 40 CFR parts 1500-1508, were removed [[ceqIfr]] [[ceqFinal]], so agencies prepare those documents under the NEPA statute and their own procedures [[usc4336]] [[ceqProcedures]].",
-      ],
-    },
-    {
-      heading:
-        "Memorandum of agreement, programmatic agreements and program comments",
-      paragraphs: [
-        "If the agency and the SHPO/THPO agree on how to resolve adverse effects, they sign a memorandum of agreement (MOA), and the ACHP signs too when it participated. The agency must submit the executed MOA to the ACHP before approving the undertaking, and the MOA then governs the undertaking [[s106Cfr8006]]. If consultation fails, the ACHP comments to the head of the agency, who must take the comments into account and document the decision [[s106Cfr8007]].",
-        "For programs and complex projects, the ACHP and an agency may negotiate a programmatic agreement, and an agency may ask the ACHP for program comments on a category of undertakings instead of reviewing each one [[s106Cfr80014]]. One program comment, in effect since December 20, 2024, gives all federal agencies an alternative review for certain housing, building and transportation undertakings [[s106PcHousing]]. Another, effective April 3, 2026, covers Army warfighting readiness activities on Army installations [[s106PcArmy]].",
-      ],
-    },
-    {
-      heading:
-        "What changed in 2026: the ACHP's proposed rewrite of 36 CFR part 800",
-      paragraphs: [
-        "The Section 106 regulations were last amended in 2004 [[s106AchpOverview]]. The ACHP listed a proposed rule amending 36 CFR part 800 in the Unified Agenda, designated deregulatory under Executive Order 14192, with a notice of proposed rulemaking targeted for July 2026 [[s106Agenda]].",
-        "On July 24, 2026, ACHP members voted to move forward with that notice of proposed rulemaking. The draft goes to interagency review at the Office of Information and Regulatory Affairs before publication in the Federal Register [[s106AchpVote]]. The ACHP has paused its training program for fall and winter 2026 because of the revision [[s106AchpIntro]]. Until a new rule is final, plan reviews under the current text of part 800 [[s106Cfr800]].",
+        "Agencies should coordinate Section 106 with NEPA and consider historic properties early; an adverse effect does not by itself require an EIS. An agency may instead use its EA or EIS process in place of 36 CFR 800.3 through 800.6 if it notifies the SHPO/THPO and the ACHP in advance and meets 800.8(c), including binding mitigation commitments [[s106Cfr8008]].",
       ],
     },
   ],
   outline: {
     heading: "Section 106 consultation letter: what to include",
     intro:
-      "No form is prescribed for a Section 106 consultation letter. This outline follows what 36 CFR part 800 asks an agency to do when it initiates consultation [[s106Cfr8003]] and the documentation it requires for a finding [[s106Cfr80011]]. Check whether your SHPO or THPO uses its own form.",
+      "This outline follows what 36 CFR part 800 asks for when an agency initiates consultation [[s106Cfr8003]] and the documentation a finding needs [[s106Cfr80011]]. Check whether your SHPO or THPO uses its own form.",
     items: [
       {
         title: "Undertaking and federal involvement",
         detail:
-          "What the project is, the agency and its funding, permit or license, and why it is an undertaking [[s106Cfr80016]], described with photographs, maps and drawings as needed [[s106Cfr80011]].",
+          "The project, the agency and its funding, permit or license, and why it is an undertaking [[s106Cfr80016]], with maps and photographs [[s106Cfr80011]].",
       },
       {
         title: "Who is consulting",
         detail:
-          "The agency official, and any applicant the agency has authorized to initiate consultation; the agency stays responsible for all findings [[s106Cfr8002]].",
+          "The agency official, or the applicant the agency authorized to initiate consultation [[s106Cfr8002]].",
       },
       {
         title: "Area of potential effects",
         detail:
-          "The area where the undertaking may directly or indirectly alter the character or use of historic properties, documented with a map [[s106Cfr80016]] [[s106Cfr8004]].",
+          "Where the undertaking may directly or indirectly alter the character or use of historic properties, shown on a map [[s106Cfr80016]] [[s106Cfr8004]].",
       },
       {
         title: "Identification efforts",
         detail:
-          "Records reviewed, surveys, and information sought from consulting parties and tribes, at a reasonable and good faith level of effort [[s106Cfr8004]] [[s106Cfr80011]].",
+          "Records reviewed, surveys, and information sought from consulting parties and tribes [[s106Cfr8004]] [[s106Cfr80011]].",
       },
       {
         title: "Historic properties and eligibility",
         detail:
-          "Each property in the area of potential effects, the National Register criteria applied, and the eligibility recommendation for the SHPO/THPO to agree with [[s106Cfr8004]].",
+          "Each property found, the National Register criteria applied and your eligibility recommendation [[s106Cfr8004]].",
       },
       {
         title: "Effects and proposed finding",
         detail:
-          "The undertaking's effects on each property and why the criteria of adverse effect do or do not apply, including any conditions to avoid adverse effects [[s106Cfr8005]] [[s106Cfr80011]].",
+          "Effects on each property and why the criteria of adverse effect do or do not apply, including conditions that avoid them [[s106Cfr8005]] [[s106Cfr80011]].",
       },
       {
         title: "Consulting parties and tribes",
         detail:
-          "The Indian tribes, Native Hawaiian organizations, local governments and others invited, and the views they provided [[s106Cfr8003]] [[s106Cfr80011]].",
+          "The tribes, Native Hawaiian organizations, local governments and others invited, and the views they gave [[s106Cfr8003]] [[s106Cfr80011]].",
       },
       {
         title: "Public involvement",
         detail:
-          "How the public has been or will be informed and asked for input, which may use the agency's NEPA public involvement procedures [[s106Cfr8002]] [[s106Cfr8003]].",
+          "How the public was or will be asked for input, possibly through the agency's NEPA procedures [[s106Cfr8002]] [[s106Cfr8003]].",
       },
       {
         title: "Request and review period",
@@ -363,19 +296,9 @@ export const entry: GuideEntry<GuidePath> = {
   },
   faq: [
     {
-      question: "What is Section 106 review?",
-      answer:
-        "The review that Section 106 of the National Historic Preservation Act (54 U.S.C. 306108) requires before a federal agency funds, carries out or licenses an undertaking. The agency identifies historic properties that could be affected, assesses effects, and consults the SHPO or THPO and others on ways to avoid, minimize or mitigate adverse effects, following the ACHP's regulations at 36 CFR part 800.",
-    },
-    {
       question: "What is a Section 106 consultation letter?",
       answer:
-        "The letter in which a federal agency, or an applicant it has authorized, starts consultation with the SHPO or THPO or asks it to review a finding. It usually describes the undertaking and the federal involvement, the area of potential effects, the identification work done, the historic properties found and the proposed finding.",
-    },
-    {
-      question: "How long does the SHPO have to respond under Section 106?",
-      answer:
-        "30 days from receipt of a request to review a finding or determination. If the SHPO or THPO does not respond in that time, the agency may move to the next step or consult the ACHP in its place.",
+        "The letter in which a federal agency, or an applicant it has authorized, starts consultation with the SHPO or THPO or asks it to review a finding. No federal form is prescribed, though some SHPOs and THPOs have their own.",
     },
     {
       question: "Does a NEPA categorical exclusion cover Section 106?",
@@ -383,9 +306,9 @@ export const entry: GuideEntry<GuidePath> = {
         "No. Under 36 CFR 800.8(b), the agency must still decide whether a categorically excluded action is an undertaking that needs Section 106 review and, if it is, complete the review.",
     },
     {
-      question: "Is Section 106 changing in 2026?",
+      question: "What happens if Section 106 consultation fails?",
       answer:
-        "The ACHP voted on July 24, 2026 to move forward with a proposed rule revising 36 CFR part 800. The draft goes through review at the Office of Management and Budget and then to the Federal Register for public comment. The regulations in force were last amended in 2004.",
+        "The ACHP comments to the head of the agency, who must take the comments into account and document the final decision. Section 106 encourages preservation but does not mandate it.",
     },
     {
       question: "Can ePlan send my Section 106 letter to the SHPO?",

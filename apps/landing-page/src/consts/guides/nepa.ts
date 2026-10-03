@@ -22,49 +22,37 @@ const nepaProcess: GuideEntry<GuidePath> = {
   ],
   document: "NEPA Documents",
   answer:
-    "NEPA, the National Environmental Policy Act, requires federal agencies to prepare a detailed statement on the reasonably foreseeable environmental effects of, and alternatives to, major federal actions significantly affecting the quality of the human environment [[usc4332]]. A NEPA review takes one of three paths: a categorical exclusion; an environmental assessment that ends in a finding of no significant impact (FONSI) or a decision to prepare an EIS; or an environmental impact statement followed by the agency's decision, such as a record of decision (ROD) [[usc4336]] [[ceqFlowchart]].",
+    "NEPA, the National Environmental Policy Act, requires federal agencies to report on the environmental effects of, and alternatives to, major actions significantly affecting the environment [[usc4332]]. A NEPA review takes one of three paths: a categorical exclusion; an environmental assessment ending in a finding of no significant impact (FONSI) or an EIS; or an environmental impact statement and record of decision [[usc4336]] [[ceqFlowchart]].",
   sections: [
     {
       heading: "Step 1: does NEPA apply?",
       paragraphs: [
-        "An agency does not need an environmental document if the action is not a final agency action, is excluded by a categorical exclusion or another law, would clearly and fundamentally conflict with another law, or is nondiscretionary [[usc4336]]. The statute also lists actions that are not major federal actions, such as non-federal projects with no or minimal federal funding [[usc4336e]].",
+        "An agency needs no environmental document if the action is not a final agency action, is excluded by a categorical exclusion or another law, would clearly and fundamentally conflict with another law, or is nondiscretionary [[usc4336]]. A non-federal project with no or minimal federal funding is not a major federal action [[usc4336e]].",
       ],
     },
     {
-      heading: "Step 2: choose the level of review",
+      heading: "Step 2: choose the level of NEPA review",
       paragraphs: [
-        "If a categorical exclusion applies, the agency applies it and documents the decision where its procedures call for that [[ceqFlowchart]]. Otherwise the agency prepares an environmental assessment when the action does not have a reasonably foreseeable significant effect or the significance is unknown, and an environmental impact statement when it does [[usc4336]].",
+        "If a [categorical exclusion](/for/nepa-categorical-exclusion) applies, the agency applies it and documents the decision where its procedures call for that [[ceqFlowchart]]. Otherwise it prepares an [environmental assessment](/for/nepa-environmental-assessment) when a significant effect is not reasonably foreseeable or its significance is unknown, and an [environmental impact statement](/for/environmental-impact-statement) when one is [[usc4336]].",
       ],
     },
     {
-      heading: "Page limits and deadlines",
+      heading: "How long does a NEPA review take?",
       paragraphs: [
-        "Since the Fiscal Responsibility Act of 2023 [[fra2023]], an EA may not exceed 75 pages and an EIS 150 pages, or 300 for an action of extraordinary complexity, not counting citations and appendices. A lead agency has one year to complete an EA and two years for an EIS, measured from the earliest of its level-of-review determination, its notice that a right-of-way application is complete, or its notice of intent. It may extend a deadline only by as much time as needed, in consultation with the applicant [[usc4336a]].",
-        "Every environmental document states the purpose and need for the action, and every notice of intent to prepare an EIS asks for public comment on alternatives, impacts and relevant information [[usc4336a]]. Since July 4, 2025, a project sponsor may pay a fee of 125 percent of the anticipated cost to have an EA completed within 180 days of payment, or an EIS within one year of the notice of intent [[pl11921]].",
+        "The one-year EA and two-year EIS clocks run from the earliest of the agency's level-of-review determination, its notice that a right-of-way application is complete, or its notice of intent. The agency may extend a deadline only as long as needed, in consultation with the applicant. Page limits exclude citations and appendices [[usc4336a]].",
+        "Since July 4, 2025, a project sponsor may pay 125 percent of the anticipated cost to have an EA completed within 180 days of payment, or an EIS within one year of the notice of intent [[pl11921]].",
       ],
     },
     {
-      heading: "Where the procedures live after 2025",
+      heading: "Where NEPA procedures live now",
       paragraphs: [
-        "CEQ removed its NEPA regulations, 40 CFR parts 1500-1508, effective April 11, 2025, and adopted the removal as final on January 8, 2026 [[ceqIfr]] [[ceqFinal]]. Agencies now follow their own NEPA procedures, which CEQ indexes on nepa.gov [[ceqProcedures]]. For example:",
+        "With CEQ's regulations removed in 2025 [[ceqIfr]], each agency follows its own NEPA procedures, indexed by CEQ on nepa.gov [[ceqProcedures]]. Recent examples:",
       ],
       bullets: [
         "USDA, including the Forest Service: 7 CFR part 1b, final rule April 3, 2026 [[usdaFinal]]",
         "Interior: 43 CFR part 46 plus a Departmental Handbook, final rule February 24, 2026 [[doiFinal]]",
-        "Energy: 10 CFR part 1021 plus DOE's NEPA Implementing Procedures, last revised July 13, 2026 [[doeProcedures]]",
+        "Energy: 10 CFR part 1021 plus DOE's NEPA Implementing Procedures, revised July 13, 2026 [[doeProcedures]]",
         "FHWA, FRA and FTA: 23 CFR part 771, final rule September 1, 2026 [[fhwaFinal]]",
-      ],
-    },
-    {
-      heading: "What the courts say",
-      paragraphs: [
-        "In Seven County Infrastructure Coalition v. Eagle County, decided May 29, 2025, the Supreme Court called NEPA a purely procedural statute that does not mandate particular results, and told courts to give agencies substantial deference on their NEPA determinations [[sevenCounty]].",
-      ],
-    },
-    {
-      heading: "The record of decision",
-      paragraphs: [
-        "After an EIS, the agency records its decision. USDA, for example, has the lead agency prepare and publish a record of decision at the time of its decision [[usda1b8]]. Interior lets applicants and their contractors help prepare an EA or EIS under supervision, but not decision documents such as a record of decision [[doi46107]].",
       ],
     },
   ],
@@ -76,7 +64,7 @@ const nepaProcess: GuideEntry<GuidePath> = {
       {
         title: "Proposed action, purpose and need",
         detail:
-          "What the agency proposes and why. Every environmental document includes a statement of purpose and need [[usc4336a]].",
+          "What the agency proposes and why; every environmental document states the purpose and need [[usc4336a]].",
       },
       {
         title: "Threshold check",
@@ -89,7 +77,8 @@ const nepaProcess: GuideEntry<GuidePath> = {
       },
       {
         title: "Environmental assessment",
-        detail: "Up to 75 pages, due within one year [[usc4336a]].",
+        detail:
+          "A concise public document setting out the basis for a FONSI or an EIS [[usc4336]].",
       },
       {
         title: "FONSI, or a decision to prepare an EIS",
@@ -99,11 +88,12 @@ const nepaProcess: GuideEntry<GuidePath> = {
       {
         title: "Notice of intent and EIS",
         detail:
-          "The notice asks for public comment; the EIS runs up to 150 pages (300 if extraordinarily complex) and is due within two years [[usc4336a]].",
+          "The notice requests public comment on alternatives, impacts and relevant information [[usc4336a]].",
       },
       {
         title: "Record of decision",
-        detail: "The agency's decision after an EIS [[ceqFlowchart]].",
+        detail:
+          "The agency's decision after an EIS; USDA publishes it at the time of decision [[ceqFlowchart]] [[usda1b8]].",
       },
     ],
   },
@@ -113,23 +103,18 @@ const nepaProcess: GuideEntry<GuidePath> = {
       value: "42 U.S.C. 4332 and 4336–4336e [[usc4332]] [[usc4336]]",
     },
     {
-      label: "Levels of review",
-      value:
-        "Categorical exclusion, environmental assessment or environmental impact statement [[usc4336]]",
+      label: "Environmental assessment",
+      value: "Up to 75 pages, due within 1 year [[usc4336a]]",
     },
     {
-      label: "Deadlines",
-      value: "1 year for an EA, 2 years for an EIS [[usc4336a]]",
+      label: "Environmental impact statement",
+      value:
+        "Up to 150 pages (300 if extraordinarily complex), due within 2 years [[usc4336a]]",
     },
     {
-      label: "Page limits",
+      label: "Who prepares",
       value:
-        "75 pages for an EA; 150 for an EIS, or 300 for extraordinary complexity [[usc4336a]]",
-    },
-    {
-      label: "CEQ's regulations",
-      value:
-        "40 CFR parts 1500–1508, removed effective April 11, 2025 [[ceqIfr]]",
+        "The agency, or a project sponsor under its supervision [[usc4336a]]",
     },
   ],
   hero: {
@@ -219,27 +204,17 @@ const nepaProcess: GuideEntry<GuidePath> = {
       question:
         "What does NEPA compliance involve for a federally funded project?",
       answer:
-        "The federal agency completes the level of review its procedures require (a categorical exclusion, an environmental assessment or an environmental impact statement) before it decides on the action. An applicant or consultant often prepares the documents, but the agency evaluates them and stays responsible for them.",
-    },
-    {
-      question: "What are the steps of the NEPA process?",
-      answer:
-        "Check whether NEPA applies, then pick the level of review: a categorical exclusion; an environmental assessment that ends in a FONSI or a decision to prepare an EIS; or an environmental impact statement followed by the agency's decision, such as a record of decision.",
-    },
-    {
-      question: "How long can a NEPA review take?",
-      answer:
-        "By statute, a lead agency has one year to complete an EA and two years for an EIS, with extensions only as long as needed and in consultation with the applicant (42 U.S.C. 4336a(g)).",
-    },
-    {
-      question: "Do CEQ's NEPA regulations still apply?",
-      answer:
-        "No. CEQ removed 40 CFR parts 1500-1508 effective April 11, 2025, and finalized the removal on January 8, 2026. Each agency's own NEPA procedures now set out how it carries out the statute.",
+        "The federal agency completes the level of review its procedures require before it decides on the action. A consultant or applicant can draft the documents, but the agency independently evaluates them and takes responsibility for their contents.",
     },
     {
       question: "What is a record of decision?",
       answer:
-        "The agency's public decision document after an environmental impact statement. Agency procedures set its contents; USDA, for example, requires the lead agency to prepare and publish one at the time of its decision.",
+        "The agency's public decision document after an environmental impact statement, recording what it decided. Each agency's NEPA procedures set its contents and timing.",
+    },
+    {
+      question: "Do CEQ's NEPA regulations still apply?",
+      answer:
+        "No. CEQ removed 40 CFR parts 1500-1508 effective April 11, 2025, and made the removal final in January 2026. Each agency's own NEPA procedures now set out how it carries out the statute.",
     },
     {
       question: "Does ePlan make NEPA decisions?",
@@ -269,120 +244,106 @@ const categoricalExclusions: GuideEntry<GuidePath> = {
   ],
   document: "CE Decision Memo",
   answer:
-    "A categorical exclusion (CE) is a category of actions that a federal agency has determined normally does not significantly affect the quality of the human environment [[usc4336e]]. When a proposed action fits one of the agency's CEs, or another agency's CE it has adopted, the agency does not prepare an environmental assessment or environmental impact statement [[usc4336]]. It still screens the action for extraordinary circumstances [[ceqCeGuidance]] and, for many categories, signs a short record of that finding, which the Forest Service's former rules called a decision memo [[usdaFinal]].",
+    "A NEPA categorical exclusion (CE) is a category of actions an agency has found normally have no significant environmental effect [[usc4336e]]. An action that fits one needs no EA or EIS [[usc4336]], but the agency screens it for extraordinary circumstances [[ceqCeGuidance]] and, for many categories, signs a short record of that finding, which the Forest Service called a decision memo [[usdaFinal]].",
   sections: [
     {
-      heading: "What the statute says",
+      heading: "Extraordinary circumstances checklist",
       paragraphs: [
-        "The Fiscal Responsibility Act of 2023 wrote categorical exclusions into NEPA itself [[fra2023]]. NEPA now defines a CE [[usc4336e]] and lists it as a reason an agency need not prepare an environmental document: the action is excluded under the agency's own CEs, another agency's CEs adopted under section 109, or another provision of law [[usc4336]].",
-        "To adopt another agency's CE, an agency identifies it, consults the agency that established it, tells the public which CE it plans to use, and documents the adoption [[usc4336c]].",
-      ],
-    },
-    {
-      heading: "Where the CE lists live after 2025",
-      paragraphs: [
-        "CEQ's NEPA regulations (40 CFR parts 1500-1508) were removed effective April 11, 2025, by an interim final rule, and CEQ adopted the removal as final on January 8, 2026 [[ceqIfr]] [[ceqFinal]]. Each agency's CEs are in its own NEPA procedures: USDA's, now including the Forest Service's, at 7 CFR 1b.4 [[usda1b4]]; DOE's in appendix B to 10 CFR part 1021 [[doe1021]]; FHWA's at 23 CFR 771.117 [[fhwa771117]].",
-        "CEQ's April 9, 2026 guidance counts over 2,000 CEs from over 80 agencies in its Categorical Exclusion Explorer, launched June 5, 2025. CEQ calls the Explorer a reference tool, not an authoritative source: check the establishing agency's published procedures [[ceqCeGuidance]] [[ceqCePage]].",
-      ],
-    },
-    {
-      heading: "Extraordinary circumstances",
-      paragraphs: [
-        "Before applying a CE, the agency evaluates the action for extraordinary circumstances that may indicate a normally excluded action is likely to have a reasonably foreseeable significant adverse effect. Under CEQ's guidance, the mere presence of an extraordinary circumstance does not bar the CE unless the agency's procedures say so; the agency documents its reasoning, and if the CE does not fit, it prepares an EA or EIS [[ceqCeGuidance]].",
-        "DOE adds that a proposal may not be segmented, broken into small parts, to fit a CE [[doeProcedures]]. USDA's procedures list resources to screen, including [[usda1b3]]:",
+        "Before applying a CE, the agency screens for extraordinary circumstances that may make a normally excluded action likely to have a reasonably foreseeable significant adverse effect. Under CEQ's guidance, one being present bars the CE only if the agency's procedures say so; the agency documents its reasoning, and if the CE does not fit, prepares an EA or EIS [[ceqCeGuidance]].",
+        "DOE bars segmenting a proposal into small parts to fit a CE [[doeProcedures]]. USDA's procedures list resources to screen, including [[usda1b3]]:",
       ],
       bullets: [
         "Federally listed threatened or endangered species, designated critical habitat, and species or habitat proposed for listing",
         "Floodplains, wetlands and other sensitive areas",
         "Special sources of water, such as sole-source aquifers and municipal watersheds",
-        "Designated areas, such as wilderness, wild and scenic rivers, inventoried roadless areas and national recreation areas",
-        "Historic, archeological or architectural properties, including those eligible for the National Register of Historic Places",
+        "Designated areas, such as wilderness, wild and scenic rivers and inventoried roadless areas",
+        "Historic, archeological or architectural properties, including those eligible for the National Register",
         "American Indian and Alaska Native religious or cultural sites",
       ],
     },
     {
-      heading: "Documenting a CE",
+      heading: "Does every CE need a decision memo?",
       paragraphs: [
-        "Not every CE needs a written record. USDA splits its list into CEs that need no NEPA documentation (7 CFR 1b.4(c)) and CEs that do (1b.4(d)) [[usda1b4]]. For the second group, the responsible official signs a finding of applicability and no extraordinary circumstance, or FANEC [[usda1b3]].",
-        "When USDA moved the Forest Service's CEs from 36 CFR 220.6 into 7 CFR part 1b, it dropped Forest Service terms such as decision memo; the categories that need documentation did not change [[usdaFinal]]. DOE documents every CE determination for actions in appendix B and posts it online, generally within two weeks [[doeProcedures]]. The Army called its record a record of environmental consideration, or REC [[army651reg]]; that regulation was rescinded on July 3, 2025, and the Army now follows Department of Defense-wide procedures [[army651]].",
+        "No. USDA splits its list into CEs that need no NEPA documentation (7 CFR 1b.4(c)) and CEs that do (1b.4(d)) [[usda1b4]]. For the second group, the responsible official signs a finding of applicability and no extraordinary circumstance, or FANEC [[usda1b3]]. Moving the Forest Service's CEs into 7 CFR part 1b did not change which categories need one [[usdaFinal]].",
+        "DOE documents every CE determination for actions in appendix B and posts it online, generally within two weeks [[doeProcedures]].",
       ],
     },
     {
       heading: "Categorical exclusion examples",
       paragraphs: [
-        "A few CEs from current agency procedures. Each carries conditions in its full text; read the whole category before relying on it.",
+        "Each carries conditions in its full text; read the whole category before relying on it.",
       ],
       bullets: [
         "Forest Service (USDA-26d-USFS): construction and reconstruction of trails [[usda1b4]]",
-        "Forest Service (USDA-35d-USFS): harvest of live trees on up to 70 acres, with no more than 1/2 mile of temporary road construction [[usda1b4]]",
-        "Forest Service (USDA-47d-USFS): restoration and resilience activities, such as prescribed burning and thinning, on up to 2,800 acres [[usda1b4]]",
-        "DOE (B5.16): installing commercially available solar photovoltaic systems on a building or in a previously disturbed or developed area [[doe1021]]",
-        "FHWA (23 CFR 771.117(c)(8)): installing fencing, signs, pavement markings, small passenger shelters, traffic signals and railroad warning devices where no substantial land acquisition or traffic disruption will occur [[fhwa771117]]",
+        "Forest Service (USDA-35d-USFS): live-tree harvest on up to 70 acres, with at most 1/2 mile of temporary road [[usda1b4]]",
+        "Forest Service (USDA-47d-USFS): restoration activities, such as prescribed burning and thinning, on up to 2,800 acres [[usda1b4]]",
+        "DOE (B5.16): commercially available solar photovoltaic systems on a building or a previously disturbed or developed area [[doe1021]]",
+        "FHWA (23 CFR 771.117(c)(8)): signs, fencing, pavement markings or traffic signals, without substantial land acquisition or traffic disruption [[fhwa771117]]",
       ],
     },
   ],
   outline: {
     heading: "What a CE decision memo contains",
     intro:
-      "A checklist to work through, built on USDA's minimum elements for a FANEC [[usda1b3]]. Other agencies use other formats; follow your agency's procedures.",
+      "A checklist built on USDA's minimum elements for a FANEC [[usda1b3]]. Other agencies use other formats; follow yours.",
     items: [
       {
         title: "The proposed action",
         detail:
-          "What, where and when: location, acres or miles, and the activities, described well enough to show the category fits.",
+          "What, where and when: location, acres or miles, and activities, in enough detail to show the category fits.",
       },
       {
         title: "The category used",
         detail:
-          "The CE's number and text from your agency's procedures, noting whether it was adopted from another agency.",
+          "The CE's number and text from your agency's procedures, and whether it was adopted from another agency.",
       },
       {
         title: "Fit with the category's conditions",
         detail:
-          "Each condition in the category, such as acreage, road miles or a ban on herbicides, checked against the project [[usda1b4]].",
+          "Each condition, such as acreage, road miles or a ban on herbicides, checked against the project [[usda1b4]].",
       },
       {
         title: "Resources considered",
         detail:
-          "The resources screened for extraordinary circumstances: species, wetlands, water sources, designated areas, historic properties and Tribal sites.",
+          "Each resource on the extraordinary-circumstances list above, and what the screening found.",
       },
       {
         title: "The finding",
         detail:
-          "A statement that no extraordinary circumstances exist, as informed by interdisciplinary review.",
+          "That no extraordinary circumstances exist, as informed by interdisciplinary review.",
       },
       {
         title: "Other laws",
         detail:
-          "References to the records for other laws, such as Endangered Species Act consultation and National Historic Preservation Act section 106 review.",
+          "The records for other laws, such as Endangered Species Act consultation and National Historic Preservation Act section 106 review.",
       },
       {
         title: "Date and signature",
-        detail: "Issued, dated and signed by the responsible official.",
+        detail: "Dated and signed by the responsible official.",
       },
     ],
   },
   glance: [
     {
-      label: "Definition",
-      value:
-        "Actions an agency has found normally have no significant effect [[usc4336e]]",
+      label: "USDA and Forest Service CEs",
+      value: "7 CFR 1b.4 [[usda1b4]]",
     },
     {
-      label: "Where the lists live",
-      value: "In each agency's NEPA procedures [[ceqCePage]]",
-    },
-    {
-      label: "Screening",
-      value: "An extraordinary circumstances review [[ceqCeGuidance]]",
-    },
-    {
-      label: "Another agency's CE",
-      value: "Can be adopted under 42 U.S.C. 4336c [[usc4336c]]",
+      label: "DOE CEs",
+      value: "Appendix B to 10 CFR part 1021 [[doe1021]]",
     },
     {
       label: "Highway and transit CEs",
       value: "23 CFR 771.117 (FHWA and FTA) [[fhwa771117]]",
+    },
+    {
+      label: "All agencies' CEs",
+      value:
+        "Over 2,000 in CEQ's CE Explorer, a reference tool, not an authoritative source [[ceqCeGuidance]] [[ceqCePage]]",
+    },
+    {
+      label: "Another agency's CE",
+      value: "Can be adopted under 42 U.S.C. 4336c [[usc4336c]]",
     },
   ],
   hero: {
@@ -470,24 +431,20 @@ const categoricalExclusions: GuideEntry<GuidePath> = {
   ],
   faq: [
     {
-      question: "What is a categorical exclusion under NEPA?",
+      question:
+        "Categorical exclusion vs environmental assessment: what is the difference?",
       answer:
-        "A category of actions that a federal agency has determined normally does not significantly affect the quality of the human environment (42 U.S.C. 4336e(1)). If a proposed action fits a CE and no extraordinary circumstance applies, the agency does not prepare an EA or EIS.",
-    },
-    {
-      question: "Does every categorical exclusion need a decision memo?",
-      answer:
-        "No. It depends on the category and the agency. USDA, for example, lists CEs that need no documentation (7 CFR 1b.4(c)) and CEs that need a signed finding (7 CFR 1b.4(d)). DOE documents its appendix B CE determinations and posts them online.",
+        "A CE covers a category the agency has already found normally has no significant effect, so no EA or EIS is written. An EA is a concise analysis the agency prepares when no CE applies and a significant effect is not reasonably foreseeable or its significance is unknown.",
     },
     {
       question: "Can an agency use another agency's categorical exclusion?",
       answer:
-        "Yes. Since 2023, NEPA section 109 (42 U.S.C. 4336c) lets an agency adopt another agency's CE after identifying it, consulting the agency that established it, telling the public, and documenting the adoption.",
+        "Yes. NEPA section 109 (42 U.S.C. 4336c) lets an agency adopt another agency's CE after identifying it, consulting the agency that established it, telling the public which CE it plans to use, and documenting the adoption.",
     },
     {
       question: "Do CEQ's regulations still define categorical exclusions?",
       answer:
-        "No. CEQ removed all of its NEPA regulations (40 CFR parts 1500-1508) effective April 11, 2025, and finalized the removal on January 8, 2026. The definition now comes from the statute, 42 U.S.C. 4336e(1), and each agency's procedures list its CEs.",
+        "No. CEQ's NEPA regulations (40 CFR parts 1500-1508) were removed effective April 11, 2025. The definition now comes from the statute, 42 U.S.C. 4336e(1), and each agency's procedures list its CEs.",
     },
     {
       question: "Does ePlan decide whether my project qualifies for a CE?",
@@ -517,44 +474,32 @@ const environmentalAssessment: GuideEntry<GuidePath> = {
   ],
   document: "Environmental Assessment",
   answer:
-    "An environmental assessment (EA) is a concise public document an agency prepares when a proposed action does not have a reasonably foreseeable significant effect on the environment, or the significance is unknown, and no categorical exclusion applies. It sets out the basis for a finding of no significant impact (FONSI) or a decision that an environmental impact statement is needed [[usc4336]]. An EA may not exceed 75 pages, not counting citations and appendices, and is due within one year [[usc4336a]].",
+    "A NEPA environmental assessment (EA) is a concise public document an agency prepares when no categorical exclusion applies and a significant environmental effect is not reasonably foreseeable, or its significance is unknown. It supports either a finding of no significant impact (FONSI) or a decision to prepare an environmental impact statement [[usc4336]].",
   sections: [
     {
-      heading: "When an EA is required",
+      heading: "EA page limit and one-year deadline",
       paragraphs: [
-        "NEPA calls for an EA when an action that needs an environmental document does not have a reasonably foreseeable significant effect, or its significance is unknown, unless a categorical exclusion or another law applies. If significant effects are reasonably foreseeable, the agency prepares an EIS instead [[usc4336]].",
+        "The one-year clock runs from the earliest of the agency's determination that an EA is required, its notice that a right-of-way application is complete, or its notice of intent to prepare the EA [[usc4336a]].",
+        "Agency procedures add format rules. USDA, for example, specifies 8.5 by 11 inch pages with 12-point single-spaced text and bars appendices from carrying substantive analysis [[usda1b5]].",
       ],
     },
     {
-      heading: "The 75-page limit and the one-year deadline",
+      heading: "What goes in a FONSI",
       paragraphs: [
-        "The 75-page cap excludes citations and appendices. The one-year clock runs from the earliest of three dates: the agency's determination that an EA is required, its notice to the applicant that a right-of-way application is complete, or its notice of intent to prepare the EA [[usc4336a]].",
-        "Agency procedures add detail. USDA, for example, specifies 8.5 by 11 inch pages with 12-point single-spaced text, bars appendices from carrying substantive analysis, and has the responsible official certify the page limit and deadline in the EA [[usda1b5]].",
+        "A finding of no significant impact is the agency's determination that the action does not require an EIS [[usc4336e]]. Under USDA's procedures it incorporates the EA by reference, names any selected alternative, explains why there is no reasonably foreseeable significant impact, states the authority for any mitigation relied on, says when implementation should begin, and is dated and signed. It may be bound with the EA [[usda1b6]].",
       ],
     },
     {
-      heading: "The FONSI",
+      heading: "Public comment on an EA",
       paragraphs: [
-        "A finding of no significant impact is the agency's determination that the action does not require an EIS [[usc4336e]]. Under USDA's procedures the FONSI incorporates the EA by reference, names the selected alternative if alternatives were analyzed, explains why there is no reasonably foreseeable significant impact, states the authority for any mitigation relied on, says when implementation is expected to begin, and is dated and signed. It may be bound into the same document as the EA [[usda1b6]].",
-      ],
-    },
-    {
-      heading: "Public involvement",
-      paragraphs: [
-        "Requirements differ by agency. USDA treats a Federal Register notice of intent for an EA as the exception and leaves soliciting public comment to the responsible official [[usda1b5]]. DOE may publish a notice requesting scoping comments on an EA [[doeProcedures]]. Forest Service projects covered by its objection rules still need a legal notice of a 30-day opportunity to comment on a proposal analyzed in an EA [[usfs218]].",
-      ],
-    },
-    {
-      heading: "Who prepares it",
-      paragraphs: [
-        "A project sponsor may prepare an EA under the lead agency's supervision; the agency independently evaluates the document and takes responsibility for its contents [[usc4336a]]. Interior requires the same independent evaluation and bars applicants and their contractors from preparing decision documents [[doi46107]].",
+        "USDA treats a Federal Register notice of intent for an EA as the exception and leaves soliciting comment to the responsible official [[usda1b5]]. DOE may publish a notice requesting scoping comments on an EA [[doeProcedures]]. Forest Service projects covered by its objection rules need a legal notice of a 30-day opportunity to comment on a proposal analyzed in an EA [[usfs218]].",
       ],
     },
   ],
   outline: {
     heading: "Environmental assessment template: the sections",
     intro:
-      "The minimum elements USDA requires in an EA and its FONSI, in order [[usda1b5]] [[usda1b6]]. Other agencies' procedures differ; use yours.",
+      "The minimum elements USDA requires in an EA, in order [[usda1b5]]. Other agencies' procedures differ; use yours.",
     items: [
       {
         title: "Purpose and need",
@@ -564,12 +509,12 @@ const environmentalAssessment: GuideEntry<GuidePath> = {
       {
         title: "Proposed action, no action and alternatives",
         detail:
-          "No action can be a stand-alone alternative or the baseline inside the effects analysis. Other alternatives are needed when there are unresolved conflicts over uses of resources.",
+          "No action can stand alone or serve as the effects baseline. Other alternatives are needed when conflicts over resource uses are unresolved.",
       },
       {
         title: "Affected environment and effects",
         detail:
-          "A brief description of the environment that may be affected and the reasonably foreseeable effects, with enough evidence to decide between a FONSI and an EIS.",
+          "The environment that may be affected and the reasonably foreseeable effects, with enough evidence to decide between a FONSI and an EIS.",
       },
       {
         title: "Agencies and persons consulted",
@@ -585,27 +530,18 @@ const environmentalAssessment: GuideEntry<GuidePath> = {
         detail:
           "The responsible official's page-limit and deadline certification, and the EA's unique identification number.",
       },
-      {
-        title: "FONSI",
-        detail:
-          "Why there is no significant impact, the selected alternative, any mitigation and its authority, the expected start date, and the official's signature.",
-      },
     ],
   },
   glance: [
-    {
-      label: "When",
-      value:
-        "No CE applies, and a significant effect is not reasonably foreseeable or is unknown [[usc4336]]",
-    },
     {
       label: "Page limit",
       value: "75 pages, not counting citations and appendices [[usc4336a]]",
     },
     { label: "Deadline", value: "1 year [[usc4336a]]" },
     {
-      label: "Ends in",
-      value: "A FONSI, or a decision to prepare an EIS [[usc4336]]",
+      label: "Public comment",
+      value:
+        "Set by agency procedures; the statute's comment request covers only an EIS notice of intent [[usc4336a]]",
     },
   ],
   hero: {
@@ -695,22 +631,12 @@ const environmentalAssessment: GuideEntry<GuidePath> = {
     {
       question: "Where can I find an environmental assessment example?",
       answer:
-        "Agencies post EAs on each project's web page, for example on Forest Service project pages and BLM's ePlanning register. ePlan's research agent finds EAs for projects like yours and drafts from one as the reference.",
+        "Agencies post EAs with each project's documents, for example on Forest Service project pages and BLM's ePlanning register. Pick a recent one from your agency for a similar action and follow its structure.",
     },
     {
       question: "EA vs EIS: what is the difference?",
       answer:
-        "An EA is the shorter review for actions without a reasonably foreseeable significant effect, or whose significance is unknown; it ends in a FONSI or a decision to prepare an EIS. An EIS is required when significant effects are reasonably foreseeable. By statute an EA is capped at 75 pages and one year, an EIS at 150 pages (300 if extraordinarily complex) and two years.",
-    },
-    {
-      question: "What is a FONSI?",
-      answer:
-        "A finding of no significant impact: the agency's determination, based on the EA, that the action does not require an environmental impact statement (42 U.S.C. 4336e(7)).",
-    },
-    {
-      question: "Does an EA need a public comment period?",
-      answer:
-        "It depends on the agency. NEPA's comment requirement covers the notice of intent for an EIS; the statute sets none for an EA. USDA leaves EA comment to the responsible official, while Forest Service projects covered by 36 CFR part 218 still need a legal notice of a 30-day comment opportunity.",
+        "An EIS is required when significant effects are reasonably foreseeable; an EA when they are not, or their significance is unknown. An EA runs up to 75 pages and one year; an EIS up to 150 pages (300 if extraordinarily complex) and two years.",
     },
     {
       question: "Can a consultant or applicant write the EA?",
@@ -744,31 +670,19 @@ const scopingLetter: GuideEntry<GuidePath> = {
   ],
   document: "Scoping Letter",
   answer:
-    "A scoping letter is an early notice that describes a proposed action and invites agencies, Tribes, the applicant and the public to say which issues and alternatives the NEPA review should cover [[usda1b7]]. Agency procedures, not the statute, define scoping: NEPA requires every notice of intent to prepare an EIS to request public comment [[usc4336a]], while USDA's procedures make scoping optional, with no prescribed process [[usda1b7]].",
+    "A scoping letter is an early notice that describes a proposed action and invites agencies, Tribes, the applicant and the public to say which issues and alternatives the NEPA review should cover [[usda1b7]]. On scoping, the statute requires only that an EIS notice of intent request public comment [[usc4336a]]; agency procedures set the rest, and USDA's make scoping optional [[usda1b7]].",
   sections: [
     {
-      heading: "What scoping is for",
+      heading: "What is NEPA scoping?",
       paragraphs: [
         "DOE defines scoping as the process, internal or public, to identify the scope of the NEPA review [[doeProcedures]]. Under USDA's procedures, scoping for an EIS identifies the substantive issues and sets aside non-substantive issues and alternatives that are not technically or economically feasible or do not meet the purpose and need [[usda1b7]].",
-        "If an agency chooses to scope, USDA's procedures let it invite affected federal, state, Tribal and local agencies, the applicant and interested people; hold scoping meetings; or publish scoping information [[usda1b7]]. A scoping letter is the written form of that invitation.",
+        "An agency that scopes can invite comment, hold scoping meetings or publish scoping information [[usda1b7]]; DOE says early scoping should be driven by the need to begin the review promptly [[doeProcedures]]. A scoping letter is the written invitation.",
       ],
     },
     {
-      heading: "What the law requires",
+      heading: "Public scoping for an EA",
       paragraphs: [
-        "NEPA requires each notice of intent to prepare an EIS to request public comment on alternatives or impacts and on relevant information, studies or analyses [[usc4336a]]. CEQ's government-wide NEPA regulations, which used to set scoping rules for every agency, were removed in 2025 [[ceqIfr]], so the details now come from each agency's procedures [[ceqProcedures]].",
-      ],
-    },
-    {
-      heading: "Scoping for EAs and CEs",
-      paragraphs: [
-        "USDA treats a notice of intent for an EA as the exception, for national, regional or otherwise complex proposals, and leaves public comment to the responsible official [[usda1b5]]. DOE may publish a notice requesting scoping comments on an EA [[doeProcedures]]. Separately, Forest Service projects covered by its objection rules need a legal notice of the opportunity to comment: 30 days for an EA and 45 days for a draft EIS [[usfs218]].",
-      ],
-    },
-    {
-      heading: "Timing",
-      paragraphs: [
-        "Deadlines can start at the notice of intent. An EIS is due within two years and an EA within one, counted from the earliest of the agency's level-of-review determination, a complete right-of-way application, or the notice of intent [[usc4336a]]. DOE's procedures say early scoping should be driven by the need to begin the review promptly and should avoid steps that do not demonstrably improve efficiency [[doeProcedures]].",
+        "With CEQ's government-wide rules removed in 2025 [[ceqIfr]], each agency's procedures set the details [[ceqProcedures]]. USDA treats a notice of intent for an EA as the exception, for national, regional or otherwise complex proposals, and leaves public comment to the responsible official [[usda1b5]]. DOE may publish a notice requesting scoping comments on an EA [[doeProcedures]].",
       ],
     },
   ],
@@ -818,21 +732,19 @@ const scopingLetter: GuideEntry<GuidePath> = {
   },
   glance: [
     {
-      label: "Purpose",
-      value: "Invite input on issues and alternatives early [[usda1b7]]",
-    },
-    {
-      label: "Required for",
+      label: "Where the rules are",
       value:
-        "Every notice of intent to prepare an EIS requests public comment [[usc4336a]]",
+        "Your agency's NEPA procedures, such as USDA's 7 CFR 1b.7 [[usda1b7]]",
     },
     {
-      label: "For EAs and CEs",
-      value: "Optional under USDA's procedures [[usda1b7]]",
+      label: "Deadline clock",
+      value:
+        "EA (1 year) and EIS (2 years) clocks can start at the notice of intent [[usc4336a]]",
     },
     {
-      label: "On ePlan's free plan",
-      value: "Yes, scoping letters are included",
+      label: "Forest Service comment notice",
+      value:
+        "30 days for an EA, 45 for a draft EIS, where objection rules apply [[usfs218]]",
     },
   ],
   hero: {
@@ -924,22 +836,17 @@ const scopingLetter: GuideEntry<GuidePath> = {
     {
       question: "Where can I find a scoping letter example?",
       answer:
-        "Agencies post scoping letters with each project's documents, for example on Forest Service project pages and the National Park Service's PEPC site. ePlan's research agent finds letters for projects like yours and drafts from one as the reference.",
-    },
-    {
-      question: "Is scoping required under NEPA?",
-      answer:
-        "The statute requires a request for public comment in every notice of intent to prepare an EIS. Beyond that, scoping is set by agency procedures; USDA's, for example, make it optional with no prescribed process.",
+        "Agencies post scoping letters with each project's documents, for example on Forest Service project pages and the National Park Service's PEPC site. Pick a recent one from your office for a similar project.",
     },
     {
       question: "What should a scoping letter include?",
       answer:
-        "The project and its location, the purpose and need, the proposed action and known alternatives, the expected level of review and issues, other permits and agencies involved, the schedule, how and by when to comment, and a contact person.",
+        "The project and its location, purpose and need, proposed action and known alternatives, expected level of review and issues, other permits and agencies, schedule, how and by when to comment, and a contact person.",
     },
     {
       question: "How long is a public scoping comment period?",
       answer:
-        "NEPA sets no length for scoping, so agencies set their own. Separately, Forest Service projects covered by 36 CFR part 218 must offer a 30-day comment period for an EA (45 days for a draft EIS) through a legal notice.",
+        "NEPA sets no length for scoping, so each agency sets its own. Forest Service projects covered by 36 CFR part 218 must also give a legal notice of a 30-day comment period for an EA, or 45 days for a draft EIS.",
     },
     {
       question: "Does ePlan send the letter for me?",

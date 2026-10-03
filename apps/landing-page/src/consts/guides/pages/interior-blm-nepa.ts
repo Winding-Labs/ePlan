@@ -5,7 +5,7 @@ import type { GuideEntry, Source } from "../types";
  * /for/interior-blm-nepa — Interior's NEPA procedures as BLM applies them.
  *
  * Reused existing source keys (guides/sources.ts and pages/*.ts):
- * doiFinal, doi46107, ceqIfr, usc4336a, eisBlmEplanning.
+ * doiFinal, doi46107, usc4336a, eisBlmEplanning.
  */
 
 const READ = "2026-10-02";
@@ -104,29 +104,27 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Categorical Exclusion Record",
   answer:
-    "BLM NEPA is the process the Bureau of Land Management uses to bring the National Environmental Policy Act into its decisions on public lands, under procedures the Department of the Interior sets for all its bureaus [[doiHandbook]]. Since Interior's final rule took effect on February 24, 2026, those procedures are a short 43 CFR part 46, which keeps the departmental categorical exclusions at 43 CFR 46.210 and the extraordinary circumstances at 46.215, plus the DOI NEPA Handbook, 516 DM 1 [[doiFinal]] [[doiHandbook]]. BLM rescinded its own NEPA handbook, H-1790-1, on March 26, 2026, and posts its NEPA projects on ePlanning, its National NEPA Register [[doiH1790Rescind]] [[eisBlmEplanning]].",
+    "BLM NEPA is how the Bureau of Land Management applies the National Environmental Policy Act to its decisions on public lands, under procedures Interior sets for all its bureaus [[doiHandbook]]. Those procedures are a short 43 CFR part 46, which keeps the departmental categorical exclusions at 43 CFR 46.210, and the DOI NEPA Handbook, 516 DM 1 [[doiFinal]] [[doiHandbook]].",
   glance: [
     {
       label: "Regulations",
       value:
-        "43 CFR part 46, cut back in 2025; final rule effective February 24, 2026 [[doiFinal]]",
+        "43 CFR part 46, final rule effective February 24, 2026 [[doiFinal]]",
     },
     {
-      label: "Procedures",
-      value: "DOI NEPA Handbook, 516 DM 1, February 2026 [[doiHandbook]]",
-    },
-    {
-      label: "Categorical exclusions",
+      label: "BLM CXs",
       value:
-        "43 CFR 46.210, plus bureau lists in Handbook Appendix 2 [[doi46210]] [[doiHandbook]]",
+        "DOI NEPA Handbook, Appendix 2, section 11.9; statutory CXs at 11.10 [[doiHandbook]]",
     },
     {
       label: "BLM NEPA Handbook",
-      value: "H-1790-1, rescinded March 26, 2026 [[doiH1790Rescind]]",
+      value:
+        "H-1790-1, rescinded March 26, 2026; superseded by 516 DM 1 [[doiH1790Rescind]]",
     },
     {
       label: "Public register",
-      value: "ePlanning, BLM's National NEPA Register [[eisBlmEplanning]]",
+      value:
+        "ePlanning, BLM's National NEPA Register, at eplanning.blm.gov [[eisBlmEplanning]] [[doiHandbook]]",
     },
     {
       label: "Deadlines",
@@ -235,161 +233,113 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   sections: [
     {
-      heading:
-        "DOI NEPA rules: what Interior's 2026 final rule kept in 43 CFR part 46",
+      heading: "The DOI NEPA handbook and what stays in 43 CFR part 46",
       paragraphs: [
-        "Interior's interim final rule of July 3, 2025 rescinded most of its 2008 NEPA regulations, which had been written to supplement CEQ's regulations, 40 CFR parts 1500-1508, removed effective April 11, 2025 [[doiFinal]] [[ceqIfr]]. The final rule, effective February 24, 2026, adopted that rescission with changes; Interior puts it at about 80 percent of its prior NEPA regulations [[doiFinal]] [[doiNepaPage]].",
-        "Everything not kept in regulation moved to the DOI NEPA Handbook, which Interior publishes in its Electronic Library of Interior Policies and does not codify [[doiFinal]]. The Handbook says its procedures do not have the force or effect of law [[doiHandbook]]. What stays in 43 CFR part 46 [[doiFinal]]:",
+        "Interior's final rule rescinded about 80 percent of its 2008 NEPA regulations [[doiFinal]] [[doiNepaPage]]. The rest moved to the DOI NEPA Handbook, 516 DM 1, dated February 23, 2026, which is not codified and does not have the force of law [[doiFinal]] [[doiHandbook]]. Besides the CE sections, part 46 keeps [[doiFinal]]:",
       ],
       bullets: [
-        "46.105 and 46.107: bureau-directed contractors and applicant-prepared EAs and EISs [[doi46107]]",
+        "46.105 and 46.107: contractors and applicant-prepared EAs and EISs [[doi46107]]",
         "46.150: emergency responses",
-        "46.205, 46.210 and 46.215: categorical exclusions, the departmental CE list and extraordinary circumstances",
-        "46.220 and 46.225: lead and cooperating agencies, added in the final rule",
-      ],
-    },
-    {
-      heading: "The DOI NEPA handbook (516 DM 1): what it covers",
-      paragraphs: [
-        "The Department of the Interior Handbook of National Environmental Policy Act Implementing Procedures, 516 DM 1, is dated February 23, 2026, and together with 43 CFR part 46 makes up Interior's NEPA procedures for every bureau. Its parts cover when NEPA applies and the level of review, categorical exclusions, EAs and FONSIs, notices of intent, EIS page limits and deadlines, reliance on existing documents, decision documents, and applicant-prepared documents [[doiHandbook]].",
-        "Appendix 1 gives bureaus implementation guidance, including a CE and extraordinary circumstances review protocol and a method for using existing NEPA reviews. Appendix 2 lists each bureau's categorical exclusions. Cite it as, for example, DOI NEPA Handbook § 2.3(a)(3), or for a CE, DOI NEPA Handbook, Appendix 2, followed by the section and paragraph [[doiHandbook]].",
-        "Interior amends Appendix 2 by Federal Register notice. On August 24, 2026, it added two BLM forestry CEs, one for timber salvage harvest and one for tree density management [[doiSalvageCe]] [[doiDensityCe]].",
-      ],
-    },
-    {
-      heading: "Is the BLM NEPA handbook (H-1790-1) still in effect?",
-      paragraphs: [
-        "No. BLM rescinded H-1790-1, its National Environmental Policy Act Handbook (Release 1-1710), by a handbook transmittal dated March 26, 2026. The transmittal says the DOI NEPA procedures and the DOI Handbook at 516 DM 1 superseded it, that its content largely referred to regulations since rescinded or revised, and that Interior is expected to direct bureaus to rescind agency-specific guidance in favor of DOI's [[doiH1790Rescind]].",
-        "BLM's categorical exclusions used to sit in chapter 11 of part 516 of the Departmental Manual, 516 DM 11, at paragraph 11.9 [[doi516dm11]]. Appendix 2 of the Handbook keeps that 11.9 numbering for BLM's CXs, so a CX formerly cited as 516 DM 11.9 is now cited as DOI NEPA Handbook, Appendix 2, 11.9 [[doiHandbook]].",
+        "46.220 and 46.225: lead and cooperating agencies",
       ],
     },
     {
       heading: "43 CFR 46.210 and BLM categorical exclusions (CXs)",
       paragraphs: [
-        "43 CFR 46.210 lists twelve departmental CEs any bureau can use. Paragraphs (a) through (j), such as personnel actions, nondestructive data collection, and routine maintenance and replacement with limited context and intensity, need no documentation. Paragraph (k), hazardous fuels reduction with prescribed fire up to 4,500 acres or mechanical treatment up to 1,000 acres, not for use within the Ninth Circuit, and paragraph (l), post-fire rehabilitation up to 4,200 acres, must be documented [[doi46210]].",
-        "BLM's own CXs are in Handbook Appendix 2, section 11.9, with CXs set by statute in 11.10. Documentation is required for CXs set by statute, adopted under NEPA section 109 or marked with an asterisk; for most others BLM recommends documenting which CX applies [[doiHandbook]]. Any bureau may use a CE another Interior bureau established or adopted, and combining several CEs for one action must be documented [[doi46205]]. Examples of BLM CXs:",
+        "43 CFR 46.210 lists twelve departmental CEs. Paragraphs (a) through (j), such as personnel actions and routine maintenance, need no documentation; (k), hazardous fuels reduction, which cannot be used within the Ninth Circuit, and (l), post-fire rehabilitation up to 4,200 acres, must be documented [[doi46210]].",
+        "BLM's own CXs must be documented when set by statute, adopted under NEPA section 109 or marked with an asterisk; for most others BLM recommends documenting which CX applies [[doiHandbook]]. Interior amends Appendix 2 by Federal Register notice, as it did for timber salvage and tree density CXs on August 24, 2026 [[doiSalvageCe]] [[doiDensityCe]]. Examples [[doiHandbook]]:",
       ],
       bullets: [
-        "Grazing permits or leases that continue current grazing management, where the allotment meets land health standards or misses them for reasons other than livestock grazing (FLPMA section 402(h)) [[doiUsc1752]] [[doiHandbook]]",
-        "Special Recreation Permits for day use or up to 14 consecutive nights, with no more than 3 staging-area acres (11.9 H) [[doiHandbook]]",
-        "Rights-of-way wholly within the boundaries of other compatibly developed rights-of-way (11.9 E(12)) [[doiHandbook]]",
-        "Disposal of mineral materials such as sand and gravel, not exceeding 50,000 cubic yards or disturbing more than 5 acres, except in riparian areas (11.9 F(10)) [[doiHandbook]]",
-        "Emergency stabilization after wildfire, flood or other events, up to 4,200 acres and completed within one year (11.9 I(1)) [[doiHandbook]]",
-        "Modification of tree density on up to 5,000 acres of treatment area, effective August 24, 2026 (11.9 C(11)) [[doiDensityCe]]",
+        "Grazing permits continuing current management, where any unmet land health standard is not due to grazing (FLPMA 402(h)) [[doiUsc1752]]",
+        "Special Recreation Permits: day use or up to 14 nights, 3 staging-area acres at most (11.9 H)",
+        "Rights-of-way wholly within other compatibly developed rights-of-way (11.9 E(12))",
+        "Sand and gravel disposals up to 50,000 cubic yards and 5 disturbed acres, outside riparian areas (11.9 F(10))",
+        "Tree density modification on up to 5,000 acres of treatment area (11.9 C(11)) [[doiDensityCe]]",
       ],
     },
     {
       heading: "Extraordinary circumstances at 43 CFR 46.215",
       paragraphs: [
-        "Before relying on a CE, a bureau reviews the action for extraordinary circumstances; if one is present and the bureau cannot remove it by modifying the action, it prepares an EA or EIS [[doi46205]] [[doiHandbook]]. Some statutory CXs carry their own rules: the Energy Policy Act of 2005 oil and gas CXs need no extraordinary circumstances review, while the FLPMA grazing CX does [[doiHandbook]].",
-        "The 2025 rule removed three older circumstances, for highly controversial effects, possible violation of other laws, and environmental justice, and the final rule kept them out [[doiFinal]]. Under 43 CFR 46.215, an extraordinary circumstance exists if the action may [[doi46215]]:",
-      ],
-      bullets: [
-        "Have significant impacts on public health or safety",
-        "Have significant impacts on natural resources and unique geographic characteristics, such as historic or cultural resources, park, recreation or refuge lands, wilderness, wild or scenic rivers, drinking water aquifers, prime farmlands, wetlands, floodplains, national monuments and migratory birds",
-        "Have highly uncertain and potentially significant effects, or involve unique or unknown environmental risks",
-        "Set a precedent for future action with potentially significant effects",
-        "Have a direct relationship to other actions with potentially significant effects",
-        "Have significant impacts on properties listed or eligible for listing on the National Register of Historic Places",
-        "Have significant impacts on listed or proposed species or designated critical habitat",
-        "Significantly limit access to and ceremonial use of Indian sacred sites on federal lands, or harm their physical integrity",
-        "Contribute to potentially significant spread of noxious weeds or non-native invasive species",
+        "43 CFR 46.215 names nine extraordinary circumstances, including significant impacts on public health or safety, natural resources, historic properties, or listed species and critical habitat; highly uncertain or precedent-setting effects; limits on access to Indian sacred sites; and significant spread of noxious weeds [[doi46215]]. If modifying the action cannot remove one, the bureau prepares an EA or EIS [[doi46205]] [[doiHandbook]].",
+        "Energy Policy Act of 2005 oil and gas CXs need no such review; the FLPMA grazing CX does [[doiHandbook]]. Interior's 2025 rule removed three older circumstances, highly controversial effects, possible violation of other laws and environmental justice, and the final rule kept them out [[doiFinal]].",
       ],
     },
     {
       heading:
         "Determination of NEPA adequacy (DNA): reusing an existing EA or EIS",
       paragraphs: [
-        "A determination of NEPA adequacy documents the responsible official's evaluation that a proposed action's effects lie within the scope of, and were analyzed in, existing EAs or EISs, with no new circumstances or information that warrant new or supplemental analysis. The Handbook allows a DNA, memorandum to file or other writing for this, after the official reevaluates whether the earlier analysis and assumptions remain valid [[doiHandbook]].",
-        'Appendix 1 sets out five questions: whether the action is substantially the same as an analyzed alternative, in the same area or similar conditions, with an adequate range of alternatives, still valid in light of new information, and with similar effects. The official answers each with citations to the existing EA or EIS; any "no" means more analysis. Public involvement for a DNA is at the official\'s discretion [[doiHandbook]].',
-        "A DNA is not a decision: the bureau documents the decision in a Decision Record or other decision document [[doiHandbook]]. Applicants may supply information such as DNA checklists, which the responsible official evaluates [[doiFinal]].",
-      ],
-    },
-    {
-      heading: "ePlanning: BLM's National NEPA Register",
-      paragraphs: [
-        "ePlanning gives the public access to BLM land use planning and NEPA information through the National NEPA Register, where visitors can search projects by name, NEPA number and keyword, read documents and comment during open comment periods [[eisBlmEplanning]]. The DOI NEPA Handbook names eplanning.blm.gov as BLM's site for its NEPA practice and environmental review documents [[doiHandbook]].",
-        "The Handbook asks bureaus to give each project a unique identification number and use it on every related document [[doiHandbook]]; Interior's final rule cites BLM examples such as DOI-BLM-UT-C030-2025-0019-EA, a campground management EA from the St. George Field Office in Utah [[doiFinal]]. When ePlan researches precedent for a BLM project, it searches agency project pages like these for similar CX records, DNAs and EAs.",
+        "A DNA documents the responsible official's finding that a proposed action's effects were analyzed in an existing EA or EIS, with no new circumstances or information that warrant new or supplemental analysis [[doiHandbook]].",
+        'Appendix 1 asks five questions: is the action substantially the same as an analyzed alternative, in the same area or similar conditions, with an adequate range of alternatives, still valid given new information, and with similar effects? The official answers each with citations to the existing document; any "no" means more analysis [[doiHandbook]].',
       ],
     },
   ],
   outline: {
     heading: "What a BLM CX record contains",
     intro:
-      "Interior prescribes no form for documenting a CE. It requires documentation for CEs set by statute, adopted under section 109 or marked with an asterisk, and for combinations of CEs, and the record shows the CE fits and no extraordinary circumstance is present [[doiHandbook]] [[doi46205]]. A checklist built from those requirements:",
+      "Interior prescribes no form; the record shows the CX fits and no extraordinary circumstance applies [[doiHandbook]] [[doi46205]].",
     items: [
       {
         title: "Project and NEPA number",
         detail:
-          "The proposed action, location and applicant, described well enough to show the CX fits, with the project's unique identification number [[doiHandbook]].",
+          "The proposed action, location and applicant, in enough detail to show the CX fits, with the project's unique identification number [[doiHandbook]].",
       },
       {
         title: "CX cited",
         detail:
-          "The citation, such as 43 CFR 46.210(k), DOI NEPA Handbook, Appendix 2, 11.9 H, or FLPMA section 402(h), and whether it was adopted from another agency [[doi46210]] [[doiHandbook]].",
+          "Such as 43 CFR 46.210(k), or DOI NEPA Handbook, Appendix 2, 11.9 H, which keeps the numbering of the former 516 DM 11.9 [[doi46210]] [[doiHandbook]] [[doi516dm11]].",
       },
       {
         title: "Fit with the CX's terms",
         detail:
-          "Each limit checked against the project: acres, nights, cubic yards or, for a grazing permit, unchanged management and the land health finding [[doiHandbook]] [[doiUsc1752]].",
+          "Each limit checked: acres, nights, cubic yards or, for grazing, unchanged management and the land health finding [[doiHandbook]] [[doiUsc1752]].",
       },
       {
         title: "Multiple CXs",
         detail:
-          "When several CXs cover parts of one action, which CX covers each element, and a review of the action as a whole [[doi46205]].",
+          "Which CX covers each element, and a review of the action as a whole [[doi46205]].",
       },
       {
         title: "Extraordinary circumstances review",
         detail:
-          "Each of the nine circumstances at 43 CFR 46.215 considered, unless a statute exempts the CX from review [[doi46215]] [[doiHandbook]].",
+          "Each of the nine circumstances at 43 CFR 46.215, unless a statute exempts the CX from review [[doi46215]] [[doiHandbook]].",
       },
       {
         title: "Plan conformance and design features",
         detail:
-          "Consistency with the land use plan and with DOI and BLM manuals and handbooks, including design features, stipulations and conditions of approval [[doiHandbook]].",
+          "Consistency with the land use plan, and the design features, stipulations and conditions of approval [[doiHandbook]].",
       },
       {
         title: "Other laws",
         detail:
-          "Where the Endangered Species Act, National Historic Preservation Act and other required reviews stand; Interior prefers they be met before the decision [[doiHandbook]].",
+          "Where Endangered Species Act, National Historic Preservation Act and other reviews stand; Interior prefers they be met before the decision [[doiHandbook]].",
       },
       {
         title: "Decision Record",
         detail:
-          "A separate Decision Record or other decision document, which the bureau may publish; the CX documentation itself is not a decision document [[doiHandbook]].",
+          "A separate decision document; the CX record itself is not one [[doiHandbook]].",
       },
     ],
   },
   faq: [
     {
-      question: "What is the DOI NEPA handbook?",
+      question: "Is a determination of NEPA adequacy a decision?",
       answer:
-        "The Department of the Interior Handbook of National Environmental Policy Act Implementing Procedures, 516 DM 1, dated February 23, 2026. Together with what remains of 43 CFR part 46, it sets Interior's NEPA procedures for every bureau, including BLM, and its Appendix 2 lists each bureau's categorical exclusions.",
+        "No. A DNA only documents that existing analysis is adequate; the bureau records the decision itself in a Decision Record or other decision document. Public involvement for a DNA is at the responsible official's discretion.",
     },
     {
-      question: "Is the BLM NEPA handbook H-1790-1 still valid?",
+      question: "Can BLM use another Interior bureau's categorical exclusions?",
       answer:
-        "No. BLM rescinded H-1790-1 on March 26, 2026, stating that the DOI NEPA procedures and the DOI NEPA Handbook at 516 DM 1 superseded it.",
-    },
-    {
-      question: "What does 43 CFR 46.210 cover?",
-      answer:
-        "Twelve categorical exclusions any Interior bureau can use, from personnel actions and nondestructive data collection to routine maintenance and educational activities. Most need no documentation; the two for hazardous fuels reduction and post-fire rehabilitation must be documented, and the fuels category cannot be used within the Ninth Circuit.",
-    },
-    {
-      question: "What is a determination of NEPA adequacy?",
-      answer:
-        "A DNA is the responsible official's documented finding that a new proposed action was already adequately analyzed in an existing EA or EIS and that no new information or circumstances call for new analysis. The decision itself is then documented in a Decision Record.",
+        "Yes. Any Interior bureau may use a categorical exclusion another bureau established or adopted. When several exclusions together cover one action, the combination must be documented.",
     },
     {
       question: "Where can I find BLM NEPA documents?",
       answer:
-        "On ePlanning, BLM's National NEPA Register at eplanning.blm.gov, where you can search by project name, NEPA number or keyword and comment during open comment periods.",
+        "On ePlanning, BLM's National NEPA Register, where you can search projects by name, NEPA number or keyword, read the documents and comment during open comment periods.",
     },
     {
       question: "Can ePlan draft a BLM CX record?",
       answer:
-        "Yes. Describe the action and ePlan drafts the CX record from a reference record it finds or you upload, with the category and its limits filled in and every fact it cannot confirm, such as the land health finding, marked for you to fill in. The responsible official decides whether the CX applies and signs the decision.",
+        "Yes. Describe the action and ePlan drafts the CX record from a reference record it finds or you upload, with the category and its limits filled in and every fact it cannot confirm marked for you. The responsible official decides whether the CX applies and signs the decision.",
     },
   ],
 };

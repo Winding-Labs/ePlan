@@ -41,7 +41,6 @@ export const sources = {
   esaCfr40212: CFR402("402.12", "B", "Biological assessments"),
   esaCfr40213: CFR402("402.13", "B", "Informal consultation"),
   esaCfr40214: CFR402("402.14", "B", "Formal consultation"),
-  esaCfr40216: CFR402("402.16", "B", "Reinitiation of consultation"),
   esaRule2024: {
     title:
       "Endangered and Threatened Wildlife and Plants; Regulations for Interagency Cooperation (final rule), 89 FR 24268",
@@ -101,21 +100,17 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Biological Assessment",
   answer:
-    "ESA section 7(a)(2), 16 U.S.C. 1536(a)(2), requires every federal agency, in consultation with the Secretary of the Interior or Commerce, to insure that any action it authorizes, funds or carries out is not likely to jeopardize a listed species or destroy or adversely modify its designated critical habitat [[esaUsc1536]]. The U.S. Fish and Wildlife Service and NOAA's National Marine Fisheries Service run section 7 consultation under 50 CFR part 402 [[esaCfr40201]]. If an action may affect listed species or critical habitat, consultation is formal and ends with a biological opinion, unless the Service concurs in writing that the action is not likely to adversely affect them [[esaCfr40214]] [[esaCfr40213]]. For a major construction activity, the agency first prepares a biological assessment [[esaCfr40212]].",
+    "ESA section 7(a)(2) requires every federal agency to insure that any action it authorizes, funds or carries out is not likely to jeopardize a listed species or destroy or adversely modify its critical habitat [[esaUsc1536]]. If an action may affect them, the agency consults the U.S. Fish and Wildlife Service or NOAA Fisheries, ending in written concurrence or a biological opinion [[esaCfr40201]] [[esaCfr40213]] [[esaCfr40214]].",
   glance: [
     {
       label: "Legal basis",
-      value: "ESA section 7(a)(2), 16 U.S.C. 1536(a)(2) [[esaUsc1536]]",
+      value:
+        "Endangered Species Act section 7(a)(2), 16 U.S.C. 1536(a)(2) [[esaUsc1536]]",
     },
     {
       label: "Regulations",
       value:
-        "50 CFR part 402, issued jointly by FWS and NMFS [[esaCfr402]] [[esaProposed2025]]",
-    },
-    {
-      label: "Consult with",
-      value:
-        "The U.S. Fish and Wildlife Service, or NOAA Fisheries for species under its jurisdiction [[esaCfr40201]]",
+        "50 CFR part 402 (2024 text); a 2025 proposal would largely restore the 2019 rules [[esaCfr402]] [[esaRule2024]] [[esaProposed2025]]",
     },
     {
       label: "Biological assessment",
@@ -230,70 +225,43 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   sections: [
     {
-      heading: "What does Endangered Species Act section 7 require?",
-      paragraphs: [
-        "Section 7(a)(1) directs all federal agencies to use their authorities to carry out programs for the conservation of listed species. Section 7(a)(2) requires each agency, in consultation with the Secretary, to insure its actions are not likely to jeopardize listed species or destroy or adversely modify critical habitat, using the best scientific and commercial data available [[esaUsc1536]].",
-        "Agencies must also confer on actions likely to jeopardize species proposed for listing or to destroy or adversely modify proposed critical habitat. Once consultation starts, neither the agency nor the applicant may make an irreversible or irretrievable commitment of resources that forecloses reasonable and prudent alternatives [[esaUsc1536]]. The requirements apply to all actions with discretionary federal involvement or control [[esaCfr40203]].",
-        "An action includes granting licenses, contracts, leases, easements, rights-of-way, permits or grants-in-aid, and activities that directly or indirectly modify land, water or air [[esaCfr40202]].",
-      ],
-    },
-    {
       heading: "USFWS or NOAA Fisheries: who handles section 7 consultation?",
       paragraphs: [
-        "The U.S. Fish and Wildlife Service (FWS) and the National Marine Fisheries Service (NMFS, or NOAA Fisheries) share responsibility for the Act. If a species is listed under NMFS jurisdiction, the agency contacts NMFS; for all other listed species it contacts FWS [[esaCfr40201]]. NOAA Fisheries consults when a project might affect an ESA-listed marine species or designated critical habitat [[esaNoaaConsultations]].",
-        "FWS encourages agencies to contact the nearest Ecological Services field office early in project development for technical assistance [[esaFwsSection7]]. NOAA Fisheries posts the status of section 7 consultations, and of essential fish habitat consultations under the Magnuson-Stevens Act, in its Environmental Consultation Organizer (ECO) portal [[esaNoaaConsultations]].",
+        "Consult NOAA Fisheries for species listed under its jurisdiction, generally marine species, and the U.S. Fish and Wildlife Service (FWS) for all others [[esaCfr40201]] [[esaNoaaConsultations]]. FWS asks agencies to contact the nearest Ecological Services field office early in project development [[esaFwsSection7]]. Consultation covers every action with discretionary federal involvement or control [[esaCfr40203]], including permits, licenses, leases, rights-of-way and grants [[esaCfr40202]].",
       ],
     },
     {
       heading: "Getting an official species list from IPaC",
       paragraphs: [
-        "IPaC (Information for Planning and Consultation) is FWS's project planning tool, open to anyone. Logging in and defining a project returns an official species list and an evaluation of potential impacts on resources FWS manages, and its Consultation Package Builder helps assemble a consultation package [[esaIpac]]. FWS encourages agencies to use IPaC to identify species and critical habitat that may be present in the action area [[esaFwsSection7]]. Our [IPaC guide](/for/ipac) explains how to read the output.",
-        "Under the regulations, the agency or its designated non-federal representative asks the Service for a list of listed and proposed species and critical habitat that may be present, or tells it which species the assessment will cover, and the Service responds within 30 days. If preparation of the biological assessment does not begin within 90 days of the list, its accuracy must be verified with the Service [[esaCfr40212]].",
-        "If the Service advises that no listed species or critical habitat may be present, no biological assessment or further consultation is needed [[esaCfr40212]].",
+        "The agency or its non-federal representative asks the Service which listed and proposed species and critical habitat may be present, and the Service responds within 30 days. If none may be present, no biological assessment or further consultation is needed [[esaCfr40212]].",
+        "FWS encourages agencies to get that list from IPaC, its online planning tool, which returns an official species list for a defined project [[esaFwsSection7]] [[esaIpac]]. If the assessment does not begin within 90 days of the list, verify the list with the Service [[esaCfr40212]]. Our [IPaC guide](/for/ipac) explains how to read the output.",
       ],
     },
     {
       heading: "Informal vs formal section 7 consultation",
       paragraphs: [
-        "Informal consultation is an optional process of discussions and correspondence that helps the agency decide whether formal consultation is needed. If the agency determines, with the Service's written concurrence, that the action is not likely to adversely affect listed species or critical habitat, consultation ends. The Service responds to a request for concurrence within 60 days, extendable by mutual consent to no more than 120 days [[esaCfr40213]].",
-        "If an action may affect listed species or critical habitat and that concurrence is not given, formal consultation is required [[esaCfr40214]]. If the agency determines the action will not affect any listed species or critical habitat, FWS says no further action is needed [[esaFwsSection7]].",
-        "Formal consultation begins with a written request describing the action, the action area, the species and habitat present and the effects, and concludes within 90 days unless extended. With an applicant involved, an extension beyond 60 days needs the applicant's consent. The Service then has 45 days to deliver the biological opinion. An agency may submit existing NEPA documents as the request if it shows where each required element appears [[esaCfr40214]].",
+        "Informal consultation is optional discussion with the Service. It ends when the Service concurs in writing, within 60 days of the request (extendable to 120), that the action is not likely to adversely affect listed species or critical habitat [[esaCfr40213]]. Otherwise, an action that may affect them needs formal consultation [[esaCfr40214]]. If the agency finds no effect, FWS says no further action is needed [[esaFwsSection7]].",
+        "Formal consultation ends with a biological opinion on whether the action is likely to jeopardize listed species or destroy or adversely modify critical habitat. A jeopardy opinion includes reasonable and prudent alternatives, if any exist, and an opinion that expects take carries an incidental take statement [[esaCfr40214]].",
       ],
     },
     {
       heading:
         "What goes in a biological assessment, and when is one required?",
       paragraphs: [
-        "A biological assessment evaluates the potential effects of the action on listed and proposed species and designated and proposed critical habitat, and determines whether any are likely to be adversely affected. It is required for major construction activities [[esaCfr40212]]: construction projects that are major federal actions significantly affecting the quality of the human environment under NEPA section 102(2)(C) [[esaCfr40202]] [[usc4332]].",
-        "Its contents are at the agency's discretion and may include an on-site inspection, the views of recognized experts, a literature review, an analysis of effects including cumulative effects, and an analysis of alternatives considered [[esaCfr40212]]. It must be completed within 180 days of its start, unless another period is agreed, and before any construction contract or construction begins, and it may be prepared as part of NEPA compliance [[esaUsc1536]] [[esaCfr40212]].",
-        "A consultant or applicant can prepare it as the agency's designated non-federal representative, but the agency must supervise it, independently review it and stays responsible for section 7 [[esaCfr40208]]. The Service tells the agency in writing within 30 days whether it concurs with the assessment's findings [[esaCfr40212]].",
-      ],
-    },
-    {
-      heading: "Biological opinion and incidental take statement",
-      paragraphs: [
-        "A biological opinion summarizes the information it relies on, discusses the environmental baseline and the effects of the action, and concludes whether the action is likely to jeopardize listed species or destroy or adversely modify critical habitat. A jeopardy opinion includes reasonable and prudent alternatives, if any exist [[esaCfr40214]].",
-        "When the action will not violate section 7(a)(2) and take is reasonably certain to occur, the Service attaches an incidental take statement. It specifies the amount or extent of take, reasonable and prudent measures to minimize its impact, and terms and conditions, including reporting, that the agency or applicant must follow; take that complies with them is not a prohibited taking [[esaCfr40214]] [[esaUsc1536]].",
-        "The agency must reinitiate consultation if the take is exceeded, new information reveals effects not previously considered, the action is modified in a way that causes unconsidered effects, or a new species is listed or critical habitat designated that the action may affect [[esaCfr40216]].",
-      ],
-    },
-    {
-      heading: "Recent changes to the section 7 regulations",
-      paragraphs: [
-        "FWS and NMFS revised 50 CFR part 402 in a rule that took effect May 6, 2024 [[esaRule2024]]. On November 21, 2025 they proposed replacing the 2024 provisions with those in place in 2019, except the reinitiation section, and removing the 2024 provisions that allowed offsets in reasonable and prudent measures. Comments closed December 22, 2025 [[esaProposed2025]].",
-        "As of October 2, 2026, the eCFR text of part 402 still carries the 2024 amendments [[esaCfr402]]. Check the Federal Register for a final rule before relying on either version.",
+        "A biological assessment evaluates the action's potential effects on listed and proposed species and critical habitat and determines whether any are likely to be adversely affected. It is required for major construction activities: construction that is a major federal action significantly affecting the human environment under NEPA [[esaCfr40212]] [[esaCfr40202]] [[usc4332]].",
+        "It must be finished before any construction contract is signed or construction begins [[esaUsc1536]]. A consultant or applicant may prepare it as the designated non-federal representative, but the agency must independently review it and stays responsible for section 7 [[esaCfr40208]]. The Service tells the agency within 30 days whether it concurs with the findings [[esaCfr40212]].",
       ],
     },
   ],
   outline: {
     heading: "Biological assessment outline: what to include",
     intro:
-      "The contents of a biological assessment are at the agency's discretion [[esaCfr40212]]. This outline combines the items 50 CFR 402.12(f) lists with the information a request for formal consultation must contain [[esaCfr40214]], so the assessment can support either a concurrence request or formal consultation.",
+      "The contents are at the agency's discretion [[esaCfr40212]]. This outline combines the items 50 CFR 402.12(f) lists with what a request for formal consultation must contain [[esaCfr40214]], so it supports either a concurrence request or formal consultation.",
     items: [
       {
         title: "Proposed action",
         detail:
-          "Purpose, duration and timing, location, components and how they will be carried out, maps or drawings, and any measures to avoid, minimize or offset effects [[esaCfr40214]].",
+          "Purpose, timing, location, components and how they will be carried out, with maps, and measures to avoid, minimize or offset effects [[esaCfr40214]].",
       },
       {
         title: "Action area",
@@ -303,12 +271,12 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Species list and critical habitat",
         detail:
-          "Listed and proposed species and designated and proposed critical habitat that may be present, from the Service's list, verified if more than 90 days old when preparation began [[esaCfr40212]].",
+          "Listed and proposed species and critical habitat that may be present, from the Service's list, verified if over 90 days old [[esaCfr40212]].",
       },
       {
         title: "Species and habitat in the action area",
         detail:
-          "Presence, abundance, density or periodic occurrence of each species and the condition and location of its habitat [[esaCfr40214]], with any on-site inspection results [[esaCfr40212]].",
+          "Presence, abundance or periodic occurrence of each species and the condition of its habitat [[esaCfr40214]], with on-site inspection results [[esaCfr40212]].",
       },
       {
         title: "Expert views and literature",
@@ -318,7 +286,7 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Effects of the action",
         detail:
-          "All consequences to listed species or critical habitat caused by the action, including later or more distant ones, plus cumulative effects of future state or private activities reasonably certain to occur [[esaCfr40202]] [[esaCfr40212]].",
+          "All consequences to listed species or critical habitat caused by the action, plus cumulative effects of future state or private activities [[esaCfr40202]] [[esaCfr40212]].",
       },
       {
         title: "Alternatives considered",
@@ -328,41 +296,31 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Determinations",
         detail:
-          "For each species and critical habitat, whether the action is likely to adversely affect it, which decides between a concurrence request and formal consultation [[esaCfr40212]] [[esaCfr40213]].",
+          "For each species and critical habitat, whether the action is likely to adversely affect it; this decides concurrence request versus formal consultation [[esaCfr40212]] [[esaCfr40213]].",
       },
     ],
   },
   faq: [
     {
-      question: "What is ESA section 7 consultation?",
-      answer:
-        "The process under section 7(a)(2) of the Endangered Species Act (16 U.S.C. 1536) by which a federal agency, working with the U.S. Fish and Wildlife Service or NOAA Fisheries, makes sure an action it authorizes, funds or carries out is not likely to jeopardize a listed species or destroy or adversely modify critical habitat. The procedures are in 50 CFR part 402.",
-    },
-    {
-      question: "When is a biological assessment required?",
-      answer:
-        "For major construction activities, meaning construction projects that are major federal actions significantly affecting the quality of the human environment under NEPA, when listed species or critical habitat may be present. For other actions, the agency still gives the Service the information listed in 50 CFR 402.14(c) when it requests formal consultation or concurrence.",
-    },
-    {
       question:
-        "What is the difference between informal and formal consultation?",
+        "What is the difference between a biological assessment and a biological opinion?",
       answer:
-        "Informal consultation is optional discussion with the Service that ends when the Service concurs in writing that the action is not likely to adversely affect listed species or critical habitat. Formal consultation is required when an action may affect them and that concurrence is not given, and it ends with a biological opinion.",
-    },
-    {
-      question: "How long does section 7 consultation take?",
-      answer:
-        "The Service answers a request for concurrence within 60 days, extendable to 120. Formal consultation concludes within 90 days unless extended, and the Service then has 45 days to deliver the biological opinion. A biological assessment must be finished within 180 days of its start unless another period is agreed.",
+        "The agency, or its designated non-federal representative, prepares the biological assessment to evaluate effects on listed species and critical habitat. The Service writes the biological opinion at the end of formal consultation, deciding whether the action is likely to jeopardize species or destroy or adversely modify critical habitat.",
     },
     {
       question: "What is an incidental take statement?",
       answer:
-        "The statement attached to a biological opinion when take of a listed species is reasonably certain to occur but the action will not violate section 7(a)(2). It sets the amount or extent of take, reasonable and prudent measures to minimize its impact, and terms and conditions; take that follows those terms is not a prohibited taking.",
+        "Part of a biological opinion, issued when take of a listed species is reasonably certain but the action will not violate section 7(a)(2). It sets the amount or extent of take, measures to minimize it, and terms and conditions; take that follows them is not prohibited.",
+    },
+    {
+      question: "Can a NEPA document serve as the biological assessment?",
+      answer:
+        "Yes. A biological assessment may be prepared as part of the agency's NEPA compliance, and an agency may submit existing NEPA documents as its request for formal consultation if it shows where each required element appears.",
     },
     {
       question: "Does an IPaC species list complete section 7?",
       answer:
-        "No. IPaC gives an official species list and planning tools for resources the Fish and Wildlife Service manages. The agency still decides whether its action may affect listed species and consults the Service where required, and species under NOAA Fisheries' jurisdiction are handled by NOAA Fisheries.",
+        "No. It shows which species and critical habitat managed by the Fish and Wildlife Service may be present. The agency still decides whether its action may affect them and consults where required; NOAA Fisheries handles the species under its jurisdiction.",
     },
   ],
 };
