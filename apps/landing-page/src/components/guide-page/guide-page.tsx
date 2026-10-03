@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import { BookOpen, Columns3, Library, ListChecks } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -184,9 +182,7 @@ export function GuidePage({ path }: GuidePageProps) {
       />
 
       <div id="draft" className="scroll-mt-24">
-        <Suspense fallback={null}>
-          <Hero content={guideHeroContent(page)} />
-        </Suspense>
+        <Hero content={guideHeroContent(page)} />
       </div>
 
       <ComparisonTable

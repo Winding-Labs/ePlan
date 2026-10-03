@@ -163,12 +163,6 @@ export const NEPA_SOURCES = {
     published: "2026-09-01",
     read: READ,
   },
-  army651reg: {
-    title: "32 CFR 651.19 - Record of environmental consideration (Army)",
-    publisher: "eCFR, version in effect on June 1, 2025",
-    url: "https://www.ecfr.gov/on/2025-06-01/title-32/section-651.19",
-    read: READ,
-  },
   army651: {
     title:
       "Environmental Analysis of Army Actions (AR 200-2), interim final rule rescinding 32 CFR part 651, 90 FR 29450",

@@ -11,9 +11,8 @@ type OfficeView = "overview" | "projects" | "templates";
 
 // Metadata for the API-backed catalog pages. The handlers' fetches are
 // memoized per request, so the page reuses this lookup. A missing entity is
-// notFound() here too, like the page itself. (The status still streams as 200
-// because the root layout wraps every page in Suspense — see the 2026-10-02
-// SEO audit — but the not-found page carries noindex.)
+// notFound() here too, like the page itself. Metadata resolves before the
+// response starts (htmlLimitedBots in next.config.ts), so this sends a 404.
 
 export const buildOrganizationMetadata = async (
   organizationSlug: string,

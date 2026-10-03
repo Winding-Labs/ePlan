@@ -4,21 +4,15 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
-import { cookies } from "next/headers";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { AnalyticsPageView } from "@wildfires-org/turboplan-analytics/client";
-import { SessionProvider } from "@wildfires-org/turboplan-auth/client";
-import { getSession } from "@wildfires-org/turboplan-auth/session";
 import { getLandingPageEnv } from "@wildfires-org/turboplan-env";
-import {
-  UI_SCALE_COOKIE_NAME,
-  uiScaleStyleFromCookie,
-} from "@wildfires-org/turboplan-utils/server";
 
 import LayoutWrapper from "@/app/layoutWrapper";
 import { Navbar } from "@/components/home-v2/navbar";
 import { SiteFooter } from "@/components/home-v2/site-footer";
+import { ClientSessionProvider } from "@/components/providers/client-session-provider";
 import { PostHogProvider } from "@/components/providers/posthog-provider";
 import { UiScaleSync } from "@/components/providers/ui-scale-sync";
 import { ReleaseInfoLogger } from "@/components/release-info-logger";
@@ -137,63 +131,21 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-/**
- * Minimal loading fallback shown during static generation.
- * Does NOT render children since they may depend on NuqsAdapter context.
- * Content appears immediately after hydration.
- */
-function LayoutFallback() {
-  return (
-    <div className="min-h-screen flex flex-col justify-between">
-      <main className="relative flex w-full justify-center">
-        <div className="flex w-screen 2xl:max-w-3xl px-5 lg:px-10 xl:px-[100px] 3xl:max-w-3xl justify-center flex-col">
-          {/* Loading placeholder - content renders after hydration */}
-        </div>
-      </main>
-    </div>
-  );
-}
-
-/**
- * Honours the interface scale the user picked in the app (Profile →
- * Appearance), shared through a cookie scoped to the parent domain. Read-only
- * here: the landing page offers no control of its own.
- *
- * The try/catch mirrors `getSession`: during static prerender (the /docs
- * pages) there is no request, `cookies()` throws, and the page is generated at
- * the default scale - `UiScaleSync` then applies the cookie after hydration.
- */
-const readUiScaleStyle = async () => {
-  let rawScale: string | undefined;
-  try {
-    rawScale = (await cookies()).get(UI_SCALE_COOKIE_NAME)?.value;
-  } catch {
-    // Only the `cookies()` call is guarded, so a bug in the parsing below still
-    // surfaces instead of silently rendering the default scale.
-    return undefined;
-  }
-  return uiScaleStyleFromCookie(rawScale);
-};
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Get session server-side to pass to client components
-  const session = await getSession();
-  const uiScaleStyle = await readUiScaleStyle();
+  // No cookies or session here: reading either makes every marketing page
+  // dynamic and uncacheable. The session loads client-side
+  // (ClientSessionProvider) and UiScaleSync applies the app's UI-scale cookie
+  // after hydration.
   // Signup hands off to the app origin via a full navigation; warm up DNS/TLS
   // so that cross-origin jump starts faster.
   const appOrigin = new URL(getLandingPageEnv().TURBOPLAN_URL).origin;
 
   return (
-    <html
-      lang="en"
-      className="scroll-smooth"
-      style={uiScaleStyle as React.CSSProperties}
-      suppressHydrationWarning
-    >
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <meta name="theme-color" content="#f4f9f7" />
       <link rel="preconnect" href={appOrigin} />
       <body
@@ -212,28 +164,30 @@ export default async function RootLayout({
             theme.enabled=false disables next-themes entirely: this app has no
             dark-mode design system (global Navbar/SiteFooter/home are light-only),
             so we never render the ThemeProvider and the `dark` class is never
-            applied — not even from OS-level prefers-color-scheme. */}
+            applied — not even from OS-level prefers-color-scheme.
+            No Suspense around the page: a boundary here flushes a 200 before
+            the page runs, so its notFound() can no longer send a 404. A
+            component that reads search params wraps itself instead (the
+            build fails on a statically prerendered page that doesn't). */}
         <RootProvider theme={{ enabled: false }}>
-          <Suspense fallback={<LayoutFallback />}>
-            <NuqsAdapter>
-              <SessionProvider session={session}>
-                <AnalyticsContextProvider>
-                  <GlobalProvider>
-                    <div className="min-h-screen flex flex-col justify-between">
-                      <Navbar />
-                      <main className="relative flex w-full flex-1 justify-center">
-                        <LayoutWrapper>{children}</LayoutWrapper>
-                      </main>
-                      <SiteFooter />
-                    </div>
-                  </GlobalProvider>
-                  <Suspense>
-                    <InitializeAnalyticsContext />
-                  </Suspense>
-                </AnalyticsContextProvider>
-              </SessionProvider>
-            </NuqsAdapter>
-          </Suspense>
+          <NuqsAdapter>
+            <ClientSessionProvider>
+              <AnalyticsContextProvider>
+                <GlobalProvider>
+                  <div className="min-h-screen flex flex-col justify-between">
+                    <Navbar />
+                    <main className="relative flex w-full flex-1 justify-center">
+                      <LayoutWrapper>{children}</LayoutWrapper>
+                    </main>
+                    <SiteFooter />
+                  </div>
+                </GlobalProvider>
+                <Suspense>
+                  <InitializeAnalyticsContext />
+                </Suspense>
+              </AnalyticsContextProvider>
+            </ClientSessionProvider>
+          </NuqsAdapter>
         </RootProvider>
         <Toaster />
         {/* Suspense boundary required: AnalyticsPageView reads

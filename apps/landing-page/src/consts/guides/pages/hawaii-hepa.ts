@@ -25,7 +25,6 @@ const HRS = (section: string, heading: string): Source => ({
 });
 
 export const sources = {
-  hepaHrs3431: HRS("1", "Findings and purpose"),
   hepaHrs3432: HRS("2", "Definitions"),
   hepaHrs3433: HRS("3", "Public records and notice"),
   hepaHrs3435: HRS("5", "Applicability and requirements"),
@@ -72,35 +71,32 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Hawaii Environmental Assessment",
   answer:
-    "HEPA Hawaii review is the environmental review process under the Hawaii Environmental Policy Act, HRS Chapter 343 [[hepaErp]]. It requires an environmental assessment (EA) for actions that trigger section 343-5, such as using state or county lands or funds, or any use within a conservation district, shoreline area or historic site [[hepaHrs3435]]. The EA determines whether the action may have a significant effect: if not, the agency issues a finding of no significant impact (FONSI); if so, it issues an environmental impact statement preparation notice (EISPN) and an EIS follows [[hepaHrs3432]] [[hepaHar]].",
+    "HEPA Hawaii review, under the Hawaii Environmental Policy Act (HRS Chapter 343), requires an environmental assessment (EA) when an action triggers section 343-5, such as using state or county lands or funds or any use in a shoreline area [[hepaErp]] [[hepaHrs3435]]. It ends in a finding of no significant impact (FONSI) or, if effects may be significant, an EIS preparation notice (EISPN) [[hepaHrs3432]] [[hepaHar]].",
   glance: [
     {
-      label: "Legal basis",
+      label: "Rules",
       value:
-        "HRS Chapter 343, and HAR Chapter 11-200.1, in effect since August 9, 2019 [[hepaHrs3435]] [[hepaErp]]",
+        "HAR Chapter 11-200.1, in effect since August 9, 2019 [[hepaHar]] [[hepaErp]]",
     },
     {
       label: "Administered by",
       value:
-        "The Environmental Review Program in the Office of Planning and Sustainable Development, formerly OEQC [[hepaErp]] [[hepaOeqc]]",
+        "The Environmental Review Program (ERP), Office of Planning and Sustainable Development [[hepaErp]] [[hepaOeqc]]",
     },
     {
       label: "Prepared by",
       value:
-        "The proposing agency, or the applicant when an applicant's action needs agency approval [[hepaHrs3435]]",
+        "The proposing agency, or the applicant when its action needs agency approval [[hepaHrs3435]]",
     },
     {
-      label: "Draft EA review",
-      value: "30 days for public comment [[hepaHrs3435]] [[hepaHar]]",
-    },
-    {
-      label: "Draft EIS review",
-      value: "45 days for public comment [[hepaHrs3435]]",
+      label: "Comment periods",
+      value:
+        "Draft EA 30 days; EISPN 30 days, extendable by 30; draft EIS 45 days [[hepaHrs3435]] [[hepaHar]]",
     },
     {
       label: "Published in",
       value:
-        "The Environmental Notice, issued on the 8th and 23rd of each month [[hepaErp]] [[hepaHar]]",
+        "The Environmental Notice, 8th and 23rd of each month; submit five business days ahead [[hepaErp]] [[hepaHrs3433]] [[hepaHar]]",
     },
   ],
   hero: {
@@ -202,71 +198,50 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "What triggers HRS Chapter 343 review?",
       paragraphs: [
-        "An action is any program or project initiated by an agency or an applicant [[hepaHrs3432]]. Unless an exemption applies, an EA is required when an action falls into one of nine categories in section 343-5(a). For an applicant, the action must also need a discretionary approval from an agency [[hepaHrs3435]] [[hepaHrs3432]].",
+        "Section 343-5(a) lists nine categories that trigger an EA unless an exemption applies; an applicant's action must also need a discretionary approval from an agency [[hepaHrs3435]] [[hepaHrs3432]].",
       ],
       bullets: [
-        "Use of state or county lands or funds, apart from feasibility or planning studies and some purchases of unimproved land [[hepaHrs3435]]",
-        "Any use within a conservation district, a shoreline area as defined in section 205A-41, or a historic site on the National or Hawaii Register",
-        "Any use within the Waikiki Special District",
-        "County general plan amendments that would result in designations other than agriculture, conservation or preservation, unless the county initiates them",
-        "Reclassification of conservation district land",
+        "Use of state or county lands or funds, except feasibility or planning studies and some unimproved land purchases [[hepaHrs3435]]",
+        "Any use in a conservation district, shoreline area or historic site on the National or Hawaii Register",
+        "Any use in the Waikiki Special District, or reclassification of conservation district land",
+        "County general plan amendments to designations other than agriculture, conservation or preservation, unless the county initiates them",
         "New or expanded helicopter facilities that may affect a conservation district, shoreline area or historic site",
-        "Wastewater treatment units (with exceptions for small systems), waste-to-energy facilities, landfills, oil refineries and power-generating facilities",
+        "Wastewater treatment units (except some small systems), waste-to-energy facilities, landfills, oil refineries and power-generating facilities",
       ],
     },
     {
       heading: "Which actions are exempt from a Hawaii EA?",
       paragraphs: [
-        "Chapter 343 directs the rules to declare exempt specific types of actions that will probably have minimal or no significant effects [[hepaHrs3436]]. HAR section 11-200.1-15 lists ten general types, including operation and repair of existing facilities, replacement on the same site, single new small structures, minor land alterations, basic data collection, and some affordable housing. No exemption applies when successive actions in the same place would have a significant cumulative impact, or when the action may be significant in a particularly sensitive environment [[hepaHar]].",
-        "Each agency may adopt an exemption list in two parts: routine activities it treats as de minimis, and actions within the general types. Lists go to the Environmental Advisory Council for concurrence at least every seven years [[hepaHar]] [[hepaErp]]. For an exemption under the general types, the agency documents its analysis and the advice of outside agencies or experts in an exemption notice, and lists those notices for The Environmental Notice published on the 8th of the following month [[hepaHar]] [[hepaErp]].",
+        "HAR section 11-200.1-15 lists ten general types of exempt actions with minimal or no significant effects, such as repairing existing facilities, same-site replacement, single small new structures, minor land alterations, basic data collection and some affordable housing [[hepaHrs3436]] [[hepaHar]]. No exemption applies to successive actions with a significant cumulative impact, or to a possibly significant action in a particularly sensitive environment [[hepaHar]].",
+        "Each agency also keeps an exemption list, which the Environmental Advisory Council reviews at least every seven years. An exemption under the general types needs a documented exemption notice, listed in The Environmental Notice of the 8th of the following month [[hepaHar]] [[hepaErp]].",
       ],
     },
     {
-      heading: "How a Hawaii EA leads to a FONSI or an EISPN",
+      heading: "How does a Hawaii EA lead to a FONSI or an EISPN?",
       paragraphs: [
-        "The proposing agency, or the applicant, consults early with the county planning agency, agencies with jurisdiction or expertise, and affected groups, then prepares a draft EA [[hepaHar]]. If the agency anticipates a FONSI, the draft EA is published with that notice for 30 days of public comment, and every substantive comment gets a written response in the final EA [[hepaHrs3435]] [[hepaHar]].",
-        "After the final EA, the agency issues a FONSI if the action is not likely to have a significant effect, or an EISPN if it may; for an applicant action, the approving agency decides within 30 days of receiving the final EA [[hepaHar]]. An agency that expects an EIS may skip the EA and start with an EISPN [[hepaHrs3435]]. A lawsuit challenging a determination that no EIS is required must be filed within 30 days after the public is notified [[hepaHrs3437]].",
+        "The agency or applicant consults early, then prepares a draft EA [[hepaHar]]. If the agency anticipates a FONSI, the draft EA is published with that notice for public comment, and the final EA answers every substantive comment in writing [[hepaHrs3435]] [[hepaHar]].",
+        "After the final EA, the agency issues the FONSI or EISPN; for an applicant action, the approving agency decides within 30 days of receiving it [[hepaHar]]. An agency that expects an EIS may skip the EA and start with an EISPN [[hepaHrs3435]]. A lawsuit challenging a FONSI must be filed within 30 days after public notice [[hepaHrs3437]].",
       ],
     },
     {
       heading: "How does an agency decide if an effect is significant?",
       paragraphs: [
-        "The agency weighs the sum of effects on the quality of the environment, considering every phase of the action, the expected impacts and the proposed mitigation. In most instances, an action is significant if it may do any of the following [[hepaHar]]:",
+        "The agency weighs the sum of effects across every phase of the action, including proposed mitigation. In most instances, an action is significant if it may [[hepaHar]]:",
       ],
       bullets: [
         "Irrevocably commit a natural, cultural or historic resource, or curtail the range of beneficial uses of the environment [[hepaHar]]",
-        "Conflict with the State's long-term environmental policies or goals, or substantially harm the economic welfare, social welfare or cultural practices of the community",
-        "Have a substantial adverse effect on public health, air or water quality, ambient noise, scenic vistas, or rare, threatened or endangered species or their habitat",
+        "Conflict with the State's long-term environmental policies, or substantially harm community economic or social welfare or cultural practices",
+        "Substantially harm public health, air or water quality, ambient noise, scenic vistas, or rare, threatened or endangered species",
         "Involve adverse secondary impacts or substantial degradation, or be cumulatively significant",
-        "Substantially affect, or be likely to suffer damage from being in, an environmentally sensitive area such as a flood plain, tsunami zone, sea level rise exposure area or erosion-prone area",
+        "Substantially affect, or likely be damaged in, a flood plain, tsunami zone or sea level rise exposure area",
         "Require substantial energy consumption or emit substantial greenhouse gases",
-      ],
-    },
-    {
-      heading: "What happens if an EIS is required?",
-      paragraphs: [
-        "The EISPN describes the action, the affected environment, possible alternatives and the proposed scoping process. Agencies and the public have 30 days to comment, extendable by up to 30 more, and at least one public scoping meeting is held on the island most affected [[hepaHar]]. The draft EIS then gets 45 days of public review, and the final EIS responds to the comments [[hepaHrs3435]].",
-        "An EIS is an informational document that discloses environmental effects and effects on the economic welfare, social welfare and cultural practices of the community and State, along with mitigation and alternatives [[hepaHrs3432]]. For agency actions, the governor or the mayor, or their representative, decides on acceptance; for applicant actions, the agency that received the request does, within 30 days or the statement is deemed accepted. Acceptance is a condition precedent to the action [[hepaHrs3435]].",
-      ],
-    },
-    {
-      heading: "The Environmental Review Program and The Environmental Notice",
-      paragraphs: [
-        "Act 152 of 2021 transferred the Office of Environmental Quality Control from the Department of Health to the Office of Planning and Sustainable Development and renamed it the Environmental Review Program (ERP) [[hepaOeqc]]. ERP facilitates the HEPA process and publishes The Environmental Notice on the 8th and 23rd of each month, with EAs, EISs, exemption lists, habitat conservation plans, shoreline notices and some federal NEPA documents [[hepaErp]] [[hepaHrs3433]].",
-        "Anything to be published must reach the office electronically before the close of business five business days before the issue date [[hepaHar]]; ERP treats close of business as 11:59 p.m. [[hepaErp]]. Chapter 343 states its purpose as making sure environmental concerns get appropriate consideration in decision making along with economic and technical considerations [[hepaHrs3431]].",
-      ],
-    },
-    {
-      heading: "When HEPA and NEPA both apply",
-      paragraphs: [
-        "When an action is subject to both NEPA and Chapter 343, state agencies must cooperate with federal agencies to reduce duplication, including joint EISs with concurrent review, so that one document meets all applicable laws [[hepaHrs3435]]. A federal NEPA exemption or FONSI does not automatically satisfy Chapter 343, though the state agency may consider it. A federal EIS may be submitted if it meets Hawaii's content requirements, including cultural impacts [[hepaHar]].",
       ],
     },
   ],
   outline: {
     heading: "Hawaii environmental assessment: the contents",
     intro:
-      "Built from the draft EA contents required by HAR section 11-200.1-18(d). The final EA adds the agency's determination with its findings and reasons, and the comments and responses from public review [[hepaHar]].",
+      "Built from the draft EA contents in HAR section 11-200.1-18(d); the final EA adds the agency's determination, findings and reasons [[hepaHar]].",
     items: [
       {
         title: "Proposing agency or applicant",
@@ -291,12 +266,12 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Affected environment",
         detail:
-          "A summary with regional, location and site maps, such as Flood Insurance Rate Maps, USGS topographic maps or state sea level rise exposure area maps [[hepaHar]].",
+          "A summary with regional, location and site maps, such as Flood Insurance Rate Maps, USGS topographic maps or sea level rise exposure area maps [[hepaHar]].",
       },
       {
         title: "Impacts and alternatives",
         detail:
-          "Identification and analysis of impacts and the alternatives considered, measured against the significance criteria in section 11-200.1-13 [[hepaHar]].",
+          "The impacts and the alternatives considered, analyzed against the significance criteria in section 11-200.1-13 [[hepaHar]].",
       },
       {
         title: "Mitigation measures",
@@ -317,29 +292,19 @@ export const entry: GuideEntry<GuidePath> = {
   },
   faq: [
     {
-      question: "What does HEPA stand for in Hawaii?",
+      question: "What happens if Hawaii requires an EIS?",
       answer:
-        "HEPA is the common name for the Hawaii Environmental Policy Act, the environmental review law in Chapter 343 of the Hawaii Revised Statutes. Its rules are in Hawaii Administrative Rules Chapter 11-200.1, and the Environmental Review Program in the Office of Planning and Sustainable Development runs the process.",
+        "The EISPN opens scoping, with at least one public scoping meeting on the island most affected. The final EIS responds to comments on the draft, and the governor or mayor, or for an applicant action the approving agency, must accept it before the action proceeds.",
     },
     {
-      question: "What is the difference between an EA and an EIS in Hawaii?",
+      question: "Does a federal NEPA FONSI satisfy HRS Chapter 343?",
       answer:
-        "An environmental assessment is a written evaluation to determine whether an action may have a significant effect. If it finds the action is not likely to, the agency issues a finding of no significant impact. If the action may have a significant effect, the agency issues an EIS preparation notice and a full environmental impact statement follows, with scoping, a 45-day draft review and acceptance before the action can proceed.",
-    },
-    {
-      question: "How long is the comment period for a draft EA in Hawaii?",
-      answer:
-        "Thirty days from publication in The Environmental Notice. The comment period on an EIS preparation notice is also 30 days and can be extended by up to 30 more, and a draft EIS is open for 45 days.",
+        "Not automatically. The state or county agency may consider a federal exemption or FONSI, but it does not by itself meet Chapter 343. A federal EIS can serve both laws if it also meets Hawaii's content rules, including cultural impacts.",
     },
     {
       question: "Is OEQC still the office for Hawaii environmental review?",
       answer:
         "No. Act 152 of 2021 moved the Office of Environmental Quality Control from the Department of Health to the Office of Planning and Sustainable Development and renamed it the Environmental Review Program, which now publishes The Environmental Notice.",
-    },
-    {
-      question: "Does a federal NEPA FONSI satisfy HRS Chapter 343?",
-      answer:
-        "Not automatically. Under the HEPA rules, a federal exemption or FONSI does not by itself meet Chapter 343, though the state or county agency may consider it. A federal EIS can be used if it also meets Hawaii's content requirements, including cultural impacts.",
     },
     {
       question: "Can ePlan publish my EA in The Environmental Notice?",

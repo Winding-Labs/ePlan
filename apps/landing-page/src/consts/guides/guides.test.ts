@@ -63,6 +63,94 @@ const keywordHaystack = (page: GuideEntry): string =>
     .map(lower)
     .join("\n");
 
+const words = (text: string) =>
+  stripCitations(text).split(/\s+/).filter(Boolean).length;
+
+/**
+ * An ad lands here, so a page reads in about three minutes: a two-sentence
+ * answer, a glance box, a few short sections, the document's outline and a
+ * short FAQ. In words, after citation markers are stripped. Before these
+ * budgets (2026-10-02) the agent-written pages ran 1,500-2,000 words with
+ * seven sections each, much of it rule history.
+ */
+export const PAGE_BUDGET = {
+  answer: 60,
+  glanceRows: 5,
+  glanceValue: 16,
+  sections: 4,
+  paragraphsPerSection: 2,
+  paragraph: 70,
+  bullets: 6,
+  bullet: 18,
+  outlineItems: 9,
+  outlineDetail: 25,
+  faq: 4,
+  faqAnswer: 50,
+  total: 900,
+} as const;
+
+/** Every way a page breaks PAGE_BUDGET, as readable lines. */
+export const budgetViolations = (page: GuideEntry): string[] => {
+  const b = PAGE_BUDGET;
+  const out: string[] = [];
+  const over = (what: string, n: number, max: number) => {
+    if (n > max) out.push(`${page.path} ${what}: ${n} > ${max}`);
+  };
+  over("answer words", words(page.answer), b.answer);
+  over("glance rows", page.glance.length, b.glanceRows);
+  page.glance.forEach((row) =>
+    over(`glance "${row.label}" words`, words(row.value), b.glanceValue),
+  );
+  over("sections", page.sections.length, b.sections);
+  page.sections.forEach((section) => {
+    over(
+      `"${section.heading}" paragraphs`,
+      section.paragraphs.length,
+      b.paragraphsPerSection,
+    );
+    section.paragraphs.forEach((text, i) =>
+      over(
+        `"${section.heading}" paragraph ${i + 1} words`,
+        words(text),
+        b.paragraph,
+      ),
+    );
+    over(
+      `"${section.heading}" bullets`,
+      section.bullets?.length ?? 0,
+      b.bullets,
+    );
+    (section.bullets ?? []).forEach((text, i) =>
+      over(`"${section.heading}" bullet ${i + 1} words`, words(text), b.bullet),
+    );
+  });
+  over("outline items", page.outline.items.length, b.outlineItems);
+  page.outline.items.forEach((item) =>
+    over(`outline "${item.title}" words`, words(item.detail), b.outlineDetail),
+  );
+  over("FAQ items", page.faq.length, b.faq);
+  page.faq.forEach((item) =>
+    over(`FAQ "${item.question}" words`, words(item.answer), b.faqAnswer),
+  );
+  const total =
+    words(page.answer) +
+    page.glance.reduce((n, row) => n + words(row.value), 0) +
+    page.sections.reduce(
+      (n, section) =>
+        n +
+        [...section.paragraphs, ...(section.bullets ?? [])].reduce(
+          (m, text) => m + words(text),
+          0,
+        ),
+      0,
+    ) +
+    words(page.outline.intro) +
+    page.outline.items.reduce((n, item) => n + words(item.detail), 0) +
+    page.faq.reduce((n, item) => n + words(item.answer), 0);
+  over("total words", total, b.total);
+  return out;
+};
+
 describe("guide pages", () => {
   it("has content for every registered path, each a /for/<slug> served by one route", () => {
     expect(GUIDES.map((page) => page.path)).toEqual([...GUIDE_PATHS]);
@@ -133,6 +221,10 @@ describe("guide pages", () => {
         });
       });
     });
+  });
+
+  it("keeps every page within its reading budget", () => {
+    expect(GUIDES.flatMap(budgetViolations)).toEqual([]);
   });
 
   it("gives every page five hero examples whose pills and headings are distinct", () => {

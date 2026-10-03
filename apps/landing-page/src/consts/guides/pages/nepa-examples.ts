@@ -1,10 +1,9 @@
 import type { GuidePath } from "../paths";
 // /for/nepa-examples. Reused source keys: eisEpaDatabase, eisEpaCopy,
 // eisNoa20260925, eisDoeEisList, eisBlmEplanning
-// (pages/environmental-impact-statement.ts); doeEaList (pages/doe-nepa.ts); exCeqanet (pages/ceqa-exemptions.ts);
-// eirCeqanetSearch (pages/ceqa-eir.ts); ceqIfr, ceqFinal, ceqProcedures,
-// usdaFinal, doiFinal, usda1b4, usda1b5, usc4336a, usc4336e, doeProcedures
-// (shared NEPA sources).
+// (pages/environmental-impact-statement.ts); doeEaList (pages/doe-nepa.ts);
+// exCeqanet (pages/ceqa-exemptions.ts); ceqIfr, ceqProcedures, usdaFinal,
+// usda1b4, usda1b5, usc4336a, usc4336e, doeProcedures (shared NEPA sources).
 import type { GuideEntry, Source } from "../types";
 
 const READ = "2026-10-02";
@@ -108,19 +107,19 @@ export const entry: GuideEntry<GuidePath> = {
     "categorical exclusion examples",
     "environmental impact statement examples",
   ],
-  document: "NEPA Document",
+  document: "EA Modeled on a Precedent",
   answer:
-    "EIS examples, like examples of environmental assessments and categorical exclusion records, are the NEPA documents agencies publish for real projects. EISs are filed with EPA, whose database holds every EIS received since 1987 and the PDFs since October 2012 [[eisEpaDatabase]]. EAs and CE records stay with the agency that prepared them, on sites such as BLM's National NEPA Register [[eisBlmEplanning]], Forest Service project pages [[ex2FsTrail]] and the Park Service's PEPC [[ex2NpsPepc]]. The most useful precedent comes from the same agency, for the same kind of action, under the procedures now in force [[ceqProcedures]].",
+    "EIS examples are environmental impact statements agencies have filed for real projects; planners use them, along with environmental assessments (EAs) and categorical exclusion (CE) records, as models for new NEPA documents. EPA's database holds the EISs [[eisEpaDatabase]]; EAs and CE records stay on the preparing agency's site [[eisBlmEplanning]].",
   glance: [
     {
       label: "EISs",
       value:
-        "EPA's EIS database: records since 1987, PDFs since October 2012 [[eisEpaDatabase]]",
+        "EPA's EIS database (records since 1987, PDFs since October 2012) and agency lists such as DOE's [[eisEpaDatabase]] [[eisDoeEisList]]",
     },
     {
       label: "EAs and CE records",
       value:
-        "The preparing agency's site, such as BLM's National NEPA Register [[eisBlmEplanning]]",
+        "BLM's National NEPA Register, Forest Service project pages, the Park Service's PEPC, DOE's EA list [[eisBlmEplanning]] [[ex2FsTrail]] [[ex2NpsPepc]] [[doeEaList]]",
     },
     {
       label: "Newest EISs",
@@ -128,19 +127,19 @@ export const entry: GuideEntry<GuidePath> = {
         "EPA's weekly notice of availability in the Federal Register [[eisNoa20260925]]",
     },
     {
-      label: "California",
-      value:
-        "CEQAnet also carries some NEPA documents sent to the State Clearinghouse [[exCeqanet]]",
-    },
-    {
       label: "Older EISs",
       value:
         "Northwestern University's Transportation Library holds nearly all federal EISs since 1969 [[eisEpaCopy]]",
     },
+    {
+      label: "California",
+      value:
+        "CEQAnet also carries some NEPA documents sent to the State Clearinghouse [[exCeqanet]]",
+    },
   ],
   hero: {
     prefix: "Draft",
-    placeholder: "I need a precedent to model my NEPA document on for…",
+    placeholder: "I'm drafting an EA and need a precedent to model it on for…",
     examples: [
       {
         emoji: "🔥",
@@ -152,11 +151,11 @@ export const entry: GuideEntry<GuidePath> = {
       },
       {
         emoji: "🥾",
-        label: "Trail CE Memo",
-        heading: "a CE Memo Modeled on a Trail Precedent",
-        eyebrow: "TRAIL REPAIR",
+        label: "Trail EA",
+        heading: "an EA Modeled on a Trail Precedent",
+        eyebrow: "TRAIL CONSTRUCTION",
         prompt:
-          "I'm a recreation planner on a national forest in western North Carolina documenting a categorical exclusion to rebuild 6 miles of storm-damaged trail and two footbridges.",
+          "I'm a recreation planner on a national forest in western North Carolina drafting an EA for 14 miles of new mountain bike trail and a trailhead, and I want to follow a recent trail EA.",
       },
       {
         emoji: "🛣️",
@@ -168,11 +167,11 @@ export const entry: GuideEntry<GuidePath> = {
       },
       {
         emoji: "⚡",
-        label: "Transmission EIS",
-        heading: "an EIS Outline From a Transmission EIS",
+        label: "Transmission EA",
+        heading: "an EA Modeled on a Transmission Precedent",
         eyebrow: "ENERGY TRANSMISSION",
         prompt:
-          "I'm a BLM project manager in Wyoming outlining an EIS on a right-of-way application for a 280-mile, 500-kV transmission line across public and private land.",
+          "I'm a BLM project manager in Wyoming drafting an EA on a right-of-way application for a 25-mile, 230-kV transmission line across public land, and I want a recent transmission EA to follow.",
       },
       {
         emoji: "🏜️",
@@ -186,7 +185,7 @@ export const entry: GuideEntry<GuidePath> = {
   },
   draft: {
     description:
-      "Describe the project and ePlan finds an analog project, then drafts the NEPA document following the precedent's structure with your facts in place; every fact it can't confirm is marked for you.",
+      "Describe the project and ePlan finds an analog project, then drafts the EA following the precedent's structure with your facts in place; every fact it can't confirm is marked for you.",
     mock: {
       project: "9,000-acre watershed fuels project",
       documentTitle:
@@ -239,80 +238,52 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   sections: [
     {
-      heading: "Where to find NEPA examples by document type",
-      paragraphs: [
-        "Each kind of NEPA document lives somewhere different. EPA's database covers EISs only [[eisEpaDatabase]]; EAs, findings of no significant impact (FONSIs) and categorical exclusion records are published by the agency that wrote them.",
-      ],
-      bullets: [
-        "EISs and EPA comment letters: EPA's EIS database, searchable by title, agency, state and date [[eisEpaDatabase]]",
-        "BLM: the National NEPA Register (ePlanning), searchable by project name, NEPA number and keyword [[eisBlmEplanning]]",
-        "Forest Service: each forest's project pages, which show the analysis type, milestones, the decision date and the documents [[ex2FsTrail]] [[ex2FsFuels]]",
-        "National Park Service: the PEPC site, with a document list for each project [[ex2NpsPepc]]",
-        "Department of Energy: EIS and EA lists filterable by DOE office and topic [[eisDoeEisList]] [[doeEaList]]",
-        "Highway projects: the state DOT's NEPA project pages, such as Iowa DOT's [[ex2IowaHinton]]",
-        "California: CEQAnet, which also holds some federal NEPA documents [[exCeqanet]]",
-      ],
-    },
-    {
       heading: "Environmental impact statement examples (2024 to 2026)",
       paragraphs: [
-        "Three recent EISs, from three agencies. Where a record of decision has been issued, read it with the final EIS: the precedent is the analysis and the decision together.",
+        "Read a final EIS with its record of decision: the precedent is the analysis and the decision together.",
       ],
       bullets: [
-        "Transmission line, EIS and record of decision: BLM's Greenlink West Transmission Project in Nevada, a 472-mile line. The record of decision was signed September 9, 2024, and also covers decisions by the National Park Service, Bureau of Indian Affairs and DOE's National Nuclear Security Administration [[ex2GreenlinkRod]]",
-        "Solar and battery storage, draft EIS: the Tennessee Valley Authority's Hope Solar and Storage Project in Mississippi, EIS No. 20260126, in EPA's September 25, 2026 notice [[eisNoa20260925]]",
-        "Military basing, final EIS: the Air Force's F-35A Lightning II Formal Training Unit at Kingsley Field Air National Guard Base in Klamath Falls, Oregon, EIS No. 20260127, in the same notice [[eisNoa20260925]]",
+        "Transmission line: BLM's Greenlink West in Nevada, a 472-mile line; record of decision signed September 9, 2024 [[ex2GreenlinkRod]]",
+        "Solar and storage, draft EIS: TVA's Hope Solar and Storage Project in Mississippi, EIS No. 20260126 [[eisNoa20260925]]",
+        "Military basing, final EIS: the Air Force's F-35A training unit at Kingsley Field, Oregon, EIS No. 20260127 [[eisNoa20260925]]",
       ],
     },
     {
       heading: "Environmental assessment examples with a FONSI",
       paragraphs: [
-        "Four EAs from 2025, from four agencies. Read each EA with its FONSI: FTA's Valley Link FONSI, for example, incorporates the EA by reference [[ex2ValleyLinkFonsi]].",
+        "Read each EA with its finding of no significant impact (FONSI); FTA's Valley Link FONSI, for example, incorporates the EA by reference [[ex2ValleyLinkFonsi]].",
       ],
       bullets: [
-        "Forest fuels: the Forest Service's Baker City Watershed Fuels Management Project in Oregon. The decision notice, signed June 6, 2025, rests on the EA and FONSI and authorizes commercial thinning on 2,665 acres and prescribed burning of activity fuels on 22,477 acres [[ex2FsFuels]] [[ex2FsFuelsDn]]",
-        "Park road: the Park Service's rehabilitation of about 42 miles of Kelso-Cima and South Kelbaker Roads in Mojave National Preserve, California, with FHWA as a cooperating agency. The FONSI was signed July 18, 2025 [[ex2NpsPepc]] [[ex2MojaveFonsi]]",
-        "Highway: FHWA and Iowa DOT's U.S. 75 in Hinton Project, about 0.7 mile rebuilt as a four-lane divided highway. FHWA signed the FONSI and Individual Section 4(f) document November 4, 2025 [[ex2IowaHinton]] [[ex2IowaHintonFonsi]]",
-        "Passenger rail: the Federal Transit Administration's FONSI for the Valley Link Rail Project, 22 miles from the Dublin/Pleasanton BART station to Mountain House, dated May 2025 and posted to CEQAnet June 4, 2025 [[ex2ValleyLink]] [[ex2ValleyLinkFonsi]]",
+        "Forest fuels: the Forest Service's Baker City Watershed Fuels project in Oregon; decision notice signed June 6, 2025 [[ex2FsFuels]] [[ex2FsFuelsDn]]",
+        "Park road: Park Service rehabilitation of about 42 miles of Mojave National Preserve roads; FONSI July 18, 2025 [[ex2NpsPepc]] [[ex2MojaveFonsi]]",
+        "Highway: FHWA and Iowa DOT's U.S. 75 in Hinton, a 0.7-mile four-lane rebuild; FONSI November 4, 2025 [[ex2IowaHinton]] [[ex2IowaHintonFonsi]]",
+        "Passenger rail: FTA's Valley Link FONSI, 22 miles from Dublin/Pleasanton BART to Mountain House, May 2025 [[ex2ValleyLink]] [[ex2ValleyLinkFonsi]]",
       ],
     },
     {
       heading: "Categorical exclusion examples: decision memos and CE records",
       paragraphs: [
-        "On the George Washington and Jefferson National Forests, the Virginia Creeper National Recreation Trail Reconstruction Project covers 17 miles of trail damaged by Hurricane Helene. Its decision memo was signed February 21, 2025, under the trail construction and reconstruction category then at 36 CFR 220.6(e)(1) [[ex2FsTrail]].",
-        "That category now sits at 7 CFR 1b.4(d)(26) [[usda1b4]]. USDA's April 2026 rule moved the Forest Service's categories into 7 CFR part 1b and dropped Forest Service terms such as decision memo; the categories that need documentation did not change [[usdaFinal]]. DOE posts its CE determinations for actions in appendix B online, generally within two weeks [[doeProcedures]]. Many CEs need no written record at all; USDA lists those separately [[usda1b4]], so expect fewer published examples than for EAs.",
+        "The Forest Service's decision memo for rebuilding 17 miles of the Virginia Creeper Trail after Hurricane Helene, signed February 21, 2025, used the trail construction and reconstruction category [[ex2FsTrail]], now at 7 CFR 1b.4(d)(26) [[usda1b4]]. USDA's April 2026 rule moved Forest Service categories into 7 CFR part 1b and dropped the term decision memo [[usdaFinal]].",
+        "DOE posts its CE determinations for appendix B actions online, generally within two weeks [[doeProcedures]]. Many CEs need no written record at all [[usda1b4]], so expect fewer published examples than for EAs.",
       ],
     },
     {
-      heading: "How to pick a precedent for your project",
+      heading: "NEPA examples: how to pick a precedent for your project",
       paragraphs: [
-        "A precedent is a model for structure and issues, not a source of findings. DOE, for example, may rely on another federal agency's EA or EIS that meets NEPA's standards, and should cite and briefly describe any portion it relies on [[doeProcedures]]. Rank candidates on four things:",
+        "Use a precedent for structure and issues, not findings. Rank candidates by:",
       ],
       bullets: [
-        "Same agency, or one under the same procedures: each agency now sets its own NEPA procedures [[ceqProcedures]]",
+        "Same agency, or one under the same procedures: each agency now sets its own [[ceqProcedures]]",
         "Same action type and scale: a 0.7-mile highway rebuild and a new corridor raise different issues [[ex2IowaHintonFonsi]]",
-        "Same region and resources: the Mojave road project added desert tortoise fencing and crossings designed with the Fish and Wildlife Service [[ex2MojaveFonsi]]",
-        "Recent, and within the 2023 limits: an EA may run 75 pages and an EIS 150, or 300 if extraordinarily complex, not counting citations and appendices [[usc4336a]]",
-      ],
-    },
-    {
-      heading: "Why the date on a NEPA example matters in 2026",
-      paragraphs: [
-        "CEQ's NEPA regulations were removed effective April 11, 2025, and the removal was finalized January 8, 2026 [[ceqIfr]] [[ceqFinal]]. Documents from the transition say which rules they followed. The Park Service's July 2025 Mojave FONSI cites Interior's procedures and CEQ's February 2025 memo telling agencies to keep following CEQ's regulations, since removed, for ongoing reviews [[ex2MojaveFonsi]]. FTA's May 2025 Valley Link FONSI says analysis under the rescinded executive orders and removed CEQ regulations did not inform its finding [[ex2ValleyLinkFonsi]].",
-        "Agencies then finalized new NEPA rules of their own: Interior on February 24, 2026 [[doiFinal]] and USDA on April 3, 2026 [[usdaFinal]]. A November 2025 FHWA FONSI already states that its EA fits the statutory timeline and page limits [[ex2IowaHintonFonsi]]. Use an older document for its structure and issues, then check every cited rule against your agency's current procedures.",
-      ],
-    },
-    {
-      heading: "California: NEPA examples on CEQAnet",
-      paragraphs: [
-        "CEQAnet, the State Clearinghouse database, holds key information on CEQA documents since 1990, and some federal NEPA documents submitted for state review; full text is available since March 2019. It is not complete, because not every document goes to the Clearinghouse [[exCeqanet]]. Its advanced search filters by document type, including environmental assessment, draft EIS, FONSI and joint document [[eirCeqanetSearch]]. FTA's Valley Link FONSI, for example, is posted there with Attachments A through D [[ex2ValleyLink]].",
+        "Same region and resources: the Mojave project added desert tortoise fencing and crossings designed with FWS [[ex2MojaveFonsi]]",
+        "Recent: a November 2025 FHWA FONSI already states its EA fits the statutory timeline and page limits [[ex2IowaHintonFonsi]]",
       ],
     },
   ],
   outline: {
     heading: "EA outline: the sections to carry over from a precedent",
     intro:
-      "Each agency now sets EA contents in its own procedures [[ceqProcedures]]. This outline follows USDA's minimum elements [[usda1b5]]; match your precedent's section order to your agency's list, not the other way round.",
+      "With CEQ's regulations removed in 2025 [[ceqIfr]], each agency sets EA contents in its own procedures [[ceqProcedures]]. This outline follows USDA's minimum elements [[usda1b5]]; match your precedent's order to your agency's list.",
     items: [
       {
         title: "Purpose and need",
@@ -322,7 +293,7 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "No action, proposed action and any alternatives",
         detail:
-          "No action need not be a separate alternative, but its consequences belong in the effects analysis; other alternatives as NEPA requires [[usda1b5]].",
+          "No action need not be a separate alternative, but its consequences belong in the effects analysis [[usda1b5]].",
       },
       {
         title: "Potentially affected environment and impacts",
@@ -336,12 +307,12 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Other environmental reviews",
         detail:
-          "Determinations under other laws, such as the Endangered Species Act and National Historic Preservation Act, which may inform the FONSI [[usda1b5]].",
+          "Determinations under laws such as the Endangered Species Act and National Historic Preservation Act, which may inform the FONSI [[usda1b5]].",
       },
       {
         title: "Page-limit and deadline certification",
         detail:
-          "75 pages of text at most, not counting citations or appendices, finished within one year [[usc4336a]], with the responsible official's certifying statement [[usda1b5]].",
+          "75 pages of text at most, not counting citations or appendices, finished within one year [[usc4336a]], with the responsible official's statement [[usda1b5]].",
       },
       {
         title: "Unique identification number",
@@ -356,34 +327,24 @@ export const entry: GuideEntry<GuidePath> = {
   },
   faq: [
     {
-      question: "What is an example of an environmental impact statement?",
+      question: "How do I find EIS examples for my type of project?",
       answer:
-        "BLM's Greenlink West Transmission Project EIS in Nevada is a recent one: a 472-mile transmission line whose record of decision, signed September 9, 2024, also covered the National Park Service, Bureau of Indian Affairs and DOE's National Nuclear Security Administration. EPA's EIS database lists every EIS filed since 1987.",
-    },
-    {
-      question: "Where can I find environmental assessment examples?",
-      answer:
-        "On the website of the agency that prepared them: BLM's National NEPA Register, Forest Service project pages, the Park Service's PEPC site, DOE's EA list and state DOT project pages. EAs are not filed in EPA's EIS database, which holds EISs.",
-    },
-    {
-      question: "What is an example of a categorical exclusion?",
-      answer:
-        "The Forest Service's February 2025 decision memo for rebuilding 17 miles of the Virginia Creeper Trail after Hurricane Helene used the trail construction and reconstruction category. Each agency lists its categories in its own NEPA procedures; USDA's are now at 7 CFR 1b.4.",
-    },
-    {
-      question: "Can I reuse another agency's NEPA document?",
-      answer:
-        "Sometimes. DOE's procedures, for example, let it rely on another federal agency's EA or EIS that meets NEPA's standards and republish it when the actions are substantially the same. Otherwise, use a precedent as a model for structure and issues, not as a source of findings.",
+        "Filter EPA's EIS database by the agency that does that work and your state, then narrow by title words such as solar, pipeline or highway. DOE's EIS list filters by office and topic, and BLM's National NEPA Register searches by project name and keyword.",
     },
     {
       question: "Are NEPA documents from before 2025 still good examples?",
       answer:
-        "For structure and issues, yes. Check the rules they cite: CEQ's regulations were removed in 2025, Interior, USDA and other agencies issued new procedures in 2026, and documents since the 2023 amendments must meet NEPA's page limits and deadlines.",
+        "For structure and issues, yes. Check the rules they cite: CEQ's regulations were removed in 2025, agencies such as USDA have issued new procedures since, and documents since the 2023 amendments must meet NEPA's page limits and deadlines.",
+    },
+    {
+      question: "Can I reuse another agency's NEPA document?",
+      answer:
+        "Sometimes. DOE's procedures, for example, let it rely on another federal agency's EA or EIS that meets NEPA's standards and republish it when the actions are substantially the same. Otherwise, use a precedent as a model, not as a source of findings.",
     },
     {
       question: "Can ePlan find NEPA examples for my project?",
       answer:
-        "Yes. Its research agent searches agency project pages, CEQAnet, the Federal Register and EPA's EIS database for your project and up to two analog projects, then drafts from the precedent's structure and marks every fact it can't confirm. ePlan is not affiliated with any of those agencies.",
+        "Yes. Its research agent searches agency project pages, CEQAnet, the Federal Register and EPA's EIS database for up to two analog projects, then drafts from the precedent's structure and marks every fact it can't confirm. ePlan is not affiliated with any of those agencies.",
     },
   ],
 };

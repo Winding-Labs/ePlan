@@ -78,12 +78,6 @@ export const sources = {
     "Preparation of environmental documents; independent judgment; State Clearinghouse submission",
     "2022-01-01",
   ),
-  ceqaPrc21083: PRC("21083", "Guidelines; review and adoption", "2005-01-01"),
-  ceqaPrc21084: PRC(
-    "21084",
-    "Classes of projects exempt from CEQA (categorical exemptions)",
-    "2014-01-01",
-  ),
   ceqaPrc21100: PRC(
     "21100",
     "Environmental impact report; required contents",
@@ -167,13 +161,6 @@ export const sources = {
     url: "https://lci.ca.gov/ceqa/guidelines/",
     read: READ,
   },
-  ceqaLciUpdates: {
-    title: "2018 CEQA Guidelines Update",
-    publisher: "Governor's Office of Land Use and Climate Innovation (LCI)",
-    url: "https://lci.ca.gov/ceqa/guidelines/updates/",
-    published: "2018-12-28",
-    read: READ,
-  },
   ceqaLciAbout: {
     title:
       "About the California Office of Land Use and Climate Innovation (LCI)",
@@ -181,24 +168,10 @@ export const sources = {
     url: "https://lci.ca.gov/about/",
     read: READ,
   },
-  ceqaLciNews: {
-    title: "CEQA News",
-    publisher: "Governor's Office of Land Use and Climate Innovation (LCI)",
-    url: "https://lci.ca.gov/ceqa/news/",
-    read: READ,
-  },
   ceqaSch: {
     title: "State Clearinghouse",
     publisher: "Governor's Office of Land Use and Climate Innovation (LCI)",
     url: "https://lci.ca.gov/sch/",
-    read: READ,
-  },
-  ceqaAep2026: {
-    title:
-      "2026 CEQA Statute & Guidelines (unofficial copy as of January 1, 2026), including Changes Made to CEQA Guidelines in 2025",
-    publisher: "Association of Environmental Professionals (AEP)",
-    url: "https://www.califaep.org/docs/CEQA_Handbook_2026_rev031926_Updated.pdf",
-    published: "2026-03",
     read: READ,
   },
 } satisfies Record<string, Source>;
@@ -209,7 +182,7 @@ export const entry: GuideEntry<GuidePath> = {
   name: "CEQA",
   title: "CEQA: California Environmental Quality Act Guide",
   description:
-    "What CEQA is, who it applies to, the CEQA process from exemption to EIR, lead agencies, the CEQA Guidelines and the 2025 AB 130 and SB 131 reforms.",
+    "What CEQA is, who it applies to, the CEQA process and its documents from exemption to EIR, the lead agency, where documents are filed and the Guidelines.",
   eyebrow: "CEQA",
   h1: "CEQA: the California Environmental Quality Act, step by step",
   primaryKeyword: "ceqa",
@@ -224,31 +197,32 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "CEQA Document",
   answer:
-    "CEQA, the California Environmental Quality Act, is the state law at Public Resources Code section 21000 and following [[ceqaPrc21050]] [[ceqaLciStart]]. It applies to discretionary projects that public agencies carry out or approve [[ceqaPrc21080]], from state agencies to cities, counties and special districts [[ceqaPrc21063]], and it directs each agency to avoid or mitigate a project's significant environmental effects whenever feasible [[ceqaPrc21002dot1]]. The lead agency decides whether a project is exempt or needs a negative declaration, a mitigated negative declaration or an environmental impact report (EIR) [[ceqaPrc21080dot1]].",
+    "CEQA, the California Environmental Quality Act, requires state and local agencies to avoid or mitigate, whenever feasible, the significant environmental effects of discretionary projects they carry out or approve [[ceqaPrc21050]] [[ceqaPrc21080]] [[ceqaPrc21063]] [[ceqaPrc21002dot1]]. The lead agency decides whether a project is exempt or needs a negative declaration, a mitigated negative declaration or an environmental impact report (EIR) [[ceqaPrc21080dot1]].",
   glance: [
     {
       label: "Legal basis",
-      value: "Public Resources Code § 21000 and following [[ceqaLciStart]]",
-    },
-    {
-      label: "Regulations",
       value:
-        "CEQA Guidelines, 14 CCR § 15000 and following [[ceqaLciGuidelines]]",
+        "Public Resources Code § 21000 and following; CEQA Guidelines, 14 CCR § 15000 and following [[ceqaLciStart]] [[ceqaLciGuidelines]] [[ceqaGuide15000]]",
     },
-    {
-      label: "Applies to",
-      value: "Discretionary projects of public agencies [[ceqaPrc21080]]",
-    },
-    { label: "Decided by", value: "The lead agency [[ceqaPrc21080dot1]]" },
     {
       label: "Filed with",
       value:
         "The State Clearinghouse (CEQAnet) and the county clerk [[ceqaPrc21152]] [[ceqaSch]]",
     },
     {
+      label: "Deadline",
+      value:
+        "Private projects: EIR within one year, negative declaration within 180 days of a complete application [[ceqaGuide15108]] [[ceqaGuide15107]] [[ceqaPrc21151dot5]]",
+    },
+    {
       label: "Typical length",
       value:
         "Draft EIR text normally under 150 pages, or 300 if unusually complex [[ceqaGuide15141]]",
+    },
+    {
+      label: "2025 CEQA reform",
+      value:
+        "AB 130 and SB 131 added exemptions for infill housing, wildfire risk reduction and more [[ceqaAb130]] [[ceqaPrc21080dot66]] [[ceqaSb131]]",
     },
   ],
   hero: {
@@ -347,98 +321,69 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "What is CEQA, and who does it apply to?",
       paragraphs: [
-        "CEQA is Division 13 of the Public Resources Code [[ceqaPrc21050]]. It applies to discretionary projects that public agencies carry out or approve, such as zoning changes, conditional use permits and tentative subdivision maps, unless an exemption applies; ministerial projects and emergency repairs are among the activities it excludes [[ceqaPrc21080]].",
-        "A project is an activity that may cause a direct, or reasonably foreseeable indirect, physical change in the environment and that an agency undertakes, funds or permits [[ceqaPrc21065]]. Private action is subject to CEQA only when it involves government participation, financing or approval [[ceqaGuide15002]].",
-        "The Legislature's policy is that agencies should not approve projects as proposed if feasible alternatives or mitigation measures would substantially lessen their significant effects [[ceqaPrc21002]]. No agency enforces CEQA, LCI included; it is enforced through litigation [[ceqaLciStart]]. A suit must be filed within 30 days after a notice of determination, 35 days after a notice of exemption, or 180 days if no notice of exemption was filed [[ceqaPrc21167]].",
+        "CEQA applies to projects: activities an agency carries out, funds or permits that may cause a direct, or reasonably foreseeable indirect, physical change in the environment [[ceqaPrc21065]]. That covers discretionary approvals such as zoning changes, conditional use permits and tentative subdivision maps, but not ministerial projects or emergency repairs [[ceqaPrc21080]]. Private development is covered only when it needs government approval, permits or funding [[ceqaGuide15002]].",
       ],
     },
     {
       heading: "The CEQA process in three steps",
       paragraphs: [
-        "The Guidelines describe up to three steps [[ceqaGuide15002]]. First, the lead agency decides whether the project is exempt, by statute or under a categorical exemption class [[ceqaGuide15061]]; those classes are listed in the Guidelines after the Secretary of the Natural Resources Agency finds they do not have a significant effect [[ceqaPrc21084]] [[ceqaGuide15300]]. If the project is exempt, the process stops, and the agency may file a notice of exemption after approval [[ceqaGuide15062]].",
-        "Second, the agency prepares an initial study [[ceqaGuide15063]]. If there is no substantial evidence that the project may have a significant effect, it adopts a negative declaration; if revisions the applicant agrees to would clearly avoid the effects, a mitigated negative declaration. Third, if substantial evidence shows the project may have a significant effect, it prepares an EIR [[ceqaPrc21080]].",
-        "Public review runs at least 20 days for a proposed negative declaration, or 30 when sent to the State Clearinghouse, and 30 to 60 days for a draft EIR, normally at least 45 through the Clearinghouse [[ceqaGuide15105]]. For a private project, the EIR is due within one year and a negative declaration within 180 days of accepting the application as complete [[ceqaGuide15108]] [[ceqaGuide15107]] [[ceqaPrc21151dot5]].",
+        "First, the lead agency checks whether a statutory or categorical exemption applies; if one does, review stops [[ceqaGuide15061]] [[ceqaGuide15300]] [[ceqaGuide15002]]. Second, it prepares an initial study [[ceqaGuide15063]]. Third, it prepares an EIR if substantial evidence shows the project may have a significant effect; otherwise it adopts a negative declaration, or a mitigated negative declaration when revisions the applicant agrees to clearly avoid the effects [[ceqaPrc21080]].",
       ],
     },
     {
       heading: "Who is the CEQA lead agency?",
       paragraphs: [
-        "The lead agency is the public agency with principal responsibility for carrying out or approving the project [[ceqaPrc21067]]. An agency that carries out its own project is the lead; for a private project, it is the agency with the greatest responsibility for supervising or approving the project as a whole, normally a city or county rather than a single-purpose district [[ceqaGuide15051]]. Its choice of exemption, negative declaration or EIR is final for everyone, including responsible agencies, unless challenged in court [[ceqaPrc21080dot1]].",
-        "Responsible agencies are the other public agencies with discretionary approval power over the project [[ceqaGuide15381]], and each considers only the effects of the activities it is required by law to carry out or approve [[ceqaPrc21002dot1]]. Trustee agencies have jurisdiction over natural resources held in trust for Californians, such as the State Lands Commission for state sovereign lands and State Parks for the state park system [[ceqaGuide15386]].",
-        "The lead agency must independently review every negative declaration and EIR, including any prepared under contract, and find that it reflects its own independent judgment [[ceqaPrc21082dot1]]. Before releasing a negative declaration or EIR, it must begin consultation with any traditionally and culturally affiliated California Native American tribe that asked in writing to be notified and then requests consultation within 30 days [[ceqaPrc21080dot3dot1]].",
+        "The lead agency has principal responsibility for carrying out or approving the project [[ceqaPrc21067]]: the agency running its own project or, for a private project, the one with the greatest responsibility for approving it as a whole, normally a city or county [[ceqaGuide15051]]. Its choice of document is final, including for responsible agencies, unless challenged in court [[ceqaPrc21080dot1]].",
+        "Responsible agencies hold other discretionary approvals over the project [[ceqaGuide15381]]; trustee agencies, such as the State Lands Commission, hold natural resources in trust for Californians [[ceqaGuide15386]]. The lead agency must independently review every negative declaration and EIR, including any a contractor prepares [[ceqaPrc21082dot1]]. Before releasing either, it must begin consultation with any affiliated California Native American tribe that asked in writing to be notified and then requests it [[ceqaPrc21080dot3dot1]].",
       ],
     },
     {
-      heading: "What are the CEQA Guidelines?",
+      heading: "Where are CEQA documents filed?",
       paragraphs: [
-        "The CEQA Guidelines are the regulations implementing the statute, at Title 14, Division 6, Chapter 3 of the California Code of Regulations [[ceqaLciGuidelines]], and they are binding on all public agencies in California [[ceqaGuide15000]]. The Governor's Office of Land Use and Climate Innovation (LCI), the Office of Planning and Research until it was renamed on July 1, 2024 [[ceqaLciAbout]], develops them with the Natural Resources Agency [[ceqaLciStart]].",
-        "The statute has the office review the Guidelines at least once every two years and recommend changes, which the Secretary of the Natural Resources Agency adopts [[ceqaPrc21083]]. The most recent comprehensive update LCI lists took effect December 28, 2018 [[ceqaLciUpdates]], and the Association of Environmental Professionals' 2026 edition reports no changes to the Guidelines in 2025 [[ceqaAep2026]]. SB 131 requires the Guidelines for streamlined infill review to be updated by January 1, 2027, and at least every two years after that [[ceqaSb131]].",
-      ],
-    },
-    {
-      heading:
-        "Where are CEQA documents filed? The State Clearinghouse and CEQAnet",
-      paragraphs: [
-        "The lead agency submits draft EIRs and proposed negative declarations electronically to the State Clearinghouse and posts them on its own website [[ceqaPrc21082dot1]]. The Clearinghouse, a division of LCI, distributes documents to state agencies for review, and its CEQAnet database holds the documents and notices it has received since 1980 [[ceqaSch]]. Documents are submitted through CEQA Submit for publication on CEQAnet [[ceqaLciStart]].",
-        "After approving a project, a local agency files a notice of determination within five working days with the county clerk and the State Clearinghouse, and may file a notice of exemption with both [[ceqaPrc21152]]. A state agency files its notices electronically with LCI [[ceqaPrc21108]] [[ceqaLciAbout]]. Those filings start the short periods for lawsuits [[ceqaPrc21167]].",
-      ],
-    },
-    {
-      heading: "CEQA reform in 2025: what AB 130 and SB 131 changed",
-      paragraphs: [
-        "The Governor signed AB 130 (Chapter 22) and SB 131 (Chapter 24) on June 30, 2025; both took effect immediately [[ceqaAb130]] [[ceqaSb131]]. AB 130 exempts housing development projects on sites of up to 20 acres (4 for builder's remedy projects) in a city or Census urban area that meet conditions on prior urban use, plan and zoning consistency, density, historic structures, tribal consultation and contamination [[ceqaPrc21080dot66]]. It also lets a lead agency mitigate a significant transportation impact by helping fund housing [[ceqaAb130]], under guidance LCI has published [[ceqaLciNews]].",
-        "SB 131 limits review of a housing development project that would be exempt but for a single condition to the effects of that condition, with no alternatives or growth-inducing analysis required in an EIR; the limit does not cover distribution centers, oil and gas infrastructure or natural and protected lands. SB 158 amended this provision and the AB 130 exemption in October 2025 [[ceqaPrc21080dot1]] [[ceqaPrc21080dot66]].",
-        "SB 131 also removes staff notes and internal agency communications from the record in CEQA lawsuits, except for distribution center and oil and gas projects, has LCI map eligible urban infill sites by July 1, 2027, and adds statutory exemptions, among them [[ceqaSb131]]:",
-      ],
-      bullets: [
-        "Rezonings that implement the schedule of actions in an approved housing element",
-        "Wildfire risk reduction projects, such as prescribed fire, defensible space clearance and fuel breaks",
-        "New agricultural employee housing and repair or maintenance of existing farmworker housing",
-        "Day care centers, rural health clinics and federally qualified health centers, food banks and advanced manufacturing facilities, outside natural and protected lands",
-        "Park and nonmotorized trail projects funded by the Safe Drinking Water, Wildfire Prevention, Drought Preparedness, and Clean Air Bond Act of 2024",
-        "High-speed rail maintenance facilities and passenger stations that meet set conditions",
+        "Draft EIRs and proposed negative declarations go electronically to the State Clearinghouse, through CEQA Submit, and on the lead agency's website [[ceqaPrc21082dot1]] [[ceqaLciStart]]. The Clearinghouse, part of LCI, circulates them to state agencies, and its CEQAnet database holds documents and notices received since 1980 [[ceqaSch]].",
+        "A state agency files its notices with LCI rather than the county clerk [[ceqaPrc21108]] [[ceqaLciAbout]]. No agency enforces CEQA; lawsuits do [[ceqaLciStart]], and they must be filed within 30 days of a notice of determination, 35 days of a notice of exemption, or 180 days if no notice was filed [[ceqaPrc21167]].",
       ],
     },
   ],
   outline: {
     heading: "CEQA documents, in order",
     intro:
-      "The documents a CEQA review can produce, in the order of the Guidelines' three steps [[ceqaGuide15002]]. Many projects stop at the first or second step; the guides to CEQA exemptions, the initial study and the environmental impact report go deeper, and the CEQA and NEPA guide covers projects with federal involvement.",
+      "The documents a CEQA review can produce, following the three steps [[ceqaGuide15002]]. Many projects stop at the first or second step. [CEQA exemptions](/for/ceqa-exemptions), the [initial study](/for/ceqa-initial-study) and the [EIR](/for/ceqa-environmental-impact-report) each have their own guide.",
     items: [
       {
         title: "Notice of exemption",
         detail:
-          "Filed, if at all, after approval: the project and its location, the exemption relied on with its citation, and a brief statement of reasons [[ceqaGuide15062]].",
+          "Optional, filed after approval: the project and its location, the exemption relied on and a brief statement of reasons [[ceqaGuide15062]].",
       },
       {
         title: "Initial study",
         detail:
-          "In brief form: the project and its location, the setting, a checklist of effects with short explanations, mitigation, consistency with zoning and plans, and who prepared it [[ceqaGuide15063]].",
+          "The project and setting, a checklist of effects with brief explanations, mitigation, consistency with zoning and plans, and the preparers [[ceqaGuide15063]].",
       },
       {
         title: "Negative declaration or mitigated negative declaration",
         detail:
-          "Adopted when there is no substantial evidence of a significant effect, or when agreed project revisions clearly avoid it [[ceqaPrc21080]]; public review of at least 20 days, or 30 through the State Clearinghouse [[ceqaGuide15105]].",
+          "Circulated for public review of at least 20 days, or 30 through the State Clearinghouse, before the agency adopts it [[ceqaGuide15105]].",
       },
       {
         title: "Notice of preparation",
         detail:
-          "Sent once an EIR is required to the Office of Planning and Research, now LCI [[ceqaLciAbout]], each responsible and trustee agency, and every federal agency involved in approving or funding the project; responsible and trustee agencies have 30 days to say what the EIR must cover [[ceqaGuide15082]].",
+          "Tells LCI and the responsible, trustee and involved federal agencies an EIR is coming; responsible and trustee agencies have 30 days to comment on scope [[ceqaGuide15082]] [[ceqaLciAbout]].",
       },
       {
         title: "Draft EIR",
         detail:
-          "Significant effects, unavoidable and irreversible effects, mitigation measures, alternatives and growth-inducing impact [[ceqaPrc21100]], circulated for 30 to 60 days of public review [[ceqaGuide15105]].",
+          "Significant and unavoidable effects, mitigation measures, alternatives and growth-inducing impact [[ceqaPrc21100]], circulated for 30 to 60 days of public review [[ceqaGuide15105]].",
       },
       {
         title: "Final EIR",
         detail:
-          "The draft or a revision, the comments received, a list of commenters and the lead agency's responses [[ceqaGuide15132]]. The lead agency certifies it before approving the project [[ceqaGuide15090]].",
+          "The draft, the comments, a list of commenters and the lead agency's responses [[ceqaGuide15132]], certified before the project is approved [[ceqaGuide15090]].",
       },
       {
         title: "Findings and statement of overriding considerations",
         detail:
-          "A written finding for each significant effect [[ceqaPrc21081]] [[ceqaGuide15091]], and, for effects that remain, the specific benefits that outweigh them [[ceqaGuide15093]].",
+          "A written finding for each significant effect [[ceqaPrc21081]] [[ceqaGuide15091]] and, for effects that remain, the specific benefits that outweigh them [[ceqaGuide15093]].",
       },
       {
         title: "Mitigation monitoring or reporting program",
@@ -448,36 +393,25 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Notice of determination",
         detail:
-          "Filed within five working days of approval with the county clerk and the State Clearinghouse [[ceqaPrc21152]]; it starts a 30-day period to sue [[ceqaPrc21167]].",
+          "Filed within five working days of approval with the county clerk and the State Clearinghouse [[ceqaPrc21152]]; it starts the 30-day period to sue [[ceqaPrc21167]].",
       },
     ],
   },
   faq: [
     {
-      question: "What is CEQA?",
+      question: "What are the CEQA Guidelines?",
       answer:
-        "The California Environmental Quality Act, Public Resources Code section 21000 and following. It requires state and local agencies to identify the significant environmental effects of the discretionary projects they carry out or approve, and to avoid or mitigate those effects when feasible.",
+        "The regulations that implement CEQA, at Title 14, section 15000 and following, of the California Code of Regulations. They bind every public agency in California and set out the review steps, the categorical exemption classes and what each CEQA document must contain.",
     },
     {
-      question:
-        "What is the difference between a negative declaration and an EIR?",
+      question: "How long does CEQA review take?",
       answer:
-        "A negative declaration is a short statement that a project will not have a significant effect, adopted when an initial study finds no substantial evidence of one. A mitigated negative declaration relies on project revisions that clearly avoid the effects. An EIR is required when substantial evidence shows the project may have a significant effect.",
+        "Public review alone runs at least 20 or 30 days for a negative declaration and 30 to 60 days for a draft EIR. For a private project, the agency must finish a negative declaration within 180 days, and an EIR within one year, of accepting the application as complete.",
     },
     {
       question: "Does CEQA apply to private projects?",
       answer:
-        "Yes, when a private project needs a discretionary permit or approval from a public agency, or public funding. Private action with no government participation, financing or approval is not subject to CEQA, and ministerial permits are not covered.",
-    },
-    {
-      question: "Where are CEQA documents filed?",
-      answer:
-        "Draft EIRs and proposed negative declarations go to the State Clearinghouse, run by the Governor's Office of Land Use and Climate Innovation, which publishes documents on CEQAnet. Local agencies file notices of determination, and may file notices of exemption, with the county clerk and the State Clearinghouse.",
-    },
-    {
-      question: "What did AB 130 and SB 131 change in 2025?",
-      answer:
-        "AB 130 created a CEQA exemption for qualifying infill housing projects on sites of up to 20 acres. SB 131 limited review of housing projects that miss an exemption by a single condition, added exemptions such as wildfire risk reduction projects and rezonings that implement a housing element, and narrowed the record in CEQA lawsuits.",
+        "Yes, when a private project needs a discretionary permit or approval from a public agency, or public funding. Ministerial permits are excluded, and private action with no government participation, financing or approval is outside CEQA.",
     },
     {
       question:

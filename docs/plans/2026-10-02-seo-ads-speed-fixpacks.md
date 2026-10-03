@@ -1,6 +1,6 @@
 # eplan.ai: SEO, ad landing pages and speed, in fix-pack rounds (2026-10-02)
 
-Status: **Round 1 in review as #37** (branch `feat/seo-fixpack-1`, base `develop`; #34 merged 2026-10-02).
+Status: **Round 1 shipped** (#37, released to eplan.ai in #41 on 2026-10-02 with #40). **Round 2 merged** (#43, develop). **Round 3 in review** (`feat/seo-fixpack-3`).
 Builds on `2026-10-02-seo-ads-analytics-audit.md` (technical SEO basics, shipped in
 #34) and `2026-10-02-analytics-master-pattern.md` (tracking, #34). This plan covers
 what those leave open outside the page system, which dash-0b owns (#35/#36): legal
@@ -95,35 +95,60 @@ Each round is one PR (one fix pack). The steps:
 
 ### Round 2: static, cacheable, crawlable HTML + speed
 
-- Root layout (`src/app/layout.tsx`): drop the root `<Suspense fallback>` and stop
-  calling `getSession()`/`cookies()`. The navbar reads the session client-side.
-  - Effects: real 404s from `notFound()`, metadata stays in `<head>` for Googlebot,
-    and the marketing routes prerender so the CDN can cache them.
-  - Keep Suspense only around the `useSearchParams` consumers.
-- `public/_headers`: `/_next/static/*` → `public, max-age=31536000, immutable`, for
-  the landing app and the web app.
-- Move `pat` and `jwt` out of the `turboplan-api-client` barrel into its `./server`
-  entry. That drops the 91 KiB crypto polyfill from every landing page.
-- Sentry `bundleSizeOptimizations` (127 KiB chunk); initialize PostHog when the
-  browser is idle.
-- `src/app/icon.png` (≥ 192 px) + `apple-icon.png`; resize the og image to
-  1200×630 and under 300 KB.
-- Server-render the catalog lists (SWR `fallback`), and generate a dynamic sitemap
-  from the public API.
-- Fix the slug truncation order in `turboplan-utils/src/slug.ts` (cut, then trim),
-  with a migration that renames existing slugs ending in `-` and keeps the old one in
-  `slug_history`. The DOT office link still soft-404s.
-- eplan-53's #39 removes the root `<Suspense>` (real 404s). After it lands, this round
-  moves the session read client-side so marketing pages can be cached.
-- Ask dash-0b, who owns the hero: render the hero H1 visible on first paint.
-  Today `ScrollReveal` server-renders it with `opacity:0`, which is most of the
-  mobile LCP.
+Done (`feat/seo-fixpack-2`):
+- **Root Suspense removed.** eplan-53's #39 did this, so `notFound()` returns real 404s.
+- **Root layout no longer reads the session or `cookies()`.**
+  - `/api/session` decodes the signed cookie (no database), and `ClientSessionProvider` feeds `useSession()` after hydration.
+  - The navbar keeps "Sign In" hidden until the session is known.
+  - `/`, `/for/*`, `/docs/*`, `/privacy` and `/terms` now prerender; `/projects/*` stays dynamic.
+- **OpenNext cache.** It serves prerendered pages from Workers static assets: a read-only incremental cache that `deploy` populates. The catalog's `fetch` revalidation skips it, as it did under the old no-op cache.
+  - Local Worker results: `x-opennext-cache: HIT`, TTFB around 5 ms, real 404s, and `/_next/static/*` served as `public, max-age=31536000, immutable` (`public/_headers` on landing and web).
+- **Hero prerendered.** `HeroUrlParams`, a component that renders nothing, reads `?projectDescription` and `?tryIt` inside its own Suspense. The page-level Suspense on the home page and the guide `#draft` section are gone, so the prerendered HTML carries the H1, the hero and the prompt (home: 27 → 1,157 words).
+- **Hero entrance is CSS** (`.hero-in`) instead of framer-motion's `whileInView`, so the headline doesn't wait for hydration.
+- **`pat` and `jwt` moved off the `turboplan-api-client` root** to `./server`. This drops a 100 KB-gzip crypto polyfill chunk.
+- **Sentry `bundleSizeOptimizations`.** Shared first-load JS went from 190 to 138 kB.
+- **og image** is 1200×630 at 201 KB (was 814 KB), and its size is now declared.
+- **Slug fix plus migration 0003**, from eplan-53's stash. It was dry-run on PGlite (Postgres 16) against: collisions on current and historical slugs, duplicates trimming to the same slug, empty trims, and a second run.
 
-### Round 3: ads ↔ live pages, citation claim, operator steps
+Results (Lighthouse 12, home, DevTools mobile throttling, production → this branch):
+
+| Metric | Production | This branch |
+|---|---|---|
+| Performance score | 51 | 59 |
+| LCP | 23.1 s | 17.0 s |
+| FCP | 6.3 s | 4.1 s |
+| TBT | 270 ms | 130 ms |
+| Speed Index | 9.1 s | 6.8 s |
+| Transferred JS | 1,035 KiB | 481 KiB |
+
+Moved to Round 3:
+- **LCP is now a below-the-fold `ScrollReveal` block** (glass-card copy, showcase). Those sections still start at `opacity: 0` until hydration. Owner: dash-0b's home-v2 components.
+- **Catalog lists** should render on the server, with a dynamic sitemap from the public API.
+- **PostHog init** should wait for idle time (analytics layer; owner: eplan-53).
+- **404 page title** reuses the home title.
+- **Hero eyebrow chip** starts at `opacity: 0`.
+
+### Round 3 (done on `feat/seo-fixpack-3`): reveals without JavaScript, catalog sitemap, 404 title
+
+- `ScrollReveal` is a CSS scroll-driven animation, so content is visible in the HTML and without JS. The hero eyebrow uses `initial={false}`.
+- The sitemap is per-request, adding public orgs, offices, projects and templates (301 URLs on staging data, up from 55).
+- The 404 page has its own title.
+- Lighthouse (home, DevTools mobile, local Worker) compared with Round 2:
+
+  | Metric | Round 2 | Round 3 |
+  |---|---|---|
+  | Performance score | 59 | 63 |
+  | Speed Index | 6.8 s | 4.9 s |
+  | TBT | 130 ms | 110 ms |
+  | LCP | 17.0 s | 17.0 s |
+
+  LCP is unchanged because it is the hero showcase's auto-rotating caption. Each tab's caption paints for the first time as the carousel advances, so lab LCP keeps updating; field LCP stops at the first input. Owner call: start auto-advance only after a scroll or interaction, or accept the lab number.
+
+### Round 4: ads ↔ live pages, citation claim, operator steps
 
 - Re-run the ads ↔ page check (`ads-landing-match`: every ash spec headline against
-  its final URL's live text) on eplan.ai once #36's pages ship, and fix what doesn't
-  match.
+  its final URL's live text) on eplan.ai. dash-0b moved the 27 live ads to `/for/<slug>`
+  on 2026-10-02 (all final URLs 200, the "cites the regulation" descriptions replaced).
 - Decide whether drafts cite the governing regulation. Either add the rule to
   the drafting prompt with an eval on real AI output, or drop the claim
   everywhere.

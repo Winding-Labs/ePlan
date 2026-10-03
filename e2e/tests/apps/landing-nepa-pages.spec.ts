@@ -59,7 +59,9 @@ test.describe("Landing Page - guide pages", () => {
     for (const path of GUIDE_PATHS) {
       expect(xml).toContain(`${path}</loc>`);
     }
-    expect(xml).not.toContain("/templates");
+    // The old top-level /templates pages 308 to /for; catalog project
+    // templates (/projects/<org>/<office>/templates/<slug>) are listed.
+    expect(xml).not.toMatch(/<loc>https?:\/\/[^/]+\/templates/);
   });
 
   test("permanently redirects the moved guide URLs", async ({ request }) => {
@@ -202,6 +204,10 @@ test.describe("Landing Page - guide pages", () => {
     test("an example pill fills the prompt with that project and starts signup", async ({
       page,
     }) => {
+      // The pills auto-scroll, so Playwright's click never sees a stable target
+      // (3/3 timeouts on system Chrome, 2026-10-02). Under reduced motion the
+      // carousel holds still, as it does for a visitor who asked for that.
+      await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto(`${LANDING_URL}/for/nepa-scoping-letter`);
 
       await page

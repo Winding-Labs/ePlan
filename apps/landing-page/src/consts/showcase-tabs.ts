@@ -11,7 +11,7 @@ export const HOME_TABS: Tab[] = [
   {
     label: "Draft NEPA documents",
     description:
-      "Turn a blank page into a structured NEPA document in seconds. We draft scoping letters and decision memos that follow your reference document and mark every detail to confirm.",
+      "Turn a blank page into a structured NEPA document in seconds. We draft scoping letters and decision memos that follow your reference document and mark every detail they can't confirm.",
     type: "draft",
   },
   {
