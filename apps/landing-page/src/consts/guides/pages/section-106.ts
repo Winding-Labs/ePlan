@@ -109,13 +109,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a Section 106 Letter for",
     placeholder: "I'm starting Section 106 consultation for…",
     examples: [
       {
         emoji: "🌉",
         label: "Bridge Work",
-        heading: "Section 106 Letter for Bridge Work",
+        heading: "Bridge Work",
         eyebrow: "BRIDGE REPLACEMENT",
         prompt:
           "I'm a cultural resources specialist at the Iowa DOT starting Section 106 consultation for an FHWA-funded replacement of a 1950s two-lane bridge over a creek in rural Iowa.",
@@ -123,7 +123,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏘️",
         label: "Housing Rehab",
-        heading: "Section 106 Letter for Housing Rehab",
+        heading: "Housing Rehab",
         eyebrow: "AFFORDABLE HOUSING",
         prompt:
           "I'm a housing program manager for a city in Ohio using HUD HOME funds to rehabilitate a 1920s three-story apartment building in a National Register-listed neighborhood.",
@@ -131,7 +131,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌊",
         label: "Levee Repair",
-        heading: "Section 106 Letter for Levee Repair",
+        heading: "Levee Repair",
         eyebrow: "FLOOD PROTECTION",
         prompt:
           "I'm a regulatory project manager at a U.S. Army Corps of Engineers district reviewing a permit for a 2-mile levee repair along a river in Missouri with known archaeological sites nearby.",
@@ -139,7 +139,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "☀️",
         label: "Solar Project",
-        heading: "Section 106 Letter for Solar Project",
+        heading: "Solar Project",
         eyebrow: "RENEWABLE ENERGY",
         prompt:
           "I'm an archaeologist at a BLM field office in Nevada reviewing a right-of-way application for a 3,000-acre solar project on public land near historic trail segments.",
@@ -147,7 +147,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "✈️",
         label: "Runway Extension",
-        heading: "Section 106 Letter for Runway Extension",
+        heading: "Runway Extension",
         eyebrow: "AIRPORT IMPROVEMENT",
         prompt:
           "I'm an environmental planner at a regional airport in Georgia preparing the Section 106 consultation letter for FAA on a 1,500-foot runway extension near a historic farmstead.",

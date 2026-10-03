@@ -135,13 +135,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft",
+    prefix: "Draft an EA Modeled on a",
     placeholder: "I'm drafting an EA and need a precedent to model it on for…",
     examples: [
       {
         emoji: "🔥",
         label: "Fuels EA",
-        heading: "an EA Modeled on a Fuels Precedent",
+        heading: "Fuels Precedent",
         eyebrow: "FOREST FUELS",
         prompt:
           "I'm the NEPA planner on a ranger district in northeast Oregon drafting an EA for thinning and prescribed burning on 9,000 acres around a city's municipal watershed, and I want to follow a recent fuels EA.",
@@ -149,7 +149,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🥾",
         label: "Trail EA",
-        heading: "an EA Modeled on a Trail Precedent",
+        heading: "Trail Precedent",
         eyebrow: "TRAIL CONSTRUCTION",
         prompt:
           "I'm a recreation planner on a national forest in western North Carolina drafting an EA for 14 miles of new mountain bike trail and a trailhead, and I want to follow a recent trail EA.",
@@ -157,7 +157,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🛣️",
         label: "Highway EA",
-        heading: "an EA Modeled on a Highway Precedent",
+        heading: "Highway Precedent",
         eyebrow: "STATE HIGHWAY",
         prompt:
           "I'm an environmental planner at a state DOT drafting an EA with our FHWA division office to widen 3 miles of a two-lane US highway to four lanes through a small town in Nebraska.",
@@ -165,7 +165,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "⚡",
         label: "Transmission EA",
-        heading: "an EA Modeled on a Transmission Precedent",
+        heading: "Transmission Precedent",
         eyebrow: "ENERGY TRANSMISSION",
         prompt:
           "I'm a BLM project manager in Wyoming drafting an EA on a right-of-way application for a 25-mile, 230-kV transmission line across public land, and I want a recent transmission EA to follow.",
@@ -173,7 +173,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏜️",
         label: "Park Road EA",
-        heading: "an EA Modeled on a Park Road Precedent",
+        heading: "Park Road Precedent",
         eyebrow: "NATIONAL PARKS",
         prompt:
           "I'm a compliance specialist at a national park in Utah drafting an EA, with FHWA's Federal Lands office, to rehabilitate 18 miles of paved park road and add two scenic pullouts.",

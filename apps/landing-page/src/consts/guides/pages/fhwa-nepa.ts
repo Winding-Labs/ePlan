@@ -110,13 +110,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a CE Determination for",
     placeholder: "I'm documenting a CE for…",
     examples: [
       {
         emoji: "🚦",
         label: "Signal Upgrade",
-        heading: "CE Determination for a Signal Upgrade",
+        heading: "a Signal Upgrade",
         eyebrow: "TRAFFIC SAFETY",
         prompt:
           "I'm an environmental planner at a state DOT district office documenting a CE for upgrading signals at 14 intersections along a 3-mile urban arterial with federal-aid safety funds.",
@@ -124,7 +124,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌉",
         label: "Bridge Replacement",
-        heading: "CE Determination for Bridge Replacement",
+        heading: "Bridge Replacement",
         eyebrow: "BRIDGE PROGRAM",
         prompt:
           "I'm a consultant to a county highway department replacing a 60-foot single-span bridge over a trout stream on the same alignment, funded through our state DOT's federal-aid bridge program.",
@@ -132,7 +132,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🚲",
         label: "Shared-Use Path",
-        heading: "CE Determination for a Shared-Use Path",
+        heading: "a Shared-Use Path",
         eyebrow: "ACTIVE TRANSPORTATION",
         prompt:
           "I'm a city transportation planner documenting a CE for a 2.4-mile shared-use path along an abandoned rail corridor, funded with a federal-aid grant our state DOT administers.",
@@ -140,7 +140,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🚆",
         label: "Platform Extension",
-        heading: "CE Determination for a Platform Extension",
+        heading: "a Platform Extension",
         eyebrow: "PUBLIC TRANSIT",
         prompt:
           "I'm the environmental manager at a regional transit agency extending four light rail platforms by 90 feet within our existing right-of-way, with FTA capital funds.",
@@ -148,7 +148,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌊",
         label: "Flood Repair",
-        heading: "CE Determination for Flood Repair",
+        heading: "Flood Repair",
         eyebrow: "EMERGENCY REPAIR",
         prompt:
           "I'm a state DOT environmental coordinator documenting a CE to rebuild 1.5 miles of a state highway washed out in a presidentially declared flood, on the same alignment and right-of-way.",

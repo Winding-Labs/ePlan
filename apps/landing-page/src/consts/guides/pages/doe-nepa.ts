@@ -83,13 +83,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a CX Determination for",
     placeholder: "I need a CX determination for…",
     examples: [
       {
         emoji: "☀️",
         label: "Rooftop Solar",
-        heading: "CX Determination for Rooftop Solar",
+        heading: "Rooftop Solar",
         eyebrow: "SOLAR ENERGY",
         prompt:
           "I'm a project officer at a DOE field office reviewing a grant that would put a 250-kW solar array on the roof of a county's existing administration building in Colorado.",
@@ -97,7 +97,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "⚡",
         label: "Line Rebuild",
-        heading: "CX Determination for a Line Rebuild",
+        heading: "a Line Rebuild",
         eyebrow: "POWER TRANSMISSION",
         prompt:
           "I'm the environmental lead at a federal power marketing administration rebuilding 22 miles of an existing 115-kV transmission line within its current right-of-way in eastern Oregon.",
@@ -105,7 +105,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "⚛️",
         label: "Advanced Microreactor",
-        heading: "CX Determination for a Microreactor",
+        heading: "a Microreactor",
         eyebrow: "NUCLEAR ENERGY",
         prompt:
           "I'm a NEPA document manager at a DOE site in Idaho reviewing a proposal to build and operate one advanced microreactor on previously disturbed land inside the site boundary.",
@@ -113,7 +113,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🔌",
         label: "EV Charging",
-        heading: "CX Determination for EV Chargers",
+        heading: "EV Chargers",
         eyebrow: "EV CHARGING",
         prompt:
           "I'm a consultant to a city transit agency in Michigan applying for DOE funds to install 12 DC fast chargers in an existing city-owned parking lot.",
@@ -121,7 +121,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏗️",
         label: "Building Demolition",
-        heading: "CX Determination for Building Demolition",
+        heading: "Building Demolition",
         eyebrow: "SITE CLEANUP",
         prompt:
           "I'm the environmental manager at a DOE cleanup site in Tennessee planning to demolish three vacant 1990s storage buildings and dispose of the debris at an existing permitted landfill.",

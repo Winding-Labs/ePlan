@@ -173,13 +173,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a SEPA Checklist for",
     placeholder: "I'm filling out a SEPA checklist for…",
     examples: [
       {
         emoji: "🏘️",
         label: "Infill Housing",
-        heading: "SEPA Checklist for Infill Housing",
+        heading: "Infill Housing",
         eyebrow: "URBAN HOUSING",
         prompt:
           "I'm a land use consultant preparing the SEPA checklist for a 90-unit apartment building on a 3-acre infill lot in the unincorporated urban growth area of Thurston County.",
@@ -187,7 +187,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🛣️",
         label: "Road Widening",
-        heading: "SEPA Checklist for Road Widening",
+        heading: "Road Widening",
         eyebrow: "CITY STREETS",
         prompt:
           "I'm an engineer with a city public works department in Snohomish County widening a 0.8-mile arterial to add bike lanes, a center turn lane and a stormwater pond.",
@@ -195,7 +195,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏭",
         label: "Industrial Warehouse",
-        heading: "SEPA Checklist for Industrial Warehouse",
+        heading: "Industrial Warehouse",
         eyebrow: "INDUSTRIAL",
         prompt:
           "I'm a consultant for a developer proposing a 250,000-square-foot warehouse with 180 truck and car stalls on 18 acres of former pasture in Pierce County.",
@@ -203,7 +203,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🗺️",
         label: "Code Update",
-        heading: "SEPA Checklist for Zoning Code Update",
+        heading: "Zoning Code Update",
         eyebrow: "NONPROJECT ACTION",
         prompt:
           "I'm a long-range planner at a city in Clark County preparing the nonproject SEPA checklist for zoning code amendments that allow taller mixed-use buildings downtown.",
@@ -211,7 +211,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "💧",
         label: "Water Reservoir",
-        heading: "SEPA Checklist for Water Reservoir",
+        heading: "Water Reservoir",
         eyebrow: "PUBLIC WATER",
         prompt:
           "I'm a project manager at a water district in Kitsap County building a 2-million-gallon steel reservoir and 1,500 feet of transmission main on a forested 2-acre lot.",

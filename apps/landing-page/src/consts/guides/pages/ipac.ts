@@ -84,13 +84,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a Biological Assessment for",
     placeholder: "I'm preparing a biological assessment for…",
     examples: [
       {
         emoji: "🛢️",
         label: "Gas Pipeline",
-        heading: "Biological Assessment for a Pipeline",
+        heading: "a Pipeline",
         eyebrow: "GAS PIPELINE",
         prompt:
           "I'm an environmental consultant for a gas utility preparing the biological assessment for replacing 12 miles of natural gas pipeline in western Pennsylvania that needs an Army Corps Section 404 permit, starting from our IPaC official species list.",
@@ -98,7 +98,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌉",
         label: "Bridge Replacement",
-        heading: "Biological Assessment for a Bridge",
+        heading: "a Bridge",
         eyebrow: "HIGHWAY BRIDGE",
         prompt:
           "I'm a biologist at a state DOT district office preparing a biological assessment for an FHWA-funded replacement of a two-lane bridge over a creek with listed freshwater mussels in Tennessee.",
@@ -106,7 +106,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "☀️",
         label: "Solar Farm",
-        heading: "Biological Assessment for a Solar Farm",
+        heading: "a Solar Farm",
         eyebrow: "RENEWABLE ENERGY",
         prompt:
           "I'm a consultant preparing the biological assessment for a 400-acre solar project on BLM land in southern Nevada within desert tortoise habitat.",
@@ -114,7 +114,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌊",
         label: "Levee Repair",
-        heading: "Biological Assessment for a Levee Repair",
+        heading: "a Levee Repair",
         eyebrow: "FLOOD CONTROL",
         prompt:
           "I'm an environmental planner at an Army Corps of Engineers district drafting the biological assessment for repairing 2 miles of levee along a river in California's Central Valley.",
@@ -122,7 +122,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌲",
         label: "Forest Thinning",
-        heading: "Biological Assessment for Forest Thinning",
+        heading: "Forest Thinning",
         eyebrow: "FOREST MANAGEMENT",
         prompt:
           "I'm a Forest Service wildlife biologist preparing the biological assessment for 1,200 acres of commercial thinning on a national forest in western Oregon with northern spotted owl habitat.",

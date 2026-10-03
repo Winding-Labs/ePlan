@@ -224,13 +224,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Start a",
+    prefix: "Start a CEQA Review for",
     placeholder: "I'm starting CEQA review for…",
     examples: [
       {
         emoji: "🏫",
         label: "School Expansion",
-        heading: "CEQA Review for School Expansion",
+        heading: "School Expansion",
         eyebrow: "SCHOOL FACILITIES",
         prompt:
           "I'm a facilities planner at a unified school district in Fresno County starting CEQA review for adding 12 permanent classrooms to an existing elementary school campus.",
@@ -238,7 +238,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏘️",
         label: "Infill Housing",
-        heading: "CEQA Review for Infill Housing",
+        heading: "Infill Housing",
         eyebrow: "CITY PLANNING",
         prompt:
           "I'm a city planner in Sacramento County reviewing a 60-unit apartment building on a 2-acre infill lot and need to know whether a CEQA exemption applies.",
@@ -246,7 +246,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "💧",
         label: "Water Main",
-        heading: "CEQA Review for Water Main Replacement",
+        heading: "Water Main Replacement",
         eyebrow: "WATER DISTRICT",
         prompt:
           "I'm an environmental planner at a county water district in San Luis Obispo County preparing an initial study for replacing 4 miles of aging water main under existing roads.",
@@ -254,7 +254,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🔥",
         label: "Fuel Break",
-        heading: "CEQA Review for Fuel Break",
+        heading: "Fuel Break",
         eyebrow: "WILDFIRE RISK",
         prompt:
           "I'm a consultant to a fire protection district in Sonoma County preparing the CEQA document for a 300-acre shaded fuel break along a ridgeline road.",
@@ -262,7 +262,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🛣️",
         label: "Road Widening",
-        heading: "CEQA Review for Road Widening",
+        heading: "Road Widening",
         eyebrow: "PUBLIC WORKS",
         prompt:
           "I'm with a county public works department in Riverside County starting the EIR for widening 2 miles of a two-lane county road to four lanes.",

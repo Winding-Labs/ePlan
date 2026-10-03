@@ -133,13 +133,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft an",
+    prefix: "Draft an Initial Study for",
     placeholder: "I'm preparing an initial study for…",
     examples: [
       {
         emoji: "🍇",
         label: "Winery Expansion",
-        heading: "Initial Study for Winery Expansion",
+        heading: "Winery Expansion",
         eyebrow: "COUNTY PLANNING",
         prompt:
           "I'm a senior planner with the Alder County Planning and Building Department preparing an initial study for a winery expanding production to 50,000 cases a year with a new 18,000-square-foot barrel building on a 60-acre vineyard parcel.",
@@ -147,7 +147,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "💧",
         label: "Pipeline Replacement",
-        heading: "Initial Study for Pipeline Replacement",
+        heading: "Pipeline Replacement",
         eyebrow: "WATER DISTRICT",
         prompt:
           "I'm an environmental planner at a California water district preparing an initial study for replacing 2 miles of aging water main within existing road rights-of-way.",
@@ -155,7 +155,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏘️",
         label: "Infill Housing",
-        heading: "Initial Study for Infill Housing",
+        heading: "Infill Housing",
         eyebrow: "CITY PLANNING",
         prompt:
           "I'm a city planner reviewing a 60-unit infill apartment project that misses the AB 130 housing exemption only because it would demolish a locally listed historic building.",
@@ -163,7 +163,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🛣️",
         label: "Shoulder Widening",
-        heading: "Initial Study for Shoulder Widening",
+        heading: "Shoulder Widening",
         eyebrow: "STATE HIGHWAY",
         prompt:
           "I'm an environmental planner at a Caltrans district office preparing an initial study for widening the shoulders along 4 miles of a rural two-lane state highway.",
@@ -171,7 +171,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏫",
         label: "Classroom Building",
-        heading: "Initial Study for a Classroom Building",
+        heading: "a Classroom Building",
         eyebrow: "SCHOOL DISTRICT",
         prompt:
           "I'm a facilities planner at a unified school district preparing an initial study for a two-story classroom building and an 80-space parking lot on an existing high school campus.",

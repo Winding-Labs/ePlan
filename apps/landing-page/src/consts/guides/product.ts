@@ -100,7 +100,7 @@ const nepaSoftware: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft",
+    prefix: "Draft NEPA Documents for",
     placeholder: "I'm working on…",
     examples: PRODUCT_EXAMPLES,
   },
@@ -259,7 +259,7 @@ const compareAiTools: GuideContent<GuidePath> = {
     { label: "Prices", value: "None of the others publishes a price" },
   ],
   hero: {
-    prefix: "Draft",
+    prefix: "Draft NEPA Documents for",
     placeholder: "I'm working on…",
     examples: PRODUCT_EXAMPLES,
   },

@@ -284,6 +284,21 @@ describe("guide pages", () => {
     expect(GUIDES.flatMap(budgetViolations)).toEqual([]);
   });
 
+  // Owner, 2026-10-02: "less words in the animation". The document goes in
+  // the static prefix ("Start a CEQA Review for"); only the project types out.
+  it("animates only the project in the hero, never the document", () => {
+    const long = GUIDES.flatMap((page) =>
+      page.hero.examples
+        .filter(
+          (example) =>
+            / for /.test(example.heading) ||
+            example.heading.split(/\s+/).length > 4,
+        )
+        .map((example) => `${page.path}: ${example.heading}`),
+    );
+    expect(long).toEqual([]);
+  });
+
   it("gives every page five hero examples whose pills and headings are distinct", () => {
     GUIDES.forEach((page) => {
       const { examples } = page.hero;

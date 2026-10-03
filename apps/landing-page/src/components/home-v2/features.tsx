@@ -2,6 +2,7 @@
 
 import { BrainCircuit, ChartGantt, Handshake, Sparkles } from "lucide-react";
 
+import { RESEARCH_COPY, type ResearchFocus } from "@/consts/research-focus";
 import { cn } from "@/lib/utils";
 import { FeatureSection } from "./feature-section";
 import { PAGE_GUTTER, SECTION_Y } from "./ui/layout";
@@ -10,10 +11,9 @@ const FEATURES = [
   {
     badge: "Research",
     badgeIcon: BrainCircuit,
-    heading: "Find the right Categorical Exclusion",
+    heading: RESEARCH_COPY["legal-pathway"].heading,
     headingAccent: "in seconds",
-    description:
-      "Automatically surface relevant project context. Our AI instantly finds the right Categorical Exclusions and references past online documents.",
+    description: RESEARCH_COPY["legal-pathway"].feature,
     visualSrc: "/images/features/research.webp",
     visualAlt: "Smart content research interface",
     beaverSrc: "/images/beavers/beaver_smartcontext.png",
@@ -62,7 +62,13 @@ const FEATURES = [
   },
 ];
 
-export function Features() {
+interface FeaturesProps {
+  /** What the research feature finds; the home page says "legal pathway". */
+  researchFocus?: ResearchFocus;
+}
+
+export function Features({ researchFocus = "legal-pathway" }: FeaturesProps) {
+  const research = RESEARCH_COPY[researchFocus];
   return (
     // Rows are spaced with the shared section rhythm.
     <section
@@ -72,8 +78,14 @@ export function Features() {
         "flex flex-col items-center gap-16 self-stretch sm:gap-20 lg:gap-28",
       )}
     >
-      {FEATURES.map((feature) => (
-        <FeatureSection key={feature.badge} {...feature} />
+      {FEATURES.map((feature, index) => (
+        <FeatureSection
+          key={feature.badge}
+          {...feature}
+          {...(index === 0
+            ? { heading: research.heading, description: research.feature }
+            : {})}
+        />
       ))}
     </section>
   );

@@ -86,13 +86,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft an",
+    prefix: "Draft an FAA EA for",
     placeholder: "I'm preparing an airport EA for…",
     examples: [
       {
         emoji: "✈️",
         label: "Runway Extension",
-        heading: "Airport EA for a Runway Extension",
+        heading: "a Runway Extension",
         eyebrow: "GENERAL AVIATION",
         prompt:
           "I'm the airport manager for a city-owned general aviation airport in rural Montana, and we need an EA for a 1,200-foot extension of our primary runway funded with an AIP grant.",
@@ -100,7 +100,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🛩️",
         label: "New GA Airport",
-        heading: "Airport EA for a New GA Airport",
+        heading: "a New GA Airport",
         eyebrow: "NEW AIRPORT",
         prompt:
           "I'm a consultant to a county in central Texas preparing an EA for a new general aviation airport with one 5,000-foot runway on 300 acres of farmland.",
@@ -108,7 +108,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🗼",
         label: "Control Tower",
-        heading: "Airport EA for a New Control Tower",
+        heading: "a New Control Tower",
         eyebrow: "AIR TRAFFIC FACILITIES",
         prompt:
           "I'm an environmental specialist at an FAA service area office preparing an EA to replace a radar-equipped airport traffic control tower on a new site at a regional airport in Georgia.",
@@ -116,7 +116,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🧭",
         label: "Approach Procedures",
-        heading: "FAA EA for New Approach Procedures",
+        heading: "New Approach Procedures",
         eyebrow: "AIRSPACE",
         prompt:
           "I'm a NEPA specialist in FAA's Air Traffic Organization preparing an EA for new instrument approach procedures that would route jets over residential areas below 3,000 feet near a mid-size airport in Ohio.",
@@ -124,7 +124,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🚀",
         label: "Spaceport License",
-        heading: "FAA EA for a Spaceport License",
+        heading: "a Spaceport License",
         eyebrow: "COMMERCIAL SPACE",
         prompt:
           "I'm an environmental consultant to a municipal airport in New Mexico applying to FAA for a commercial space launch site operator license to launch from the existing airfield.",
