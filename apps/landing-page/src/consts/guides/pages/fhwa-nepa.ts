@@ -70,9 +70,9 @@ export const sources = {
 
 export const entry: GuideContent<GuidePath> = {
   path: "/for/fhwa-nepa",
-  title: "FHWA NEPA: 23 CFR 771 CEs, EAs and EISs",
+  title: "FHWA NEPA: 23 CFR 771.117 CEs, EAs and EISs",
   description:
-    "FHWA NEPA under 23 CFR part 771: FHWA and FTA categorical exclusions, CE agreements, NEPA assignment, EAs and EISs.",
+    "How FHWA NEPA works under 23 CFR part 771: 771.117 categorical exclusions, CE agreements, NEPA assignment, EAs and EISs.",
   eyebrow: "FHWA and FTA",
   h1: "FHWA NEPA: 23 CFR 771 categorical exclusions, EAs and EISs",
   primaryKeyword: "fhwa nepa",

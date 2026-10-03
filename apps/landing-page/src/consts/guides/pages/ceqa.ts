@@ -180,9 +180,9 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/ceqa",
   title: "CEQA: California Environmental Quality Act Guide",
   description:
-    "What CEQA is, who it applies to, its process from exemption to EIR, the lead agency, and where CEQA documents are filed.",
+    "What CEQA is, who it applies to, the CEQA Guidelines process from exemption to EIR, the lead agency, and where CEQA documents go.",
   eyebrow: "CEQA",
-  h1: "CEQA: the California Environmental Quality Act, step by step",
+  h1: "What is CEQA? The California Environmental Quality Act, step by step",
   primaryKeyword: "ceqa",
   secondaryKeywords: [
     "what is ceqa",

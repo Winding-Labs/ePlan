@@ -87,7 +87,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/interior-blm-nepa",
   title: "BLM NEPA: DOI Handbook, CXs, DNAs and ePlanning",
   description:
-    "BLM NEPA in 2026: the DOI NEPA Handbook, what's left of 43 CFR part 46, BLM CXs, DNAs and ePlanning.",
+    "BLM NEPA in 2026: the DOI NEPA Handbook, what's left of 43 CFR part 46, BLM categorical exclusions, DNAs, and ePlanning.",
   eyebrow: "Interior & BLM",
   h1: "BLM NEPA in 2026: the DOI NEPA Handbook, CX records, DNAs and ePlanning",
   primaryKeyword: "blm nepa",

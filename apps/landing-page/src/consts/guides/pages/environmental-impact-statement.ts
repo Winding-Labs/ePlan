@@ -94,7 +94,7 @@ export const sources = {
 
 export const entry: GuideContent<GuidePath> = {
   path: "/for/environmental-impact-statement",
-  title: "Environmental Impact Statement: Steps & Examples",
+  title: "NEPA Environmental Impact Statement (EIS) Guide",
   description:
     "What an environmental impact statement (EIS) means, when NEPA requires one, page limits, the steps to a ROD and real examples.",
   eyebrow: "Environmental impact statement",
@@ -102,7 +102,6 @@ export const entry: GuideContent<GuidePath> = {
   primaryKeyword: "environmental impact statement",
   secondaryKeywords: [
     "what is an environmental impact statement",
-    "environmental impact statement example",
     "record of decision",
     "notice of intent",
     "draft and final EIS",

@@ -32,11 +32,17 @@ export default function GuidesIndex() {
           "@type": "CollectionPage",
           name: "NEPA and CEQA guides",
           url: toAbsoluteUrl("/for"),
-          hasPart: GUIDES.map((guide) => ({
-            "@type": "Article",
-            headline: guide.h1,
-            url: toAbsoluteUrl(guide.path),
-          })),
+          // A list of links, not Articles: an Article node needs an author and
+          // dates, and each guide's own page carries its full Article.
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: GUIDES.map((guide, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: guide.title,
+              url: toAbsoluteUrl(guide.path),
+            })),
+          },
         }}
       />
       <JsonLd

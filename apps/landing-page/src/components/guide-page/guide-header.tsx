@@ -15,6 +15,9 @@ export type Crumb = { name: string; href: string };
 const H1_CLASS =
   "font-heading text-[34px] font-normal leading-[1.1] tracking-[-0.04em] text-balance text-egray-900 md:text-[44px] lg:text-[52px]";
 
+const DRAFT_CTA_CLASS =
+  "btn-primary press h-12 items-center justify-center gap-2 rounded-xl px-6 font-inter text-body-md font-medium";
+
 const LEAD_CLASS =
   "font-inter text-body-md text-egray-800 md:text-[17px] md:leading-[28px]";
 
@@ -68,6 +71,20 @@ export function GuideHeader({
             <h1 className={H1_CLASS}>{page.h1}</h1>
           </div>
 
+          {/* Phones: the draft action right under the H1, inside the first
+              screen (it sat ~800px down, below the answer and benefits, on a
+              664px iPhone screen). From sm up it stays in the pair below. */}
+          <a
+            href="#draft"
+            className={cn(
+              DRAFT_CTA_CLASS,
+              "inline-flex w-full max-w-[420px] sm:hidden",
+            )}
+          >
+            Draft yours with ePlan
+            <ArrowDown className="size-4" aria-hidden="true" />
+          </a>
+
           <div className="flex flex-col gap-3">
             <p className={LEAD_CLASS}>
               <CitedText text={page.answer} numberOf={numberOf} />
@@ -102,7 +119,7 @@ export function GuideHeader({
           <div className="flex w-full max-w-[420px] flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row">
             <a
               href="#draft"
-              className="btn-primary press inline-flex h-12 items-center justify-center gap-2 rounded-xl px-6 font-inter text-body-md font-medium"
+              className={cn(DRAFT_CTA_CLASS, "hidden sm:inline-flex")}
             >
               Draft yours with ePlan
               <ArrowDown className="size-4" aria-hidden="true" />

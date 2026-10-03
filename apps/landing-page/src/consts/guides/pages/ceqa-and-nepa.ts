@@ -76,7 +76,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/ceqa-and-nepa",
   title: "CEQA and NEPA: Joint EIR/EIS and Key Differences",
   description:
-    "When CEQA and NEPA both apply, how the two reviews differ, which documents match, and how to prepare a joint EIR/EIS.",
+    "When CEQA and NEPA both apply to a project, how the two reviews differ, which documents match, and how to prepare a joint EIR/EIS.",
   eyebrow: "CEQA and NEPA",
   h1: "CEQA and NEPA: when both apply and how to prepare one joint document",
   primaryKeyword: "ceqa and nepa",

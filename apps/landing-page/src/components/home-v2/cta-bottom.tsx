@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Sparkles } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import CatalogRequestDialog from "@/components/dialogs/catalog-request-dialog/catalog-request-dialog";
 import {
@@ -54,6 +54,7 @@ interface CtaBottomProps {
 
 export function CtaBottom({ showFooter = true }: CtaBottomProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { captureEvent } = useAnalytics();
   const { displayText, currentIndex } = useTypewriterHeading(CTA_WORDS);
   const prefersReducedMotion = useReducedMotion();
@@ -80,7 +81,7 @@ export function CtaBottom({ showFooter = true }: CtaBottomProps) {
 
   const handleCreateProject = () => {
     captureEvent(events.TRY_IT_CLICKED);
-    router.push(routing.home({ tryIt: "true" }));
+    router.push(routing.tryIt(pathname));
   };
 
   const handleAddToCatalog = () => {

@@ -43,6 +43,9 @@ export const PRODUCTION_ORIGIN = "https://eplan.ai";
 // Lengths Google shows in a result before truncating.
 export const TITLE_MAX_LENGTH = 60;
 export const DESCRIPTION_MAX_LENGTH = 155;
+// Shorter than this and the result shows less than it could (SEOmator
+// core-description-length; 15 guides were 114-119 after the width cut).
+export const DESCRIPTION_MIN_LENGTH = 120;
 
 // Arial advance widths in 1/1000 em: Google renders result snippets in Arial.
 const ARIAL_WIDTHS: Record<string, number> = {
@@ -179,6 +182,20 @@ export const toAbsoluteUrl = (
   }
   return new URL(path, siteUrl).toString();
 };
+
+/**
+ * The one Organization node for structured data. Every place that names ePlan
+ * (home, the WebSite publisher, each guide's author and publisher) uses it, so
+ * they share one absolute @id and crawlers read one entity, not several
+ * (SEOmator schema-entity-id, 2026-10-03).
+ */
+export const organizationJsonLd = () => ({
+  "@type": "Organization",
+  "@id": toAbsoluteUrl("/#organization"),
+  name: brand.name,
+  url: toAbsoluteUrl("/"),
+  logo: toAbsoluteUrl(brand.logo),
+});
 
 /**
  * Complete per-page metadata: title, description, canonical and social cards.

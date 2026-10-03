@@ -69,7 +69,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/section-106",
   title: "Section 106: NHPA Review Steps & 36 CFR 800",
   description:
-    "What Section 106 of the NHPA requires: the 36 CFR part 800 steps, SHPO and tribal consultation, and how it runs with NEPA.",
+    "What Section 106 of the National Historic Preservation Act requires: the 36 CFR part 800 steps, SHPO and tribal consultation.",
   eyebrow: "Section 106",
   h1: "Section 106 review: the NHPA process, step by step",
   primaryKeyword: "section 106",

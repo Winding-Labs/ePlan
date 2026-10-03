@@ -49,7 +49,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/usda-forest-service-nepa",
   title: "Forest Service NEPA: 7 CFR 1b and Decision Memos",
   description:
-    "Forest Service NEPA under USDA's 7 CFR 1b: categorical exclusions, decision memos (FANECs) and 36 CFR 218 objections.",
+    "Forest Service NEPA under USDA's 7 CFR 1b: categorical exclusions, decision memos (FANECs) and the 36 CFR 218 objection process.",
   eyebrow: "Forest Service",
   h1: "Forest Service NEPA under 7 CFR 1b: decision memos, objections and the SOPA",
   primaryKeyword: "forest service nepa",
@@ -59,7 +59,6 @@ export const entry: GuideContent<GuidePath> = {
     "usda nepa regulations",
     "36 cfr 220",
     "usfs nepa",
-    "decision memo",
   ],
   document: "Decision Memo",
   answer:

@@ -31,7 +31,11 @@ import { RESEARCH_COPY, researchFocus } from "@/consts/research-focus";
 import { HOME_TABS } from "@/consts/showcase-tabs";
 import { brand } from "@/lib/brand";
 import { guideLinks, orderCitations, stripCitations } from "@/lib/citations";
-import { buildPageMetadata, toAbsoluteUrl } from "@/lib/seo";
+import {
+  buildPageMetadata,
+  organizationJsonLd,
+  toAbsoluteUrl,
+} from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { CitedText } from "./cited-text";
 import { ComparisonTable } from "./comparison-table";
@@ -189,16 +193,8 @@ export function GuidePage({ path }: GuidePageProps) {
           // Every source was read on this date; the page was written from them.
           datePublished: GUIDE_SOURCES_READ_ON,
           dateModified: GUIDE_SOURCES_READ_ON,
-          author: {
-            "@type": "Organization",
-            name: brand.name,
-            url: toAbsoluteUrl("/"),
-          },
-          publisher: {
-            "@type": "Organization",
-            name: brand.name,
-            logo: { "@type": "ImageObject", url: toAbsoluteUrl(brand.logo) },
-          },
+          author: organizationJsonLd(),
+          publisher: organizationJsonLd(),
           citation: sourceKeys.map((key) => SOURCES[key].url),
         }}
       />

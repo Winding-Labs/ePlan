@@ -94,14 +94,13 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/nepa-examples",
   title: "EIS Examples, EAs and CE Memos to Model On",
   description:
-    "Real EIS, EA and CE decision memo examples from 2024 to 2026, where each is published, and how to pick a precedent.",
+    "Real EIS, EA and CE decision memo examples from 2024 to 2026, where each one is published, and how to pick your precedent.",
   eyebrow: "NEPA examples",
   h1: "EIS examples, environmental assessments and CE records: real NEPA documents to model a draft on",
   primaryKeyword: "eis examples",
   secondaryKeywords: [
     "environmental assessment examples",
     "nepa examples",
-    "categorical exclusion examples",
     "environmental impact statement examples",
   ],
   document: "EA Modeled on a Precedent",
