@@ -6,6 +6,7 @@ import * as ceqaExemptions from "./pages/ceqa-exemptions";
 import * as ceqaInitialStudy from "./pages/ceqa-initial-study";
 import * as ceqanet from "./pages/ceqanet";
 import * as doeNepa from "./pages/doe-nepa";
+import * as eisDatabase from "./pages/eis-database";
 import * as environmentalImpactStatement from "./pages/environmental-impact-statement";
 import * as esaSection7 from "./pages/esa-section-7";
 import * as faaNepa from "./pages/faa-nepa";
@@ -16,10 +17,14 @@ import * as hudEnvironmentalReview from "./pages/hud-environmental-review";
 import * as interiorBlmNepa from "./pages/interior-blm-nepa";
 import * as ipac from "./pages/ipac";
 import * as massachusettsMepa from "./pages/massachusetts-mepa";
+import * as nepaExamples from "./pages/nepa-examples";
 import * as nepaRegulations from "./pages/nepa-regulations";
+import * as nepassist from "./pages/nepassist";
+import * as newYorkSeqr from "./pages/new-york-seqr";
 import * as section106 from "./pages/section-106";
 import * as stateEnvironmentalReview from "./pages/state-environmental-review";
 import * as usdaForestServiceNepa from "./pages/usda-forest-service-nepa";
+import * as washingtonSepa from "./pages/washington-sepa";
 import { GUIDE_PATHS, type GuidePath } from "./paths";
 import { PRODUCT_GUIDES } from "./product";
 import { NEPA_SOURCES } from "./sources";
@@ -38,6 +43,11 @@ const PAGE_MODULES = [
   ceqaExemptions,
   ceqaEir,
   ceqaAndNepa,
+  nepassist,
+  eisDatabase,
+  nepaExamples,
+  washingtonSepa,
+  newYorkSeqr,
   hawaiiHepa,
   massachusettsMepa,
   stateEnvironmentalReview,
