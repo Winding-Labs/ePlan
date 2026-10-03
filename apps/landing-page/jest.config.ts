@@ -14,4 +14,7 @@ const config: Config = {
 module.exports = async () => ({
   ...(await createJestConfig(config)()),
   testPathIgnorePatterns: ["/node_modules/"],
+  // Build output (`next build` standalone, `opennextjs-cloudflare build`)
+  // contains copies of workspace packages that collide in jest's module map.
+  modulePathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/.open-next/"],
 });
