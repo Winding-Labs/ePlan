@@ -96,7 +96,7 @@ export const entry: GuideContent<GuidePath> = {
   path: "/for/environmental-impact-statement",
   title: "Environmental Impact Statement: Steps & Examples",
   description:
-    "What an environmental impact statement covers, when NEPA requires one, page limits, the steps to a ROD and real examples.",
+    "What an environmental impact statement (EIS) means, when NEPA requires one, page limits, the steps to a ROD and real examples.",
   eyebrow: "Environmental impact statement",
   h1: "Environmental impact statements: steps, page limits and real examples",
   primaryKeyword: "environmental impact statement",
@@ -237,7 +237,7 @@ export const entry: GuideContent<GuidePath> = {
   sections: [
     {
       heading:
-        "What is an environmental impact statement, and when is one required?",
+        "What is an environmental impact statement (EIS), and when is one required?",
       paragraphs: [
         "If no significant effect is reasonably foreseeable, or its significance is unknown, the agency prepares an environmental assessment instead, unless a categorical exclusion applies. No environmental document is needed if the action is not final agency action, is excluded, would clearly and fundamentally conflict with another law, or is nondiscretionary [[usc4336]].",
         "Recent filings show the range: EPA's September 25, 2026 notice lists EISs for a TVA solar and storage project, Air Force F-35A training basing and a FERC liquefaction project [[eisNoa20260925]]. Some agencies list actions that normally need one; FHWA, FRA and FTA name these, among others [[eisFhwa771115]]:",
