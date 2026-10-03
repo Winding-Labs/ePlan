@@ -1,6 +1,6 @@
 import type { GuidePath } from "../paths";
 // /for/eis-database. Reused source keys: eisEpaDatabase, eisEpaFiling,
-// eisEpa309, eisEpaCopy, eisNoa20260925 (pages/environmental-impact-statement.ts); usc4332,
+// eisEpa309, eisEpaCopy (pages/environmental-impact-statement.ts); usc4332,
 // usc4336a, usda1b7, ceqIfr (shared NEPA sources).
 import type { GuideEntry, Source } from "../types";
 
@@ -37,14 +37,6 @@ export const sources = {
     published: "2026-10-02",
     read: READ,
   },
-  eisdb309Memo: {
-    title:
-      "Clean Air Act Section 309 and National Environmental Policy Act Section 102(2)(C) Implementation (memorandum)",
-    publisher: "U.S. Environmental Protection Agency, Deputy Administrator",
-    url: "https://www.epa.gov/system/files/documents/2026-06/caasection309nepasection102-2-c-implementation_0.pdf",
-    published: "2026-06-24",
-    read: READ,
-  },
 } satisfies Record<string, Source>;
 
 export const entry: GuideEntry<GuidePath> = {
@@ -66,13 +58,8 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "EIS Outline",
   answer:
-    "EPA's EIS database is the public record of the environmental impact statements federal agencies file with EPA: every EIS received since 1987, EPA's comment letters since 2001, and PDFs of the EISs since October 2012 [[eisEpaDatabase]]. Agencies file through EPA's e-NEPA system, and EPA publishes a weekly notice of availability in the Federal Register that starts each comment or review period [[eisEpaFiling]]. The database is also where EPA posts the letters it writes on draft EISs under Clean Air Act section 309 [[eisEpa309]].",
+    "EPA's EIS database is the public record of the environmental impact statements federal agencies file with EPA, with the EIS documents and EPA's comment letters on them [[eisEpaDatabase]]. Agencies file through e-NEPA, and EPA's weekly Federal Register notice of availability starts each comment or review period [[eisEpaFiling]].",
   glance: [
-    {
-      label: "Run by",
-      value:
-        "EPA, which administers EIS filing on behalf of the Council on Environmental Quality [[eisEpaFiling]]",
-    },
     {
       label: "Holds",
       value:
@@ -82,6 +69,11 @@ export const entry: GuideEntry<GuidePath> = {
       label: "Search by",
       value:
         "Title, CEQ number, agency, state, Federal Register date and comment letter date [[eisEpaDatabase]]",
+    },
+    {
+      label: "Older EISs",
+      value:
+        "Northwestern University's Transportation Library holds nearly all federal EISs since 1969 [[eisEpaCopy]]",
     },
     {
       label: "Filing deadline",
@@ -195,52 +187,30 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   sections: [
     {
-      heading: "What is in the EPA EIS database?",
+      heading: "What is in EPA's environmental impact statement database?",
       paragraphs: [
-        "The database covers EISs prepared by federal agencies and EPA's comments on them: records of all EISs EPA has received since 1987, EPA comment letters since 2001, and PDFs since October 2012. Shortcuts on the search page list EISs filed the previous week, EISs open for comment, EPA comments issued in the past 60 days, and EISs published in the last 30 days. For questions about a project, EPA sends you to the lead agency [[eisEpaDatabase]].",
-        "It does not hold environmental assessments. e-NEPA, the filing system behind the database, is for EISs only, not EAs or stand-alone records of decision [[eisdbEnepaGuide]]. Find EAs, FONSIs and decision documents on the preparing agency's own project pages.",
+        "Besides the EISs, it posts the letters EPA writes on every draft EIS under Clean Air Act section 309 [[eisEpa309]]. Search-page shortcuts list EISs filed the previous week, EISs open for comment, EPA comments from the past 60 days and EISs published in the last 30 days. For questions about a project, EPA sends you to the lead agency [[eisEpaDatabase]].",
+        "It holds no environmental assessments: e-NEPA takes EISs only, not EAs or stand-alone records of decision [[eisdbEnepaGuide]]. Find EAs, FONSIs and decision documents on the preparing agency's project pages.",
       ],
     },
     {
-      heading: "How to search the EIS database",
+      heading: "How to search the EPA EIS database and read a record",
       paragraphs: [
-        "The search form takes title words (joined with and/or), the CEQ number, the unique identification number, a Federal Register date range, an EPA comment letter date range, the agency, and the state or territory. You can include EISs where your agency was a co-lead or federal cooperating agency, or limit results to EISs with EPA comment letters. A search returns at most 500 records [[eisEpaDatabase]].",
-        "Results list each EIS's title, CEQ number, document type, EPA comment letter date, Federal Register date, unique identification number, lead agency, federal cooperating agencies and state, with download links, and export to CSV, Excel, XML or HTML [[eisdbLastWeek]]. To find a precedent, search by the agency that does your kind of work and your state, then narrow by title words such as solar, pipeline or highway.",
-      ],
-    },
-    {
-      heading: "Reading an EIS record",
-      paragraphs: [
-        "Each record shows the EIS title and number, unique identification number, document type, Federal Register date, comment due or review period date, any amended notice, the date of the notice of intent, EPA's comment letter date, state, lead agency and a contact. EPA stopped rating draft EISs in October 2018 [[eisdbHopeSolar]].",
-        "Take TVA's Hope Solar and Storage Project in Mississippi: EIS No. 20260126, a draft with a Federal Register date of September 25, 2026 and a notice of intent dated March 13, 2025. The record lists a 189-page draft EIS PDF and EPA's one-page comment letter [[eisdbHopeSolar]]. The same EIS appears in that week's Federal Register notice [[eisNoa20260925]].",
+        "You can include EISs where an agency was co-lead or cooperating, or limit results to EISs with EPA comment letters; a search returns at most 500 records [[eisEpaDatabase]], exportable to CSV, Excel, XML or HTML [[eisdbLastWeek]]. For a precedent, search by the agency that does your kind of work and your state, then narrow by title words such as solar, pipeline or highway.",
+        "A record shows the document type, Federal Register and comment due dates, the notice of intent date, EPA's letter date, lead agency and a contact. TVA's Hope Solar and Storage draft EIS (No. 20260126), for example, lists a 189-page PDF and EPA's one-page letter. EPA stopped rating draft EISs in October 2018 [[eisdbHopeSolar]].",
       ],
     },
     {
       heading: "How to download EIS documents",
       paragraphs: [
-        "On a record's page, complete the ALTCHA check, then download the EIS files and EPA's comment letters; each file is listed with its page count and size [[eisdbHopeSolar]]. A large EIS may come in several PDFs, because e-NEPA caps each public file at 125 MB and asks agencies to split bigger documents by chapter [[eisdbEnepaGuide]].",
-        "For an EIS from before October 2012, contact the preparing agency's contact person listed in the database, or Northwestern University's Transportation Library, which holds nearly all federal EISs issued since 1969. Your librarian can also borrow EPA Headquarters Repository microfiche of final EISs from 1970 to 1977 and all EISs from 1978 to 1990 [[eisEpaCopy]].",
+        "On a record's page, complete the ALTCHA check, then download the EIS files and EPA's comment letters, each listed with its page count and size [[eisdbHopeSolar]]. A large EIS may come in several PDFs, because e-NEPA caps each public file at 125 MB and asks agencies to split bigger documents by chapter [[eisdbEnepaGuide]].",
       ],
     },
     {
       heading: "The weekly Federal Register notice of availability",
       paragraphs: [
-        "EPA prepares a weekly report of every EIS filed the week before and publishes it each Friday in the Federal Register as a notice of availability, on Thursday if Friday is a federal holiday. Agencies must file by 10:00 a.m. Eastern on Monday to make that week's notice. Amended notices carry corrections, changed time periods, withdrawals and retractions. Comment and review periods run from the notice: 45 days recommended for a draft EIS, 30 for a final, never ending on a weekend or holiday [[eisEpaFiling]].",
-        "The October 2, 2026 notice covers EISs filed September 21 to 28: FERC's final EIS for the Sabine Pass Stage 5 Expansion Project in Texas and NHTSA's final supplemental EIS for the SAFE Vehicles Rule III. An amended notice moves the end of the review period for an adopted final EIS on the Anderson Dam Hydroelectric Project in California to October 19, 2026 [[eisdbNoa20261002]].",
-      ],
-    },
-    {
-      heading: "How agencies file an EIS through e-NEPA",
-      paragraphs: [
-        "Federal agencies file the complete EIS, appendices included, through e-NEPA on EPA's Central Data Exchange. Registration is open only to federal employees, or state employees whose agencies hold assigned NEPA authority, and every required approval must be in hand before filing. The lead agency remains responsible for distributing the EIS and for making its PDFs accessible under Section 508 [[eisEpaFiling]].",
-        "EPA's e-NEPA guide adds that contractors cannot submit, that every PDF must be searchable, with title, subject, author and keywords in its properties, and that chapters should be bookmarked [[eisdbEnepaGuide]]. An agency adopting another agency's EIS without having been a cooperating agency must republish and refile it; an agency that served as a cooperating agency only notifies EPA, which then notes the adoption in its weekly notice [[eisEpaFiling]].",
-      ],
-    },
-    {
-      heading: "EPA's Clean Air Act section 309 comment letters",
-      paragraphs: [
-        "EPA reviews all draft EISs, and certain other federal actions, under section 309 of the Clean Air Act and makes its reviews public by posting the comment letters in the EIS database. Its draft EIS reviews focus on measures to avoid and mitigate significant impacts and on the adequacy of the information; its final EIS reviews check that the lead agency took EPA's comments into account, and EPA may refer an unsatisfactory project to CEQ [[eisEpa309]].",
-        "A June 24, 2026 EPA memo tells reviewers to keep letters focused on EPA's statutory authorities, such as the Clean Air, Clean Water and Safe Drinking Water Acts and Superfund, to group comments by topic, and on a final EIS to focus on new, potentially significant impacts [[eisdb309Memo]]. Read the letter on a precedent EIS to see which issues EPA raised for that kind of project.",
+        "Each Friday, or Thursday if Friday is a federal holiday, EPA publishes a notice of availability listing every EIS filed the week before. Amended notices carry corrections, changed time periods, withdrawals and retractions, and no period ends on a weekend or holiday [[eisEpaFiling]].",
+        "The October 2, 2026 notice, for example, lists FERC's final EIS for the Sabine Pass Stage 5 Expansion Project in Texas and NHTSA's final supplemental EIS for the SAFE Vehicles Rule III [[eisdbNoa20261002]].",
       ],
     },
   ],
@@ -248,7 +218,7 @@ export const entry: GuideEntry<GuidePath> = {
     heading:
       "EIS outline: the chapters to carry over from a database precedent",
     intro:
-      "Use a precedent from the database for structure and issues, and your agency's procedures for content. With CEQ's regulations removed [[ceqIfr]], this outline follows NEPA [[usc4332]] [[usc4336a]] and USDA's minimum EIS elements [[usda1b7]].",
+      "Take structure and issues from the precedent, and content from your agency's procedures. With CEQ's regulations removed [[ceqIfr]], this outline follows NEPA [[usc4332]] [[usc4336a]] and USDA's minimum EIS elements [[usda1b7]].",
     items: [
       {
         title: "Cover",
@@ -258,32 +228,32 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Purpose and need",
         detail:
-          "A brief statement of the underlying purpose and need [[usc4336a]], based on your agency's authority or, for an application, the applicant's goals [[usda1b7]].",
+          "A brief statement of the underlying purpose and need [[usc4336a]], based on your agency's authority or an applicant's goals [[usda1b7]].",
       },
       {
         title: "Proposed action and alternatives",
         detail:
-          "A reasonable range of technically and economically feasible alternatives that meet the purpose and need, plus no action [[usc4332]], with reasons for any eliminated [[usda1b7]].",
+          "A reasonable range of feasible alternatives that meet the purpose and need, plus no action [[usc4332]], with reasons for any eliminated [[usda1b7]].",
       },
       {
         title: "Potentially affected environment",
         detail:
-          "A succinct description of the areas the alternatives may affect, which may be combined with the impacts [[usda1b7]].",
+          "A succinct description of the areas the alternatives may affect; it may be combined with the impacts [[usda1b7]].",
       },
       {
         title: "Environmental impacts",
         detail:
-          "Reasonably foreseeable effects, unavoidable adverse effects, short-term uses versus long-term productivity, and irreversible commitments of federal resources [[usc4332]], plus any means to reduce adverse effects [[usda1b7]].",
+          "Reasonably foreseeable and unavoidable adverse effects, short-term uses versus long-term productivity, irreversible commitments of resources [[usc4332]], and means to reduce adverse effects [[usda1b7]].",
       },
       {
         title: "Reviews, permits and consultation",
         detail:
-          "Compliance with other laws, the federal permits needed and the agencies and persons consulted [[usda1b7]].",
+          "Compliance with other laws, the federal permits needed, and the agencies and persons consulted [[usda1b7]].",
       },
       {
         title: "Comments and responses",
         detail:
-          "How comments were addressed, which USDA recommends placing in an appendix [[usda1b7]]. A precedent's final EIS and EPA's letter show what reviewers challenged [[eisEpa309]].",
+          "How comments were addressed, which USDA recommends placing in an appendix [[usda1b7]]. A precedent's EPA letter shows what reviewers challenged [[eisEpa309]].",
       },
       {
         title: "Page-limit and deadline statements",
@@ -294,34 +264,24 @@ export const entry: GuideEntry<GuidePath> = {
   },
   faq: [
     {
-      question: "What is in the environmental impact statement database?",
+      question: "Do I need an e-NEPA account to search the EIS database?",
       answer:
-        "Records of every EIS filed with EPA since 1987, EPA's comment letters since 2001 and PDFs of the EISs since October 2012, each with its Federal Register date, lead agency, state and contact. Anyone can search it at cdxapps.epa.gov without an account.",
+        "No. Anyone can search it at cdxapps.epa.gov and download EISs and comment letters. Only filers register in e-NEPA: federal employees, and state employees whose agencies hold assigned NEPA authority. Contractors cannot submit EIS documents.",
     },
     {
-      question: "Can I find environmental assessments in the EIS database?",
+      question: "What do EPA's comment letters on an EIS cover?",
       answer:
-        "No. EPA's e-NEPA filing system takes EISs only, not EAs or stand-alone records of decision. Look for EAs and FONSIs on the preparing agency's project pages, such as BLM's National NEPA Register or a national forest's project list.",
-    },
-    {
-      question: "When does EPA publish EIS notices of availability?",
-      answer:
-        "Every Friday in the Federal Register, or Thursday when Friday is a federal holiday, for EISs filed by 10:00 a.m. Eastern that Monday. The notice date starts the comment period on a draft EIS and the review period on a final.",
+        "On a draft EIS, measures to avoid and mitigate significant impacts and whether the information is adequate. On a final EIS, whether the lead agency took EPA's comments into account; EPA may refer an unsatisfactory project to the Council on Environmental Quality.",
     },
     {
       question: "How do I get a copy of an EIS from before 2012?",
       answer:
-        "Ask the lead agency's contact person listed in the database, contact Northwestern University's Transportation Library, which holds nearly all federal EISs since 1969, or ask a librarian to borrow EPA's microfiche of EISs filed from 1970 to 1990.",
-    },
-    {
-      question: "Who can file an EIS in e-NEPA?",
-      answer:
-        "Federal agency employees, and state employees whose agencies hold assigned NEPA authority. EPA's e-NEPA guide says contractors cannot submit EIS documents.",
+        "Ask the lead agency's contact person listed in the database or Northwestern University's Transportation Library, or ask a librarian to borrow EPA's microfiche of EISs filed from 1970 to 1990.",
     },
     {
       question: "Does ePlan file EISs with EPA?",
       answer:
-        "No. ePlan is not affiliated with EPA and does not file anything in e-NEPA or the Federal Register. It searches the EIS database for precedent EISs and outlines yours, and your agency files the finished EIS.",
+        "No. ePlan is not affiliated with EPA and does not file anything in e-NEPA or the Federal Register. It searches the EIS database for precedent EISs and outlines yours; your agency files the finished EIS.",
     },
   ],
 };

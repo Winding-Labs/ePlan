@@ -46,12 +46,6 @@ export const PRICING_FAQ: FaqItem = {
   answer: `${PRICING_SUMMARY} Each workspace shares a monthly credit pool, and extra seats add credits.`,
 };
 
-export const RESPONSIBLE_OFFICIAL_FAQ: FaqItem = {
-  question: "Is an ePlan draft ready to sign?",
-  answer:
-    "No draft is. ePlan marks every fact it could not confirm, so your team can check the draft before anyone relies on it. The responsible official reviews, edits and signs.",
-};
-
 // --- Prompts (first-person, like the homepage examples; not real projects) --
 
 export const PROMPTS = {

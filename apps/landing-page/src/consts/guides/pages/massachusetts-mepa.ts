@@ -107,22 +107,17 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Environmental Notification Form",
   answer:
-    "MEPA, the Massachusetts Environmental Policy Act (M.G.L. c. 30, §§ 61–62L), requires state agencies to review, evaluate and determine the environmental impact of their projects and to find that all feasible measures have been taken to avoid or minimize it [[mepaMgl61]]. MEPA review is required when a project needs an agency action, such as a permit, financial assistance or a land transfer, and meets or exceeds a review threshold in 301 CMR 11.03 [[mepaFiling]]. It begins with an Environmental Notification Form (ENF), on which the Secretary of Energy and Environmental Affairs issues a Certificate stating whether an environmental impact report (EIR) is required [[mepaRegs]] [[mepaOffice]].",
+    "MEPA, the Massachusetts Environmental Policy Act, requires state agencies to evaluate and minimize the environmental impact of projects they undertake, fund or permit [[mepaMgl61]] [[mepaMgl62]]. A project that meets a review threshold in 301 CMR 11.03 files an Environmental Notification Form (ENF), and the Secretary of Energy and Environmental Affairs issues a Certificate deciding whether an environmental impact report (EIR) is required [[mepaFiling]] [[mepaRegs]].",
   glance: [
     {
       label: "Legal basis",
       value:
-        "M.G.L. c. 30, §§ 61–62L and 301 CMR 11.00 [[mepaMgl62]] [[mepaRegs]]",
-    },
-    {
-      label: "Administered by",
-      value:
-        "The MEPA Office, part of the Executive Office of Energy and Environmental Affairs [[mepaOffice]]",
+        "M.G.L. c. 30, §§ 61–62L; regulations at 301 CMR 11.00 [[mepaMgl62]] [[mepaRegs]]",
     },
     {
       label: "Prepared by",
       value:
-        "The proponent: the agency undertaking the project, or the person seeking the permit or financial assistance [[mepaRegs]] [[mepaMgl62b]]",
+        "The proponent: the agency doing the project, or the party seeking its permit or funding [[mepaRegs]] [[mepaMgl62b]]",
     },
     {
       label: "ENF review",
@@ -135,9 +130,9 @@ export const entry: GuideEntry<GuidePath> = {
         "37 days, with 30 days for comments, then a Certificate on adequacy [[mepaRegs]]",
     },
     {
-      label: "Filing",
+      label: "Filed with",
       value:
-        "Online through the MEPA e-Filing Portal, mandatory since July 1, 2025 [[mepaReady]]",
+        "The MEPA Office (EEA), online through the e-Filing Portal, required since July 1, 2025 [[mepaOffice]] [[mepaReady]]",
     },
   ],
   hero: {
@@ -237,86 +232,63 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   sections: [
     {
-      heading: "What is MEPA review in Massachusetts?",
-      paragraphs: [
-        "Section 61 directs every state agency, department, board, commission and authority to review, evaluate and determine the environmental impact of its works, projects and activities, and to use all practicable means to minimize damage to the environment. Any determination must include a finding that all feasible measures have been taken to avoid or minimize the impact, and agencies must also consider reasonably foreseeable climate change impacts, including greenhouse gas emissions and sea level rise [[mepaMgl61]].",
-        "MEPA covers state agencies and authorities created under special or general law, and projects they undertake, fund or permit [[mepaMgl62]]. The MEPA Office runs the process day to day on behalf of the Secretary [[mepaOffice]]. MEPA review happens before agencies act, but it is not a permitting process and does not itself result in approval or denial of a project [[mepaFiling]].",
-      ],
-    },
-    {
       heading: "What are the MEPA thresholds?",
       paragraphs: [
-        "MEPA review is required when a project meets or exceeds one or more review thresholds in 301 CMR 11.03 and the subject matter of at least one threshold is within MEPA jurisdiction. Each threshold says whether review consists of an ENF and a mandatory EIR, or an ENF and other review if the Secretary so requires. Jurisdiction is broad when an agency undertakes or funds the project, and limited to the subject matter of the permits or land transfer when a private party only needs those [[mepaRegs]].",
-        "The thresholds cover land; state-listed species; wetlands, waterways and tidelands; water; wastewater; transportation; energy; air; solid and hazardous waste; historical and archaeological resources; Areas of Critical Environmental Concern; and regulations and planning. They do not apply to lawfully existing structures, routine maintenance or replacement projects [[mepaRegs]].",
+        "Each 301 CMR 11.03 threshold sets the review level: an ENF and a mandatory EIR, or an ENF with an EIR only if the Secretary requires one. Jurisdiction is broad when an agency undertakes or funds the project, and limited to the subject matter of the permits or land transfer when a private party needs only those. Lawfully existing structures, routine maintenance and replacement projects fall outside the thresholds [[mepaRegs]].",
       ],
       bullets: [
-        "Land: direct alteration of 50 or more acres, or 10 or more acres of new impervious area, means an ENF and mandatory EIR; 25 acres or 5 acres of impervious area means an ENF [[mepaRegs]]",
-        "Transportation: 1,000 or more new parking spaces or 3,000 or more new average daily trips at a single location means a mandatory EIR; 300 spaces or 2,000 trips means an ENF",
-        "Energy: a new electric generating facility of 100 MW or more means a mandatory EIR; 25 MW or more means an ENF",
-        "Water: a new drinking water treatment plant with a capacity of 1,000,000 or more gallons per day means an ENF",
-        "Waterways: dredging 10,000 or more cubic yards of material means an ENF",
+        "Land: 50+ acres altered or 10+ acres of new impervious area, mandatory EIR; 25 or 5 acres, ENF [[mepaRegs]]",
+        "Transportation: 1,000+ new parking spaces or 3,000+ new average daily trips, mandatory EIR; 300 or 2,000, ENF",
+        "Energy: a new electric generating facility of 100+ MW, mandatory EIR; 25+ MW, ENF",
+        "Water: a new drinking water treatment plant of 1,000,000+ gallons per day, ENF",
+        "Waterways: dredging 10,000+ cubic yards of material, ENF",
       ],
     },
     {
-      heading: "What goes in an Environmental Notification Form?",
+      heading: "How does MEPA review work?",
       paragraphs: [
-        "The ENF gives a concise but accurate description of the project and its alternatives, identifies the thresholds it may meet and the agency actions it may require, presents the proponent's initial assessment of impacts, and proposes mitigation. It assesses environmental and public health impacts separately, names its sources, states whether the project is likely to negatively affect an environmental justice population, and may include a proposed Scope for an EIR [[mepaRegs]].",
-        "The MEPA Office expects the current ENF form, effective February 3, 2026, plus a project narrative with an alternatives analysis, which it calls a significant component of MEPA review. Required attachments include a USGS locus map, existing and proposed site plans, the circulation list, an output report from the RMAT Climate Resilience Design Standards Tool, and a map of environmental justice populations within 1 and 5 miles [[mepaEnfGuide]]. A private proponent files the ENF no later than ten days after its first permit or financial assistance application [[mepaMgl62a]] [[mepaRegs]].",
+        "A private proponent files the ENF no later than ten days after its first application for a permit or financial assistance [[mepaMgl62a]] [[mepaRegs]]. Review then runs in this order [[mepaRegs]]:",
+      ],
+      bullets: [
+        "Notice in the Environmental Monitor, published twice monthly for filings received by the 15th and month-end, starts review [[mepaRegs]]",
+        "Comment period, usually with a site visit and a public consultation session",
+        "The Secretary's Certificate, by the end of review: whether an EIR is required and, if so, its Scope",
+        "Draft and final EIR, each certified for adequacy within seven days after comments close [[mepaMgl62c]]",
+        "Section 61 Findings: after an EIR, each acting agency writes the mitigation into its permit or approval",
       ],
     },
     {
-      heading: "How long does MEPA review take?",
+      heading: "When is an EIR required under MEPA?",
       paragraphs: [
-        "Publication of the ENF in the Environmental Monitor starts a 30-day review period with a 20-day comment period, usually including a site visit and public consultation session. On or before the last day, the Secretary issues a Certificate stating whether an EIR is required and, if so, its Scope [[mepaRegs]]. An expanded ENF asking for a single EIR, rollover EIR or Special Review Procedure gets 37 days, with 30 for comments [[mepaRegs]] [[mepaEnfGuide]].",
-        "An EIR's review period is 37 days from notice in the Environmental Monitor, with comments due within 30 days; within seven days after comments close, the Secretary certifies whether the EIR adequately and properly complies with MEPA [[mepaRegs]] [[mepaMgl62c]]. The Environmental Monitor is published twice a month, for filings received by the 15th and by the last day of each month [[mepaRegs]]. Filing has been online-only since July 1, 2025 [[mepaReady]].",
-      ],
-    },
-    {
-      heading: "Expanded ENF, single EIR and waivers",
-      paragraphs: [
-        "A proponent may file an expanded ENF with more detailed analysis, and must when asking for a single EIR, a Special Review Procedure or a waiver. The Secretary ordinarily requires a draft and final EIR, but may allow a single EIR if the expanded ENF analyzes all aspects of the project and all feasible alternatives, provides a detailed baseline, and shows the design uses all feasible means to avoid impacts [[mepaRegs]].",
-        "A waiver of an EIR requirement needs findings that strict compliance would cause undue hardship and would not serve to avoid or minimize damage to the environment. A rollover EIR, in which a proposed EIR filed with the ENF is reviewed as the final EIR, is available only to projects that must file an EIR because of their location near environmental justice populations [[mepaEnfGuide]] [[mepaRegs]].",
-      ],
-    },
-    {
-      heading: "MEPA environmental justice requirements",
-      paragraphs: [
-        "The 2021 climate law, approved March 26, 2021, amended MEPA so that an EIR is required for any project likely to cause damage to the environment within 1 mile of an environmental justice population, or within 5 miles for a project affecting air quality [[mepaAct2021]] [[mepaMgl62b]]. An environmental justice population is a census block group meeting income, minority or English-proficiency criteria set in the statute [[mepaMgl62]].",
-        "Under the regulations, a proponent must provide public involvement opportunities for environmental justice populations within the project's Designated Geographic Area, generally 1 mile, before filing. Projects that meet mandatory EIR thresholds or seek a single or rollover EIR must also give advance notification 45 to 90 days before filing the ENF. Outside the categories listed in 301 CMR 11.01(2)(c), the Secretary must require an EIR for any project in a Designated Geographic Area [[mepaRegs]] [[mepaEnfGuide]].",
-      ],
-    },
-    {
-      heading: "Section 61 Findings and the 2026 housing streamlining",
-      paragraphs: [
-        "An agency that takes action on a project for which the Secretary required an EIR issues Section 61 Findings specifying all feasible means to avoid, minimize and mitigate damage to the environment, including any actions to reduce unfair or inequitable effects on environmental justice populations. The findings become part of the permit or other approval document and are filed with the MEPA Office [[mepaRegs]].",
-        "Amendments effective January 30, 2026 provide that qualifying housing projects are not presumed likely to cause damage to the environment, even when they exceed review thresholds. Criteria include devoting at least 67 percent of floor area to housing, minimum densities, limits on altering undeveloped land, and siting outside the highest flood and erosion hazard areas. The proponent still files an ENF, and the Secretary decides whether an EIR is needed [[mepaRegs]] [[mepaHousing]].",
+        "An EIR is required when a project meets a mandatory EIR threshold, when the Secretary requires one after reviewing the ENF, and for any project likely to damage the environment within 1 mile of an environmental justice population, or 5 miles for air quality impacts [[mepaRegs]] [[mepaAct2021]] [[mepaMgl62b]].",
+        "Before filing, the proponent must offer public involvement to environmental justice populations in the Designated Geographic Area, generally 1 mile; projects meeting mandatory EIR thresholds, or seeking a single or rollover EIR, also give notice 45 to 90 days ahead [[mepaRegs]] [[mepaEnfGuide]]. Since January 30, 2026, qualifying housing projects are not presumed likely to cause damage, even above thresholds, though they still file an ENF [[mepaRegs]] [[mepaHousing]].",
       ],
     },
   ],
   outline: {
-    heading: "Environmental Notification Form: the sections",
+    heading: "What goes in an Environmental Notification Form?",
     intro:
-      "Built from the ENF contents required by 301 CMR 11.05 and the MEPA Office's ENF guide. File on the current ENF form from the MEPA Office, revised effective February 3, 2026 [[mepaRegs]] [[mepaEnfGuide]].",
+      "Built from 301 CMR 11.05 and the MEPA Office's ENF guide; file on the current ENF form, effective February 3, 2026 [[mepaRegs]] [[mepaEnfGuide]].",
     items: [
       {
         title: "Project information and thresholds",
         detail:
-          "Project name, location and proponent, each review threshold the project may meet or exceed, and each agency action it may require [[mepaRegs]] [[mepaEnfGuide]].",
+          "Name, location and proponent, each review threshold the project may meet, and each agency action it may require [[mepaRegs]] [[mepaEnfGuide]].",
       },
       {
         title: "Project description",
         detail:
-          "A concise but accurate description of the whole project, including likely future expansion; a proponent may not phase or segment a project to evade MEPA review [[mepaRegs]].",
+          "The whole project, including likely future expansion; phasing or segmenting a project to evade MEPA review is not allowed [[mepaRegs]].",
       },
       {
         title: "Alternatives analysis",
         detail:
-          "The project purpose, the criteria for choosing the preferred alternative, and the impacts of each alternative, such as other sites, uses or building configurations [[mepaEnfGuide]].",
+          "The purpose, the criteria for the preferred alternative, and the impacts of each alternative, such as other sites or uses; a significant component of review [[mepaEnfGuide]].",
       },
       {
         title: "Environmental and public health impacts",
         detail:
-          "The proponent's initial assessment, with environmental and public health impacts assessed separately and the sources of each assessment identified [[mepaRegs]].",
+          "The proponent's initial assessment, with environmental and public health impacts assessed separately and the sources of each identified [[mepaRegs]].",
       },
       {
         title: "Mitigation measures",
@@ -326,7 +298,7 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Environmental justice",
         detail:
-          "Environmental justice populations in the Designated Geographic Area, whether the project is likely to negatively affect them, outreach done before filing, and languages spoken by residents with limited English in nearby census tracts [[mepaRegs]].",
+          "Environmental justice populations in the Designated Geographic Area, likely negative effects on them, outreach before filing, and languages spoken by nearby limited-English residents [[mepaRegs]].",
       },
       {
         title: "Climate resilience",
@@ -336,35 +308,25 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Requests",
         detail:
-          "Whether the proponent asks for a single EIR, a Special Review Procedure or a waiver, each of which calls for an expanded ENF [[mepaRegs]].",
+          "Any request for a single EIR, a Special Review Procedure or a waiver, each of which calls for an expanded ENF [[mepaRegs]].",
       },
       {
         title: "Attachments, circulation and notice",
         detail:
-          "USGS locus map, site plans, environmental justice map, the list of agencies and persons the ENF went to, and certification of the newspaper notice [[mepaRegs]] [[mepaEnfGuide]].",
+          "USGS locus map, existing and proposed site plans, environmental justice map (1 and 5 miles), circulation list and newspaper notice certification [[mepaRegs]] [[mepaEnfGuide]].",
       },
     ],
   },
   faq: [
     {
-      question: "What is an Environmental Notification Form in Massachusetts?",
+      question: "Is MEPA review a permit?",
       answer:
-        "The ENF is the filing that starts MEPA review. It describes the project and its alternatives, lists the review thresholds it meets and the state agency actions it needs, gives the proponent's initial assessment of impacts, and proposes mitigation. The Secretary of Energy and Environmental Affairs reviews it and issues a Certificate stating whether an environmental impact report is required.",
+        "No. MEPA review happens before state agencies act, but it is not a permitting process and does not itself approve or deny a project. The agencies decide on their own permits, financial assistance or land transfers afterward.",
     },
     {
-      question: "Does every Massachusetts project need MEPA review?",
+      question: "Can I file a single EIR instead of a draft and final EIR?",
       answer:
-        "No. MEPA review applies when a project needs a state agency action, such as a permit, financial assistance or a land transfer, or is undertaken by an agency, and it meets or exceeds a review threshold in 301 CMR 11.03. Lawfully existing structures, routine maintenance and replacement projects fall outside the thresholds.",
-    },
-    {
-      question: "When is an EIR required under MEPA?",
-      answer:
-        "An EIR is required when a project meets an ENF and Mandatory EIR threshold, when the Secretary requires one after reviewing the ENF, and for projects located within the Designated Geographic Area around an environmental justice population, apart from categories such as qualifying housing projects that the 2026 amendments carved out.",
-    },
-    {
-      question: "How long is the MEPA comment period on an ENF?",
-      answer:
-        "Twenty days from publication in the Environmental Monitor, within a 30-day review period. For an expanded ENF that asks for a single EIR, a rollover EIR or a Special Review Procedure, the comment period is 30 days within a 37-day review period.",
+        "Only if the Secretary allows it. File an expanded ENF that analyzes all aspects of the project and all feasible alternatives, with a detailed baseline. A rollover EIR, reviewed as the final EIR, is only for projects that need an EIR because they are near environmental justice populations.",
     },
     {
       question:

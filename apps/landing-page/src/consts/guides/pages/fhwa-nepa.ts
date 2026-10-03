@@ -1,9 +1,8 @@
 import type { GuidePath } from "../paths";
 // Reused source keys (defined in consts/guides/sources.ts or pages/*.ts):
-// fhwa771117, fhwaFinal, ceqIfr, ceqFinal (sources.ts); eisFhwa771115,
-// eisFhwa771123, eisFhwa771124, eisFhwa771138 (pages/environmental-impact-statement.ts);
+// fhwa771117, fhwaFinal (sources.ts); eisFhwa771115, eisFhwa771123,
+// eisFhwa771124, eisFhwa771138 (pages/environmental-impact-statement.ts);
 // jointCfr771109 (pages/ceqa-and-nepa.ts).
-// fhwa774 below is also cited by the FAA page (faa-nepa.ts).
 import type { GuideEntry, Source } from "../types";
 
 const READ = "2026-10-02";
@@ -29,7 +28,6 @@ export const sources = {
   fhwa771121: ECFR_771("771.121", "Findings of no significant impact"),
   fhwa771129: ECFR_771("771.129", "Re-evaluations"),
   fhwa771139: ECFR_771("771.139", "Limitations on actions"),
-  fhwa771141: ECFR_771("771.141", "Reliance and adoption efficiencies"),
   fhwa774: {
     title:
       "23 CFR part 774 - Parks, recreation areas, wildlife and waterfowl refuges, and historic sites (Section 4(f))",
@@ -90,22 +88,17 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "CE Determination",
   answer:
-    "FHWA NEPA is the process the Federal Highway Administration follows under 23 CFR part 771, the NEPA procedures it shares with FRA and FTA, finalized on September 1, 2026 [[fhwaFinal]]. Each action falls into one of three classes: a categorical exclusion (CE), an environmental assessment (EA) or an environmental impact statement (EIS) [[eisFhwa771115]]. FHWA's CEs are listed in 23 CFR 771.117 and FTA's in 771.118, each split into a (c) list that normally needs no further NEPA approval and a (d) list that needs documentation and agency approval [[fhwa771117]] [[fhwa771118]].",
+    "FHWA NEPA is the Federal Highway Administration's NEPA process under 23 CFR part 771, the procedures it shares with FRA and FTA, finalized September 1, 2026 [[fhwaFinal]]. Each action is a categorical exclusion (CE), listed for FHWA in 23 CFR 771.117, an environmental assessment (EA) or an environmental impact statement (EIS) [[eisFhwa771115]] [[fhwa771117]].",
   glance: [
     {
-      label: "Regulation",
+      label: "Prepared by",
       value:
-        "23 CFR part 771, final rule effective September 1, 2026 [[fhwaFinal]]",
-    },
-    {
-      label: "Applies to",
-      value:
-        "Highway, transit and railroad actions of FHWA, FTA and FRA [[fhwaFinal]]",
+        "The applicant receiving the funds, as joint lead agency, with agency guidance [[jointCfr771109]]",
     },
     {
       label: "CE lists",
       value:
-        "FHWA: 771.117(c) and (d); FTA: 771.118(c) and (d); FRA: 771.116 [[eisFhwa771115]]",
+        "771.117 (FHWA), 771.118 (FTA): (c) normally needs no further approval; (d) needs documented approval [[fhwa771117]] [[fhwa771118]]",
     },
     { label: "EA limits", value: "75 pages and 1 year [[eisFhwa771138]]" },
     {
@@ -219,24 +212,14 @@ export const entry: GuideEntry<GuidePath> = {
   sections: [
     {
       heading:
-        "What changed in 23 CFR part 771 after CEQ's rules were removed?",
-      paragraphs: [
-        "FHWA's NEPA regulations date to 1974, and after 1978 they served as a supplement to CEQ's regulations [[fhwaFinal]]. CEQ's regulations, 40 CFR parts 1500-1508, were removed effective April 11, 2025, and CEQ finalized the removal on January 8, 2026 [[ceqIfr]] [[ceqFinal]]. FHWA, FRA and FTA revised part 771 by interim final rule on July 3, 2025 and finalized it with minor technical changes on September 1, 2026; the agencies say part 771 now stands on its own [[fhwaFinal]].",
-        "The rule reflects the 2023 NEPA amendments, 2021 changes to 23 U.S.C. 139 and the Supreme Court's Seven County decision, and it updated the funding thresholds in the CE for projects with limited federal assistance [[fhwaFinal]]. Environmental documents prepared or accepted after July 3, 2025 follow the revised part 771 [[jointCfr771109]].",
-        "A State or local applicant that directly receives title 23 or transit funds serves as joint lead agency with FHWA, FRA or FTA, and may prepare the environmental documents if the agency furnishes guidance and independently evaluates them [[jointCfr771109]].",
-      ],
-    },
-    {
-      heading:
         "FHWA categorical exclusions: the (c) and (d) lists in 23 CFR 771.117",
       paragraphs: [
-        "FHWA CEs are actions that, based on FHWA's experience, normally involve no significant environmental impacts. Actions on the (c) list normally need no further NEPA approval from FHWA. Actions on the (d) list, such as new rest areas, changes in access control or hardship acquisitions, qualify only after FHWA approval, or under a programmatic agreement, once the applicant documents that their conditions are met [[fhwa771117]].",
-        "Three (c) CEs, highway modernization such as resurfacing or added auxiliary lanes, safety and traffic operations projects, and bridge rehabilitation or replacement, carry constraints in paragraph (e). A project that needs more than minor right-of-way, a Coast Guard bridge permit, or work outside a Corps nationwide or general permit, or that causes an adverse effect on historic properties, a Section 4(f) use beyond de minimis or likely adverse effects on listed species, moves to the (d) list [[fhwa771117]].",
-        "Any CE can still trigger studies of unusual circumstances: significant impacts, substantial controversy on environmental grounds, significant impacts on Section 4(f) or Section 106 properties, or inconsistency with environmental laws [[fhwa771117]]. Final design, property acquisition and construction wait until the action is classified as a CE [[fhwa771113]]. Examples from the (c) list:",
+        "Actions on the (d) list, such as new rest areas or changes in access control, qualify only after FHWA approves the applicant's documentation, directly or under a programmatic agreement. Any CE needs further study if unusual circumstances arise: significant impacts, substantial controversy, effects on Section 4(f) or Section 106 properties, or inconsistency with environmental laws [[fhwa771117]]. Final design, property acquisition and construction wait until the action is classified as a CE [[fhwa771113]].",
+        "Modernization, safety and bridge CEs on the (c) list move to (d) if they need more than minor right-of-way, a Coast Guard bridge permit or work outside a Corps general permit, or have an adverse effect on historic properties, a more than de minimis Section 4(f) use or likely adverse effects on listed species [[fhwa771117]]. Examples from the (c) list:",
       ],
       bullets: [
         "(c)(3): bicycle and pedestrian lanes, paths and facilities [[fhwa771117]]",
-        "(c)(8): fencing, signs, pavement markings, small passenger shelters, traffic signals and railroad warning devices, where no substantial land acquisition or traffic disruption occurs [[fhwa771117]]",
+        "(c)(8): signs, markings, signals and railroad warning devices, without substantial land acquisition or traffic disruption [[fhwa771117]]",
         "(c)(22): projects entirely within the existing operational right-of-way [[fhwa771117]]",
         "(c)(23): projects with limited federal funding, under thresholds adjusted annually for inflation [[fhwa771117]]",
         "(c)(28): bridge rehabilitation, reconstruction or replacement that meets the paragraph (e) constraints [[fhwa771117]]",
@@ -245,116 +228,87 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "FTA categorical exclusions in 23 CFR 771.118",
       paragraphs: [
-        "FTA's CEs follow the same model. Its (c) list covers, among others, utilities within or next to transportation right-of-way; stand-alone recreation, pedestrian and bicycle facilities; vehicles and equipment that existing facilities can accommodate; and maintenance or reconstruction of facilities on substantially the same footprint, such as platform extensions and passing track [[fhwa771118]].",
-        "FTA's (d) list, which needs FTA approval of the applicant's documentation, includes right-of-way acquisition, facility modernization and minor expansions of transit structures outside existing right-of-way [[fhwa771118]]. FHWA and FTA may each approve a CE from the other's list, or from FRA's list in 771.116, when its requirements are met [[fhwa771117]] [[fhwa771118]].",
+        "FTA's CEs follow the same (c) and (d) model. Its (c) list includes utilities along transportation right-of-way, stand-alone bicycle and pedestrian facilities, and reconstruction on the same footprint, such as platform extensions; its (d) list includes right-of-way acquisition [[fhwa771118]]. FHWA and FTA may each use the other's list, or FRA's, when its requirements are met [[fhwa771117]] [[fhwa771118]].",
       ],
     },
     {
-      heading: "What is a programmatic agreement for FHWA CEs?",
+      heading: "Programmatic agreements and NEPA assignment",
       paragraphs: [
-        "Under 23 CFR 771.117(g), FHWA may sign a programmatic agreement letting a State DOT make CE determinations and approvals on FHWA's behalf for (c) and (d) CEs named in the agreement. The agreement must set the State DOT's documentation and quality-control duties, last no more than five years (it may be renewed), provide for FHWA monitoring and corrective action, and address amendment, termination and public availability [[fhwa771117]].",
-        "The authority traces to MAP-21 section 1318(d). FHWA publishes a model agreement and the executed agreements it holds, including those of Connecticut, Oregon, Washington and Wisconsin; others are posted on State DOT websites [[fhwaPce]].",
+        "Under 23 CFR 771.117(g), a programmatic agreement lets a State DOT make CE determinations on FHWA's behalf for the CEs it names. It lasts up to five years, is renewable, and sets documentation, quality control and FHWA monitoring [[fhwa771117]]. FHWA posts its model agreement and executed agreements; others are on State DOT websites [[fhwaPce]].",
+        "Under NEPA assignment, the State acts as FHWA [[fhwaFinal]]. Through 23 U.S.C. 326 it assumes CE determinations only, as California, Utah and Alaska do [[fhwaUsc326]] [[fhwaAssignment]]; through 327 it assumes the full NEPA role, consents to federal court jurisdiction and is solely liable. FHWA lists 327 agreements for Alaska, Arizona, California, Florida, Maine, Nebraska, Ohio, Texas and Utah [[fhwaUsc327]] [[fhwaProgramAssignment]].",
       ],
     },
     {
-      heading: "NEPA assignment under 23 U.S.C. 326 and 327",
+      heading: "FHWA EAs and EISs: 23 CFR 771.119 and 771.123",
       paragraphs: [
-        "Under 23 U.S.C. 326, a State can assume FHWA's responsibility for CE determinations through a memorandum of understanding of up to three years, or five once it has held the role for ten years [[fhwaUsc326]]. FHWA's toolkit lists California, Utah and Alaska in this program [[fhwaAssignment]].",
-        "Under 23 U.S.C. 327, a State can assume the Secretary's NEPA responsibilities for highway projects and, at its request, railroad, transit or multimodal projects. It consents to federal court jurisdiction and becomes solely responsible and solely liable for what it assumes; agreements run up to five years, or ten for States with ten years in the program [[fhwaUsc327]].",
-        "FHWA lists assignment MOUs for Alaska, Arizona, California, Florida, Maine, Nebraska, Ohio, Texas and Utah; Maine's was signed January 30, 2026 and Nebraska's February 23, 2026 [[fhwaProgramAssignment]]. Under part 771 an assigned State functions as FHWA, but it may not create a new CE by adopting another agency's [[fhwaFinal]] [[fhwa771141]].",
-      ],
-    },
-    {
-      heading:
-        "FHWA environmental assessments and EISs: 23 CFR 771.119 and 771.123",
-      paragraphs: [
-        "When an action cannot be categorically excluded and no significant effect is foreseeable, or significance is unknown, the applicant prepares an EA in consultation with the Administration, after early coordination or scoping. The Administration must approve the EA before it is released; it is then available for 30 days with a newspaper notice. If no significant impacts are found, the applicant recommends a finding of no significant impact (FONSI), and the Administration issues one if it agrees [[fhwa771119]] [[fhwa771121]].",
-        "An EA is due within one year of the class-of-action determination and may not exceed 75 pages, excluding citations and appendices [[eisFhwa771138]].",
-        "For an EIS, scoping begins before the notice of intent and identifies the purpose and need, alternatives, impacts and significant issues; the draft EIS has a 45- to 60-day comment period; and the final EIS and record of decision are combined where practicable [[eisFhwa771123]] [[eisFhwa771124]]. The EIS is due within two years of the notice of intent [[eisFhwa771138]]. After a limitations notice, claims against FHWA or FTA decisions must be filed within 150 days [[fhwa771139]].",
-      ],
-    },
-    {
-      heading: "Section 4(f), re-evaluations and mitigation commitments",
-      paragraphs: [
-        "Section 4(f) protects public parks, recreation areas, wildlife and waterfowl refuges, and historic sites. FHWA, FRA and FTA may approve a use only if there is no feasible and prudent avoidance alternative and the action includes all possible planning to minimize harm, or if the use has a de minimis impact. For a CE, the Section 4(f) documentation goes in a separate document [[fhwa774]].",
-        "Before later major approvals, such as right-of-way acquisition or final plans, the applicant consults the Administration on whether the CE, FONSI or ROD remains valid [[fhwa771129]]. Mitigation commitments in the environmental document bind the project sponsor unless the Administration agrees in writing to change them [[jointCfr771109]].",
+        "EA: when an action is not a CE and no significant effect is foreseeable, or significance is unknown, the applicant prepares an EA, which the Administration approves for 30 days of public availability; a finding of no significant impact (FONSI) follows if warranted [[fhwa771119]] [[fhwa771121]].",
+        "EIS: scoping precedes the notice of intent, the draft EIS gets 45 to 60 days of comment, and the final EIS and record of decision are combined where practicable [[eisFhwa771123]] [[eisFhwa771124]]. After a limitations notice, claims must be filed within 150 days [[fhwa771139]].",
       ],
     },
   ],
   outline: {
     heading: "FHWA CE determination outline: what to document",
     intro:
-      "Part 771 prescribes no CE form; a programmatic agreement sets how a State DOT documents its determinations [[fhwa771117]]. This outline follows what part 771 asks a documented CE to show. Use your State's format.",
+      "Part 771 has no CE form; a programmatic agreement sets how a State DOT documents its determinations [[fhwa771117]]. This outline follows what part 771 asks a documented CE to show.",
     items: [
       {
         title: "Project description and termini",
         detail:
-          "Location, limits and work, showing logical termini and independent utility [[fhwa771111]].",
+          "Location, limits and work, with logical termini and independent utility [[fhwa771111]].",
       },
       {
         title: "Lead agency and authority",
         detail:
-          "The federal funds or approval involved and the Administration acting, or the State acting under a programmatic agreement or assignment [[fhwa771117]] [[fhwaUsc327]].",
+          "The federal funds or approval involved, and who acts: the Administration, or the State under an agreement or assignment [[fhwa771117]] [[fhwaUsc327]].",
       },
       {
         title: "CE category",
         detail:
-          "The 771.117 or 771.118 paragraph used; for a (d)-list CE, documentation that its conditions are met and significant effects will not result [[fhwa771117]] [[fhwa771118]].",
+          "The 771.117 or 771.118 paragraph; for a (d)-list CE, documentation that its conditions are met [[fhwa771117]] [[fhwa771118]].",
       },
       {
         title: "Paragraph (e) constraints",
         detail:
-          "For modernization, safety and bridge CEs, a check of each constraint: right-of-way, permits, historic properties, Section 4(f), listed species, traffic, access control and floodplains [[fhwa771117]].",
+          "For modernization, safety and bridge CEs: right-of-way, permits, historic properties, Section 4(f), listed species, traffic, access control and floodplains [[fhwa771117]].",
       },
       {
         title: "Unusual circumstances",
         detail:
-          "The finding on significant impacts, substantial controversy, Section 4(f) and Section 106 properties, and consistency with environmental laws [[fhwa771117]].",
+          "Findings on significant impacts, controversy, Section 4(f) and Section 106 properties, and consistency with environmental laws [[fhwa771117]].",
       },
       {
-        title: "Section 4(f) and other findings",
+        title: "Section 4(f)",
         detail:
-          "Any Section 4(f) approval, documented separately for a CE [[fhwa774]], and the historic-property and listed-species findings the (e) constraints depend on [[fhwa771117]].",
+          "Any use of a park, refuge or historic site, with its avoidance or de minimis finding, in a separate document for a CE [[fhwa774]].",
       },
       {
         title: "Mitigation commitments",
         detail:
-          "Measures the project sponsor commits to, which it must carry out unless the Administration agrees in writing to change them [[jointCfr771109]].",
+          "Measures the sponsor must carry out unless the Administration agrees in writing to change them [[jointCfr771109]].",
       },
       {
         title: "Approval and re-evaluation",
         detail:
-          "Signature by FHWA, FTA or the State DOT acting under an agreement, and a note that later major approvals need a validity check [[fhwa771117]] [[fhwa771129]].",
+          "Signature by FHWA, FTA or the State DOT, and a validity check before later major approvals [[fhwa771117]] [[fhwa771129]].",
       },
     ],
   },
   faq: [
     {
-      question: "What is FHWA NEPA?",
-      answer:
-        "The National Environmental Policy Act process the Federal Highway Administration follows, set out in 23 CFR part 771, which it shares with FRA and FTA. The agencies revised part 771 by interim final rule on July 3, 2025 and finalized it on September 1, 2026.",
-    },
-    {
       question:
         "What is the difference between a c-list and a d-list categorical exclusion?",
       answer:
-        "Actions on the (c) list in 23 CFR 771.117 or 771.118 normally need no further NEPA approval. Actions on the (d) list qualify only after FHWA or FTA approves the applicant's documentation showing the conditions are met; for FHWA, a programmatic agreement can let the State DOT make that call.",
+        "A (c)-list action normally needs no further NEPA approval once it fits the listed category and no unusual circumstances arise. A (d)-list action needs documentation that its conditions are met and approval from FHWA or FTA, or from a State DOT acting under a programmatic agreement.",
     },
     {
-      question:
-        "What is a programmatic agreement for FHWA categorical exclusions?",
+      question: "When does an FHWA CE need a re-evaluation?",
       answer:
-        "An agreement under 23 CFR 771.117(g) that lets a State DOT make CE determinations and approvals on FHWA's behalf for the CEs it names. It runs up to five years, is renewable, and must cover documentation, quality control, FHWA monitoring, amendment, termination and public availability.",
+        "Before later major approvals, such as right-of-way acquisition or approval of final plans, the applicant consults FHWA or FTA on whether the CE, FONSI or record of decision is still valid.",
     },
     {
-      question: "Which states have NEPA assignment?",
+      question: "How many pages can an FHWA EIS be?",
       answer:
-        "FHWA lists full NEPA assignment memoranda under 23 U.S.C. 327 for Alaska, Arizona, California, Florida, Maine, Nebraska, Ohio, Texas and Utah. Under 23 U.S.C. 326 a State can instead assume only CE determinations; FHWA's toolkit lists California, Utah and Alaska in that program.",
-    },
-    {
-      question: "How long can an FHWA EA or EIS take?",
-      answer:
-        "An EA is limited to one year and 75 pages, excluding citations and appendices. An EIS must be finished within two years from the notice of intent to the signed record of decision; for projects under 23 U.S.C. 139 the text is held to 200 pages where practicable, and otherwise to 150 pages, or 300 for extraordinary complexity.",
+        "For projects under 23 U.S.C. 139, the EIS text is held to 200 pages where practicable. Otherwise the limit is 150 pages, or 300 for extraordinary complexity.",
     },
     {
       question: "Can ePlan draft an FHWA CE determination?",

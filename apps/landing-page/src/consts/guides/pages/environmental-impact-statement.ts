@@ -1,7 +1,8 @@
 // Reused source keys (defined in the shared NEPA sources): usc4332, usc4336,
-// usc4336a, usc4336e, fra2023, ceqIfr, ceqFinal, ceqProcedures, sevenCounty,
-// usda1b7, usda1b8, fhwaFinal. DOE is cited to its July 13, 2026 procedures
-// (doeProcedures, now repointed to that version).
+// usc4336a, usc4336e, ceqIfr, ceqProcedures, sevenCounty, usda1b7, usda1b8.
+// DOE is cited to its July 13, 2026 procedures (doeProcedures). Some keys
+// defined here are cited only by other pages (eisEpaDatabase, eisEpaCopy,
+// eisDoeEisList, eisBlmEplanning, eisUsda1b9).
 import type { GuidePath } from "../paths";
 import type { GuideEntry, Source } from "../types";
 
@@ -34,7 +35,6 @@ export const sources = {
     "Final environmental impact statement/record of decision document",
   ),
   eisFhwa771125: ECFR_FHWA("771.125", "Final environmental impact statements"),
-  eisFhwa771127: ECFR_FHWA("771.127", "Record of decision"),
   eisFhwa771130: ECFR_FHWA(
     "771.130",
     "Supplemental environmental impact statements",
@@ -78,20 +78,6 @@ export const sources = {
     published: "2026-09-25",
     read: READ,
   },
-  eisCeqTimelines: {
-    title: "Environmental Impact Statement Timelines (2010-2018)",
-    publisher: "Council on Environmental Quality, nepa.gov",
-    url: "https://nepa.gov/sites/default/files/documents/CEQ_EIS_Timeline_Report_2020-6-12.pdf",
-    published: "2020-06-12",
-    read: READ,
-  },
-  eisCeqLength: {
-    title: "Length of Environmental Impact Statements (2013-2018)",
-    publisher: "Council on Environmental Quality, nepa.gov",
-    url: "https://nepa.gov/sites/default/files/documents/CEQ_EIS_Length_Report_2020-6-12.pdf",
-    published: "2020-06-12",
-    read: READ,
-  },
   eisDoeEisList: {
     title: "DOE Environmental Impact Statements",
     publisher: "U.S. Department of Energy",
@@ -129,16 +115,11 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "EIS Outline",
   answer:
-    "An environmental impact statement (EIS) is the detailed written statement NEPA requires for a proposed federal action that has a reasonably foreseeable significant effect on the quality of the human environment [[usc4336e]] [[usc4336]]. It covers the action's reasonably foreseeable effects, unavoidable adverse effects, a reasonable range of feasible alternatives including no action, and any irreversible and irretrievable commitments of federal resources [[usc4332]]. Since 2023 an EIS may not exceed 150 pages, or 300 for an action of extraordinary complexity, not counting citations and appendices, and is due within two years [[usc4336a]]. The agency then records its decision, for example in a record of decision [[usda1b8]] [[doeProcedures]].",
+    "An environmental impact statement (EIS) is the detailed statement NEPA requires for a proposed federal action with a reasonably foreseeable significant effect on the quality of the human environment [[usc4336e]] [[usc4336]]. It analyzes the action's effects and a reasonable range of alternatives, including no action [[usc4332]], and ends in the agency's decision, such as a record of decision [[usda1b8]] [[doeProcedures]].",
   glance: [
     {
       label: "Legal basis",
       value: "NEPA section 102(2)(C), 42 U.S.C. 4332(2)(C) [[usc4332]]",
-    },
-    {
-      label: "Required when",
-      value:
-        "A proposed action has a reasonably foreseeable significant effect on the human environment [[usc4336]]",
     },
     {
       label: "Prepared by",
@@ -150,11 +131,15 @@ export const entry: GuideEntry<GuidePath> = {
       value:
         "150 pages, or 300 if extraordinarily complex, not counting citations and appendices [[usc4336a]]",
     },
-    { label: "Deadline", value: "2 years [[usc4336a]]" },
     {
-      label: "Ends with",
+      label: "Deadline",
       value:
-        "A decision document, such as a record of decision (ROD) [[usda1b8]] [[doeProcedures]]",
+        "2 years from the EIS determination, complete right-of-way application or NOI, whichever is first [[usc4336a]]",
+    },
+    {
+      label: "Filed with",
+      value:
+        "EPA, which publishes a weekly notice of availability in the Federal Register [[eisEpaFiling]]",
     },
   ],
   hero: {
@@ -254,108 +239,83 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   sections: [
     {
-      heading: "When is an environmental impact statement required?",
+      heading:
+        "What is an environmental impact statement, and when is one required?",
       paragraphs: [
-        "An agency issues an EIS for a proposed action that needs an environmental document and has a reasonably foreseeable significant effect on the quality of the human environment. If no significant effect is foreseeable, or its significance is unknown, the agency prepares an environmental assessment instead, unless a categorical exclusion applies. No environmental document is needed if the action is not final agency action, is excluded, would clearly and fundamentally conflict with another law, or is nondiscretionary [[usc4336]].",
-        "Under USDA's procedures, whether an effect is significant is the responsible official's expert judgment, informed by interdisciplinary analysis [[usda1b7]]. Some agencies list actions that normally need an EIS. FHWA, FRA and FTA name these, among others [[eisFhwa771115]]:",
+        "If no significant effect is reasonably foreseeable, or its significance is unknown, the agency prepares an environmental assessment instead, unless a categorical exclusion applies. No environmental document is needed if the action is not final agency action, is excluded, would clearly and fundamentally conflict with another law, or is nondiscretionary [[usc4336]].",
+        "Recent filings show the range: EPA's September 25, 2026 notice lists EISs for a TVA solar and storage project, Air Force F-35A training basing and a FERC liquefaction project [[eisNoa20260925]]. Some agencies list actions that normally need one; FHWA, FRA and FTA name these, among others [[eisFhwa771115]]:",
       ],
       bullets: [
         "A new controlled-access freeway",
-        "A highway project of four or more lanes on a new location",
-        "Construction or extension of a fixed transit facility, such as light rail or bus rapid transit, not located primarily within an existing transportation right-of-way",
-        "New major railroad lines or facilities, such as passenger terminals or freight yards, outside an existing transportation right-of-way",
+        "A highway of four or more lanes on a new location",
+        "A new or extended fixed transit facility, such as light rail, not primarily within existing transportation right-of-way",
+        "A new major railroad line or facility outside existing transportation right-of-way",
       ],
     },
     {
-      heading: "Who sets the EIS format now that CEQ's regulations are gone?",
+      heading:
+        "EIS steps: notice of intent, draft and final EIS, record of decision",
       paragraphs: [
-        "CEQ's NEPA regulations, 40 CFR parts 1500-1508, were removed effective April 11, 2025, and CEQ finalized the removal on January 8, 2026 [[ceqIfr]] [[ceqFinal]]. Agencies now follow the statute and their own NEPA procedures, which CEQ indexes on nepa.gov [[ceqProcedures]].",
-        "USDA lets its subcomponents use any EIS format but sets minimum elements, from a cover of no more than two pages to the responsible official's page-limit and deadline statements [[usda1b7]]. DOE lists what an EIS must show, including any means identified to mitigate adverse effects [[doeProcedures]]. FHWA, FRA and FTA set their EIS steps in 23 CFR part 771, finalized September 1, 2026 [[fhwaFinal]].",
-        "In Seven County Infrastructure Coalition v. Eagle County (May 29, 2025), the Supreme Court said agencies make fact-dependent choices about the depth and breadth of their inquiry and the length, content and level of detail of an EIS, and that courts should afford those choices substantial deference [[sevenCounty]].",
+        "With CEQ's regulations at 40 CFR parts 1500-1508 removed in 2025 [[ceqIfr]], the statute and each agency's NEPA procedures set the steps [[ceqProcedures]]. The usual sequence:",
+      ],
+      bullets: [
+        "Notice of intent: a Federal Register notice that must request comment on alternatives, impacts and relevant information [[usda1b7]] [[usc4336a]]",
+        "Scoping: optional under USDA; FHWA, FRA and FTA scope before the NOI [[usda1b7]] [[eisFhwa771123]]",
+        "Draft EIS: agency procedures decide whether it circulates; EPA recommends 45 days of comment [[doeProcedures]] [[eisEpaFiling]]",
+        "EPA review: EPA comments on every draft EIS under Clean Air Act section 309 and posts its letters [[eisEpa309]]",
+        "Final EIS: responds to comments and, under FHWA's rule, names the preferred alternative; EPA recommends 30 days' review [[eisFhwa771125]] [[eisEpaFiling]]",
+        "Record of decision: states the selected alternative and mitigation; FHWA combines it with the final EIS where practicable [[usda1b8]] [[eisFhwa771124]]",
       ],
     },
     {
       heading: "EIS page limits and the two-year deadline",
       paragraphs: [
-        "The Fiscal Responsibility Act of 2023 wrote page limits and deadlines into NEPA [[fra2023]]. An EIS may not exceed 150 pages, or 300 for a proposed action of extraordinary complexity, not including citations or appendices [[usc4336a]]. USDA and DOE specify 8.5 by 11 inch pages with single-spaced 12-point text and count pages of maps and tables toward the limit [[usda1b7]] [[doeProcedures]]. For projects under 23 U.S.C. 139, FHWA's rule sets 200 pages to the maximum extent practicable, unless it sets a different limit [[eisFhwa771138]].",
-        "The lead agency must finish within two years of the earliest of its determination that an EIS is required, its notice that a right-of-way application is complete, or its notice of intent. It may extend the deadline, in consultation with the applicant, only as long as needed, and a project sponsor may petition a court over a missed deadline [[usc4336a]]. FHWA counts from the NOI to the signed record of decision [[eisFhwa771138]]; DOE counts to EPA's notice of availability [[doeProcedures]].",
-        "Both limits date from 2023. For EISs completed from 2010 to 2018, CEQ measured an average of 4.5 years from notice of intent to record of decision [[eisCeqTimelines]]. Final EISs from 2013 to 2018 averaged 661 pages, with a median of 447, not counting appendices [[eisCeqLength]].",
+        "USDA and DOE count 8.5 by 11 inch pages of single-spaced 12-point text, including pages of maps and tables [[usda1b7]] [[doeProcedures]].",
+        "The lead agency may extend the deadline, in consultation with the applicant, only as long as needed, and a project sponsor may petition a court over a missed deadline [[usc4336a]]. FHWA stops the clock at the signed record of decision [[eisFhwa771138]]; DOE at EPA's notice of availability [[doeProcedures]].",
       ],
     },
     {
-      heading: "Notice of intent and scoping",
+      heading: "Supplemental EIS and programmatic EIS",
       paragraphs: [
-        "A notice of intent (NOI) is the Federal Register notice that an agency will prepare an EIS [[usda1b7]]. NEPA requires every NOI to request public comment on alternatives or impacts and on relevant information, studies or analyses, and the NOI's date is one of the dates that can start the two-year clock [[usc4336a]].",
-        "USDA's NOI must include the purpose and need, a preliminary description of the proposed action and known alternatives, the substantive issues with expected impacts, anticipated permits, a decision schedule, any scoping process, cooperating agencies, a project website and a contact [[usda1b7]].",
-        "Scoping is not a statutory step. USDA makes it optional, with no prescribed process [[usda1b7]]. FHWA, FRA and FTA begin scoping before the NOI to identify the purpose and need, the range of alternatives, reasonably foreseeable impacts and the significant issues to address [[eisFhwa771123]].",
-      ],
-    },
-    {
-      heading: "Draft and final EIS, and the record of decision",
-      paragraphs: [
-        "DOE's procedures say there is no statutory requirement to post a draft EIS for public comment [[doeProcedures]]. Agency procedures decide whether and how a draft circulates. FHWA, FRA and FTA circulate a draft EIS with a comment period of 45 to 60 days unless one is set under 23 U.S.C. 139 [[eisFhwa771123]]. USDA lets the responsible official choose whether to publish a draft, posts it on a USDA website, and files only the completed EIS with EPA [[usda1b7]].",
-        "Agencies file EISs with EPA, which publishes a weekly notice of availability in the Federal Register. EPA recommends 45 days of comment on a draft EIS and a 30-day review period for a final, counted from that notice [[eisEpaFiling]]. EPA reviews every draft EIS under Clean Air Act section 309 and posts its comment letters [[eisEpa309]]. Under FHWA's rule, a final EIS names the preferred alternative and responds to substantive comments on the draft [[eisFhwa771125]].",
-        "Under USDA's procedures, the record of decision (ROD) incorporates the EIS by reference, states the selected alternative, any mitigation and its authority, and when implementation begins, and is signed; the action may start once EPA's notice is published, the ROD is posted and notifications are sent [[usda1b8]]. FHWA combines the final EIS and ROD where practicable [[eisFhwa771124]]; a separate ROD comes at least 30 days after the final EIS notice or 90 days after the draft notice, whichever is later [[eisFhwa771127]].",
-      ],
-    },
-    {
-      heading: "When to prepare a supplemental EIS or a programmatic EIS",
-      paragraphs: [
-        "FHWA, FRA and FTA must supplement an EIS when changes to the action, or new information or circumstances, would cause significant impacts the EIS did not evaluate. A supplement goes through the same draft, final and ROD steps, without scoping [[eisFhwa771130]]. DOE writes a supplement analysis when it is unclear whether a supplement is needed [[doeProcedures]]. USDA fixes minor changes to a filed EIS with an errata sheet and prepares a supplemental EIS for substantial ones [[eisUsda1b9]].",
-        "A programmatic EIS analyzes all or some of the effects of a policy, program, plan or group of related actions [[usc4336e]]. If judicial review of it was available, later documents for related actions may rely on its analysis for five years unless substantial new circumstances or information bear on it, and after five years if the agency reevaluates it [[eisUsc4336b]]. USDA and DOE may frame programmatic reviews geographically, generically, or by stage of technological development [[eisUsda1b9]] [[doeProcedures]].",
-      ],
-    },
-    {
-      heading:
-        "Environmental impact statement examples: where to find real EISs",
-      paragraphs: [
-        "Start with EPA's EIS database at cdxapps.epa.gov/cdx-enepa-II. It holds records of all EISs EPA has received since 1987, EPA comment letters since 2001, and PDFs since October 2012. Search by title words, agency (optionally including co-lead and cooperating agencies), state, Federal Register date, or CEQ number; a search returns up to 500 records [[eisEpaDatabase]].",
-        "EPA's weekly notice shows what was just filed. The September 25, 2026 notice lists a Tennessee Valley Authority draft EIS for a solar and storage project in Mississippi, an Air Force final EIS for F-35A training basing in Oregon, and a FERC draft EIS for a liquefaction project in Texas [[eisNoa20260925]]. For older EISs, Northwestern University's Transportation Library holds nearly all federal EISs issued since 1969 [[eisEpaCopy]].",
-        "To find precedent for your project type, filter the database by the agency that does that work and your state [[eisEpaDatabase]]. Agencies also post their own: DOE's EIS list filters by office and topic [[eisDoeEisList]], and BLM's National NEPA Register searches by project name, NEPA number and keyword [[eisBlmEplanning]]. When you read one, check:",
-      ],
-      bullets: [
-        "The alternatives chapter: what was proposed and which options were compared",
-        "The environmental consequences: how each resource's effects were analyzed",
-        "The comment responses in the final EIS: what reviewers challenged",
-        "EPA's comment letter on the draft, in the same database [[eisEpa309]]",
-        "The record of decision: the alternative selected and the mitigation adopted",
+        "FHWA, FRA and FTA supplement an EIS when changes to the action, or new information or circumstances, would cause significant impacts it did not evaluate [[eisFhwa771130]]. DOE writes a supplement analysis when it is unclear whether one is needed [[doeProcedures]].",
+        "A programmatic EIS analyzes the effects of a policy, program, plan or group of related actions [[usc4336e]]. Where judicial review of it was available, later reviews of related actions may rely on it for five years unless substantial new circumstances or information bear on it, and after that if the agency reevaluates it [[eisUsc4336b]].",
       ],
     },
   ],
   outline: {
     heading: "EIS outline: what an environmental impact statement contains",
     intro:
-      "NEPA lists what every EIS must address [[usc4332]]. With CEQ's regulations removed [[ceqIfr]], this outline follows the minimum elements in USDA's procedures [[usda1b7]] and DOE's [[doeProcedures]]. Other agencies differ; use yours.",
+      "NEPA lists what every EIS must address [[usc4332]]; agencies set the rest, with substantial deference from courts [[sevenCounty]]. This outline follows USDA's [[usda1b7]] and DOE's [[doeProcedures]] minimum elements.",
     items: [
       {
         title: "Cover",
         detail:
-          "Two pages at most: the title, the lead and cooperating agencies, the location, a contact and the unique identification number [[usda1b7]].",
+          "Two pages at most: title, lead and cooperating agencies, location, contact and unique identification number [[usda1b7]].",
       },
       {
         title: "Purpose and need",
         detail:
-          "A brief statement of the underlying purpose and need [[usc4336a]], generally based on the agency's authority or, for an application, informed by the applicant's goals [[usda1b7]] [[doeProcedures]].",
+          "A brief statement of the underlying purpose and need [[usc4336a]], based on the agency's authority or an applicant's goals [[usda1b7]] [[doeProcedures]].",
       },
       {
         title: "Proposed action and alternatives",
         detail:
-          "A reasonable range of technically and economically feasible alternatives that meet the purpose and need, including no action [[usc4332]], with brief reasons for any eliminated from detailed study [[usda1b7]].",
+          "A reasonable range of feasible alternatives that meet the purpose and need, plus no action [[usc4332]], with reasons for any eliminated [[usda1b7]].",
       },
       {
         title: "Affected environment",
         detail:
-          "A succinct description of the area the alternatives could affect, which may be combined with the effects analysis [[usda1b7]].",
+          "A succinct description of the area the alternatives could affect; it may be combined with the effects [[usda1b7]].",
       },
       {
         title: "Environmental effects",
         detail:
-          "Reasonably foreseeable effects, unavoidable adverse effects, short-term uses versus long-term productivity, and irreversible and irretrievable commitments of federal resources [[usc4332]], plus any means identified to mitigate adverse effects [[doeProcedures]].",
+          "Reasonably foreseeable and unavoidable adverse effects, short-term uses versus long-term productivity, irreversible commitments of resources [[usc4332]], and any mitigation identified [[doeProcedures]].",
       },
       {
         title: "Other laws, permits and consultation",
         detail:
-          "Reviews under other laws such as the Endangered Species Act and the National Historic Preservation Act, the federal permits needed, and the agencies and persons consulted [[usda1b7]].",
+          "Reviews under laws such as the Endangered Species Act and National Historic Preservation Act, federal permits needed, and agencies and persons consulted [[usda1b7]].",
       },
       {
         title: "Comments and responses",
@@ -370,40 +330,30 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Appendices",
         detail:
-          "Voluminous data such as tables and calculations that support the analysis, not additional analysis [[usda1b7]].",
+          "Supporting data such as tables and calculations, not additional analysis [[usda1b7]].",
       },
     ],
   },
   faq: [
     {
-      question: "What is an environmental impact statement?",
-      answer:
-        "The detailed written statement NEPA requires for a proposed federal action with a reasonably foreseeable significant effect on the quality of the human environment (42 U.S.C. 4332(2)(C) and 4336(b)(1)). It analyzes the action's effects and a reasonable range of alternatives, including no action, before the agency decides.",
-    },
-    {
-      question: "How many pages can an EIS be?",
-      answer:
-        "Since the 2023 amendments to NEPA, 150 pages, or 300 for an action of extraordinary complexity, not counting citations and appendices (42 U.S.C. 4336a(e)). USDA and DOE also specify single-spaced 12-point text on 8.5 by 11 inch pages, and count pages with maps and tables.",
-    },
-    {
-      question: "How long does an EIS take?",
-      answer:
-        "By statute, no more than two years from the earliest of the agency's decision that an EIS is required, its notice that a right-of-way application is complete, or its notice of intent, with extensions only as long as needed (42 U.S.C. 4336a(g)). Before that limit, CEQ found EISs completed from 2010 to 2018 averaged 4.5 years from notice of intent to record of decision.",
-    },
-    {
       question: "Is a draft EIS required?",
       answer:
-        "It depends on the agency. FHWA, FRA and FTA circulate a draft EIS for 45 to 60 days of comment, USDA lets the responsible official choose whether to publish a draft, and DOE's procedures note there is no statutory requirement to post a draft EIS for comment.",
+        "It depends on the agency. FHWA, FRA and FTA circulate one for 45 to 60 days of comment, USDA lets the responsible official decide, and DOE's procedures note that no statute requires posting a draft EIS for comment.",
     },
     {
       question: "Where can I find environmental impact statement examples?",
       answer:
-        "EPA's EIS database (cdxapps.epa.gov/cdx-enepa-II) lists every EIS filed with EPA since 1987, with PDFs since October 2012, searchable by title, agency and state. DOE's EIS list and BLM's National NEPA Register post project documents, and Northwestern University's Transportation Library holds nearly all federal EISs since 1969.",
+        "EPA's EIS database (cdxapps.epa.gov/cdx-enepa-II) lists every EIS filed with EPA since 1987, with PDFs since October 2012, searchable by title, agency and state. DOE and BLM post their own, and Northwestern University's Transportation Library holds nearly all federal EISs since 1969.",
+    },
+    {
+      question: "Who decides how detailed an EIS must be?",
+      answer:
+        "The agency. In Seven County Infrastructure Coalition v. Eagle County (2025), the Supreme Court called an EIS's depth, length, content and level of detail fact-dependent agency choices that courts should treat with substantial deference.",
     },
     {
       question: "Can ePlan write my EIS?",
       answer:
-        "No. ePlan outlines the EIS from your project description and files, researches precedent EISs, and marks every fact it can't confirm for you to fill. Your team writes the analysis, and the responsible official makes the decision.",
+        "No. ePlan outlines the EIS from your project description and files, finds precedent EISs, and marks every fact it can't confirm. Your team writes the analysis, and the responsible official decides.",
     },
   ],
 };

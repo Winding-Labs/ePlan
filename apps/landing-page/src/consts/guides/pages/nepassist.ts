@@ -40,12 +40,6 @@ export const sources = {
     url: "https://nepassisttool.epa.gov/nepassist/nepamap.aspx",
     read: READ,
   },
-  nepassistHudEa: {
-    title: "Environmental Assessment: Resources",
-    publisher: "U.S. Department of Housing and Urban Development, HUD Exchange",
-    url: "https://www.hudexchange.info/programs/environmental-review/environmental-assessment/resources/",
-    read: READ,
-  },
 } satisfies Record<string, Source>;
 
 export const entry: GuideEntry<GuidePath> = {
@@ -66,7 +60,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Affected Environment Section",
   answer:
-    "NEPAssist is EPA's web mapping tool that draws environmental data from EPA's GIS databases and web services and gives an immediate screening of a project area you define [[nepassistEpa]]. Its report answers yes-or-no questions about what lies within a buffer of that area, such as a brownfields site, from national and state datasets, and adds a Fish and Wildlife Service species report [[nepassistGuide]]. Planners use it in scoping and to describe the affected environment, since NEPA lets agencies use any reliable data source [[usc4336]]. It screens; it does not decide significance, and EPA asks users to cite each layer's source data rather than NEPAssist [[nepassistGuide]].",
+    "NEPAssist, also searched as NEPA Assist, is EPA's web mapping tool for environmental screening: it checks a project area you define against data from EPA's GIS databases and web services, raising issues at the earliest stage of planning [[nepassistEpa]]. Its report answers yes-or-no questions about what lies within a buffer of that area [[nepassistGuide]].",
   glance: [
     {
       label: "Run by",
@@ -76,11 +70,6 @@ export const entry: GuideEntry<GuidePath> = {
       label: "Input",
       value:
         "An address, coordinates, county, watershed or a drawn point, line or area, plus a buffer [[nepassistGuide]]",
-    },
-    {
-      label: "Output",
-      value:
-        "National and state reports of yes/no questions and an IPaC species report, saved as Excel or PDF [[nepassistGuide]]",
     },
     {
       label: "Default buffer",
@@ -99,7 +88,7 @@ export const entry: GuideEntry<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft an",
+    prefix: "Draft the",
     placeholder: "I have a NEPAssist report for…",
     examples: [
       {
@@ -121,7 +110,7 @@ export const entry: GuideEntry<GuidePath> = {
       {
         emoji: "🏘️",
         label: "Affordable Housing",
-        heading: "Affected Environment for Housing",
+        heading: "Affected Environment for a Housing Project",
         eyebrow: "HOUSING",
         prompt:
           "I'm the environmental officer for a county housing authority reviewing a 60-unit affordable housing project on a 4-acre infill lot in central Ohio, and I exported the NEPAssist report to Excel.",
@@ -137,7 +126,7 @@ export const entry: GuideEntry<GuidePath> = {
       {
         emoji: "🛤️",
         label: "Rail Siding",
-        heading: "Affected Environment From NEPAssist",
+        heading: "Affected Environment for a Rail Siding",
         eyebrow: "FREIGHT RAIL",
         prompt:
           "I'm a consultant to a short-line railroad preparing an EA for a 2-mile passing siding next to wetlands in the Mississippi Delta, and I have a NEPAssist report for the corridor.",
@@ -190,68 +179,45 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   sections: [
     {
-      heading: "What is EPA's NEPAssist?",
-      paragraphs: [
-        "EPA describes NEPAssist as a tool that facilitates the environmental review process and project planning. The web application draws environmental data dynamically from EPA Geographic Information System databases and web services and screens environmental assessment indicators for an area of interest the user defines, which can raise important environmental issues at the earliest stages of project development [[nepassistEpa]].",
-        "EPA's NEPAssist page links the tool, a user guide, a description of the map layers and training videos [[nepassistEpa]]. Agencies point their reviewers to it: HUD lists NEPAssist among its environmental assessment resources [[nepassistHudEa]]. ePlan is not affiliated with EPA and does not run NEPAssist; it reads the report a planner exports and uploads.",
-      ],
-    },
-    {
       heading: "What the EPA NEPAssist report covers",
       paragraphs: [
-        "You find a study area by address, airport, ZIP code, city, county, state, coordinates, congressional district or watershed, then draw a point, line, area or rectangle, or enter coordinates. The buffer defaults to 0.5 mile for a point or line and 0 for an area or rectangle; change it before you run the report. You can also report on an existing feature's boundary, but not from EPA facility or water monitoring points [[nepassistGuide]].",
-        "The report is a series of yes-or-no questions. The National Report draws on nationally available datasets and the State Reports on datasets from the EPA Regions; a multistate area gets one consolidated report. Clicking a question shows its source and metadata, and clicking an answer shows details, such as the name and distance of each brownfields site, with the option to change the buffer. The report also includes a U.S. Fish and Wildlife Service IPaC report on threatened and endangered species, and saves to Excel or PDF [[nepassistGuide]].",
+        "The report is a series of yes-or-no questions: a National Report from nationally available datasets and State Reports from the EPA Regions' datasets, consolidated for a multistate area. Click a question for its source and metadata, or an answer for details such as each brownfields site's name and distance. It adds a Fish and Wildlife Service IPaC species report and saves to Excel or PDF [[nepassistGuide]].",
       ],
     },
     {
       heading: "NEPAssist layers: what data it maps",
       paragraphs: [
-        "EPA's layer descriptions list these groups, each with its source and date [[nepassistLayers]]:",
+        "EPA dates the impaired-water layers to 2020, land cover to change between 2006 and 2019 and sole source aquifers to 2018, and warns that the critical habitat shown is not all designated critical habitat, so check each layer's vintage [[nepassistLayers]]. The layer groups:",
       ],
       bullets: [
-        "EPA facilities: hazardous waste (RCRAInfo), air pollution (ICIS-AIR), water dischargers (NPDES), toxic releases (TRI), Superfund (NPL) site boundaries and brownfields (ACRES) [[nepassistLayers]]",
-        "Water: impaired waters on the Clean Water Act 303(d) list, streams, water bodies, sole source aquifers, HUC8 and HUC12 watersheds, wild and scenic rivers, and USGS and EPA water monitors [[nepassistLayers]]",
-        "Air: nonattainment areas for ozone, PM2.5, PM10, lead, sulfur dioxide, carbon monoxide and nitrogen dioxide, by standard [[nepassistLayers]]",
-        "Places and transportation: National Register of Historic Places, schools, places of worship, hospitals, airports and railroads [[nepassistLayers]]",
-        "Habitat and hazards: Fish and Wildlife Service critical habitat, NWI wetlands, FEMA flood hazard data, land cover, essential fish habitat, BLM areas of critical environmental concern, and formerly used defense sites [[nepassistLayers]]",
-        "Boundaries: federal lands, counties, cities, urban areas, PLSS townships and congressional districts; you can also add a shapefile, ArcGIS.com data or a web map service [[nepassistLayers]] [[nepassistGuide]]",
+        "EPA facilities: RCRAInfo hazardous waste, ICIS-AIR, NPDES dischargers, TRI, Superfund (NPL) boundaries and ACRES brownfields [[nepassistLayers]]",
+        "Water: 303(d) impaired waters, streams, water bodies, sole source aquifers, watersheds, wild and scenic rivers [[nepassistLayers]]",
+        "Air: nonattainment areas for ozone, PM2.5, PM10, lead, sulfur dioxide, carbon monoxide and nitrogen dioxide [[nepassistLayers]]",
+        "Habitat and flooding: critical habitat, NWI wetlands, essential fish habitat, land cover and FEMA flood hazard data [[nepassistLayers]]",
+        "Places: National Register properties, schools, places of worship, hospitals, airports, railroads and formerly used defense sites [[nepassistLayers]]",
+        "Boundaries: federal lands, counties, cities, urban areas and PLSS townships [[nepassistLayers]]",
       ],
     },
     {
       heading:
         "How planners use NEPAssist in scoping and the affected environment",
       paragraphs: [
-        "In deciding the level of review, an agency may use any reliable data source and need not do new research unless it is essential to a reasoned choice among alternatives [[usc4336]]. A NEPAssist report is a quick first pass: it shows which resources sit inside the buffer before field studies start, which helps set the study area and the list of issues.",
-        "The affected environment then describes those resources. USDA asks for a succinct description of the environment of the areas the alternatives may affect, no longer than needed for context, and lets it be combined with the effects analysis [[usda1b7]] [[usda1b5]]. DOE wants enough to support its significance conclusion, not an encyclopedia, and it need not extend beyond areas with reasonably foreseeable effects [[doeProcedures]]. Several NEPAssist layers match USDA's extraordinary-circumstance resources: critical habitat, floodplains and wetlands, sole-source aquifers, and National Register properties [[usda1b3]].",
+        "NEPA lets an agency use any reliable data source and does not require new research unless it is essential to a reasoned choice among alternatives [[usc4336]]. A NEPAssist report is a quick first pass: it shows which resources sit inside the buffer before field studies start, which helps set the study area and the list of issues.",
+        "The affected environment then describes those resources briefly: USDA asks for no more than context requires [[usda1b7]] [[usda1b5]], and DOE for enough to support its significance conclusion, not an encyclopedia [[doeProcedures]]. Several layers match USDA's extraordinary-circumstance resources: critical habitat, floodplains and wetlands, sole source aquifers and National Register properties [[usda1b3]].",
       ],
     },
     {
       heading: "How to read and cite a NEPAssist report",
       paragraphs: [
-        "Every layer and report question carries metadata: the source, the date the data was generated, accuracy and projection. EPA says to cite the data file and its metadata, not the NEPAssist application, because the layers are updated as newer data arrives. For a hazardous waste site, for example, cite EPA's Envirofacts database, the RCRAInfo system and the last retrieval date [[nepassistGuide]].",
-        "Check each layer's vintage before you rely on it. EPA's descriptions date the impaired-water layers to 2020, the land cover layer to change between 2006 and 2019, and the sole source aquifer layer to 2018, and warn that the critical habitat shown does not include all designated critical habitat [[nepassistLayers]].",
-      ],
-    },
-    {
-      heading:
-        "Environmental screening, not a determination: NEPAssist's limits",
-      paragraphs: [
-        "EPA calls NEPAssist a screening tool that potentially raises issues early [[nepassistEpa]]. A yes means a mapped feature falls inside your buffer; it does not measure an effect. Under USDA's procedures, the mere presence of a listed resource does not mean an extraordinary circumstance exists; what matters is whether there is a cause-and-effect relationship between the action and the resource [[usda1b3]]. Whether an effect is significant is the responsible official's expert judgment [[usda1b7]].",
-        "Some layers switch off at certain map scales, and EPA asks for caution before uploading a shapefile with sensitive or confidential data [[nepassistGuide]]. Where information is incomplete and cannot be obtained at reasonable cost, DOE says the document should make clear that it is lacking [[doeProcedures]]. Follow a screen with the agency consultations and field surveys the project needs.",
-      ],
-    },
-    {
-      heading: "Is NEPAssist still online in 2026, and what changed?",
-      paragraphs: [
-        "Yes. EPA's NEPAssist page was last updated January 20, 2026 [[nepassistEpa]], and the user guide on February 24, 2026 [[nepassistGuide]]. The map application was running when we checked on October 2, 2026, and its start screen notes a February 2025 data update: Superfund sites now show as polygon boundaries instead of points [[nepassistTool]].",
-        "Environmental justice data is gone from the layer list. The September 2024 descriptions listed EJScreen Indexes (2024) and a Census demographics option under More Data [[nepassistLayers2024]]; the current descriptions list neither [[nepassistLayers]]. If your agency's procedures still ask for community or demographic information, get it from the original data sources.",
+        "A yes means a mapped feature falls inside your buffer; it does not measure an effect [[nepassistEpa]]. Under USDA's procedures, a resource's presence alone is not an extraordinary circumstance; what matters is cause and effect [[usda1b3]]. Significance is the responsible official's judgment [[usda1b7]].",
+        "Cite each dataset and its metadata date, not NEPAssist, because layers are refreshed as newer data arrives; for a hazardous waste site, cite EPA's Envirofacts RCRAInfo data and the retrieval date [[nepassistGuide]]. Where information is incomplete and cannot be obtained at reasonable cost, DOE says the document should make that clear [[doeProcedures]].",
       ],
     },
   ],
   outline: {
     heading: "Affected environment outline built from a NEPAssist report",
     intro:
-      "USDA's EA and EIS rules ask for a succinct description of the potentially affected environment [[usda1b5]] [[usda1b7]], and DOE's for one that supports its significance findings [[doeProcedures]]. This outline maps NEPAssist's layer groups to that section [[nepassistLayers]]; follow your agency's resource list.",
+      "This outline maps NEPAssist's layer groups to an affected environment section [[nepassistLayers]]; follow your agency's resource list where it differs.",
     items: [
       {
         title: "Study area and buffer",
@@ -302,29 +268,19 @@ export const entry: GuideEntry<GuidePath> = {
   },
   faq: [
     {
-      question: "What is NEPAssist used for?",
-      answer:
-        "Screening a project area early in planning. You draw the area, set a buffer and get a report of yes-or-no questions about nearby features such as impaired waters, wetlands, critical habitat, historic properties and contaminated sites, which helps set the study area and the issues for an EA or EIS.",
-    },
-    {
-      question: "Is NEPA Assist the same as NEPAssist?",
-      answer:
-        "Yes. NEPAssist, often searched as NEPA Assist, is EPA's environmental screening map at nepassisttool.epa.gov. EPA runs it and answers questions at NEPAssisthelp@epa.gov.",
-    },
-    {
       question: "Is NEPAssist still available in 2026?",
       answer:
-        "Yes. EPA updated its NEPAssist page in January 2026 and the user guide in February 2026, and the tool was online in October 2026.",
+        "Yes. The map application was online when we checked on October 2, 2026. Its start screen notes a February 2025 data update that shows Superfund sites as polygon boundaries instead of points.",
     },
     {
       question: "Does NEPAssist still include environmental justice data?",
       answer:
-        "No. EPA's layer descriptions listed EJScreen indexes and Census demographic data in September 2024, and the current descriptions list neither. Get community data from the original sources if your agency still asks for it.",
+        "No. EPA's layer descriptions listed EJScreen indexes and Census demographic data in September 2024, and the current descriptions list neither. If your agency still asks for community or demographic information, get it from the original data sources.",
     },
     {
-      question: "Can I cite NEPAssist in an environmental assessment?",
+      question: "Can I upload a project boundary to NEPAssist?",
       answer:
-        "EPA says not to. Cite the underlying data file and its metadata, such as EPA's Envirofacts RCRAInfo data and its retrieval date, because NEPAssist's layers are refreshed as newer data arrives.",
+        "Yes. You can add a shapefile, ArcGIS.com data or a web map service, and run the report on an existing feature's boundary, though not from EPA facility or water monitoring points. EPA asks for caution before uploading a shapefile with sensitive or confidential data.",
     },
     {
       question: "Can ePlan run NEPAssist for me?",
