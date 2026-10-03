@@ -104,7 +104,7 @@ number is inflated by grouping.
    Pages that track rules carry a "last reviewed" date and get updated when the rule
    lands.
 6. **Nobody bids, and AI Overviews top the results.** There are 0 ads on 34/34 NEPA/CEQA
-   SERPs. Top-of-page bids are $1–8. An AI Overview appears on 32/34. Each page opens with
+   SERPs. Top-of-page bids are $1–8. An AI Overview appears on 33/34. Each page opens with
    a one-paragraph answer that an Overview can quote (#35's "Short answer" card), then a
    table, an FAQ built from People Also Ask, and primary-source links.
 7. **Named projects are precedent, not traffic.** "Mountain Valley Pipeline" gets 90,500,
