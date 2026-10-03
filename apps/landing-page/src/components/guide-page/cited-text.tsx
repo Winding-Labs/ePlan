@@ -1,5 +1,7 @@
 import { Fragment } from "react";
 
+import Link from "next/link";
+
 import { splitCitations } from "@/lib/citations";
 
 interface CitedTextProps {
@@ -9,8 +11,9 @@ interface CitedTextProps {
 }
 
 // Renders copy with `[[sourceKey]]` markers as numbered superscript links to
-// the page's source list. Whitespace before a marker is dropped so the
-// number sits against the word it supports.
+// the page's source list, and `[label](/for/slug)` as a link to that guide.
+// Whitespace before a marker is dropped so the number sits against the word
+// it supports.
 export function CitedText({ text, numberOf }: CitedTextProps) {
   const segments = splitCitations(text);
 
@@ -29,6 +32,18 @@ export function CitedText({ text, numberOf }: CitedTextProps) {
                 [{number}]
               </a>
             </sup>
+          );
+        }
+
+        if (segment.type === "link") {
+          return (
+            <Link
+              key={`link-${index}`}
+              href={segment.href}
+              className="font-medium text-brand-800 underline underline-offset-2 hover:text-brand-900"
+            >
+              {segment.label}
+            </Link>
           );
         }
 

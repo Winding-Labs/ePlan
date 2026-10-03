@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 import { PLANS } from "@wildfires-org/turboplan-billing/types";
 
-import { orderCitations, stripCitations } from "@/lib/citations";
+import { guideLinks, orderCitations, stripCitations } from "@/lib/citations";
 import { DESCRIPTION_MAX_LENGTH, TITLE_MAX_LENGTH } from "@/lib/seo";
 import { GUIDE_LINKS } from "../guide-links";
 import { GUIDE_PATHS, GUIDES, guideSlug, SOURCES } from "./index";
@@ -154,6 +154,12 @@ describe("guide pages", () => {
     Object.keys(SOURCES).forEach((key) => expect(cited).toContain(key));
   });
 
+  it("links only to registered guide pages from its copy", () => {
+    guideLinks(ALL_COPY).forEach((href) => {
+      expect(["/for", ...GUIDE_PATHS]).toContain(href);
+    });
+  });
+
   it("lists each source URL once (pages share a source by its key)", () => {
     const keysByUrl = new Map<string, string[]>();
     for (const [key, source] of Object.entries(SOURCES)) {
@@ -173,9 +179,10 @@ describe("guide pages", () => {
     });
   });
 
-  it("keeps FAQ answers free of citation markers (they feed JSON-LD)", () => {
+  it("keeps FAQ answers free of citation markers and links (they feed JSON-LD)", () => {
     GUIDES.flatMap((page) => page.faq).forEach((item) => {
       expect(item.answer).not.toMatch(MARKER);
+      expect(guideLinks([item.answer])).toEqual([]);
     });
   });
 

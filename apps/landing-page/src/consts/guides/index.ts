@@ -4,16 +4,21 @@ import * as ceqaAndNepa from "./pages/ceqa-and-nepa";
 import * as ceqaEir from "./pages/ceqa-eir";
 import * as ceqaExemptions from "./pages/ceqa-exemptions";
 import * as ceqaInitialStudy from "./pages/ceqa-initial-study";
+import * as ceqanet from "./pages/ceqanet";
 import * as doeNepa from "./pages/doe-nepa";
 import * as environmentalImpactStatement from "./pages/environmental-impact-statement";
 import * as esaSection7 from "./pages/esa-section-7";
 import * as faaNepa from "./pages/faa-nepa";
 import * as femaEhp from "./pages/fema-ehp";
 import * as fhwaNepa from "./pages/fhwa-nepa";
+import * as hawaiiHepa from "./pages/hawaii-hepa";
 import * as hudEnvironmentalReview from "./pages/hud-environmental-review";
 import * as interiorBlmNepa from "./pages/interior-blm-nepa";
+import * as ipac from "./pages/ipac";
+import * as massachusettsMepa from "./pages/massachusetts-mepa";
 import * as nepaRegulations from "./pages/nepa-regulations";
 import * as section106 from "./pages/section-106";
+import * as stateEnvironmentalReview from "./pages/state-environmental-review";
 import * as usdaForestServiceNepa from "./pages/usda-forest-service-nepa";
 import { GUIDE_PATHS, type GuidePath } from "./paths";
 import { PRODUCT_GUIDES } from "./product";
@@ -33,6 +38,11 @@ const PAGE_MODULES = [
   ceqaExemptions,
   ceqaEir,
   ceqaAndNepa,
+  hawaiiHepa,
+  massachusettsMepa,
+  stateEnvironmentalReview,
+  ceqanet,
+  ipac,
   femaEhp,
   hudEnvironmentalReview,
   faaNepa,
