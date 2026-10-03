@@ -89,14 +89,14 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a Decision Memo for",
     placeholder:
       "I'm planning a project on our ranger district and need a decision memo for…",
     examples: [
       {
         emoji: "🥾",
         label: "Trail Reroute",
-        heading: "Decision Memo for Trail Reroute",
+        heading: "Trail Reroute",
         eyebrow: "RANGER DISTRICT",
         prompt:
           "I'm the recreation planner on the Cowlitz Valley Ranger District in Washington, rerouting 1.4 miles of the Kettle Bench Trail away from an eroding creek bank and restoring the old tread.",
@@ -104,7 +104,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏕️",
         label: "Campground Upgrades",
-        heading: "Decision Memo for Campground Upgrades",
+        heading: "Campground Upgrades",
         eyebrow: "DEVELOPED RECREATION",
         prompt:
           "I'm a recreation staff officer on a national forest in Arizona replacing two vault toilets, rebuilding 12 campsites and paving the parking loop at an existing campground.",
@@ -112,7 +112,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🚧",
         label: "Road Decommissioning",
-        heading: "Decision Memo for Road Decommissioning",
+        heading: "Road Decommissioning",
         eyebrow: "WATERSHED RESTORATION",
         prompt:
           "I'm a hydrologist on a national forest in Idaho planning to decommission 6 miles of unneeded system and user-created roads in a steelhead watershed.",
@@ -120,7 +120,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "📡",
         label: "Communications Site",
-        heading: "Decision Memo for a Communications Site",
+        heading: "a Communications Site",
         eyebrow: "SPECIAL USES",
         prompt:
           "I'm a special uses permit administrator in Colorado reviewing a wireless carrier's request to add an antenna and equipment shelter at an existing communications site on a forest summit.",
@@ -128,7 +128,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🔥",
         label: "Post-Fire Repairs",
-        heading: "Decision Memo for Post-Fire Repairs",
+        heading: "Post-Fire Repairs",
         eyebrow: "BURNED AREA RECOVERY",
         prompt:
           "I'm a district ranger in Oregon planning tree planting, fence replacement and trail repair on 1,800 acres of national forest that burned last summer.",

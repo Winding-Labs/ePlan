@@ -144,13 +144,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Start a",
+    prefix: "Start a State Review for",
     placeholder: "I'm starting state environmental review for…",
     examples: [
       {
         emoji: "🚌",
         label: "Transit Line",
-        heading: "State Review for a Transit Line",
+        heading: "a Transit Line",
         eyebrow: "REGIONAL TRANSIT",
         prompt:
           "I'm an environmental planner at a Minnesota regional transit agency starting an environmental assessment worksheet for a 7-mile arterial bus rapid transit line with 14 stations.",
@@ -158,7 +158,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏘️",
         label: "Housing Project",
-        heading: "State Review for a Housing Project",
+        heading: "a Housing Project",
         eyebrow: "VILLAGE PLANNING",
         prompt:
           "I'm the planning consultant to a New York village planning board starting SEQR review of a 180-unit apartment project on a 12-acre former nursery site.",
@@ -166,7 +166,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "⛏️",
         label: "Gravel Pit",
-        heading: "State Review for a Gravel Pit",
+        heading: "a Gravel Pit",
         eyebrow: "STATE PERMITTING",
         prompt:
           "I'm an environmental specialist at a Montana state agency starting MEPA review of a permit application for a 40-acre gravel pit along a county road.",
@@ -174,7 +174,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🛣️",
         label: "Road Widening",
-        heading: "State Review for a Road Widening",
+        heading: "a Road Widening",
         eyebrow: "CITY PUBLIC WORKS",
         prompt:
           "I'm a project engineer at a Washington city public works department starting SEPA review for widening 1.5 miles of a two-lane arterial to add a center turn lane and sidewalks.",
@@ -182,7 +182,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌊",
         label: "Seawall Repair",
-        heading: "State Review for a Seawall Repair",
+        heading: "a Seawall Repair",
         eyebrow: "COUNTY PARKS",
         prompt:
           "I'm a planner with a Hawaii county parks department starting Chapter 343 review for repairing a 250-foot seawall at a beach park on county land.",

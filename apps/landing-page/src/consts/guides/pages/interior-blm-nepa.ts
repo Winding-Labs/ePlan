@@ -129,14 +129,14 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a CX Record for",
     placeholder:
       "I'm renewing a grazing permit on our field office and need a CX record for…",
     examples: [
       {
         emoji: "🐄",
         label: "Grazing Permit",
-        heading: "CX Record for a Grazing Permit",
+        heading: "a Grazing Permit",
         eyebrow: "RANGELAND",
         prompt:
           "I'm a rangeland management specialist at a BLM field office in southern Idaho renewing a 10-year cattle grazing permit on a 22,000-acre allotment with no change in management.",
@@ -144,7 +144,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🚵",
         label: "Recreation Permit",
-        heading: "CX Record for a Recreation Permit",
+        heading: "a Recreation Permit",
         eyebrow: "RECREATION PERMITS",
         prompt:
           "I'm an outdoor recreation planner at a BLM field office in Utah reviewing a one-day mountain bike race on existing trails with a 2-acre staging area.",
@@ -152,7 +152,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "📶",
         label: "Fiber Right-of-Way",
-        heading: "CX Record for a Fiber Right-of-Way",
+        heading: "a Fiber Right-of-Way",
         eyebrow: "RIGHTS-OF-WAY",
         prompt:
           "I'm a realty specialist at a BLM field office in Nevada processing an application to bury 3 miles of fiber optic cable inside an existing highway right-of-way.",
@@ -160,7 +160,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🪨",
         label: "Gravel Sale",
-        heading: "CX Record for a Gravel Sale",
+        heading: "a Gravel Sale",
         eyebrow: "MINERAL MATERIALS",
         prompt:
           "I'm a geologist at a BLM field office in Wyoming processing a county road department's request for 20,000 cubic yards of gravel from an existing community pit.",
@@ -168,7 +168,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🔥",
         label: "Prescribed Burn",
-        heading: "CX Record for a Prescribed Burn",
+        heading: "a Prescribed Burn",
         eyebrow: "WILDLIFE REFUGE",
         prompt:
           "I'm the fire management officer at a national wildlife refuge in North Dakota planning a 1,200-acre prescribed burn in grassland at the edge of a town.",

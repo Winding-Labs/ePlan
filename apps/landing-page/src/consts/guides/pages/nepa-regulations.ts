@@ -111,14 +111,14 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a Procedures Memo for",
     placeholder:
       "I'm applying for federal funds for a project and need to know which NEPA procedures apply…",
     examples: [
       {
         emoji: "🌉",
         label: "Bridge Replacement",
-        heading: "Procedures Memo for Bridge Replacement",
+        heading: "Bridge Replacement",
         eyebrow: "COUNTY PUBLIC WORKS",
         prompt:
           "I'm the grants coordinator for Marten County Public Works, applying for federal-aid highway funds through our state DOT to replace the one-lane Alder Creek bridge on County Road 12.",
@@ -126,7 +126,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "💧",
         label: "Water Main Upgrade",
-        heading: "Procedures Memo for Water Main Upgrade",
+        heading: "Water Main Upgrade",
         eyebrow: "RURAL WATER DISTRICT",
         prompt:
           "I'm the engineer for a small water district in Idaho applying for a USDA Rural Development loan to replace 4 miles of water main and add a storage tank.",
@@ -134,7 +134,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "⚡",
         label: "Transmission Line",
-        heading: "Procedures Memo for Transmission Line",
+        heading: "Transmission Line",
         eyebrow: "ENERGY INFRASTRUCTURE",
         prompt:
           "I'm a permitting manager at a utility planning a 60-mile transmission line across BLM and Forest Service land in Nevada, and I need to know which agency's procedures lead.",
@@ -142,7 +142,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🚆",
         label: "Park-and-Ride Station",
-        heading: "Procedures Memo for Park-and-Ride Station",
+        heading: "Park-and-Ride Station",
         eyebrow: "REGIONAL TRANSIT",
         prompt:
           "I'm a planner at a regional transit agency in Colorado seeking FTA capital funds for a park-and-ride lot and station on an existing commuter rail line.",
@@ -150,7 +150,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🪖",
         label: "Training Range",
-        heading: "Procedures Memo for Training Range",
+        heading: "Training Range",
         eyebrow: "ARMY INSTALLATION",
         prompt:
           "I'm an environmental coordinator at an Army installation in Georgia upgrading a small-arms training range within its existing footprint.",

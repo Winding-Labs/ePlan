@@ -194,13 +194,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft a",
+    prefix: "Draft a Notice of Exemption for",
     placeholder: "I'm a city planner and need a Notice of Exemption for…",
     examples: [
       {
         emoji: "🏘️",
         label: "Infill Housing",
-        heading: "Notice of Exemption for Infill Housing",
+        heading: "Infill Housing",
         eyebrow: "URBAN HOUSING",
         prompt:
           "I'm a planner with a city planning department in Sacramento County reviewing a 48-unit apartment building on a 1.2-acre infill lot, and I need the exemption memo and Notice of Exemption.",
@@ -208,7 +208,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🛣️",
         label: "Culvert Repair",
-        heading: "Notice of Exemption for Culvert Repair",
+        heading: "Culvert Repair",
         eyebrow: "ROAD MAINTENANCE",
         prompt:
           "I'm an environmental planner with a county public works department replacing a failing culvert under a rural road in Sonoma County, entirely within the existing right-of-way.",
@@ -216,7 +216,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🔥",
         label: "Fuel Reduction",
-        heading: "Notice of Exemption for Fuel Reduction",
+        heading: "Fuel Reduction",
         eyebrow: "WILDFIRE RISK",
         prompt:
           "I'm the CEQA coordinator at a fire protection district planning a 40-acre prescribed burn within half a mile of a 200-home subdivision in the Sierra Nevada foothills.",
@@ -224,7 +224,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🏥",
         label: "Health Clinic",
-        heading: "Notice of Exemption for Health Clinic",
+        heading: "Health Clinic",
         eyebrow: "HEALTH CARE",
         prompt:
           "I'm a consultant for a community health center building a 12,000-square-foot federally qualified health center on a commercial lot in Fresno County.",
@@ -232,7 +232,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🌿",
         label: "Creek Restoration",
-        heading: "Notice of Exemption for Creek Restoration",
+        heading: "Creek Restoration",
         eyebrow: "HABITAT RESTORATION",
         prompt:
           "I'm a planner at a resource conservation district revegetating 3 acres of eroding creek bank with native plants in Santa Cruz County.",

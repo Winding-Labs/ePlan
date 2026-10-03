@@ -133,13 +133,13 @@ export const entry: GuideContent<GuidePath> = {
     },
   ],
   hero: {
-    prefix: "Draft an",
+    prefix: "Draft an ENF for",
     placeholder: "I'm preparing an ENF for…",
     examples: [
       {
         emoji: "🏙️",
         label: "Mixed-Use Project",
-        heading: "ENF for a Mixed-Use Project",
+        heading: "a Mixed-Use Project",
         eyebrow: "PRIVATE DEVELOPMENT",
         prompt:
           "I'm an environmental consultant preparing an ENF for a developer's 320-unit mixed-use project with a 1,100-space garage on a 9-acre former mill site in a Massachusetts city.",
@@ -147,7 +147,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "💧",
         label: "Water Treatment",
-        heading: "ENF for a Water Treatment Plant",
+        heading: "a Water Treatment Plant",
         eyebrow: "MUNICIPAL WATER",
         prompt:
           "I'm the project manager for a Massachusetts town water department preparing an ENF for a new 2-million-gallon-per-day drinking water treatment plant and 3 miles of new water main.",
@@ -155,7 +155,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "☀️",
         label: "Solar Array",
-        heading: "ENF for a Solar Array",
+        heading: "a Solar Array",
         eyebrow: "CLEAN ENERGY",
         prompt:
           "I'm a permitting lead at a renewable energy developer preparing an ENF for a 30-megawatt ground-mounted solar array that would clear 120 acres of forest in central Massachusetts.",
@@ -163,7 +163,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "⚓",
         label: "Harbor Dredging",
-        heading: "ENF for Harbor Dredging",
+        heading: "Harbor Dredging",
         eyebrow: "COASTAL WORKS",
         prompt:
           "I'm a coastal engineer for a Massachusetts harbor town preparing an ENF for deepening the town mooring basin, removing 45,000 cubic yards of sediment.",
@@ -171,7 +171,7 @@ export const entry: GuideContent<GuidePath> = {
       {
         emoji: "🚆",
         label: "Rail Layover Yard",
-        heading: "ENF for a Rail Layover Yard",
+        heading: "a Rail Layover Yard",
         eyebrow: "STATE TRANSIT",
         prompt:
           "I'm an environmental planner at a state transit agency preparing an ENF for a commuter rail layover yard for six trainsets on 14 acres beside an existing line.",
