@@ -1,7 +1,7 @@
 import type { FaqItem } from "@/components/home-v2/faq";
 
 /**
- * Types for the guide pages (/nepa/*, /ceqa/*, /nepa-software, /compare/*).
+ * Types for the guide pages (/nepa/*, /ceqa/*, /for/nepa-software, /compare/*).
  * One entry per page, rendered by `components/guide-page/guide-page.tsx` from
  * the same shared components as the home page: the text header, the hero
  * prompt with its feature showcase, the ePlan-vs-manual comparison and the
@@ -82,7 +82,7 @@ export type ManualComparisonRow = {
   manual: string;
 };
 
-/** One tool card on /compare/nepa-ai-tools. */
+/** One tool card on /for/nepa-ai-tools. */
 export type ToolComparisonRow = {
   name: string;
   maker: string;
@@ -92,7 +92,14 @@ export type ToolComparisonRow = {
   availability: string;
 };
 
-export type GuideFamily = "nepa" | "ceqa" | "product";
+export type GuideFamily =
+  | "nepa"
+  | "ceqa"
+  | "federal"
+  | "state"
+  | "agency"
+  | "tools"
+  | "product";
 
 export type GuideEntry<Path extends string = string> = {
   path: Path;

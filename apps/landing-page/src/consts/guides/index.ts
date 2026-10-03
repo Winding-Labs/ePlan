@@ -11,7 +11,7 @@ import { PRODUCT_GUIDES } from "./product";
 import { NEPA_SOURCES } from "./sources";
 import type { GuideEntry, Source } from "./types";
 
-export { GUIDE_HUBS, GUIDE_PATHS, type GuidePath } from "./paths";
+export { GUIDE_PATHS, type GuidePath, guideSlug } from "./paths";
 export { GUIDE_SOURCES_READ_ON } from "./sources";
 
 // Pages written one per module (`pages/*.ts`): each exports its entry and

@@ -1,7 +1,7 @@
 import type { GuidePath } from "../paths";
 import type { GuideEntry, Source } from "../types";
 
-// /ceqa/environmental-impact-report. Reused keys from nepa-pages.ts SOURCES: none.
+// /for/ceqa-environmental-impact-report. Reused keys from nepa-pages.ts SOURCES: none.
 // Reused keys defined in ceqa-exemptions.ts: exPrc21080, exPrc21108,
 // exPrc21152, exPrc21167, exCeqanet, exLciAbout.
 
@@ -22,7 +22,8 @@ const CCR = (
   published?: string,
 ): Source => ({
   title: `CEQA Guidelines, 14 CCR § ${section}: ${heading}`,
-  publisher: "California Code of Regulations (Office of Administrative Law, Westlaw)",
+  publisher:
+    "California Code of Regulations (Office of Administrative Law, Westlaw)",
   url: `https://govt.westlaw.com/calregs/Document/${id}`,
   ...(published ? { published } : {}),
   read: READ,
@@ -39,21 +40,13 @@ export const sources = {
     "local agencies prepare and certify EIRs",
     "2003-01-01",
   ),
-  eirPrc2108031: PRC(
-    "21080.3.1",
-    "tribal consultation (AB 52)",
-    "2015-01-01",
-  ),
+  eirPrc2108031: PRC("21080.3.1", "tribal consultation (AB 52)", "2015-01-01"),
   eirPrc210804: PRC(
     "21080.4",
     "notice that an EIR is required; 30-day agency responses",
     "2022-01-01",
   ),
-  eirPrc21091: PRC(
-    "21091",
-    "public review periods and comments",
-    "2022-01-01",
-  ),
+  eirPrc21091: PRC("21091", "public review periods and comments", "2022-01-01"),
   eirPrc21081: PRC(
     "21081",
     "findings required before approving a project with significant effects",
@@ -156,11 +149,7 @@ export const sources = {
     "Table of Contents or Index",
     "I892ADDAA5B4D11EC976B000D3A7C4BC3",
   ),
-  eirCcr15123: CCR(
-    "15123",
-    "Summary",
-    "I892F98985B4D11EC976B000D3A7C4BC3",
-  ),
+  eirCcr15123: CCR("15123", "Summary", "I892F98985B4D11EC976B000D3A7C4BC3"),
   eirCcr15124: CCR(
     "15124",
     "Project Description",
@@ -218,11 +207,7 @@ export const sources = {
     "Contents of Final Environmental Impact Report",
     "I898EF6A45B4D11EC976B000D3A7C4BC3",
   ),
-  eirCcr15141: CCR(
-    "15141",
-    "Page Limits",
-    "I8998939A5B4D11EC976B000D3A7C4BC3",
-  ),
+  eirCcr15141: CCR("15141", "Page Limits", "I8998939A5B4D11EC976B000D3A7C4BC3"),
   eirCcr15362: CCR(
     "15362",
     "EIR--Environmental Impact Report",
@@ -238,8 +223,8 @@ export const sources = {
 } satisfies Record<string, Source>;
 
 export const entry: GuideEntry<GuidePath> = {
-  path: "/ceqa/environmental-impact-report",
-  parent: "/ceqa",
+  path: "/for/ceqa-environmental-impact-report",
+  parent: "/for/ceqa",
   family: "ceqa",
   name: "Environmental impact report",
   title: "Environmental Impact Report (EIR): CEQA Guide",
@@ -288,7 +273,8 @@ export const entry: GuideEntry<GuidePath> = {
     },
     {
       label: "Challenge window",
-      value: "30 days after the notice of determination is filed [[exPrc21167]]",
+      value:
+        "30 days after the notice of determination is filed [[exPrc21167]]",
     },
   ],
   hero: {
@@ -342,7 +328,8 @@ export const entry: GuideEntry<GuidePath> = {
       "Describe the project and ePlan drafts the Notice of Preparation and lays out the EIR's sections, with the project description, location and probable effects filled in; every fact it can't confirm is marked for you.",
     mock: {
       project: "Ridge Road water storage",
-      documentTitle: "Notice of Preparation of a Draft Environmental Impact Report",
+      documentTitle:
+        "Notice of Preparation of a Draft Environmental Impact Report",
       summary:
         "I drafted the NOP from your description, with the project, location and probable effects that Guidelines §15082 asks for. Five details still need your input before it goes out.",
       missing: [
@@ -353,8 +340,14 @@ export const entry: GuideEntry<GuidePath> = {
         "Responsible and trustee agency list",
       ],
       letterhead: {
-        left: ["Cedar Hollow Water District", "Engineering and Environmental Services"],
-        right: ["[INSERT: district street address]", "[INSERT: city], California"],
+        left: [
+          "Cedar Hollow Water District",
+          "Engineering and Environmental Services",
+        ],
+        right: [
+          "[INSERT: district street address]",
+          "[INSERT: city], California",
+        ],
       },
       meta: ["File No.: [INSERT: project number]", "Date: October 2, 2026"],
       salutation:
@@ -419,7 +412,8 @@ export const entry: GuideEntry<GuidePath> = {
       ],
     },
     {
-      heading: "Certification, findings and the statement of overriding considerations",
+      heading:
+        "Certification, findings and the statement of overriding considerations",
       paragraphs: [
         "Before approving the project, the lead agency certifies that the final EIR was completed in compliance with CEQA, that its decision-making body reviewed and considered it, and that it reflects the agency's independent judgment [[eirCcr15090]].",
         "For each significant effect the EIR identifies, the agency makes written findings, supported by substantial evidence: changes to the project avoid or substantially lessen the effect, another agency is responsible for those changes, or specific considerations make the mitigation or alternatives infeasible [[eirPrc21081]] [[eirCcr15091]]. When it requires mitigation, it adopts a program to report on or monitor it [[eirCcr15097]].",
@@ -427,7 +421,8 @@ export const entry: GuideEntry<GuidePath> = {
       ],
     },
     {
-      heading: "Filing the notice of determination and finding past EIRs on CEQAnet",
+      heading:
+        "Filing the notice of determination and finding past EIRs on CEQAnet",
       paragraphs: [
         "The lead agency files a notice of determination within five working days after approving the project. It identifies the project and its State Clearinghouse number, states whether the project will have a significant effect and that an EIR was prepared and certified, and says whether mitigation, findings and a statement of overriding considerations were part of the approval [[eirCcr15094]].",
         "A local agency files with the county clerk of each county where the project is located and with the State Clearinghouse; a state agency files with the Office of Planning and Research [[exPrc21152]] [[exPrc21108]]. Filing starts a 30-day period for a lawsuit alleging the EIR does not comply with CEQA [[exPrc21167]].",
@@ -442,7 +437,8 @@ export const entry: GuideEntry<GuidePath> = {
     items: [
       {
         title: "Table of contents or index",
-        detail: "At least one, so readers can find each subject and issue [[eirCcr15122]].",
+        detail:
+          "At least one, so readers can find each subject and issue [[eirCcr15122]].",
       },
       {
         title: "Summary",

@@ -1,8 +1,4 @@
-import {
-  orderCitations,
-  splitCitations,
-  stripCitations,
-} from "./citations";
+import { orderCitations, splitCitations, stripCitations } from "./citations";
 
 describe("splitCitations", () => {
   it("splits text and citation markers in order", () => {

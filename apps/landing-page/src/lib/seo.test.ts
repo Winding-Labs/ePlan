@@ -131,9 +131,10 @@ describe("sitemap", () => {
     expect(urls).toEqual(
       expect.arrayContaining([
         "https://example.test/",
-        "https://example.test/nepa",
-        "https://example.test/nepa/scoping-letter",
-        "https://example.test/ceqa/initial-study",
+        "https://example.test/for",
+        "https://example.test/for/nepa",
+        "https://example.test/for/nepa-scoping-letter",
+        "https://example.test/for/ceqa-initial-study",
         "https://example.test/docs",
         "https://example.test/docs/guides/quickstart",
       ]),

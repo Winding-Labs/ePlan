@@ -63,20 +63,23 @@ export const sources = {
     read: READ,
   },
   regsFast41Sunset: {
-    title: "42 U.S.C. 4370m-12 - Repealed (former FAST-41 termination provision)",
+    title:
+      "42 U.S.C. 4370m-12 - Repealed (former FAST-41 termination provision)",
     publisher: USC_2023,
     url: "https://www.govinfo.gov/content/pkg/USCODE-2023-title42/html/USCODE-2023-title42-chap55-subchapIV-sec4370m-12.htm",
     read: READ,
   },
   regsPermittingProgram: {
     title: "FAST-41 Program",
-    publisher: "Federal Permitting Improvement Steering Council (permitting.gov)",
+    publisher:
+      "Federal Permitting Improvement Steering Council (permitting.gov)",
     url: "https://www.permitting.gov/projects/title-41-fixing-americas-surface-transportation-act-fast-41",
     read: READ,
   },
   regsPermittingAbout: {
     title: "About the Permitting Council",
-    publisher: "Federal Permitting Improvement Steering Council (permitting.gov)",
+    publisher:
+      "Federal Permitting Improvement Steering Council (permitting.gov)",
     url: "https://www.permitting.gov/about/our-mission",
     read: READ,
   },
@@ -91,8 +94,8 @@ export const sources = {
 } satisfies Record<string, Source>;
 
 export const entry: GuideEntry<GuidePath> = {
-  path: "/nepa/regulations",
-  parent: "/nepa",
+  path: "/for/nepa-regulations",
+  parent: "/for/nepa",
   family: "nepa",
   name: "NEPA regulations",
   title: "NEPA Regulations in 2026: Where the Rules Live",
@@ -126,11 +129,13 @@ export const entry: GuideEntry<GuidePath> = {
     },
     {
       label: "Agency rules",
-      value: "Each agency's own NEPA procedures, listed by CEQ [[ceqProcedures]]",
+      value:
+        "Each agency's own NEPA procedures, listed by CEQ [[ceqProcedures]]",
     },
     {
       label: "Page limits",
-      value: "EA 75 pages; EIS 150, or 300 if extraordinarily complex [[usc4336a]]",
+      value:
+        "EA 75 pages; EIS 150, or 300 if extraordinarily complex [[usc4336a]]",
     },
     {
       label: "Deadlines",
@@ -263,7 +268,8 @@ export const entry: GuideEntry<GuidePath> = {
       ],
     },
     {
-      heading: "CEQ NEPA regulations rescinded: what happened and what still applies",
+      heading:
+        "CEQ NEPA regulations rescinded: what happened and what still applies",
       paragraphs: [
         "CEQ first issued its NEPA regulations in 1978, citing Executive Order 11991 as its authority [[ceqIfr]]. Executive Order 14154 revoked that order on January 20, 2025 [[regsEo14154]]. CEQ then concluded it may lack authority to issue binding rules without it and removed all iterations of 40 CFR parts 1500-1508, effective April 11, 2025 [[ceqIfr]]. The January 8, 2026 final rule adopted that removal without changes [[ceqFinal]].",
         "For reviews already underway, CEQ tells agencies to keep applying their existing procedures, adjusted to match the amended statute, and not to delay pending analyses. Agencies may also voluntarily rely on CEQ's removed regulations to finish ongoing reviews or defend reviews completed while those regulations were in effect [[regsCeqMemoSept]]. The September 29, 2025 guidance replaced the February 19 memo [[regsCeqMemoFeb]], and CEQ says neither it nor its template is binding on agencies [[regsCeqMemoSept]].",
@@ -378,7 +384,8 @@ export const entry: GuideEntry<GuidePath> = {
         "No single government-wide rule. Agencies apply the statute, as amended by the Fiscal Responsibility Act of 2023, through their own NEPA procedures, which they develop in consultation with CEQ. CEQ also issues non-binding guidance, including a September 2025 template for agency procedures.",
     },
     {
-      question: "Which NEPA procedures apply to a review that started before the changes?",
+      question:
+        "Which NEPA procedures apply to a review that started before the changes?",
       answer:
         "CEQ's guidance tells agencies to keep applying their existing procedures, adjusted for the amended statute, and not to delay ongoing reviews; agencies may also voluntarily rely on CEQ's removed regulations to finish them. Some agencies set their own cutoff: FHWA, FRA and FTA apply the revised 23 CFR part 771 to environmental documents prepared or accepted after July 3, 2025.",
     },

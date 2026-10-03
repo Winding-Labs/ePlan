@@ -37,7 +37,9 @@ export const PRICING_SUMMARY = `${ORDERED_PLANS.map(
     `${plan.name} is ${planPrice(plan.price_usd)} with ${plan.included_seats} seats.`,
 ).join(" ")}${seatSentence()}`;
 
-export const FREE_PLAN_LINE = FREE_PLAN ? ` The ${FREE_PLAN.name} plan is free.` : "";
+export const FREE_PLAN_LINE = FREE_PLAN
+  ? ` The ${FREE_PLAN.name} plan is free.`
+  : "";
 
 export const PRICING_FAQ: FaqItem = {
   question: "How much does ePlan cost?",
@@ -115,7 +117,8 @@ export const MANUAL_COMPARISON_BASE: ManualComparisonRow[] = [
   },
   {
     label: "Tasks and timeline",
-    eplan: "Milestones, surveys and deadlines on a Gantt timeline (Pro and Max)",
+    eplan:
+      "Milestones, surveys and deadlines on a Gantt timeline (Pro and Max)",
     manual: "A separate spreadsheet or calendar",
   },
   {

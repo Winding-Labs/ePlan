@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import {
   ArrowUp,
   ChevronDown,
@@ -9,8 +11,6 @@ import {
   Users,
   X,
 } from "lucide-react";
-
-import { Fragment } from "react";
 
 import { HOME_DRAFT_MOCK } from "@/consts/draft-mocks";
 import type { DraftMock } from "@/consts/guides/types";
@@ -34,13 +34,15 @@ const INSERT_PATTERN = /(\[INSERT:[^\]]*\])/;
 function WithInserts({ text }: { text: string }) {
   return (
     <>
-      {text.split(INSERT_PATTERN).map((part, index) =>
-        INSERT_PATTERN.test(part) ? (
-          <Insert key={`${index}-${part}`}>{part}</Insert>
-        ) : (
-          <Fragment key={`${index}-${part}`}>{part}</Fragment>
-        ),
-      )}
+      {text
+        .split(INSERT_PATTERN)
+        .map((part, index) =>
+          INSERT_PATTERN.test(part) ? (
+            <Insert key={`${index}-${part}`}>{part}</Insert>
+          ) : (
+            <Fragment key={`${index}-${part}`}>{part}</Fragment>
+          ),
+        )}
     </>
   );
 }

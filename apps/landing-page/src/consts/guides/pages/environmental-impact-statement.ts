@@ -71,7 +71,8 @@ export const sources = {
     read: READ,
   },
   eisNoa20260925: {
-    title: "Environmental Impact Statements; Notice of Availability, 91 FR 60957",
+    title:
+      "Environmental Impact Statements; Notice of Availability, 91 FR 60957",
     publisher: "Environmental Protection Agency, Federal Register",
     url: "https://www.federalregister.gov/documents/2026/09/25/2026-19676/environmental-impact-statements-notice-of-availability",
     published: "2026-09-25",
@@ -106,8 +107,8 @@ export const sources = {
 } satisfies Record<string, Source>;
 
 export const entry: GuideEntry<GuidePath> = {
-  path: "/nepa/environmental-impact-statement",
-  parent: "/nepa",
+  path: "/for/environmental-impact-statement",
+  parent: "/for/nepa",
   family: "nepa",
   name: "Environmental impact statement",
   title: "Environmental Impact Statement: Steps & Examples",

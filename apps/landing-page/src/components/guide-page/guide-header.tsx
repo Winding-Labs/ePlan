@@ -1,9 +1,6 @@
 import { ArrowDown, ArrowRight, CheckCircle2, Scale } from "lucide-react";
 
-import {
-  PAGE_CONTAINER,
-  PAGE_GUTTER,
-} from "@/components/home-v2/ui/layout";
+import { PAGE_CONTAINER, PAGE_GUTTER } from "@/components/home-v2/ui/layout";
 import {
   Eyebrow,
   HEADER_STACK_CLASS,

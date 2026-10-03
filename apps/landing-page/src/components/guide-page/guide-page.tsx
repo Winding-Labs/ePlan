@@ -1,14 +1,7 @@
 import { Suspense } from "react";
 
-import {
-  ArrowRight,
-  BookOpen,
-  Columns3,
-  Library,
-  ListChecks,
-} from "lucide-react";
+import { BookOpen, Columns3, Library, ListChecks } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { ContactSection } from "@/components/home-v2/contact-section";
 import { CtaBottom } from "@/components/home-v2/cta-bottom";
@@ -42,6 +35,7 @@ import { absoluteUrl, buildPageMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { CitedText } from "./cited-text";
 import { ComparisonTable } from "./comparison-table";
+import { GuideCards } from "./guide-cards";
 import { type Crumb, GuideHeader } from "./guide-header";
 
 const H2_CLASS =
@@ -422,32 +416,7 @@ function RelatedGuides({ current }: { current: GuideEntry<GuidePath> }) {
       className={cn(PAGE_GUTTER, SECTION_Y, "flex flex-col gap-10 sm:gap-12")}
     >
       <SectionHeader icon={BookOpen} eyebrow="Guides" title="Keep reading" />
-      <ul
-        className={cn(
-          PAGE_CONTAINER,
-          "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6",
-        )}
-      >
-        {related.map((page) => (
-          <li key={page.path} className="flex">
-            <Link
-              href={page.path}
-              className="glass-card press group flex w-full flex-col gap-2 rounded-[24px] p-6 hover:bg-white/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
-            >
-              <span className="flex items-center justify-between gap-3 font-heading text-[20px] font-normal tracking-[-0.02em] text-egray-900">
-                {page.name}
-                <ArrowRight
-                  className="size-4 shrink-0 text-brand-800 transition-transform duration-200 ease-out-expo group-hover:translate-x-0.5 motion-reduce:transition-none"
-                  aria-hidden="true"
-                />
-              </span>
-              <span className="font-inter text-[14px] leading-[22px] text-egray-700">
-                {page.description}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <GuideCards guides={related} />
     </section>
   );
 }

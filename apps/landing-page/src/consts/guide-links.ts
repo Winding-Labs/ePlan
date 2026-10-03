@@ -3,12 +3,16 @@
 // bodies into the client bundle. `guides.test.ts` checks these against the
 // registry.
 export const GUIDE_LINKS = [
-  { href: "/nepa", label: "NEPA guide" },
-  { href: "/nepa/categorical-exclusion", label: "Categorical exclusions" },
-  { href: "/nepa/environmental-assessment", label: "Environmental assessments" },
-  { href: "/nepa/scoping-letter", label: "Scoping letters" },
-  { href: "/ceqa", label: "CEQA guide" },
-  { href: "/nepa-software", label: "NEPA software" },
+  { href: "/for", label: "All guides" },
+  { href: "/for/nepa", label: "NEPA guide" },
+  { href: "/for/nepa-categorical-exclusion", label: "Categorical exclusions" },
+  {
+    href: "/for/nepa-environmental-assessment",
+    label: "Environmental assessments",
+  },
+  { href: "/for/nepa-scoping-letter", label: "Scoping letters" },
+  { href: "/for/ceqa", label: "CEQA guide" },
+  { href: "/for/nepa-software", label: "NEPA software" },
 ] as const;
 
 export const LEGAL_LINKS = [

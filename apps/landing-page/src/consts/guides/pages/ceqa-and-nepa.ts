@@ -2,7 +2,7 @@ import type { GuidePath } from "../paths";
 import type { GuideEntry, Source } from "../types";
 
 /**
- * /ceqa/ceqa-and-nepa — when CEQA and NEPA both apply.
+ * /for/ceqa-and-nepa — when CEQA and NEPA both apply.
  *
  * Reuses existing NEPA source keys (guides/sources.ts): usc4332, usc4336,
  * usc4336a, usc4336e, fra2023, sevenCounty, ceqIfr, ceqFinal, ceqProcedures.
@@ -39,10 +39,7 @@ export const sources = {
     "21083.5",
     "Use of an environmental impact statement in place of an EIR",
   ),
-  jointPrc21083dot6: PRC(
-    "21083.6",
-    "Combined EIR-EIS; waiver of time limits",
-  ),
+  jointPrc21083dot6: PRC("21083.6", "Combined EIR-EIS; waiver of time limits"),
   jointPrc21083dot7: PRC(
     "21083.7",
     "Projects requiring both an EIR and an EIS; consultation with the federal agency",
@@ -79,8 +76,8 @@ export const sources = {
 } satisfies Record<string, Source>;
 
 export const entry: GuideEntry<GuidePath> = {
-  path: "/ceqa/ceqa-and-nepa",
-  parent: "/ceqa",
+  path: "/for/ceqa-and-nepa",
+  parent: "/for/ceqa",
   family: "ceqa",
   name: "CEQA and NEPA",
   title: "CEQA and NEPA: Joint EIR/EIS and Key Differences",
@@ -106,11 +103,13 @@ export const entry: GuideEntry<GuidePath> = {
     },
     {
       label: "CEQA Guidelines",
-      value: "Article 14, 14 CCR §§ 15220-15229 [[jointGuide15220]] [[jointGuide15229]]",
+      value:
+        "Article 14, 14 CCR §§ 15220-15229 [[jointGuide15220]] [[jointGuide15229]]",
     },
     {
       label: "NEPA basis",
-      value: "42 U.S.C. 4332 and 4336-4336e, as amended in 2023 [[usc4332]] [[fra2023]]",
+      value:
+        "42 U.S.C. 4332 and 4336-4336e, as amended in 2023 [[usc4332]] [[fra2023]]",
     },
     {
       label: "Applies when",
@@ -175,7 +174,8 @@ export const entry: GuideEntry<GuidePath> = {
       "Describe the project and ePlan drafts the joint CEQA/NEPA document from a reference document's structure, with both laws' requirements side by side; every fact it can't confirm is marked for you.",
     mock: {
       project: "Orchard Lane Interchange",
-      documentTitle: "Orchard Lane Interchange — Notice of Preparation of a Joint EIR/EIS",
+      documentTitle:
+        "Orchard Lane Interchange — Notice of Preparation of a Joint EIR/EIS",
       summary:
         "The Orchard Lane Interchange — Notice of Preparation draft is ready, naming the Authority as CEQA lead and Caltrans as NEPA lead. A few details still need your input:",
       missing: [
@@ -186,7 +186,10 @@ export const entry: GuideEntry<GuidePath> = {
         "Comment contact",
       ],
       letterhead: {
-        left: ["Delta Valley Transportation Authority", "Environmental Planning"],
+        left: [
+          "Delta Valley Transportation Authority",
+          "Environmental Planning",
+        ],
         right: ["[INSERT: street address]", "Stockton, CA [INSERT: ZIP code]"],
       },
       meta: ["SCH No.: [INSERT: assigned on filing]", "Date: October 2, 2026"],

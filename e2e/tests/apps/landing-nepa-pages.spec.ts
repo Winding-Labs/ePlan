@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * Guide pages (/nepa/*, /ceqa/*, /nepa-software, /compare/*) and SEO basics
+ * Guide pages (every /for/<slug>) and SEO basics
  * on the landing page: robots.txt, sitemap.xml, the moved-page redirects,
  * per-page metadata and JSON-LD, the shared home components every guide
  * renders (hero prompt, feature showcase, comparison, feature sections),
@@ -10,19 +10,38 @@ import { expect, test } from "@playwright/test";
 const LANDING_URL = process.env.LANDING_PAGE_URL || "http://localhost:3002";
 
 const GUIDE_PATHS = [
-  "/nepa",
-  "/nepa/categorical-exclusion",
-  "/nepa/environmental-assessment",
-  "/nepa/environmental-impact-statement",
-  "/nepa/scoping-letter",
-  "/nepa/regulations",
-  "/ceqa",
-  "/ceqa/initial-study",
-  "/ceqa/exemptions",
-  "/ceqa/environmental-impact-report",
-  "/ceqa/ceqa-and-nepa",
-  "/nepa-software",
-  "/compare/nepa-ai-tools",
+  "/for/nepa",
+  "/for/nepa-categorical-exclusion",
+  "/for/nepa-environmental-assessment",
+  "/for/environmental-impact-statement",
+  "/for/nepa-scoping-letter",
+  "/for/nepa-regulations",
+  "/for/ceqa",
+  "/for/ceqa-initial-study",
+  "/for/ceqa-exemptions",
+  "/for/ceqa-environmental-impact-report",
+  "/for/ceqa-and-nepa",
+  "/for/section-106",
+  "/for/hud-environmental-review",
+  "/for/esa-section-7",
+  "/for/state-environmental-review",
+  "/for/new-york-seqr",
+  "/for/washington-sepa",
+  "/for/massachusetts-mepa",
+  "/for/hawaii-hepa",
+  "/for/usda-forest-service-nepa",
+  "/for/interior-blm-nepa",
+  "/for/fhwa-nepa",
+  "/for/doe-nepa",
+  "/for/faa-nepa",
+  "/for/fema-ehp",
+  "/for/nepa-examples",
+  "/for/eis-database",
+  "/for/nepassist",
+  "/for/ipac",
+  "/for/ceqanet",
+  "/for/nepa-software",
+  "/for/nepa-ai-tools",
 ];
 
 test.describe("Landing Page - guide pages", () => {
@@ -44,9 +63,11 @@ test.describe("Landing Page - guide pages", () => {
 
   test("permanently redirects the moved guide URLs", async ({ request }) => {
     for (const [from, to] of [
-      ["/categorical-exclusions", "/nepa/categorical-exclusion"],
-      ["/templates/nepa-scoping-letter", "/nepa/scoping-letter"],
-      ["/templates/ceqa-initial-study", "/ceqa/initial-study"],
+      ["/categorical-exclusions", "/for/nepa-categorical-exclusion"],
+      ["/templates/nepa-scoping-letter", "/for/nepa-scoping-letter"],
+      ["/nepa/scoping-letter", "/for/nepa-scoping-letter"],
+      ["/ceqa/initial-study", "/for/ceqa-initial-study"],
+      ["/nepa", "/for/nepa"],
     ]) {
       const response = await request.get(`${LANDING_URL}${from}`, {
         maxRedirects: 0,
@@ -155,15 +176,13 @@ test.describe("Landing Page - guide pages", () => {
       const description =
         "I'm planning a culvert replacement on a national forest road in Idaho.";
       await page.goto(
-        `${LANDING_URL}/nepa/scoping-letter?projectDescription=${encodeURIComponent(description)}`,
+        `${LANDING_URL}/for/nepa-scoping-letter?projectDescription=${encodeURIComponent(description)}`,
       );
 
       const prompt = page.locator("#project-prompt-input textarea");
       await expect(prompt).toHaveValue(description);
 
-      await page
-        .locator('#project-prompt-input button[type="submit"]')
-        .click();
+      await page.locator('#project-prompt-input button[type="submit"]').click();
       const dialog = page.getByRole("dialog");
       await expect(dialog).toBeVisible({ timeout: 30_000 });
       await expect(dialog.getByText("Sign up for")).toBeVisible();
@@ -173,7 +192,7 @@ test.describe("Landing Page - guide pages", () => {
     test("an example pill fills the prompt with that project and starts signup", async ({
       page,
     }) => {
-      await page.goto(`${LANDING_URL}/nepa/scoping-letter`);
+      await page.goto(`${LANDING_URL}/for/nepa-scoping-letter`);
 
       await page
         .locator('#draft [data-testid="quick-start-pills"] button', {
@@ -184,9 +203,7 @@ test.describe("Landing Page - guide pages", () => {
       const prompt = page.locator("#project-prompt-input textarea");
       await expect(prompt).toHaveValue(/maintenance dredging/);
 
-      await page
-        .locator('#project-prompt-input button[type="submit"]')
-        .click();
+      await page.locator('#project-prompt-input button[type="submit"]').click();
       const dialog = page.getByRole("dialog");
       await expect(dialog).toBeVisible({ timeout: 30_000 });
       await expect(dialog.locator("textarea").first()).toHaveValue(
@@ -198,22 +215,23 @@ test.describe("Landing Page - guide pages", () => {
   test("links the guide hubs and the legal pages from the footer", async ({
     page,
   }) => {
-    await page.goto(`${LANDING_URL}/nepa`);
+    await page.goto(`${LANDING_URL}/for/nepa`);
     const hrefs = await page
       .getByRole("navigation", { name: "Guides and legal" })
       .getByRole("link")
       .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
     expect(hrefs).toEqual(
       expect.arrayContaining([
-        "/nepa",
-        "/ceqa",
-        "/nepa/scoping-letter",
+        "/for",
+        "/for/nepa",
+        "/for/ceqa",
+        "/for/nepa-scoping-letter",
         "/privacy",
         "/terms",
       ]),
     );
     for (const href of hrefs) {
-      if (href && GUIDE_PATHS.some((path) => href === path)) {
+      if (href && (href === "/for" || GUIDE_PATHS.includes(href))) {
         continue;
       }
       expect(["/privacy", "/terms"]).toContain(href);

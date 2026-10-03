@@ -9,7 +9,7 @@ import {
 import type { GuideEntry } from "./types";
 
 const nepaSoftware: GuideEntry<GuidePath> = {
-  path: "/nepa-software",
+  path: "/for/nepa-software",
   name: "NEPA software",
   title: "NEPA Software: AI for Environmental Review",
   description:
@@ -18,7 +18,11 @@ const nepaSoftware: GuideEntry<GuidePath> = {
   h1: "NEPA software that drafts the document and marks what to check",
   family: "product",
   primaryKeyword: "nepa software",
-  secondaryKeywords: ["nepa ai", "environmental review software", "ai permitting"],
+  secondaryKeywords: [
+    "nepa ai",
+    "environmental review software",
+    "ai permitting",
+  ],
   document: "NEPA Document",
   answer:
     "ePlan is NEPA software, or environmental review software, for agency staff and environmental consultants. Describe a project and it drafts the scoping letter, categorical exclusion decision memo or environmental assessment from a reference document, marking every fact it could not confirm for your team to fill in. Research, tasks, maps and comments sit in the same workspace. Your team reviews, edits and signs; ePlan does not make NEPA determinations.",
@@ -148,7 +152,7 @@ const nepaSoftware: GuideEntry<GuidePath> = {
 };
 
 const compareAiTools: GuideEntry<GuidePath> = {
-  path: "/compare/nepa-ai-tools",
+  path: "/for/nepa-ai-tools",
   name: "AI tools for NEPA",
   title: "AI Tools for NEPA Review Compared (2026)",
   description:

@@ -2,7 +2,7 @@ import type { GuidePath } from "../paths";
 import type { GuideEntry, Source } from "../types";
 
 /**
- * /ceqa — the CEQA hub page.
+ * /for/ceqa — the CEQA hub page.
  *
  * Reuses no existing source keys. Defines the shared CEQA sources: the
  * ceqa-and-nepa page (ceqa-and-nepa.ts) cites several of the keys below
@@ -32,7 +32,10 @@ const CCR = (section: string, heading: string): Source => ({
 });
 
 export const sources = {
-  ceqaPrc21050: PRC("21050", "Short title (California Environmental Quality Act)"),
+  ceqaPrc21050: PRC(
+    "21050",
+    "Short title (California Environmental Quality Act)",
+  ),
   ceqaPrc21002: PRC(
     "21002",
     "Approval of projects; feasible alternatives or mitigation measures",
@@ -107,8 +110,10 @@ export const sources = {
     "2023-01-01",
   ),
   ceqaAb130: {
-    title: "Assembly Bill No. 130 (2025-2026), Chapter 22, Statutes of 2025 (Housing), chaptered text",
-    publisher: "California Legislative Information (leginfo.legislature.ca.gov)",
+    title:
+      "Assembly Bill No. 130 (2025-2026), Chapter 22, Statutes of 2025 (Housing), chaptered text",
+    publisher:
+      "California Legislative Information (leginfo.legislature.ca.gov)",
     url: "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260AB130",
     published: "2025-06-30",
     read: READ,
@@ -116,7 +121,8 @@ export const sources = {
   ceqaSb131: {
     title:
       "Senate Bill No. 131 (2025-2026), Chapter 24, Statutes of 2025 (Public resources), chaptered text",
-    publisher: "California Legislative Information (leginfo.legislature.ca.gov)",
+    publisher:
+      "California Legislative Information (leginfo.legislature.ca.gov)",
     url: "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB131",
     published: "2025-06-30",
     read: READ,
@@ -144,10 +150,7 @@ export const sources = {
     "Completion of negative declaration for certain private projects",
   ),
   ceqaGuide15108: CCR("15108", "Completion and certification of EIR"),
-  ceqaGuide15132: CCR(
-    "15132",
-    "Contents of final environmental impact report",
-  ),
+  ceqaGuide15132: CCR("15132", "Contents of final environmental impact report"),
   ceqaGuide15141: CCR("15141", "Page limits"),
   ceqaGuide15300: CCR("15300", "Categorical exemptions"),
   ceqaGuide15381: CCR("15381", "Responsible agency"),
@@ -172,7 +175,8 @@ export const sources = {
     read: READ,
   },
   ceqaLciAbout: {
-    title: "About the California Office of Land Use and Climate Innovation (LCI)",
+    title:
+      "About the California Office of Land Use and Climate Innovation (LCI)",
     publisher: "Governor's Office of Land Use and Climate Innovation (LCI)",
     url: "https://lci.ca.gov/about/",
     read: READ,
@@ -200,7 +204,7 @@ export const sources = {
 } satisfies Record<string, Source>;
 
 export const entry: GuideEntry<GuidePath> = {
-  path: "/ceqa",
+  path: "/for/ceqa",
   family: "ceqa",
   name: "CEQA",
   title: "CEQA: California Environmental Quality Act Guide",
@@ -228,7 +232,8 @@ export const entry: GuideEntry<GuidePath> = {
     },
     {
       label: "Regulations",
-      value: "CEQA Guidelines, 14 CCR § 15000 and following [[ceqaLciGuidelines]]",
+      value:
+        "CEQA Guidelines, 14 CCR § 15000 and following [[ceqaLciGuidelines]]",
     },
     {
       label: "Applies to",
@@ -371,7 +376,8 @@ export const entry: GuideEntry<GuidePath> = {
       ],
     },
     {
-      heading: "Where are CEQA documents filed? The State Clearinghouse and CEQAnet",
+      heading:
+        "Where are CEQA documents filed? The State Clearinghouse and CEQAnet",
       paragraphs: [
         "The lead agency submits draft EIRs and proposed negative declarations electronically to the State Clearinghouse and posts them on its own website [[ceqaPrc21082dot1]]. The Clearinghouse, a division of LCI, distributes documents to state agencies for review, and its CEQAnet database holds the documents and notices it has received since 1980 [[ceqaSch]]. Documents are submitted through CEQA Submit for publication on CEQAnet [[ceqaLciStart]].",
         "After approving a project, a local agency files a notice of determination within five working days with the county clerk and the State Clearinghouse, and may file a notice of exemption with both [[ceqaPrc21152]]. A state agency files its notices electronically with LCI [[ceqaPrc21108]] [[ceqaLciAbout]]. Those filings start the short periods for lawsuits [[ceqaPrc21167]].",
@@ -453,7 +459,8 @@ export const entry: GuideEntry<GuidePath> = {
         "The California Environmental Quality Act, Public Resources Code section 21000 and following. It requires state and local agencies to identify the significant environmental effects of the discretionary projects they carry out or approve, and to avoid or mitigate those effects when feasible.",
     },
     {
-      question: "What is the difference between a negative declaration and an EIR?",
+      question:
+        "What is the difference between a negative declaration and an EIR?",
       answer:
         "A negative declaration is a short statement that a project will not have a significant effect, adopted when an initial study finds no substantial evidence of one. A mitigated negative declaration relies on project revisions that clearly avoid the effects. An EIR is required when substantial evidence shows the project may have a significant effect.",
     },
@@ -473,7 +480,8 @@ export const entry: GuideEntry<GuidePath> = {
         "AB 130 created a CEQA exemption for qualifying infill housing projects on sites of up to 20 acres. SB 131 limited review of housing projects that miss an exemption by a single condition, added exemptions such as wildfire risk reduction projects and rezonings that implement a housing element, and narrowed the record in CEQA lawsuits.",
     },
     {
-      question: "Does ePlan decide whether a project is exempt or file on CEQAnet?",
+      question:
+        "Does ePlan decide whether a project is exempt or file on CEQAnet?",
       answer:
         "No. ePlan drafts CEQA documents, shows the sources it used and leaves every fact it cannot confirm as a placeholder for you. The lead agency decides on exemptions and files with the State Clearinghouse and the county clerk.",
     },

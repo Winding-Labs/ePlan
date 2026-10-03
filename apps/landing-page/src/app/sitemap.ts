@@ -31,6 +31,7 @@ const sitemap = (): MetadataRoute.Sitemap => {
 
   return [
     toEntry(routing.home(), 1),
+    toEntry("/for", 0.9),
     ...GUIDES.map((guide) =>
       toEntry(guide.path, guide.parent ? 0.8 : 0.9, GUIDE_SOURCES_READ_ON),
     ),

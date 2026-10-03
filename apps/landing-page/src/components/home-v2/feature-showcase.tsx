@@ -6,15 +6,14 @@ import { useInView, useReducedMotion } from "framer-motion";
 
 import { PAGE_CONTAINER } from "@/components/home-v2/ui/layout";
 import { ScrollReveal } from "@/components/home-v2/ui/scroll-reveal";
+import { HOME_TABS } from "@/consts/showcase-tabs";
 import { cn } from "@/lib/utils";
 import { CollaborateSlide } from "./feature-showcase/collaborate-slide";
 import { DraftSlide } from "./feature-showcase/draft-slide";
 import { PlanSlide } from "./feature-showcase/plan-slide";
 import { ResearchSlide } from "./feature-showcase/research-slide";
 import { ShowcaseTabs } from "./feature-showcase/showcase-tabs";
-import { HOME_TABS } from "@/consts/showcase-tabs";
 import type { Tab } from "./feature-showcase/types";
-
 
 // Matches the `showcase-tab-shrink` duration in showcase-tabs.tsx.
 const TAB_SHRINK_DURATION_MS = 250;

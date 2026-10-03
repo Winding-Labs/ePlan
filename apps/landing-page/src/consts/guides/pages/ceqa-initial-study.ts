@@ -7,8 +7,7 @@ const READ = "2026-10-02";
 
 export const sources = {
   isCcr15063: {
-    title:
-      "14 CCR § 15063 - Initial Study (CEQA Guidelines)",
+    title: "14 CCR § 15063 - Initial Study (CEQA Guidelines)",
     publisher: "California Code of Regulations, Title 14 (Westlaw)",
     url: "https://govt.westlaw.com/calregs/Document/I87A7E72C5B4D11EC976B000D3A7C4BC3",
     published: "2018-12-28",
@@ -30,8 +29,7 @@ export const sources = {
     read: READ,
   },
   isCcr15071: {
-    title:
-      "14 CCR § 15071 - Contents (negative declaration) (CEQA Guidelines)",
+    title: "14 CCR § 15071 - Contents (negative declaration) (CEQA Guidelines)",
     publisher: "California Code of Regulations, Title 14 (Westlaw)",
     url: "https://govt.westlaw.com/calregs/Document/I8802633B5B4D11EC976B000D3A7C4BC3",
     published: "2005-10-06",
@@ -78,8 +76,7 @@ export const sources = {
     read: READ,
   },
   isCcr15084: {
-    title:
-      "14 CCR § 15084 - Preparing the Draft EIR (CEQA Guidelines)",
+    title: "14 CCR § 15084 - Preparing the Draft EIR (CEQA Guidelines)",
     publisher: "California Code of Regulations, Title 14 (Westlaw)",
     url: "https://govt.westlaw.com/calregs/Document/I886B5E3A5B4D11EC976B000D3A7C4BC3",
     published: "2005-10-06",
@@ -144,8 +141,8 @@ export const sources = {
 } satisfies Record<string, Source>;
 
 export const entry: GuideEntry<GuidePath> = {
-  path: "/ceqa/initial-study",
-  parent: "/ceqa",
+  path: "/for/ceqa-initial-study",
+  parent: "/for/ceqa",
   family: "ceqa",
   name: "Initial study",
   title: "CEQA Initial Study: Appendix G, ND and MND Guide",
@@ -416,7 +413,8 @@ export const entry: GuideEntry<GuidePath> = {
         "A negative declaration is adopted when the initial study finds no substantial evidence that the project may have a significant effect. A mitigated negative declaration is used when the study finds potentially significant effects, but revisions the applicant makes or agrees to before public review would clearly avoid or reduce them below significance, and no substantial evidence shows the revised project may still have a significant effect.",
     },
     {
-      question: "How long is the public review period for an initial study and MND?",
+      question:
+        "How long is the public review period for an initial study and MND?",
       answer:
         "At least 20 days. It is at least 30 days when the document goes to the State Clearinghouse for state agency review, for example when a state agency is a responsible or trustee agency or the project is of statewide, regional or areawide significance.",
     },

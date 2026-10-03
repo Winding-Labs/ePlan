@@ -203,17 +203,52 @@ const nextConfig: NextConfig = {
     const appOrigin = toOrigin(process.env.NEXT_PUBLIC_TURBOPLAN_URL);
 
     return [
-      // One URL per keyword: the /templates guides (ePlan #34) and #35's
-      // /categorical-exclusions moved into the guide system.
+      // One URL per keyword, all under /for/<slug>: earlier guide URLs (ePlan
+      // #34's /templates, #35's /nepa/*, /ceqa/*, /categorical-exclusions and
+      // /compare) move there permanently.
       ...[
-        ["/templates", "/nepa"],
-        ["/templates/categorical-exclusion-decision-memo", "/nepa/categorical-exclusion"],
-        ["/templates/nepa-environmental-assessment", "/nepa/environmental-assessment"],
-        ["/templates/environmental-impact-statement", "/nepa/environmental-impact-statement"],
-        ["/templates/nepa-scoping-letter", "/nepa/scoping-letter"],
-        ["/templates/ceqa-initial-study", "/ceqa/initial-study"],
-        ["/templates/purpose-and-need-statement", "/nepa/environmental-assessment"],
-        ["/categorical-exclusions", "/nepa/categorical-exclusion"],
+        ["/templates", "/for"],
+        [
+          "/templates/categorical-exclusion-decision-memo",
+          "/for/nepa-categorical-exclusion",
+        ],
+        [
+          "/templates/nepa-environmental-assessment",
+          "/for/nepa-environmental-assessment",
+        ],
+        [
+          "/templates/environmental-impact-statement",
+          "/for/environmental-impact-statement",
+        ],
+        ["/templates/nepa-scoping-letter", "/for/nepa-scoping-letter"],
+        ["/templates/ceqa-initial-study", "/for/ceqa-initial-study"],
+        [
+          "/templates/purpose-and-need-statement",
+          "/for/nepa-environmental-assessment",
+        ],
+        ["/categorical-exclusions", "/for/nepa-categorical-exclusion"],
+        ["/nepa", "/for/nepa"],
+        ["/nepa/categorical-exclusion", "/for/nepa-categorical-exclusion"],
+        [
+          "/nepa/environmental-assessment",
+          "/for/nepa-environmental-assessment",
+        ],
+        [
+          "/nepa/environmental-impact-statement",
+          "/for/environmental-impact-statement",
+        ],
+        ["/nepa/scoping-letter", "/for/nepa-scoping-letter"],
+        ["/nepa/regulations", "/for/nepa-regulations"],
+        ["/ceqa", "/for/ceqa"],
+        ["/ceqa/initial-study", "/for/ceqa-initial-study"],
+        ["/ceqa/exemptions", "/for/ceqa-exemptions"],
+        [
+          "/ceqa/environmental-impact-report",
+          "/for/ceqa-environmental-impact-report",
+        ],
+        ["/ceqa/ceqa-and-nepa", "/for/ceqa-and-nepa"],
+        ["/nepa-software", "/for/nepa-software"],
+        ["/compare/nepa-ai-tools", "/for/nepa-ai-tools"],
       ].map(([source, destination]) => ({
         source,
         destination,

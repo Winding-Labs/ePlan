@@ -5,7 +5,7 @@ import { PLANS } from "@wildfires-org/turboplan-billing/types";
 
 import { orderCitations, stripCitations } from "@/lib/citations";
 import { GUIDE_LINKS } from "../guide-links";
-import { GUIDE_PATHS, GUIDES, SOURCES } from "./index";
+import { GUIDE_PATHS, GUIDES, guideSlug, SOURCES } from "./index";
 import { MANUAL_COMPARISON_BASE, PRICING_SUMMARY } from "./shared";
 import type { GuideEntry } from "./types";
 
@@ -59,18 +59,28 @@ const keywordHaystack = (page: GuideEntry): string =>
     .join("\n");
 
 describe("guide pages", () => {
-  it("has content and a route for every registered path", () => {
+  it("has content for every registered path, each a /for/<slug> served by one route", () => {
     expect(GUIDES.map((page) => page.path)).toEqual([...GUIDE_PATHS]);
     GUIDE_PATHS.forEach((path) => {
-      expect(
-        existsSync(join(__dirname, "../../app", path, "page.tsx")),
-      ).toBe(true);
+      expect(path).toMatch(/^\/for\/[a-z0-9-]+$/);
+    });
+    expect(new Set(GUIDE_PATHS.map(guideSlug)).size).toBe(GUIDE_PATHS.length);
+    expect(existsSync(join(__dirname, "../../app/for/[slug]/page.tsx"))).toBe(
+      true,
+    );
+  });
+
+  it("gives every page a parent that is a registered hub", () => {
+    GUIDES.forEach((page) => {
+      if (page.parent) {
+        expect(GUIDE_PATHS as readonly string[]).toContain(page.parent);
+      }
     });
   });
 
-  it("links only real guide pages from the footer", () => {
+  it("links only real guide pages (or the /for index) from the footer", () => {
     GUIDE_LINKS.forEach((link) => {
-      expect(GUIDE_PATHS as readonly string[]).toContain(link.href);
+      expect(["/for", ...GUIDE_PATHS]).toContain(link.href);
     });
   });
 
@@ -103,7 +113,11 @@ describe("guide pages", () => {
     GUIDES.forEach((page) => {
       const haystack = keywordHaystack(page);
       page.secondaryKeywords.forEach((keyword) => {
-        expect({ page: page.path, keyword, found: haystack.includes(keyword.toLowerCase()) }).toEqual({
+        expect({
+          page: page.path,
+          keyword,
+          found: haystack.includes(keyword.toLowerCase()),
+        }).toEqual({
           page: page.path,
           keyword,
           found: true,

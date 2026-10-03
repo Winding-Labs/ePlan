@@ -1,7 +1,7 @@
 import type { GuidePath } from "../paths";
 import type { GuideEntry, Source } from "../types";
 
-// /ceqa/exemptions. Reused keys from nepa-pages.ts SOURCES: none.
+// /for/ceqa-exemptions. Reused keys from nepa-pages.ts SOURCES: none.
 // Sources defined here and reused by ceqa-eir.ts: exPrc21080, exPrc21108,
 // exPrc21152, exPrc21167, exCeqanet, exLciAbout.
 
@@ -22,7 +22,8 @@ const CCR = (
   published?: string,
 ): Source => ({
   title: `CEQA Guidelines, 14 CCR § ${section}: ${heading}`,
-  publisher: "California Code of Regulations (Office of Administrative Law, Westlaw)",
+  publisher:
+    "California Code of Regulations (Office of Administrative Law, Westlaw)",
   url: `https://govt.westlaw.com/calregs/Document/${id}`,
   ...(published ? { published } : {}),
   read: READ,
@@ -59,14 +60,11 @@ export const sources = {
     "local agency notices of determination and exemption",
     "2024-01-01",
   ),
-  exPrc21167: PRC(
-    "21167",
-    "time limits for CEQA lawsuits",
-    "2023-01-01",
-  ),
+  exPrc21167: PRC("21167", "time limits for CEQA lawsuits", "2023-01-01"),
   exSb158: {
     title: "SB 158, Land use (Chapter 650, Statutes of 2025), chaptered text",
-    publisher: "California Legislative Information (leginfo.legislature.ca.gov)",
+    publisher:
+      "California Legislative Information (leginfo.legislature.ca.gov)",
     url: "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB158",
     published: "2025-10-11",
     read: READ,
@@ -159,8 +157,8 @@ export const sources = {
 } satisfies Record<string, Source>;
 
 export const entry: GuideEntry<GuidePath> = {
-  path: "/ceqa/exemptions",
-  parent: "/ceqa",
+  path: "/for/ceqa-exemptions",
+  parent: "/for/ceqa",
   family: "ceqa",
   name: "CEQA exemptions",
   title: "CEQA Exemption Guide: Classes, NOE & 2025 Laws",
@@ -203,7 +201,8 @@ export const entry: GuideEntry<GuidePath> = {
     },
     {
       label: "Challenge window",
-      value: "35 days after the notice is filed; 180 days if none is [[exPrc21167]]",
+      value:
+        "35 days after the notice is filed; 180 days if none is [[exPrc21167]]",
     },
   ],
   hero: {
@@ -271,7 +270,10 @@ export const entry: GuideEntry<GuidePath> = {
         left: ["Planning Division", "Community Development Department"],
         right: ["[INSERT: city hall address]", "Sacramento County, California"],
       },
-      meta: ["File No.: [INSERT: planning file number]", "Date: October 2, 2026"],
+      meta: [
+        "File No.: [INSERT: planning file number]",
+        "Date: October 2, 2026",
+      ],
       salutation: "To: County Clerk, County of Sacramento; State Clearinghouse",
       paragraphs: [
         "Project: construction of a 48-unit apartment building on a 1.2-acre vacant infill parcel at [INSERT: street address and APN], within city limits and surrounded by residential and commercial uses. Applicant: [INSERT: applicant name].",
