@@ -325,4 +325,14 @@ export default withSentryConfig(withMDX(nextConfig), {
     disable: !process.env.SENTRY_AUTH_TOKEN,
     deleteSourcemapsAfterUpload: true,
   },
+  // The landing page only reports errors: tracesSampleRate is 0 and Session
+  // Replay is never initialized (instrumentation-client.ts), so their code is
+  // dead weight in every page's bundle.
+  bundleSizeOptimizations: {
+    excludeDebugStatements: true,
+    excludeTracing: true,
+    excludeReplayIframe: true,
+    excludeReplayShadowDom: true,
+    excludeReplayWorker: true,
+  },
 });

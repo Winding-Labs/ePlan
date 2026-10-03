@@ -116,7 +116,13 @@ export const buildPageMetadata = ({
       description,
       siteName: brand.name,
       type,
-      images: [{ url: image }],
+      // The brand card is 1200x630; page-specific images (project covers)
+      // have unknown dimensions.
+      images: [
+        image === brand.ogImage
+          ? { url: image, width: 1200, height: 630 }
+          : { url: image },
+      ],
       ...(hasSiteUrl ? { url: path } : {}),
     },
     twitter: {

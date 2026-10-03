@@ -3,7 +3,10 @@ import * as Sentry from "@sentry/cloudflare";
 
 import { ANALYTICS_EVENTS } from "@wildfires-org/turboplan-analytics";
 import { trackAnalyticsEvent } from "@wildfires-org/turboplan-analytics/server";
-import { hashPAT, isPATToken } from "@wildfires-org/turboplan-api-client";
+import {
+  hashPAT,
+  isPATToken,
+} from "@wildfires-org/turboplan-api-client/server";
 import { runWithWorkerConnection } from "@wildfires-org/turboplan-db/db-client";
 import {
   findPATByHash,
