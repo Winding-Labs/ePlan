@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { PLANS } from "@wildfires-org/turboplan-billing/types";
 
 import { orderCitations, stripCitations } from "@/lib/citations";
+import { DESCRIPTION_MAX_LENGTH, TITLE_MAX_LENGTH } from "@/lib/seo";
 import { GUIDE_LINKS } from "../guide-links";
 import { GUIDE_PATHS, GUIDES, guideSlug, SOURCES } from "./index";
 import { MANUAL_COMPARISON_BASE, PRICING_SUMMARY } from "./shared";
@@ -90,9 +91,13 @@ describe("guide pages", () => {
       expect(new Set(values).size).toBe(values.length);
     }
     GUIDES.forEach((page) => {
-      // The site appends " | ePlan.ai" (11 characters); Google shows ~60.
-      expect(page.title.length).toBeLessThanOrEqual(49);
-      expect(page.description.length).toBeLessThanOrEqual(160);
+      // The root layout's title template appends " | ePlan.ai" in production.
+      expect(page.title.length).toBeLessThanOrEqual(
+        TITLE_MAX_LENGTH - " | ePlan.ai".length,
+      );
+      expect(page.description.length).toBeLessThanOrEqual(
+        DESCRIPTION_MAX_LENGTH,
+      );
     });
   });
 

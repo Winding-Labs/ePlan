@@ -48,9 +48,10 @@ test.describe("Landing Page - guide pages", () => {
   test("serves robots.txt and a sitemap listing every guide page", async ({
     request,
   }) => {
+    // Only https://eplan.ai is crawlable; this suite runs on another host.
     const robots = await request.get(`${LANDING_URL}/robots.txt`);
     expect(robots.status()).toBe(200);
-    expect(await robots.text()).toContain("/sitemap.xml");
+    expect(await robots.text()).toMatch(/^Disallow: \/$/m);
 
     const sitemap = await request.get(`${LANDING_URL}/sitemap.xml`);
     expect(sitemap.status()).toBe(200);
@@ -89,6 +90,10 @@ test.describe("Landing Page - guide pages", () => {
       await expect(page.locator("h1"), path).toHaveCount(1);
 
       titles.add(await page.title());
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+        "content",
+        /noindex/,
+      );
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
         "href",
         new RegExp(`${path.replace(/\//g, "\\/")}$`),

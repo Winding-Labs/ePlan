@@ -7,9 +7,9 @@ import { routing } from "@/utils/routing";
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
-// Indexable, server-rendered pages only: home, every guide and the docs. The
-// /projects listings render client-side and are noindex (app/projects/
-// layout.tsx); their detail pages come from the API at request time.
+// Every route here is enumerable at build time without the API: home, the
+// guide index and every guide, the catalog index and the docs. Public
+// organizations, offices and projects come from the API at request time.
 const sitemap = (): MetadataRoute.Sitemap => {
   const siteUrl = getSiteUrl();
 
@@ -32,6 +32,7 @@ const sitemap = (): MetadataRoute.Sitemap => {
   return [
     toEntry(routing.home(), 1),
     toEntry("/for", 0.9),
+    toEntry(routing.catalog(), 0.7),
     ...GUIDES.map((guide) =>
       toEntry(guide.path, guide.parent ? 0.8 : 0.9, GUIDE_SOURCES_READ_ON),
     ),

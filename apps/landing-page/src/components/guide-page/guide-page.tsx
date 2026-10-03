@@ -31,7 +31,7 @@ import { guideBenefits, MANUAL_COMPARISON_BASE } from "@/consts/guides/shared";
 import type { GuideEntry, ToolComparisonRow } from "@/consts/guides/types";
 import { HOME_TABS } from "@/consts/showcase-tabs";
 import { orderCitations, stripCitations } from "@/lib/citations";
-import { absoluteUrl, buildPageMetadata } from "@/lib/seo";
+import { buildPageMetadata, toAbsoluteUrl } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { CitedText } from "./cited-text";
 import { ComparisonTable } from "./comparison-table";
@@ -155,7 +155,7 @@ export function GuidePage({ path }: GuidePageProps) {
             "@type": "ListItem",
             position: index + 1,
             name: crumb.name,
-            item: absoluteUrl(crumb.href),
+            item: toAbsoluteUrl(crumb.href),
           })),
         }}
       />

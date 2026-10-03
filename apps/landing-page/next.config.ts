@@ -179,6 +179,11 @@ const nextConfig: NextConfig = {
   },
 
   poweredByHeader: false,
+  // Resolve metadata before the <head> is sent, for every user agent. With
+  // streaming metadata (the default since Next 15.2) the <title>, canonical
+  // and description could land in <body> on some routes, even for Googlebot,
+  // and crawlers ignore a canonical outside <head>.
+  htmlLimitedBots: /.*/,
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

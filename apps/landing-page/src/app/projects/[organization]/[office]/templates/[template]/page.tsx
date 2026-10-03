@@ -157,23 +157,18 @@ export async function generateMetadata({
     notFound();
   }
 
-  // Server-rendered detail page: opt back in from the catalog's noindex
-  // (app/projects/layout.tsx).
-  return {
-    ...buildPageMetadata({
-      title: `${templateData.name} template – ${templateData.organization.name}`,
-      description:
-        templateData.description ||
-        `Preview the ${templateData.name} template from ${templateData.organization.name}`,
-      path: routing.catalogTemplate({
-        organizationSlug: organization,
-        officeSlug: office,
-        templateSlug: template,
-      }),
-      image: templateData.coverImageUrl || undefined,
+  return buildPageMetadata({
+    title: `${templateData.name} template – ${templateData.organization.name}`,
+    description:
+      templateData.description ||
+      `Preview the ${templateData.name} template from ${templateData.organization.name}`,
+    path: routing.catalogTemplate({
+      organizationSlug: organization,
+      officeSlug: office,
+      templateSlug: template,
     }),
-    robots: { index: true, follow: true },
-  };
+    image: templateData.coverImageUrl || undefined,
+  });
 }
 
 export default async function PublicTemplatePage({

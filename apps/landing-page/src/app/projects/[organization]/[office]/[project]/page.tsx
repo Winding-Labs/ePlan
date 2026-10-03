@@ -233,23 +233,18 @@ export async function generateMetadata({
     notFound();
   }
 
-  // Server-rendered detail page: opt back in from the catalog's noindex
-  // (app/projects/layout.tsx).
-  return {
-    ...buildPageMetadata({
-      title: `${projectData.name} – ${projectData.organization.name}`,
-      description:
-        projectData.description ||
-        `View the ${projectData.name} project from ${projectData.organization.name}`,
-      path: routing.catalogProject({
-        organizationSlug: organization,
-        officeSlug: office,
-        projectSlug: project,
-      }),
-      image: projectData.coverImageUrl || undefined,
+  return buildPageMetadata({
+    title: `${projectData.name} – ${projectData.organization.name}`,
+    description:
+      projectData.description ||
+      `View the ${projectData.name} project from ${projectData.organization.name}`,
+    path: routing.catalogProject({
+      organizationSlug: organization,
+      officeSlug: office,
+      projectSlug: project,
     }),
-    robots: { index: true, follow: true },
-  };
+    image: projectData.coverImageUrl || undefined,
+  });
 }
 
 export default async function PublicProjectPage({ params }: ProjectPageProps) {

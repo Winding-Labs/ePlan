@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { getOffice } from "@/handlers/offices";
 import { getOrganization } from "@/handlers/organizations";
-import { buildPageMetadata } from "@/lib/seo";
+import { buildPageMetadata, THIN_PAGE_ROBOTS } from "@/lib/seo";
 import { routing } from "@/utils/routing";
 
 type OrganizationView = "overview" | "offices" | "projects" | "templates";
@@ -54,10 +54,17 @@ export const buildOrganizationMetadata = async (
     },
   };
 
-  return buildPageMetadata({
-    ...pages[view],
-    image: organization.coverImageUrl ?? undefined,
-  });
+  return {
+    ...buildPageMetadata({
+      ...pages[view],
+      image: organization.coverImageUrl ?? undefined,
+    }),
+    // The overview and offices views server-render the office list; the
+    // project and template lists load in the browser.
+    ...(view === "projects" || view === "templates"
+      ? { robots: THIN_PAGE_ROBOTS }
+      : {}),
+  };
 };
 
 export const buildOfficeMetadata = async (
@@ -96,8 +103,13 @@ export const buildOfficeMetadata = async (
     },
   };
 
-  return buildPageMetadata({
-    ...pages[view],
-    image: office.coverImageUrl ?? undefined,
-  });
+  return {
+    ...buildPageMetadata({
+      ...pages[view],
+      image: office.coverImageUrl ?? undefined,
+    }),
+    // Office pages server-render only the hero; their project and template
+    // lists load in the browser.
+    robots: THIN_PAGE_ROBOTS,
+  };
 };

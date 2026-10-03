@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { getAppEnv, getLandingPageEnv } from "@wildfires-org/turboplan-env";
+import { getLandingPageEnv } from "@wildfires-org/turboplan-env";
 
 import { brand } from "@/lib/brand";
 import { resolveMetadataBase } from "@/lib/metadata-base";
@@ -20,9 +20,10 @@ interface PageMetadataOptions {
 // wording as project-management software.
 export const SITE_TAGLINE = "AI for NEPA & CEQA Documents";
 
-export const SITE_TITLE = `${brand.name} — ${SITE_TAGLINE}: Scoping Letters, CEs, EAs`;
+// Kept within TITLE_MAX_LENGTH / DESCRIPTION_MAX_LENGTH (see seo.test.ts).
+export const SITE_TITLE = `${brand.name} — AI for NEPA & CEQA: Scoping Letters, CEs, EAs`;
 
-export const SITE_DESCRIPTION = `AI for NEPA and CEQA reviews: describe a project and ${brand.name} researches precedent, plans the work and drafts scoping letters, CE decision memos and EAs for review.`;
+export const SITE_DESCRIPTION = `AI for NEPA and CEQA reviews: describe a project and ${brand.name} researches precedent and drafts scoping letters, CE decision memos and EAs.`;
 
 /**
  * The marketing site's canonical origin (LANDING_URL), or undefined when the
@@ -32,22 +33,56 @@ export const getSiteUrl = () =>
   resolveMetadataBase(getLandingPageEnv().LANDING_URL);
 
 /**
- * Absolute URL for a site path (JSON-LD, sitemap). Without a known origin the
- * path stays relative: a guessed localhost origin is worse than none.
+ * The only origin search engines should index. Staging and PR previews serve
+ * the same pages from other hosts and must stay out of search results, or
+ * they compete with eplan.ai for the same queries. (A fork serving its own
+ * domain changes this constant.)
  */
-export const absoluteUrl = (path: string): string => {
-  const siteUrl = getSiteUrl();
-  return siteUrl ? new URL(path, siteUrl).href : path;
-};
+export const PRODUCTION_ORIGIN = "https://eplan.ai";
+
+// Lengths Google shows in a result before truncating.
+export const TITLE_MAX_LENGTH = 60;
+export const DESCRIPTION_MAX_LENGTH = 155;
+
+export const isProductionSite = (siteUrl: URL | undefined): boolean =>
+  siteUrl?.origin === PRODUCTION_ORIGIN;
+
+/** Only production may be indexed: robots.txt and the root `robots` meta. */
+export const isIndexableDeployment = () => isProductionSite(getSiteUrl());
+
+/** Root `robots` metadata: index on production, noindex everywhere else. */
+export const indexableRobots = (
+  siteUrl: URL | undefined = getSiteUrl(),
+): NonNullable<Metadata["robots"]> =>
+  isProductionSite(siteUrl)
+    ? { index: true, follow: true }
+    : { index: false, follow: false };
 
 /**
- * Only production may be indexed. An unset APP_ENV (local dev, or a fork that
- * never configured it) counts as production, so a missing variable can never
- * silently block a live site from search engines.
+ * For pages whose content renders in the browser (catalog lists, office
+ * pages): out of the index, but crawlers still follow their links.
  */
-export const isIndexableDeployment = () => {
-  const appEnv = getAppEnv();
-  return !appEnv || appEnv === "production";
+export const THIN_PAGE_ROBOTS = {
+  index: false,
+  follow: true,
+} as const satisfies Metadata["robots"];
+
+/**
+ * Absolute URL for a site path, for JSON-LD and the sitemap. Without an
+ * origin the path stays relative and a warning is logged: a guessed origin
+ * (localhost) is worse than none.
+ */
+export const toAbsoluteUrl = (
+  path: string,
+  siteUrl: URL | undefined = getSiteUrl(),
+): string => {
+  if (!siteUrl) {
+    console.warn(
+      `LANDING_URL is not set; "${path}" stays relative in structured data`,
+    );
+    return path;
+  }
+  return new URL(path, siteUrl).toString();
 };
 
 /**

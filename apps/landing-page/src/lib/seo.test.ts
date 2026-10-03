@@ -88,10 +88,9 @@ describe("buildPageMetadata", () => {
 });
 
 describe("robots", () => {
-  it("allows crawling and points to the sitemap in production", async () => {
+  it("allows crawling and points to the sitemap on https://eplan.ai", async () => {
     const { robots } = await loadWithEnv({
-      NEXT_PUBLIC_LANDING_URL: "https://example.test",
-      NEXT_PUBLIC_APP_ENV: "production",
+      NEXT_PUBLIC_LANDING_URL: "https://eplan.ai",
     });
 
     expect(robots()).toEqual({
@@ -100,14 +99,26 @@ describe("robots", () => {
         allow: "/",
         disallow: ["/api/", "/ingest/", "/monitoring"],
       },
-      sitemap: "https://example.test/sitemap.xml",
+      sitemap: "https://eplan.ai/sitemap.xml",
     });
   });
 
-  it("treats an unset APP_ENV as production", async () => {
-    const { seo } = await loadWithEnv({});
-
-    expect(seo.isIndexableDeployment()).toBe(true);
+  it("is indexable only when the site URL is https://eplan.ai", async () => {
+    expect((await loadWithEnv({})).seo.isIndexableDeployment()).toBe(false);
+    expect(
+      (
+        await loadWithEnv({
+          NEXT_PUBLIC_LANDING_URL:
+            "https://turboplan-landing-pr-35.ilya-496.workers.dev",
+          NEXT_PUBLIC_APP_ENV: "production",
+        })
+      ).seo.isIndexableDeployment(),
+    ).toBe(false);
+    expect(
+      (
+        await loadWithEnv({ NEXT_PUBLIC_LANDING_URL: "https://eplan.ai" })
+      ).seo.isIndexableDeployment(),
+    ).toBe(true);
   });
 
   it("blocks every crawler on staging and previews", async () => {
@@ -133,17 +144,21 @@ describe("sitemap", () => {
         "https://example.test/",
         "https://example.test/for",
         "https://example.test/for/nepa",
+        "https://example.test/for/nepa-categorical-exclusion",
         "https://example.test/for/nepa-scoping-letter",
         "https://example.test/for/ceqa-initial-study",
+        "https://example.test/for/nepa-ai-tools",
+        "https://example.test/projects",
         "https://example.test/docs",
         "https://example.test/docs/guides/quickstart",
       ]),
     );
+    // Client-rendered lists are noindex, so they stay out of the sitemap.
+    expect(urls).not.toContain("https://example.test/projects/projects");
+    expect(urls).not.toContain("https://example.test/projects/templates");
     expect(new Set(urls).size).toBe(urls.length);
-    // Moved pages (308) and the client-rendered, noindex catalog listings
-    // stay out of the sitemap.
+    // Moved pages (308) stay out of the sitemap.
     expect(urls.some((url) => url.includes("/templates"))).toBe(false);
-    expect(urls.some((url) => url.endsWith("/projects"))).toBe(false);
     expect(urls.some((url) => url.includes("/checkout"))).toBe(false);
   });
 
@@ -151,5 +166,63 @@ describe("sitemap", () => {
     const { sitemap } = await loadWithEnv({});
 
     expect(sitemap()).toEqual([]);
+  });
+});
+
+describe("isProductionSite and indexableRobots", () => {
+  it("index https://eplan.ai only", async () => {
+    const { seo } = await loadWithEnv({});
+
+    expect(seo.isProductionSite(new URL("https://eplan.ai/nepa"))).toBe(true);
+    expect(seo.indexableRobots(new URL("https://eplan.ai"))).toEqual({
+      index: true,
+      follow: true,
+    });
+
+    for (const url of [
+      "https://turboplan-landing-pr-35.ilya-496.workers.dev",
+      "https://turboplan-landing-staging.ilya-496.workers.dev",
+      "https://www.eplan.ai",
+      "http://eplan.ai",
+      "http://localhost:3002",
+    ]) {
+      expect(seo.isProductionSite(new URL(url))).toBe(false);
+      expect(seo.indexableRobots(new URL(url))).toEqual({
+        index: false,
+        follow: false,
+      });
+    }
+    expect(seo.isProductionSite(undefined)).toBe(false);
+  });
+});
+
+describe("toAbsoluteUrl", () => {
+  it("joins a path onto the site origin", async () => {
+    const { seo } = await loadWithEnv({});
+
+    expect(
+      seo.toAbsoluteUrl("/nepa/scoping-letter", new URL("https://eplan.ai")),
+    ).toBe("https://eplan.ai/nepa/scoping-letter");
+  });
+
+  it("keeps the path relative, with a warning, without an origin", async () => {
+    const { seo } = await loadWithEnv({});
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    expect(seo.toAbsoluteUrl("/nepa", undefined)).toBe("/nepa");
+    expect(warnSpy).toHaveBeenCalled();
+
+    warnSpy.mockRestore();
+  });
+});
+
+describe("home title and description", () => {
+  it("fit Google's limits", async () => {
+    const { seo } = await loadWithEnv({ NEXT_PUBLIC_APP_NAME: "ePlan.ai" });
+
+    expect(seo.SITE_TITLE.length).toBeLessThanOrEqual(seo.TITLE_MAX_LENGTH);
+    expect(seo.SITE_DESCRIPTION.length).toBeLessThanOrEqual(
+      seo.DESCRIPTION_MAX_LENGTH,
+    );
   });
 });
