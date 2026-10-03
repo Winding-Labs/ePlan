@@ -225,7 +225,7 @@ reads `IS_<MODULE>_PACKAGE_ENABLED`, the browser bundle reads
 | Fields | `IS_FIELDS_PACKAGE_ENABLED` | No | Custom project fields | — |
 | Documents | `IS_DOCUMENTS_PACKAGE_ENABLED` | No | PDF/Word upload per project | Working `R2_*` credentials, or every upload returns 500 |
 | Timeline records | `IS_TIMELINE_RECORDS_PACKAGE_ENABLED` | No | Project activity log | — |
-| Billing | `IS_BILLING_PACKAGE_ENABLED` | No | Stripe plans, checkout, seat reconciliation, `/setup/plan` | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (API server throws at startup without them). Optional: `RECONCILE_SECRET`, `LANDING_URL` |
+| Billing | `IS_BILLING_PACKAGE_ENABLED` | No | Stripe plans, checkout (the app and the landing page's `/checkout`, which the pricing buttons open), seat reconciliation, `/setup/plan` | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (API server throws at startup without them). Optional: `RECONCILE_SECRET`, `LANDING_URL` |
 | Signing | `IS_SIGNING_PACKAGE_ENABLED` | No | Documenso signature requests | `DOCUMENSO_API_URL`, `DOCUMENSO_API_KEY`, `DOCUMENSO_WEBHOOK_SECRET` (API server throws at startup without them) plus a running Documenso |
 
 Prices for the billing module are **not** environment variables. They resolve at

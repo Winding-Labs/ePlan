@@ -8,8 +8,9 @@ import { routing } from "@/utils/routing";
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
 // Every route here is enumerable at build time without the API: home, the
-// guide index and every guide, the catalog index and the docs. Public
-// organizations, offices and projects come from the API at request time.
+// guide index and every guide, the catalog index, the legal pages and the
+// docs. Public organizations, offices and projects come from the API at
+// request time.
 const sitemap = (): MetadataRoute.Sitemap => {
   const siteUrl = getSiteUrl();
 
@@ -33,6 +34,8 @@ const sitemap = (): MetadataRoute.Sitemap => {
     toEntry(routing.home(), 1),
     toEntry("/for", 0.9),
     toEntry(routing.catalog(), 0.7),
+    toEntry(routing.privacy(), 0.2),
+    toEntry(routing.terms(), 0.2),
     ...GUIDES.map((guide) =>
       toEntry(guide.path, guide.parent ? 0.8 : 0.9, GUIDE_SOURCES_READ_ON),
     ),
