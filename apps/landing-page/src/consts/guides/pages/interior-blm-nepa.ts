@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 /**
  * /for/interior-blm-nepa — Interior's NEPA procedures as BLM applies them.
@@ -83,14 +83,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/interior-blm-nepa",
-  parent: "/for/nepa",
-  family: "agency",
-  name: "Interior and BLM NEPA",
   title: "BLM NEPA: DOI Handbook, CXs, DNAs and ePlanning",
   description:
-    "BLM NEPA in 2026: the DOI NEPA Handbook (516 DM 1), what's left of 43 CFR part 46, BLM CXs, DNAs, the rescinded H-1790-1 and ePlanning.",
+    "BLM NEPA in 2026: the DOI NEPA Handbook, what's left of 43 CFR part 46, BLM CXs, DNAs and ePlanning.",
   eyebrow: "Interior & BLM",
   h1: "BLM NEPA in 2026: the DOI NEPA Handbook, CX records, DNAs and ePlanning",
   primaryKeyword: "blm nepa",
@@ -104,7 +101,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Categorical Exclusion Record",
   answer:
-    "BLM NEPA is how the Bureau of Land Management applies the National Environmental Policy Act to its decisions on public lands, under procedures Interior sets for all its bureaus [[doiHandbook]]. Those procedures are a short 43 CFR part 46, which keeps the departmental categorical exclusions at 43 CFR 46.210, and the DOI NEPA Handbook, 516 DM 1 [[doiFinal]] [[doiHandbook]].",
+    "BLM NEPA is how the Bureau of Land Management applies the National Environmental Policy Act to its decisions on public lands, under procedures Interior sets for all its bureaus [[doiHandbook]]. Those procedures are a short 43 CFR part 46, which keeps the departmental [categorical exclusions](/for/nepa-categorical-exclusion) at 43 CFR 46.210, and the DOI NEPA Handbook, 516 DM 1 [[doiFinal]] [[doiHandbook]].",
   glance: [
     {
       label: "Regulations",
@@ -235,10 +232,10 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "The DOI NEPA handbook and what stays in 43 CFR part 46",
       paragraphs: [
-        "Interior's final rule rescinded about 80 percent of its 2008 NEPA regulations [[doiFinal]] [[doiNepaPage]]. The rest moved to the DOI NEPA Handbook, 516 DM 1, dated February 23, 2026, which is not codified and does not have the force of law [[doiFinal]] [[doiHandbook]]. Besides the CE sections, part 46 keeps [[doiFinal]]:",
+        "Interior's final rule rescinded about 80 percent of its 2008 [NEPA regulations](/for/nepa-regulations) [[doiFinal]] [[doiNepaPage]]. The rest moved to the DOI NEPA Handbook, 516 DM 1, dated February 23, 2026, which is not codified and does not have the force of law [[doiFinal]] [[doiHandbook]]. Besides the CE sections, part 46 keeps [[doiFinal]]:",
       ],
       bullets: [
-        "46.105 and 46.107: contractors and applicant-prepared EAs and EISs [[doi46107]]",
+        "46.105 and 46.107: contractors and applicant-prepared [EAs](/for/nepa-environmental-assessment) and [EISs](/for/environmental-impact-statement) [[doi46107]]",
         "46.150: emergency responses",
         "46.220 and 46.225: lead and cooperating agencies",
       ],

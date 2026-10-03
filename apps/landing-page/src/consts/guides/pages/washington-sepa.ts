@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 // /for/washington-sepa. Reused keys: none (no existing source covers Washington).
 // Every source below was opened on 2026-10-02. RCW and WAC pages are the
@@ -128,14 +128,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/washington-sepa",
-  parent: "/for/state-environmental-review",
-  family: "state",
-  name: "Washington SEPA",
   title: "Washington SEPA Checklist, DNS & MDNS Guide",
   description:
-    "Washington SEPA step by step: categorical exemptions, the SEPA environmental checklist, DNS, MDNS and DS threshold determinations, and the EIS.",
+    "Washington SEPA step by step: exemptions, the SEPA environmental checklist, DNS, MDNS and DS determinations, and the EIS.",
   eyebrow: "Washington SEPA",
   h1: "Washington SEPA guide: the environmental checklist, threshold determinations and EIS",
   primaryKeyword: "washington sepa",
@@ -148,7 +145,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "SEPA Checklist",
   answer:
-    "Washington SEPA, the State Environmental Policy Act (chapter 43.21C RCW), requires state and local agencies to consider environmental impacts before deciding on a proposal [[sepaRcw031]]. Unless it is exempt, the lead agency reviews a SEPA environmental checklist and makes a threshold determination: a DNS, a mitigated determination of nonsignificance (MDNS), or a determination of significance (DS) requiring an EIS [[sepaWac310]] [[sepaWac960]].",
+    "Washington SEPA, the State Environmental Policy Act (chapter 43.21C RCW), requires state and local agencies to consider environmental impacts before deciding on a proposal [[sepaRcw031]]. Unless it is exempt, the lead agency reviews a SEPA environmental checklist and makes a threshold determination: a DNS, a mitigated determination of nonsignificance (MDNS), or a determination of significance (DS) requiring an [EIS](/for/environmental-impact-statement) [[sepaWac310]] [[sepaWac960]].",
   glance: [
     {
       label: "Legal basis",
@@ -306,7 +303,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "What the SEPA environmental checklist asks",
     intro:
-      "The questions in WAC 197-11-960 [[sepaWac960]], each explained in Ecology's checklist guidance [[sepaChecklistGuide]].",
+      "The questions in WAC 197-11-960 [[sepaWac960]], each explained in Ecology's checklist guidance [[sepaChecklistGuide]]. SEPA is one of the [state environmental policy acts](/for/state-environmental-review) similar to [NEPA](/for/nepa).",
     items: [
       {
         title: "A. Background (questions 1 to 12)",

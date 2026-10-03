@@ -24,6 +24,8 @@ interface GuideHeaderProps {
   benefits: string[];
   sourceCount: number;
   sourcesReadOn: string;
+  /** The same date as YYYY-MM-DD, for the <time> element. */
+  sourcesReadOnIso: string;
   numberOf: (key: string) => number;
 }
 
@@ -38,6 +40,7 @@ export function GuideHeader({
   benefits,
   sourceCount,
   sourcesReadOn,
+  sourcesReadOnIso,
   numberOf,
 }: GuideHeaderProps) {
   return (
@@ -70,8 +73,9 @@ export function GuideHeader({
               <CitedText text={page.answer} numberOf={numberOf} />
             </p>
             <p className="font-inter text-[13px] leading-[20px] text-egray-600">
-              {sourceCount} sources, each read on {sourcesReadOn}. This page
-              explains the law; it is not legal advice.
+              {sourceCount} sources, each read on{" "}
+              <time dateTime={sourcesReadOnIso}>{sourcesReadOn}</time>. This
+              page explains the law; it is not legal advice.
             </p>
           </div>
 

@@ -1,7 +1,7 @@
 import type { GuidePath } from "../paths";
 // /for/esa-section-7. Reused source keys (defined in the shared NEPA sources):
 // usc4332.
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 const READ = "2026-10-02";
 
@@ -80,14 +80,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/esa-section-7",
-  parent: "/for/nepa",
-  family: "federal",
-  name: "ESA Section 7",
   title: "ESA Section 7: Consultation Steps & BA Guide",
   description:
-    "How ESA section 7 consultation works under 50 CFR part 402: IPaC species lists, biological assessments, informal vs formal consultation and timelines.",
+    "How ESA section 7 consultation works: IPaC species lists, biological assessments, informal vs formal consultation, timelines.",
   eyebrow: "ESA Section 7",
   h1: "ESA section 7 consultation: biological assessments, opinions and timelines",
   primaryKeyword: "esa section 7",
@@ -256,7 +253,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "Biological assessment outline: what to include",
     intro:
-      "The contents are at the agency's discretion [[esaCfr40212]]. This outline combines the items 50 CFR 402.12(f) lists with what a request for formal consultation must contain [[esaCfr40214]], so it supports either a concurrence request or formal consultation.",
+      "The contents are at the agency's discretion [[esaCfr40212]]. This outline combines the items 50 CFR 402.12(f) lists with what a request for formal consultation must contain [[esaCfr40214]], so it supports either a concurrence request or formal consultation. A biological assessment often accompanies an [EA](/for/nepa-environmental-assessment) or EIS, and [Section 106](/for/section-106) review often runs in parallel.",
     items: [
       {
         title: "Proposed action",

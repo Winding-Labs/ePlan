@@ -2,7 +2,7 @@ import type { GuidePath } from "../paths";
 // /for/hud-environmental-review.
 // eCFR sections were read through eCFR's versioner API (text current as of
 // 2026-10-01); the eCFR website blocks automated browsing.
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 const READ = "2026-10-02";
 
@@ -117,14 +117,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/hud-environmental-review",
-  parent: "/for/nepa",
-  family: "federal",
-  name: "HUD environmental review",
   title: "24 CFR Part 58: HUD Environmental Review Guide",
   description:
-    "24 CFR Part 58 explained: responsible entities vs HUD under Part 50, levels of review, the ERR, public notices, the RROF (HUD-7015.15) and HEROS.",
+    "How a HUD environmental review works under 24 CFR Part 58: levels of review, the ERR, public notices and the RROF.",
   eyebrow: "HUD environmental review",
   h1: "24 CFR Part 58: how a HUD environmental review works, from exemption to release of funds",
   primaryKeyword: "24 cfr part 58",
@@ -138,7 +135,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Environmental Review Record",
   answer:
-    "24 CFR Part 58 lets a state, local government or tribe, as the responsible entity, take on HUD's NEPA review duties for programs such as CDBG and HOME [[hudEcfr581]] [[hudEcfr584]] [[hudOrientation]]. The entity sets each project's level of review, keeps an environmental review record (ERR) and, where required, submits a Request for Release of Funds (HUD-7015.15) before committing funds [[hudEcfr5838]] [[hudEcfr5822]] [[hudOrientation]].",
+    "24 CFR Part 58 lets a state, local government or tribe, as the responsible entity, take on HUD's [NEPA review](/for/nepa) duties for programs such as CDBG and HOME [[hudEcfr581]] [[hudEcfr584]] [[hudOrientation]]. The entity sets each project's level of review, keeps an environmental review record (ERR) and, where required, submits a Request for Release of Funds (HUD-7015.15) before committing funds [[hudEcfr5838]] [[hudEcfr5822]] [[hudOrientation]].",
   glance: [
     {
       label: "Legal basis",
@@ -152,7 +149,8 @@ export const entry: GuideEntry<GuidePath> = {
     },
     {
       label: "Levels of review",
-      value: "Exempt, CENST, CEST, EA or EIS [[hudOrientation]]",
+      value:
+        "Exempt, CENST, CEST, [EA](/for/nepa-environmental-assessment) or EIS [[hudOrientation]]",
     },
     {
       label: "Release of funds",
@@ -303,7 +301,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "What an environmental review record contains",
     intro:
-      "Section 58.38 sets what an ERR must contain [[hudEcfr5838]]. This outline follows HUD's suggested EA format [[hudEaFormat]]; CEST and exempt reviews use shorter ones [[hudCestFormat]].",
+      "Section 58.38 sets what an ERR must contain [[hudEcfr5838]]. This outline follows HUD's suggested EA format [[hudEaFormat]]; CEST and exempt reviews use shorter ones [[hudCestFormat]]. [ESA section 7](/for/esa-section-7) consultation is one of the related laws the record documents.",
     items: [
       {
         title: "Project information",
@@ -328,7 +326,7 @@ export const entry: GuideEntry<GuidePath> = {
       {
         title: "Compliance with 58.5 and 58.6",
         detail:
-          "For each law, whether steps or mitigation are needed: Section 106, floodplains, wetlands, species, coastal zones, air, farmland, noise, contamination and radon [[hudEaFormat]] [[hudEcfr585]] [[hudRadon]].",
+          "For each law, whether steps or mitigation are needed: [Section 106](/for/section-106), floodplains, wetlands, species, coastal zones, air, farmland, noise, contamination and radon [[hudEaFormat]] [[hudEcfr585]] [[hudRadon]].",
       },
       {
         title: "EA factors",

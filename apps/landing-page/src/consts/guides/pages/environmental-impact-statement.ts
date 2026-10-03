@@ -4,7 +4,7 @@
 // defined here are cited only by other pages (eisEpaDatabase, eisEpaCopy,
 // eisDoeEisList, eisBlmEplanning, eisUsda1b9).
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 const READ = "2026-10-02";
 
@@ -92,14 +92,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/environmental-impact-statement",
-  parent: "/for/nepa",
-  family: "nepa",
-  name: "Environmental impact statement",
   title: "Environmental Impact Statement: Steps & Examples",
   description:
-    "What an environmental impact statement covers, when NEPA requires one, page limits, the steps from notice of intent to ROD, and where to find real EISs.",
+    "What an environmental impact statement covers, when NEPA requires one, page limits, the steps to a ROD and real examples.",
   eyebrow: "Environmental impact statement",
   h1: "Environmental impact statements: steps, page limits and real examples",
   primaryKeyword: "environmental impact statement",
@@ -115,7 +112,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "EIS Outline",
   answer:
-    "An environmental impact statement (EIS) is the detailed statement NEPA requires for a proposed federal action with a reasonably foreseeable significant effect on the quality of the human environment [[usc4336e]] [[usc4336]]. It analyzes the action's effects and a reasonable range of alternatives, including no action [[usc4332]], and ends in the agency's decision, such as a record of decision [[usda1b8]] [[doeProcedures]].",
+    "An environmental impact statement (EIS) is the detailed statement [NEPA](/for/nepa) requires for a proposed federal action with a reasonably foreseeable significant effect on the quality of the human environment [[usc4336e]] [[usc4336]]. It analyzes the action's effects and a reasonable range of alternatives, including no action [[usc4332]], and ends in the agency's decision, such as a record of decision [[usda1b8]] [[doeProcedures]].",
   glance: [
     {
       label: "Legal basis",
@@ -260,7 +257,7 @@ export const entry: GuideEntry<GuidePath> = {
       ],
       bullets: [
         "Notice of intent: a Federal Register notice that must request comment on alternatives, impacts and relevant information [[usda1b7]] [[usc4336a]]",
-        "Scoping: optional under USDA; FHWA, FRA and FTA scope before the NOI [[usda1b7]] [[eisFhwa771123]]",
+        "[Scoping](/for/nepa-scoping-letter): optional under USDA; FHWA, FRA and FTA scope before the NOI [[usda1b7]] [[eisFhwa771123]]",
         "Draft EIS: agency procedures decide whether it circulates; EPA recommends 45 days of comment [[doeProcedures]] [[eisEpaFiling]]",
         "EPA review: EPA comments on every draft EIS under Clean Air Act section 309 and posts its letters [[eisEpa309]]",
         "Final EIS: responds to comments and, under FHWA's rule, names the preferred alternative; EPA recommends 30 days' review [[eisFhwa771125]] [[eisEpaFiling]]",
@@ -285,7 +282,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "EIS outline: what an environmental impact statement contains",
     intro:
-      "NEPA lists what every EIS must address [[usc4332]]; agencies set the rest, with substantial deference from courts [[sevenCounty]]. This outline follows USDA's [[usda1b7]] and DOE's [[doeProcedures]] minimum elements.",
+      "NEPA lists what every EIS must address [[usc4332]]; agencies set the rest, with substantial deference from courts [[sevenCounty]]. This outline follows USDA's [[usda1b7]] and DOE's [[doeProcedures]] minimum elements. Filed EISs are in [EPA's EIS database](/for/eis-database); [NEPA examples](/for/nepa-examples) lists recent ones by type.",
     items: [
       {
         title: "Cover",

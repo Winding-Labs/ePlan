@@ -100,28 +100,43 @@ export function CtaBottom({ showFooter = true }: CtaBottomProps) {
               <div
                 className={cn(HEADER_STACK_CLASS, "max-w-[760px] items-center")}
               >
-                <h2 className={SECTION_TITLE_CLASS}>
-                  {/* Stable accessible name — the typewriter below mutates
-                    every few ms and would spam screen readers. */}
-                  <span className="sr-only">
-                    Ready to accelerate your environmental planning?
-                  </span>
-                  <span aria-hidden="true" className="block">
-                    Ready to accelerate your
-                  </span>
-                  {/* Every word is laid out invisibly in the same grid cell as
-                      the live text, so the cell is always as tall as the
-                      longest wrap and the panel never jumps while typing. */}
-                  <span aria-hidden="true" className="grid">
-                    {CTA_WORDS.map((word) => (
-                      <span
-                        key={word}
-                        className="invisible col-start-1 row-start-1"
-                      >
-                        <TypedLine text={word} />
-                      </span>
-                    ))}
-                    <span className="col-start-1 row-start-1">
+                {/* Every word is laid out invisibly in the same grid cell as
+                    the heading, so the cell is always as tall as the longest
+                    wrap and the panel never jumps while typing. The sizing
+                    copies sit beside the h2, not in it, so its text is one
+                    sentence rather than every word run together. */}
+                <div className="grid w-full">
+                  <div
+                    aria-hidden="true"
+                    className={cn(
+                      SECTION_TITLE_CLASS,
+                      "invisible col-start-1 row-start-1",
+                    )}
+                  >
+                    <span className="block">Ready to accelerate your</span>
+                    <span className="grid">
+                      {CTA_WORDS.map((word) => (
+                        <span key={word} className="col-start-1 row-start-1">
+                          <TypedLine text={word} />
+                        </span>
+                      ))}
+                    </span>
+                  </div>
+                  <h2
+                    className={cn(
+                      SECTION_TITLE_CLASS,
+                      "col-start-1 row-start-1",
+                    )}
+                  >
+                    {/* Stable accessible name — the typewriter below mutates
+                      every few ms and would spam screen readers. */}
+                    <span className="sr-only">
+                      Ready to accelerate your environmental planning?
+                    </span>
+                    <span aria-hidden="true" className="block">
+                      Ready to accelerate your
+                    </span>
+                    <span aria-hidden="true" className="block">
                       <TypedLine
                         text={displayText}
                         sparkleKey={sparkleKey}
@@ -129,8 +144,8 @@ export function CtaBottom({ showFooter = true }: CtaBottomProps) {
                         prefersReducedMotion={Boolean(prefersReducedMotion)}
                       />
                     </span>
-                  </span>
-                </h2>
+                  </h2>
+                </div>
 
                 <p className={cn(SECTION_LEAD_CLASS, "max-w-[520px]")}>
                   Start a project in minutes — draft, plan and track NEPA work

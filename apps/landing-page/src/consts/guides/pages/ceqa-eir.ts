@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 // /for/ceqa-environmental-impact-report. Reused keys from nepa-pages.ts SOURCES: none.
 // Reused keys defined in ceqa-exemptions.ts: exPrc21080, exPrc21108,
@@ -218,14 +218,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/ceqa-environmental-impact-report",
-  parent: "/for/ceqa",
-  family: "ceqa",
-  name: "Environmental impact report",
   title: "Environmental Impact Report (EIR): CEQA Guide",
   description:
-    "When CEQA requires an environmental impact report, the NOP and scoping, AB 52, draft and final EIR contents, review periods, findings and the NOD.",
+    "When CEQA requires an EIR, the NOP and scoping, AB 52 consultation, draft and final EIR contents, findings and the NOD.",
   eyebrow: "CEQA EIR",
   h1: "The CEQA environmental impact report, from notice of preparation to notice of determination",
   primaryKeyword: "environmental impact report",
@@ -245,7 +242,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       label: "Legal basis",
       value:
-        "Pub. Resources Code §§21100 and 21151; CEQA Guidelines Article 9 [[eirPrc21100]] [[eirPrc21151]] [[eirCcr15120]]",
+        "Pub. Resources Code §§21100 and 21151; [CEQA Guidelines](/for/ceqa) Article 9 [[eirPrc21100]] [[eirPrc21151]] [[eirCcr15120]]",
     },
     {
       label: "Prepared by",
@@ -260,7 +257,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       label: "Public review",
       value:
-        "30 to 60 days; at least 45 through the State Clearinghouse [[eirCcr15105]]",
+        "30 to 60 days; at least 45 through the [State Clearinghouse](/for/ceqanet) [[eirCcr15105]]",
     },
     {
       label: "Time limit",
@@ -368,7 +365,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "When is a CEQA EIR required?",
       paragraphs: [
-        "The test is the fair argument standard: if the lead agency is presented with a fair argument that the project may have a significant effect, it prepares an EIR even if other substantial evidence points the other way. Public controversy alone does not require one [[eirCcr15064]]. An initial study usually comes first; the agency may skip it when an EIR is clearly required [[eirCcr15063]].",
+        "The test is the fair argument standard: if the lead agency is presented with a fair argument that the project may have a significant effect, it prepares an EIR even if other substantial evidence points the other way. Public controversy alone does not require one [[eirCcr15064]]. An [initial study](/for/ceqa-initial-study) usually comes first; the agency may skip it when an EIR is clearly required [[eirCcr15063]].",
       ],
     },
     {
@@ -397,7 +394,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "Draft EIR outline: the required sections",
     intro:
-      "Required in every draft EIR by Guidelines §§15122-15131, in Article 9's order; the format can vary if each element is covered [[eirCcr15120]].",
+      "Required in every draft EIR by Guidelines §§15122-15131, in Article 9's order; the format can vary if each element is covered [[eirCcr15120]]. For a joint document with a federal agency, see [CEQA and NEPA](/for/ceqa-and-nepa).",
     items: [
       {
         title: "Table of contents or index",

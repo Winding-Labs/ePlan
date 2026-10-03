@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 /**
  * /for/hawaii-hepa — the Hawaii Environmental Policy Act (HRS Chapter 343).
@@ -53,14 +53,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/hawaii-hepa",
-  parent: "/for/state-environmental-review",
-  family: "state",
-  name: "Hawaii HEPA",
   title: "HEPA Hawaii: Chapter 343 EA and EIS Guide",
   description:
-    "HEPA Hawaii guide: what triggers HRS Chapter 343 review, exemptions, the environmental assessment, FONSI or EISPN, and The Environmental Notice.",
+    "HEPA Hawaii: what triggers HRS Chapter 343 review, exemptions, the environmental assessment, and a FONSI or EISPN.",
   eyebrow: "Hawaii HEPA",
   h1: "HEPA Hawaii: when HRS Chapter 343 requires an environmental assessment",
   primaryKeyword: "hepa hawaii",
@@ -71,7 +68,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Hawaii Environmental Assessment",
   answer:
-    "HEPA Hawaii review, under the Hawaii Environmental Policy Act (HRS Chapter 343), requires an environmental assessment (EA) when an action triggers section 343-5, such as using state or county lands or funds or any use in a shoreline area [[hepaErp]] [[hepaHrs3435]]. It ends in a finding of no significant impact (FONSI) or, if effects may be significant, an EIS preparation notice (EISPN) [[hepaHrs3432]] [[hepaHar]].",
+    "HEPA Hawaii review, under the Hawaii Environmental Policy Act (HRS Chapter 343), requires an [environmental assessment](/for/nepa-environmental-assessment) (EA) when an action triggers section 343-5, such as using state or county lands or funds or any use in a shoreline area [[hepaErp]] [[hepaHrs3435]]. It ends in a finding of no significant impact (FONSI) or, if effects may be significant, an EIS preparation notice (EISPN) [[hepaHrs3432]] [[hepaHar]].",
   glance: [
     {
       label: "Rules",
@@ -241,7 +238,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "Hawaii environmental assessment: the contents",
     intro:
-      "Built from the draft EA contents in HAR section 11-200.1-18(d); the final EA adds the agency's determination, findings and reasons [[hepaHar]].",
+      "Built from the draft EA contents in HAR section 11-200.1-18(d); the final EA adds the agency's determination, findings and reasons [[hepaHar]]. HEPA is one of the [state environmental policy acts](/for/state-environmental-review) similar to [NEPA](/for/nepa).",
     items: [
       {
         title: "Proposing agency or applicant",

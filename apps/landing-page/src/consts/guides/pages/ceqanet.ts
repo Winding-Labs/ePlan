@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 /**
  * /for/ceqanet — CEQAnet, the State Clearinghouse database, and CEQA Submit.
@@ -84,14 +84,11 @@ export const sources = {
   cnetGuide15373: CCR("15373", "Notice of determination"),
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/ceqanet",
-  parent: "/for/ceqa",
-  family: "tools",
-  name: "CEQAnet",
   title: "CEQAnet: Search the CEQA State Clearinghouse",
   description:
-    "What CEQAnet holds, how to search it for precedent by document type, lead agency, county and date, SCH numbers, CEQA Submit and review periods.",
+    "What CEQAnet holds, how to search it for CEQA precedent by document type, agency and county, SCH numbers and CEQA Submit.",
   eyebrow: "CEQAnet",
   h1: "CEQAnet: searching the State Clearinghouse database and reading what you find",
   primaryKeyword: "ceqanet",
@@ -103,7 +100,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Notice of Determination",
   answer:
-    "CEQAnet (also written CEQA Net) is the online, searchable database of the State Clearinghouse in California's Governor's Office of Land Use and Climate Innovation (LCI) [[exCeqanet]]. It holds the CEQA documents and notices agencies submit to the Clearinghouse, with full copies since March 2019, searchable by document type, agency, county and date [[ceqaSch]] [[eirCeqanetSearch]].",
+    "CEQAnet (also written [CEQA](/for/ceqa) Net) is the online, searchable database of the State Clearinghouse in California's Governor's Office of Land Use and Climate Innovation (LCI) [[exCeqanet]]. It holds the CEQA documents and notices agencies submit to the Clearinghouse, with full copies since March 2019, searchable by document type, agency, county and date [[ceqaSch]] [[eirCeqanetSearch]].",
   glance: [
     {
       label: "Holds",
@@ -233,14 +230,14 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "How to search CEQAnet for precedent",
       paragraphs: [
-        "Advanced Search looks up a State Clearinghouse number directly, or filters by date range, document type, lead agency, reviewing state agency, county, city, local action, project issue and development type. For precedent, start with the document type you are drafting and your county, narrow to recent years, then add the matching project issue or development type [[eirCeqanetSearch]].",
+        "Advanced Search looks up a State Clearinghouse number directly, or filters by date range, document type, lead agency, reviewing state agency, county, city, local action, project issue and development type. For [precedent](/for/nepa-examples), start with the document type you are drafting and your county, narrow to recent years, then add the matching project issue or development type [[eirCeqanetSearch]].",
         "A record shows the agency, dates, contacts, location, parcel numbers, nearby waterways and attachments, and downloads as CSV [[cnetNodRecord]]. Its project page lists every document filed under the same SCH number, such as an MND and its later NOD [[cnetProjectPage]]. The document type codes you will use most [[eirCeqanetSearch]]:",
       ],
       bullets: [
-        "NOP: notice of preparation of a draft EIR",
+        "NOP: notice of preparation of a draft [EIR](/for/ceqa-environmental-impact-report)",
         "NEG and MND: negative declaration and mitigated negative declaration",
         "EIR and FIN: draft EIR and final document",
-        "NOE and NOD: notice of exemption and notice of determination",
+        "NOE and NOD: [notice of exemption](/for/ceqa-exemptions) and notice of determination",
         "EA, EIS and FON: NEPA environmental assessment, draft EIS and finding of no significant impact",
       ],
     },

@@ -1,6 +1,6 @@
 import type { GuidePath } from "../paths";
 // /for/faa-nepa. No FAA sources existed in consts/guides before this page.
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 const READ = "2026-10-02";
 
@@ -46,14 +46,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/faa-nepa",
-  parent: "/for/nepa",
-  family: "agency",
-  name: "FAA NEPA",
   title: "FAA NEPA: Order 1050.1G, CATEXs & Airport EAs",
   description:
-    "FAA NEPA under Order 1050.1G, which replaced 1050.1F in 2025: when NEPA applies, FAA categorical exclusions, airport EAs and EISs, and Order 5050.4.",
+    "FAA NEPA under Order 1050.1G: when NEPA applies to FAA actions, categorical exclusions, and airport EAs and EISs.",
   eyebrow: "FAA and airports",
   h1: "FAA NEPA: Order 1050.1G, categorical exclusions and airport environmental assessments",
   primaryKeyword: "faa nepa",
@@ -85,7 +82,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       label: "Notice and filing",
       value:
-        "FONSI notice in local media, Federal Register or project website; EISs filed with EPA [[faa1050g]]",
+        "FONSI notice in local media, Federal Register or project website; [EISs](/for/environmental-impact-statement) filed with EPA [[faa1050g]]",
     },
   ],
   hero: {
@@ -188,7 +185,7 @@ export const entry: GuideEntry<GuidePath> = {
       heading: "When does NEPA apply to an FAA action?",
       paragraphs: [
         "FAA presumes that airport layout plan (ALP) approvals, airport development funded with federal grants or passenger facility charges, and commercial space launch site and vehicle licenses are major Federal actions. Other projects with 14 percent or less FAA funding and little federal control are presumed not to be, and advisory actions such as 14 CFR part 77 airspace determinations fall outside NEPA [[faa1050g]].",
-        "Where NEPA applies, FAA uses a CATEX if one fits, an EA if significant effects are unlikely or unknown, and an EIS if they are likely [[faa1050g]].",
+        "Where NEPA applies, FAA uses a CATEX if one fits, an [EA](/for/nepa-environmental-assessment) if significant effects are unlikely or unknown, and an EIS if they are likely [[faa1050g]].",
       ],
     },
     {
@@ -224,7 +221,8 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   outline: {
     heading: "Airport EA outline: what an FAA environmental assessment covers",
-    intro: "Order 1050.1G sets these elements for every FAA EA [[faa1050g]].",
+    intro:
+      "Order 1050.1G sets these elements for every FAA EA [[faa1050g]]. FAA calls its [categorical exclusions](/for/nepa-categorical-exclusion) CATEXs, and Section 4(f) binds [FHWA](/for/fhwa-nepa) projects too.",
     items: [
       {
         title: "Purpose and need",

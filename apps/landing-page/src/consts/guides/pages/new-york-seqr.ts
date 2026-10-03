@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 // /for/new-york-seqr. Reused keys: stateNyEcl80109 (ECL § 8-0109, defined in
 // pages/state-environmental-review.ts; same URL, so not redefined here).
@@ -74,14 +74,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/new-york-seqr",
-  parent: "/for/state-environmental-review",
-  family: "state",
-  name: "New York SEQRA",
   title: "SEQRA Guide: Full EAF, Type II & 2026 Changes",
   description:
-    "New York SEQRA step by step: Type I, Type II and Unlisted actions, the Full EAF Part 1, negative and positive declarations, and the 2026 amendments.",
+    "New York SEQRA step by step: Type I, Type II and Unlisted actions, the Full EAF, declarations and the 2026 amendments.",
   eyebrow: "New York SEQRA",
   h1: "SEQRA guide: New York's environmental review, from the Full EAF to findings",
   primaryKeyword: "seqra",
@@ -95,7 +92,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Full EAF Part 1",
   answer:
-    "SEQRA, New York's State Environmental Quality Review Act (ECL Article 8), requires state, regional and local agencies to weigh environmental impacts before they approve, fund or undertake a discretionary action [[seqrDec]]. Under 6 NYCRR Part 617, the lead agency classifies the action, reviews the sponsor's environmental assessment form (EAF), and issues a negative declaration or positive declaration requiring an EIS [[seqrPart617]].",
+    "SEQRA, New York's State Environmental Quality Review Act (ECL Article 8), requires state, regional and local agencies to weigh environmental impacts before they approve, fund or undertake a discretionary action [[seqrDec]]. Under 6 NYCRR Part 617, the lead agency classifies the action, reviews the sponsor's environmental assessment form (EAF), and issues a negative declaration or positive declaration requiring an [EIS](/for/environmental-impact-statement) [[seqrPart617]].",
   glance: [
     {
       label: "Legal basis",
@@ -252,7 +249,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "What the Full EAF Part 1 asks, section by section",
     intro:
-      "Type I actions use the full EAF; most Unlisted actions use the short EAF [[seqrPart617]]. The 2026 Full EAF Part 1 runs 15 pages in seven sections [[seqrFeaf1]].",
+      "Type I actions use the full EAF; most Unlisted actions use the short EAF [[seqrPart617]]. The 2026 Full EAF Part 1 runs 15 pages in seven sections [[seqrFeaf1]]. SEQR is one of the [state environmental policy acts](/for/state-environmental-review) similar to [NEPA](/for/nepa).",
     items: [
       {
         title: "A. Project and applicant/sponsor information",

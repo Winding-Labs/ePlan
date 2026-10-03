@@ -103,10 +103,11 @@ export type GuideFamily =
 
 export type GuideEntry<Path extends string = string> = {
   path: Path;
-  /** Hub page this page sits under, for breadcrumbs. */
+  /** Hub page this page sits under, for breadcrumbs. From `nav.ts`. */
   parent?: Path;
+  /** From `nav.ts`. */
   family: GuideFamily;
-  /** Short name for breadcrumbs, related cards and the footer. */
+  /** Short name for breadcrumbs, guide cards and the footer. From `nav.ts`. */
   name: string;
   /** <title>, before the " | ePlan.ai" suffix. */
   title: string;
@@ -143,3 +144,9 @@ export type GuideEntry<Path extends string = string> = {
   outline: { heading: string; intro: string; items: GuideOutlineItem[] };
   faq: FaqItem[];
 };
+
+/** What a page module writes: everything but its place in the site (`nav.ts`). */
+export type GuideContent<Path extends string = string> = Omit<
+  GuideEntry<Path>,
+  "name" | "family" | "parent"
+>;

@@ -311,5 +311,19 @@ describe("home title and description", () => {
     expect(seo.SITE_DESCRIPTION.length).toBeLessThanOrEqual(
       seo.DESCRIPTION_MAX_LENGTH,
     );
+    expect(seo.snippetWidthPx(seo.SITE_DESCRIPTION)).toBeLessThanOrEqual(
+      seo.DESCRIPTION_MAX_PX,
+    );
+  });
+});
+
+describe("snippetWidthPx", () => {
+  // SEOmator measured this description at 1,033px on 2026-10-02.
+  it("tracks the SEOmator snippet estimate within 1%", async () => {
+    const { seo } = await loadWithEnv({});
+    const width = seo.snippetWidthPx(
+      "What CEQA is, who it applies to, the CEQA process from exemption to EIR, lead agencies, the CEQA Guidelines and the 2025 AB 130 and SB 131 reforms.",
+    );
+    expect(Math.abs(width - 1033)).toBeLessThanOrEqual(11);
   });
 });

@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 // Reused source keys: none. Every CEQA source below is new to this page.
 
@@ -86,14 +86,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/ceqa-initial-study",
-  parent: "/for/ceqa",
-  family: "ceqa",
-  name: "Initial study",
   title: "CEQA Initial Study: Appendix G, ND and MND Guide",
   description:
-    "What a CEQA initial study contains, the Appendix G checklist, when it leads to a negative declaration, an MND or an EIR, and review periods, cited.",
+    "What a CEQA initial study contains, the Appendix G checklist, when it leads to an ND, an MND or an EIR, and review periods.",
   eyebrow: "Initial study",
   h1: "The CEQA initial study: Appendix G checklist, negative declarations and MNDs",
   primaryKeyword: "ceqa initial study",
@@ -107,12 +104,12 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Initial Study",
   answer:
-    "A CEQA initial study is the lead agency's preliminary analysis of whether a project may have a significant environmental effect [[eirCcr15063]]. It leads to a negative declaration if there is no substantial evidence of such an effect, a mitigated negative declaration (MND) if revisions the applicant agrees to clearly avoid it [[isCcr15070]], or an environmental impact report (EIR) if such evidence exists [[eirCcr15064]].",
+    "A CEQA initial study is the lead agency's preliminary analysis of whether a project may have a significant environmental effect [[eirCcr15063]]. It leads to a negative declaration if there is no substantial evidence of such an effect, a mitigated negative declaration (MND) if revisions the applicant agrees to clearly avoid it [[isCcr15070]], or an [environmental impact report](/for/ceqa-environmental-impact-report) (EIR) if such evidence exists [[eirCcr15064]].",
   glance: [
     {
       label: "Legal basis",
       value:
-        "CEQA Guidelines §§ 15063 (initial study) and 15070–15075 (negative declarations), 14 CCR [[eirCcr15063]] [[isCcr15070]]",
+        "[CEQA Guidelines](/for/ceqa) §§ 15063 (initial study) and 15070–15075 (negative declarations), 14 CCR [[eirCcr15063]] [[isCcr15070]]",
     },
     {
       label: "Prepared by",
@@ -267,7 +264,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "Initial study checklist: the sections",
     intro:
-      "Built from CEQA Guidelines section 15063(d) and the Appendix G sample form, and kept brief: an initial study does not need an EIR's level of detail [[eirCcr15063]] [[isAppG]]. Use your agency's format if it has one.",
+      "Built from CEQA Guidelines section 15063(d) and the Appendix G sample form, and kept brief: an initial study does not need an EIR's level of detail [[eirCcr15063]] [[isAppG]]. Use your agency's format if it has one. An exempt project needs no initial study; see [CEQA exemptions](/for/ceqa-exemptions).",
     items: [
       {
         title: "Project information and description",

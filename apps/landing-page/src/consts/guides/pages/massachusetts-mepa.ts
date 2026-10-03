@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 /**
  * /for/massachusetts-mepa — the Massachusetts Environmental Policy Act.
@@ -88,14 +88,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/massachusetts-mepa",
-  parent: "/for/state-environmental-review",
-  family: "state",
-  name: "Massachusetts MEPA",
   title: "MEPA Massachusetts: ENF, EIR and Thresholds",
   description:
-    "How MEPA review works in Massachusetts: the review thresholds, the Environmental Notification Form, EIRs, Certificates and environmental justice rules.",
+    "How MEPA review works in Massachusetts: the review thresholds, the Environmental Notification Form, EIRs and Certificates.",
   eyebrow: "Massachusetts MEPA",
   h1: "MEPA in Massachusetts: the Environmental Notification Form, EIRs and review thresholds",
   primaryKeyword: "mepa",
@@ -107,7 +104,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Environmental Notification Form",
   answer:
-    "MEPA, the Massachusetts Environmental Policy Act, requires state agencies to evaluate and minimize the environmental impact of projects they undertake, fund or permit [[mepaMgl61]] [[mepaMgl62]]. A project that meets a review threshold in 301 CMR 11.03 files an Environmental Notification Form (ENF), and the Secretary of Energy and Environmental Affairs issues a Certificate deciding whether an environmental impact report (EIR) is required [[mepaFiling]] [[mepaRegs]].",
+    "MEPA, the Massachusetts Environmental Policy Act, requires state agencies to evaluate and minimize the environmental impact of projects they undertake, fund or permit [[mepaMgl61]] [[mepaMgl62]]. A project that meets a review threshold in 301 CMR 11.03 files an Environmental Notification Form (ENF), and the Secretary of Energy and Environmental Affairs issues a Certificate deciding whether an [environmental impact report](/for/ceqa-environmental-impact-report) (EIR) is required [[mepaFiling]] [[mepaRegs]].",
   glance: [
     {
       label: "Legal basis",
@@ -268,7 +265,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "What goes in an Environmental Notification Form?",
     intro:
-      "Built from 301 CMR 11.05 and the MEPA Office's ENF guide; file on the current ENF form, effective February 3, 2026 [[mepaRegs]] [[mepaEnfGuide]].",
+      "Built from 301 CMR 11.05 and the MEPA Office's ENF guide; file on the current ENF form, effective February 3, 2026 [[mepaRegs]] [[mepaEnfGuide]]. MEPA is one of the [state environmental policy acts](/for/state-environmental-review) similar to [NEPA](/for/nepa).",
     items: [
       {
         title: "Project information and thresholds",

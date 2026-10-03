@@ -1,7 +1,7 @@
 import type { GuidePath } from "../paths";
 // /for/nepassist. Reused source keys (defined in the shared NEPA sources):
 // usc4336, usda1b3, usda1b5, usda1b7, doeProcedures.
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 const READ = "2026-10-02";
 
@@ -42,14 +42,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/nepassist",
-  parent: "/for/nepa",
-  family: "tools",
-  name: "NEPAssist",
   title: "NEPAssist: EPA's Environmental Screening Map",
   description:
-    "What EPA's NEPAssist screening tool reports, the layers it maps and dropped, and how planners turn its report into an affected environment section.",
+    "What EPA's NEPAssist screening tool reports, the layers it maps, and how to use its report in an affected environment.",
   eyebrow: "NEPAssist",
   h1: "NEPAssist: what EPA's screening map reports and how to use it in a NEPA review",
   primaryKeyword: "nepassist",
@@ -181,7 +178,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "What the EPA NEPAssist report covers",
       paragraphs: [
-        "The report is a series of yes-or-no questions: a National Report from nationally available datasets and State Reports from the EPA Regions' datasets, consolidated for a multistate area. Click a question for its source and metadata, or an answer for details such as each brownfields site's name and distance. It adds a Fish and Wildlife Service IPaC species report and saves to Excel or PDF [[nepassistGuide]].",
+        "The report is a series of yes-or-no questions: a National Report from nationally available datasets and State Reports from the EPA Regions' datasets, consolidated for a multistate area. Click a question for its source and metadata, or an answer for details such as each brownfields site's name and distance. It adds a Fish and Wildlife Service [IPaC](/for/ipac) species report and saves to Excel or PDF [[nepassistGuide]].",
       ],
     },
     {
@@ -217,7 +214,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "Affected environment outline built from a NEPAssist report",
     intro:
-      "This outline maps NEPAssist's layer groups to an affected environment section [[nepassistLayers]]; follow your agency's resource list where it differs.",
+      "This outline maps NEPAssist's layer groups to an affected environment section [[nepassistLayers]]; follow your agency's resource list where it differs. Use the report for an [EA](/for/nepa-environmental-assessment)'s affected environment, and pair it with an IPaC species list for [ESA section 7](/for/esa-section-7).",
     items: [
       {
         title: "Study area and buffer",

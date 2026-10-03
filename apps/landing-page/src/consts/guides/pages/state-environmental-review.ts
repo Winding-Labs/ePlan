@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 /**
  * /for/state-environmental-review — the state environmental policy acts hub.
@@ -109,13 +109,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/state-environmental-review",
-  family: "state",
-  name: "State environmental review",
   title: "State Environmental Policy Acts: Little NEPAs",
   description:
-    "State environmental policy acts explained: which states have a little NEPA, how they differ from NEPA, and how CEQA, SEQR, SEPA, MEPA and HEPA work.",
+    "Which states have a little NEPA, how state environmental policy acts differ from NEPA, and how CEQA, SEQR and SEPA work.",
   eyebrow: "State review",
   h1: "State environmental policy acts: which states have a little NEPA and how they work",
   primaryKeyword: "state environmental policy acts",
@@ -127,7 +125,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "State Environmental Review Document",
   answer:
-    "State environmental policy acts, or little NEPAs, are state laws requiring NEPA-style environmental review of a state or local government's own actions and decisions [[stateCeqList]]. Unlike NEPA, which is purely procedural [[sevenCounty]], several also require agencies to avoid or mitigate significant effects, or let them deny a project [[ceqaPrc21002]] [[stateRcw060]].",
+    "State environmental policy acts, or little NEPAs, are state laws requiring NEPA-style environmental review of a state or local government's own actions and decisions [[stateCeqList]]. Unlike [NEPA](/for/nepa), which is purely procedural [[sevenCounty]], several also require agencies to avoid or mitigate significant effects, or let them deny a project [[ceqaPrc21002]] [[stateRcw060]].",
   glance: [
     {
       label: "On CEQ's list",

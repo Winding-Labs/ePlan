@@ -1,3 +1,4 @@
+import { GUIDE_NAV } from "./nav";
 import { NEPA_GUIDES } from "./nepa";
 import * as ceqa from "./pages/ceqa";
 import * as ceqaAndNepa from "./pages/ceqa-and-nepa";
@@ -30,6 +31,7 @@ import { PRODUCT_GUIDES } from "./product";
 import { NEPA_SOURCES } from "./sources";
 import type { GuideEntry, Source } from "./types";
 
+export { GUIDE_FAMILIES, GUIDE_NAV } from "./nav";
 export { GUIDE_PATHS, type GuidePath, guideSlug } from "./paths";
 export { GUIDE_SOURCES_READ_ON } from "./sources";
 
@@ -81,11 +83,13 @@ export const SOURCES: Record<string, Source> = [
   return all;
 }, {});
 
+// A page module writes its content; its name, family and hub come from
+// `nav.ts`, the one list the footer also reads.
 const ENTRIES: GuideEntry<GuidePath>[] = [
   ...NEPA_GUIDES,
   ...PAGE_MODULES.map((module) => module.entry),
   ...PRODUCT_GUIDES,
-];
+].map((content) => ({ ...content, ...GUIDE_NAV[content.path] }));
 
 const BY_PATH = new Map(ENTRIES.map((entry) => [entry.path, entry]));
 

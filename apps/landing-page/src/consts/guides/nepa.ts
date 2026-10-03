@@ -1,16 +1,14 @@
 import type { GuidePath } from "./paths";
 import { PROMPTS } from "./shared";
-import type { GuideEntry } from "./types";
+import type { GuideContent } from "./types";
 
-const nepaProcess: GuideEntry<GuidePath> = {
+const nepaProcess: GuideContent<GuidePath> = {
   path: "/for/nepa",
-  name: "NEPA process",
   title: "What Is NEPA? The NEPA Process, Step by Step",
   description:
-    "How a NEPA review works after the 2023 amendments and the 2025 removal of CEQ's rules: threshold checks, CE, EA and FONSI, EIS and the record of decision.",
+    "How a NEPA review works since CEQ's rules were removed: the threshold check, CE, EA and FONSI, EIS and the record of decision.",
   eyebrow: "NEPA process",
   h1: "What is NEPA? The NEPA process, from the first check to the record of decision",
-  family: "nepa",
   primaryKeyword: "what is nepa",
   secondaryKeywords: [
     "nepa process",
@@ -27,7 +25,7 @@ const nepaProcess: GuideEntry<GuidePath> = {
     {
       heading: "Step 1: does NEPA apply?",
       paragraphs: [
-        "An agency needs no environmental document if the action is not a final agency action, is excluded by a categorical exclusion or another law, would clearly and fundamentally conflict with another law, or is nondiscretionary [[usc4336]]. A non-federal project with no or minimal federal funding is not a major federal action [[usc4336e]].",
+        "An agency needs no environmental document if the action is not a final agency action, is excluded by a categorical exclusion or another law, would clearly and fundamentally conflict with another law, or is nondiscretionary [[usc4336]]. A non-federal project with no or minimal federal funding is not a major federal action [[usc4336e]]; it may still need state review, such as [Massachusetts MEPA](/for/massachusetts-mepa) or [Hawaii HEPA](/for/hawaii-hepa).",
       ],
     },
     {
@@ -46,20 +44,21 @@ const nepaProcess: GuideEntry<GuidePath> = {
     {
       heading: "Where NEPA procedures live now",
       paragraphs: [
-        "With CEQ's regulations removed in 2025 [[ceqIfr]], each agency follows its own NEPA procedures, indexed by CEQ on nepa.gov [[ceqProcedures]]. Recent examples:",
+        "With CEQ's regulations removed in 2025 [[ceqIfr]], each agency follows its own [NEPA procedures](/for/nepa-regulations), indexed by CEQ on nepa.gov [[ceqProcedures]]. Recent examples:",
       ],
       bullets: [
-        "USDA, including the Forest Service: 7 CFR part 1b, final rule April 3, 2026 [[usdaFinal]]",
-        "Interior: 43 CFR part 46 plus a Departmental Handbook, final rule February 24, 2026 [[doiFinal]]",
-        "Energy: 10 CFR part 1021 plus DOE's NEPA Implementing Procedures, revised July 13, 2026 [[doeProcedures]]",
-        "FHWA, FRA and FTA: 23 CFR part 771, final rule September 1, 2026 [[fhwaFinal]]",
+        "USDA, including the [Forest Service](/for/usda-forest-service-nepa): 7 CFR part 1b, final rule April 3, 2026 [[usdaFinal]]",
+        "[Interior](/for/interior-blm-nepa): 43 CFR part 46 plus a Departmental Handbook, final rule February 24, 2026 [[doiFinal]]",
+        "[Energy](/for/doe-nepa): 10 CFR part 1021 plus DOE's NEPA Implementing Procedures, revised July 13, 2026 [[doeProcedures]]",
+        "[FHWA](/for/fhwa-nepa), FRA and FTA: 23 CFR part 771, final rule September 1, 2026 [[fhwaFinal]]",
+        "[FAA](/for/faa-nepa): Order 1050.1G [[faa1050g]]; [FEMA](/for/fema-ehp): Directive 108-1 [[femaDirective]]; [HUD](/for/hud-environmental-review) grantees: 24 CFR Part 58 [[hudEcfr581]]",
       ],
     },
   ],
   outline: {
     heading: "NEPA documentation, in order",
     intro:
-      "The documents a review can produce, following CEQ's January 2026 process chart [[ceqFlowchart]]. Many actions stop at the first or second step.",
+      "The documents a review can produce, following CEQ's January 2026 process chart [[ceqFlowchart]]. Many actions stop at the first or second step. Most reviews start with a [scoping letter](/for/nepa-scoping-letter), and past documents for the same kind of action are in [NEPA examples](/for/nepa-examples). ePlan's [NEPA software](/for/nepa-software) drafts these documents, and [AI tools for NEPA](/for/nepa-ai-tools) compares the alternatives.",
     items: [
       {
         title: "Proposed action, purpose and need",
@@ -224,16 +223,13 @@ const nepaProcess: GuideEntry<GuidePath> = {
   ],
 };
 
-const categoricalExclusions: GuideEntry<GuidePath> = {
+const categoricalExclusions: GuideContent<GuidePath> = {
   path: "/for/nepa-categorical-exclusion",
-  parent: "/for/nepa",
-  name: "Categorical exclusions",
   title: "NEPA Categorical Exclusion Checklist & Examples",
   description:
-    "What a NEPA categorical exclusion is, how extraordinary circumstances are checked, what a CE decision memo contains, and CE examples, cited to current law.",
+    "What a NEPA categorical exclusion covers, how extraordinary circumstances are checked, and what a CE decision memo contains.",
   eyebrow: "Categorical exclusions",
   h1: "NEPA categorical exclusions: checklist, examples and the CE decision memo",
-  family: "nepa",
   primaryKeyword: "nepa categorical exclusion",
   secondaryKeywords: [
     "categorical exclusion examples",
@@ -244,7 +240,7 @@ const categoricalExclusions: GuideEntry<GuidePath> = {
   ],
   document: "CE Decision Memo",
   answer:
-    "A NEPA categorical exclusion (CE) is a category of actions an agency has found normally have no significant environmental effect [[usc4336e]]. An action that fits one needs no EA or EIS [[usc4336]], but the agency screens it for extraordinary circumstances [[ceqCeGuidance]] and, for many categories, signs a short record of that finding, which the Forest Service called a decision memo [[usdaFinal]].",
+    "A [NEPA](/for/nepa) categorical exclusion (CE) is a category of actions an agency has found normally have no significant environmental effect [[usc4336e]]. An action that fits one needs no [EA](/for/nepa-environmental-assessment) or EIS [[usc4336]], but the agency screens it for extraordinary circumstances [[ceqCeGuidance]] and, for many categories, signs a short record of that finding, which the Forest Service called a decision memo [[usdaFinal]].",
   sections: [
     {
       heading: "Extraordinary circumstances checklist",
@@ -326,15 +322,15 @@ const categoricalExclusions: GuideEntry<GuidePath> = {
   glance: [
     {
       label: "USDA and Forest Service CEs",
-      value: "7 CFR 1b.4 [[usda1b4]]",
+      value: "[7 CFR 1b](/for/usda-forest-service-nepa).4 [[usda1b4]]",
     },
     {
       label: "DOE CEs",
-      value: "Appendix B to 10 CFR part 1021 [[doe1021]]",
+      value: "Appendix B to [10 CFR part 1021](/for/doe-nepa) [[doe1021]]",
     },
     {
       label: "Highway and transit CEs",
-      value: "23 CFR 771.117 (FHWA and FTA) [[fhwa771117]]",
+      value: "[23 CFR 771.117](/for/fhwa-nepa) (FHWA and FTA) [[fhwa771117]]",
     },
     {
       label: "All agencies' CEs",
@@ -454,16 +450,13 @@ const categoricalExclusions: GuideEntry<GuidePath> = {
   ],
 };
 
-const environmentalAssessment: GuideEntry<GuidePath> = {
+const environmentalAssessment: GuideContent<GuidePath> = {
   path: "/for/nepa-environmental-assessment",
-  parent: "/for/nepa",
-  name: "Environmental assessment",
   title: "NEPA Environmental Assessment (EA) & FONSI Guide",
   description:
-    "When an EA is required, the 75-page and one-year limits, what an EA and a FONSI contain, and a section-by-section EA outline, cited to current law.",
+    "When a NEPA EA is required, its 75-page and one-year limits, what an EA and FONSI contain, and an outline to draft from.",
   eyebrow: "Environmental assessment",
   h1: "NEPA environmental assessments and the FONSI",
-  family: "nepa",
   primaryKeyword: "nepa environmental assessment",
   secondaryKeywords: [
     "finding of no significant impact",
@@ -474,7 +467,7 @@ const environmentalAssessment: GuideEntry<GuidePath> = {
   ],
   document: "Environmental Assessment",
   answer:
-    "A NEPA environmental assessment (EA) is a concise public document an agency prepares when no categorical exclusion applies and a significant environmental effect is not reasonably foreseeable, or its significance is unknown. It supports either a finding of no significant impact (FONSI) or a decision to prepare an environmental impact statement [[usc4336]].",
+    "A [NEPA](/for/nepa) environmental assessment (EA) is a concise public document an agency prepares when no categorical exclusion applies and a significant environmental effect is not reasonably foreseeable, or its significance is unknown. It supports either a finding of no significant impact (FONSI) or a decision to prepare an [environmental impact statement](/for/environmental-impact-statement) [[usc4336]].",
   sections: [
     {
       heading: "EA page limit and one-year deadline",
@@ -499,7 +492,7 @@ const environmentalAssessment: GuideEntry<GuidePath> = {
   outline: {
     heading: "Environmental assessment template: the sections",
     intro:
-      "The minimum elements USDA requires in an EA, in order [[usda1b5]]. Other agencies' procedures differ; use yours.",
+      "The minimum elements USDA requires in an EA, in order [[usda1b5]]. Other agencies' procedures differ; use yours. [NEPAssist](/for/nepassist) screens the project area for the affected environment, and [EA examples](/for/nepa-examples) from your agency show its format.",
     items: [
       {
         title: "Purpose and need",
@@ -651,16 +644,13 @@ const environmentalAssessment: GuideEntry<GuidePath> = {
   ],
 };
 
-const scopingLetter: GuideEntry<GuidePath> = {
+const scopingLetter: GuideContent<GuidePath> = {
   path: "/for/nepa-scoping-letter",
-  parent: "/for/nepa",
-  name: "Scoping letter",
   title: "NEPA Scoping Letter: Template, Example & Outline",
   description:
-    "What a NEPA scoping letter should include, what the law requires for scoping and public comment today, and an outline you can draft from.",
+    "What a NEPA scoping letter should include, what the law requires for scoping and comment, and an outline to draft from.",
   eyebrow: "Scoping",
   h1: "NEPA scoping letters: what to include",
-  family: "nepa",
   primaryKeyword: "scoping letter",
   secondaryKeywords: [
     "nepa scoping",
@@ -670,7 +660,7 @@ const scopingLetter: GuideEntry<GuidePath> = {
   ],
   document: "Scoping Letter",
   answer:
-    "A scoping letter is an early notice that describes a proposed action and invites agencies, Tribes, the applicant and the public to say which issues and alternatives the NEPA review should cover [[usda1b7]]. On scoping, the statute requires only that an EIS notice of intent request public comment [[usc4336a]]; agency procedures set the rest, and USDA's make scoping optional [[usda1b7]].",
+    "A scoping letter is an early notice that describes a proposed action and invites agencies, Tribes, the applicant and the public to say which issues and alternatives the [NEPA review](/for/nepa) should cover [[usda1b7]]. On scoping, the statute requires only that an [EIS](/for/environmental-impact-statement) notice of intent request public comment [[usc4336a]]; agency procedures set the rest, and USDA's make scoping optional [[usda1b7]].",
   sections: [
     {
       heading: "What is NEPA scoping?",
@@ -739,7 +729,7 @@ const scopingLetter: GuideEntry<GuidePath> = {
     {
       label: "Deadline clock",
       value:
-        "EA (1 year) and EIS (2 years) clocks can start at the notice of intent [[usc4336a]]",
+        "[EA](/for/nepa-environmental-assessment) (1 year) and EIS (2 years) clocks can start at the notice of intent [[usc4336a]]",
     },
     {
       label: "Forest Service comment notice",
