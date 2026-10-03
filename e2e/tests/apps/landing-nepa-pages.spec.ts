@@ -59,7 +59,9 @@ test.describe("Landing Page - guide pages", () => {
     for (const path of GUIDE_PATHS) {
       expect(xml).toContain(`${path}</loc>`);
     }
-    expect(xml).not.toContain("/templates");
+    // The old top-level /templates pages 308 to /for; catalog project
+    // templates (/projects/<org>/<office>/templates/<slug>) are listed.
+    expect(xml).not.toMatch(/<loc>https?:\/\/[^/]+\/templates/);
   });
 
   test("permanently redirects the moved guide URLs", async ({ request }) => {
