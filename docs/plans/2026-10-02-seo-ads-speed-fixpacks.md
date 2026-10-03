@@ -1,6 +1,6 @@
 # eplan.ai: SEO, ad landing pages and speed, in fix-pack rounds (2026-10-02)
 
-Status: **Round 1 shipped** (#37, released to eplan.ai in #41 on 2026-10-02 with #40). **Round 2 merged** (#43, develop). **Round 3 in review** (`feat/seo-fixpack-3`).
+Status: **Rounds 1–3 shipped to eplan.ai.** Round 1 (#37) went out in release #41, and Rounds 2 and 3 (#43, #44) in release #46, all on 2026-10-02. Release #48 followed with dash-0b's #47. Round 4 is open (§4).
 Builds on `2026-10-02-seo-ads-analytics-audit.md` (technical SEO basics, shipped in
 #34) and `2026-10-02-analytics-master-pattern.md` (tracking, #34). This plan covers
 what those leave open outside the page system, which dash-0b owns (#35/#36): legal
@@ -75,7 +75,7 @@ Each round is one PR (one fix pack). The steps:
    eplan.ai).
 4. Chrome check and an audit of eplan.ai. Findings become the next round's fix pack.
 
-### Round 1: legal pages, checkout links, dead code, working checkout
+### Round 1 (#37, shipped in #41): legal pages, checkout links, dead code, working checkout
 
 - `/privacy` and `/terms` (`components/legal/legal-page.tsx`). They list the processors the
   product actually uses and read the brand name and support email from env, so forks
@@ -93,9 +93,9 @@ Each round is one PR (one fix pack). The steps:
   dead `NEXT_PUBLIC_CATALOG_BASE_URL`, and `dotenv.config()` in the root layout. Rewrite
   the landing `CLAUDE.md`, which described tools and folders that no longer exist.
 
-### Round 2: static, cacheable, crawlable HTML + speed
+### Round 2 (#43, shipped in #46): static, cacheable, crawlable HTML + speed
 
-Done (`feat/seo-fixpack-2`):
+Done:
 - **Root Suspense removed.** eplan-53's #39 did this, so `notFound()` returns real 404s.
 - **Root layout no longer reads the session or `cookies()`.**
   - `/api/session` decodes the signed cookie (no database), and `ClientSessionProvider` feeds `useSession()` after hydration.
@@ -128,7 +128,7 @@ Moved to Round 3:
 - **404 page title** reuses the home title.
 - **Hero eyebrow chip** starts at `opacity: 0`.
 
-### Round 3 (done on `feat/seo-fixpack-3`): reveals without JavaScript, catalog sitemap, 404 title
+### Round 3 (#44, shipped in #46): reveals without JavaScript, catalog sitemap, 404 title
 
 - `ScrollReveal` is a CSS scroll-driven animation, so content is visible in the HTML and without JS. The hero eyebrow uses `initial={false}`.
 - The sitemap is per-request, adding public orgs, offices, projects and templates (301 URLs on staging data, up from 55).
@@ -144,17 +144,29 @@ Moved to Round 3:
 
   LCP is unchanged because it is the hero showcase's auto-rotating caption. Each tab's caption paints for the first time as the carousel advances, so lab LCP keeps updating; field LCP stops at the first input. Owner call: start auto-advance only after a scroll or interaction, or accept the lab number.
 
-### Round 4: ads ↔ live pages, citation claim, operator steps
+### Round 4 (open): what the post-release checks left
 
-- Re-run the ads ↔ page check (`ads-landing-match`: every ash spec headline against
-  its final URL's live text) on eplan.ai. dash-0b moved the 27 live ads to `/for/<slug>`
-  on 2026-10-02 (all final URLs 200, the "cites the regulation" descriptions replaced).
-- Decide whether drafts cite the governing regulation. Either add the rule to
-  the drafting prompt with an eval on real AI output, or drop the claim
-  everywhere.
-- Operator: Search Console + Bing (sitemap, request indexing for the guide pages),
-  GA4 ↔ Ads link and conversion import (#34 §7), then the ash bootstrap with the
-  final URLs.
+Production after release #48 (Lighthouse 12, simulated mobile, two runs each):
+
+| Page | Perf | SEO | A11y | Best practices | LCP | FCP | TBT |
+|---|---|---|---|---|---|---|---|
+| `/` | 76–77 | 100 | 97 | 79 | 5.9–6.3 s | 1.2–1.7 s | 90–110 ms |
+| `/for/nepa` | 68–79 | 100 | 97 | 79 | 5.5–7.6 s | 1.3–2.7 s | 90–150 ms |
+
+Baseline before the rounds: home perf 71–74, LCP 6.8–8.5 s, 1,035 KiB of JS.
+
+Also checked:
+- Unthrottled first paint is 300–430 ms on both pages, with or without JS. An early 3.9 s guide FCP was a cold-Worker outlier.
+- The ads ↔ page check was re-run against the live account (26 ads, $33/day): all 25 final URLs return 200 and every price matches `pricing.yaml`. dash-0b took every copy and keyword mismatch: page copy in #45, ad copy in ash #234.
+
+Open items, in rough order of value:
+1. **Owner: the citation claim.** Either drafts cite the governing regulation (a prompt rule plus an eval on real AI output), or the claim stays dropped from ads and pages.
+2. **Owner: showcase auto-advance.** Lab LCP on home and guides is the hero showcase's auto-rotating caption. Each tab's caption is a new, larger paint as the carousel advances, and field LCP stops at the first input. Starting auto-advance only after a scroll or interaction would fix the lab number.
+3. **Third-party JS.** It is now the largest part of production JS: gtag 174 KiB, plus the Ads tag, PostHog (~80 KiB) and Ahrefs (#50). Initializing PostHog when idle is offered to eplan-53. Load Ahrefs `afterInteractive` or `lazyOnload`.
+4. **Best practices 79** is only the Google Ads third-party cookie, inherent to the conversion tag.
+5. **Accessibility 97** is color contrast in shared tokens and components: guide citation links at 4.38:1, `egray-600` labels at 4.28–4.43:1, and mock-screen labels and avatar chips at about 2.8:1. Sent to dash-0b; darkening `egray-600` and `brand-800` slightly fixes the guide cases.
+6. **Operator steps:** Search Console and Bing (submit `sitemap.xml`, now 307 URLs; request indexing for the 32 guides), GA4 ↔ Ads link and conversion import (#34 §7).
+7. **Legal review** of `/privacy` and `/terms`: entity, address, governing law, retention.
 
 ## 5. Speed (Lighthouse 12, production + PR #34 preview, 2026-10-02)
 
@@ -197,5 +209,5 @@ Cloudflare fixes, **done 2026-10-02**, with the owner's go-ahead:
   `/templates/*` URL returns 308.
 - Every ad final URL returns 200 on eplan.ai, and each ad group's headlines
   appear in that page's text (checked by script against the ash spec).
-- Lighthouse mobile performance ≥ 90 on `/` and `/docs`. CLS < 0.1.
+- Lighthouse mobile performance ≥ 90 on `/` and `/docs`. CLS < 0.1. (Reached 76–79 with CLS ≤ 0.014; the gap to 90 is items 2 and 3 of Round 4.)
 - No new dead code (knip clean for `apps/landing-page`).
