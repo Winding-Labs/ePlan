@@ -62,6 +62,11 @@ test.describe("Landing Page - guide pages", () => {
     // The old top-level /templates pages 308 to /for; catalog project
     // templates (/projects/<org>/<office>/templates/<slug>) are listed.
     expect(xml).not.toMatch(/<loc>https?:\/\/[^/]+\/templates/);
+    // Office pages (/projects/<org>/<office>) are noindex, so a sitemap entry
+    // for one would be a conflicting signal.
+    expect(xml).not.toMatch(
+      /<loc>https?:\/\/[^/]+\/projects\/[^/<]+\/[^/<]+<\/loc>/,
+    );
   });
 
   test("permanently redirects the moved guide URLs", async ({ request }) => {
