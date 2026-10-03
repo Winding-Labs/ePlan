@@ -125,7 +125,7 @@ export const entry: GuideContent<GuidePath> = {
   ],
   document: "State Environmental Review Document",
   answer:
-    "State environmental policy acts, or little NEPAs, are state laws requiring NEPA-style environmental review of a state or local government's own actions and decisions [[stateCeqList]]. Unlike [NEPA](/for/nepa), which is purely procedural [[sevenCounty]], several also require agencies to avoid or mitigate significant effects, or let them deny a project [[ceqaPrc21002]] [[stateRcw060]].",
+    "State environmental policy acts, or little NEPAs, are state laws requiring NEPA-style [environmental impact assessment](/for/environmental-impact-assessment) of a state or local government's own actions and decisions [[stateCeqList]]. Unlike [NEPA](/for/nepa), which is purely procedural [[sevenCounty]], several also require agencies to avoid or mitigate significant effects, or let them deny a project [[ceqaPrc21002]] [[stateRcw060]].",
   glance: [
     {
       label: "On CEQ's list",
