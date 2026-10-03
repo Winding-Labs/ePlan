@@ -133,7 +133,12 @@ test.describe("Landing Page - guide pages", () => {
       await page.goto(`${LANDING_URL}${path}`);
 
       // The hero prompt (an h2 under the page's H1) with five example pills.
+      // The showcase's mock app screens add no headings to the page outline.
       await expect(page.locator("#draft h2"), path).toHaveCount(1);
+      await expect(
+        page.locator("#draft :is(h1, h3, h4, h5, h6)"),
+        path,
+      ).toHaveCount(0);
       await expect(
         page.locator(
           '#draft [data-testid="quick-start-pills"] button:not([aria-label])',
