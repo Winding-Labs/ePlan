@@ -108,7 +108,7 @@ test.describe("Landing Page - guide pages", () => {
             (script) => JSON.parse(script.textContent ?? "")["@type"],
           ),
         );
-      expect(types).toEqual(["BreadcrumbList", "FAQPage"]);
+      expect(types).toEqual(["BreadcrumbList", "FAQPage", "Article"]);
 
       // Every citation number links to an entry in the source list.
       const citationTargets = await page
@@ -228,29 +228,41 @@ test.describe("Landing Page - guide pages", () => {
     });
   });
 
-  test("links the guide hubs and the legal pages from the footer", async ({
+  test("links every guide, the site and the legal pages from the footer, on every route", async ({
     page,
   }) => {
-    await page.goto(`${LANDING_URL}/for/nepa`);
-    const hrefs = await page
-      .getByRole("navigation", { name: "Guides and legal" })
-      .getByRole("link")
-      .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
-    expect(hrefs).toEqual(
-      expect.arrayContaining([
-        "/for",
-        "/for/nepa",
-        "/for/ceqa",
-        "/for/nepa-scoping-letter",
-        "/privacy",
-        "/terms",
-      ]),
-    );
-    for (const href of hrefs) {
-      if (href && (href === "/for" || GUIDE_PATHS.includes(href))) {
-        continue;
-      }
-      expect(["/privacy", "/terms"]).toContain(href);
+    // The footer is the one place every page links every guide from, so each
+    // guide is one click from home and from every other page.
+    for (const path of ["/", "/for/nepa", "/privacy"]) {
+      await page.goto(`${LANDING_URL}${path}`);
+      const hrefs = await page
+        .locator("footer")
+        .getByRole("link")
+        .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
+      expect(hrefs, path).toEqual(
+        expect.arrayContaining([...GUIDE_PATHS, "/for", "/privacy", "/terms"]),
+      );
     }
+  });
+
+  test("links related guides from the article copy and redirects a trailing slash", async ({
+    page,
+    request,
+  }) => {
+    await page.goto(`${LANDING_URL}/for/nepa-scoping-letter`);
+    const inCopy = await page
+      .locator("article a[href^='/for/'], #draft ~ * a[href^='/for/']")
+      .count();
+    expect(inCopy).toBeGreaterThanOrEqual(2);
+
+    const slash = await request.get(`${LANDING_URL}/for/nepa-scoping-letter/`, {
+      maxRedirects: 0,
+    });
+    expect(slash.status()).toBe(308);
+    expect(slash.headers().location).toMatch(/\/for\/nepa-scoping-letter$/);
+
+    const llms = await request.get(`${LANDING_URL}/llms.txt`);
+    expect(llms.status()).toBe(200);
+    expect(await llms.text()).toContain("/for/nepa-scoping-letter");
   });
 });

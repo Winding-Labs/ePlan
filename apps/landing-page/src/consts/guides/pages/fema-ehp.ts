@@ -1,7 +1,7 @@
 import type { GuidePath } from "../paths";
 // /for/fema-ehp. Reused source key (defined in the shared NEPA sources):
 // usc4336c.
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 const READ = "2026-10-02";
 
@@ -112,14 +112,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/fema-ehp",
-  parent: "/for/nepa",
-  family: "agency",
-  name: "FEMA EHP review",
   title: "FEMA EHP Review: NEPA, CATEXs & Grant Checklist",
   description:
-    "How FEMA EHP review works for Public Assistance and Hazard Mitigation grants: NEPA levels, Stafford Act exclusions, CATEXs, the REC and what to submit.",
+    "How FEMA EHP review works for Public Assistance and Hazard Mitigation grants: NEPA levels, CATEXs, the REC and submittals.",
   eyebrow: "FEMA EHP review",
   h1: "FEMA EHP review: environmental and historic preservation review for FEMA grants",
   primaryKeyword: "fema ehp",
@@ -130,7 +127,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "EHP Review Narrative",
   answer:
-    "FEMA EHP review is FEMA's environmental planning and historic preservation review of the projects it funds, including Public Assistance and Hazard Mitigation grants, under NEPA and other federal environmental and historic preservation laws [[femaEhpGuidance]] [[femaPappg]] [[femaHmaGuide]]. Each project gets a statutory exclusion, a categorical exclusion, an EA or an EIS, and the review must be complete before funds are released [[femaInstruction]] [[femaEhpGuidance]].",
+    "FEMA EHP review is FEMA's environmental planning and historic preservation review of the projects it funds, including Public Assistance and Hazard Mitigation grants, under NEPA and other federal environmental and historic preservation laws [[femaEhpGuidance]] [[femaPappg]] [[femaHmaGuide]]. Each project gets a statutory exclusion, a [categorical exclusion](/for/nepa-categorical-exclusion), an EA or an EIS, and the review must be complete before funds are released [[femaInstruction]] [[femaEhpGuidance]].",
   glance: [
     {
       label: "Procedures",
@@ -257,7 +254,7 @@ export const entry: GuideEntry<GuidePath> = {
         "When is a FEMA environmental review required, and under which laws?",
       paragraphs: [
         "Every Public Assistance project gets an EHP review, documented in a record of environmental consideration (REC) [[femaPappg]]; for Hazard Mitigation, FEMA completes the review before making an award [[femaHmaGuide]]. FEMA keeps responsibility for consultation with tribes and resource agencies, even when an applicant prepares the studies [[femaInstruction]].",
-        "Besides NEPA, FEMA's actions most often trigger NHPA section 106, ESA section 7 and the floodplain and wetland Executive Orders 11988 and 11990, implemented in 44 CFR part 9 [[femaInstruction]]. Others include Clean Water Act permits, coastal zone and coastal barrier laws, and NAGPRA [[femaLawsPage]].",
+        "Besides NEPA, FEMA's actions most often trigger NHPA [section 106](/for/section-106), [ESA section 7](/for/esa-section-7) and the floodplain and wetland Executive Orders 11988 and 11990, implemented in 44 CFR part 9 [[femaInstruction]]. Others include Clean Water Act permits, coastal zone and coastal barrier laws, and NAGPRA [[femaLawsPage]].",
       ],
     },
     {
@@ -285,7 +282,7 @@ export const entry: GuideEntry<GuidePath> = {
       heading: "When does FEMA prepare an EA or EIS?",
       paragraphs: [
         "FEMA prepares an EA when impacts are unknown or unlikely to be significant, and an EIS when significant impacts are likely, such as extensive land use change or substantial effects on wetlands, floodplains or endangered species. An applicant FEMA finds capable may prepare either; FEMA reviews it and issues the FONSI or ROD [[femaInstruction]].",
-        "FEMA may adopt other agencies' EAs and EISs [[femaInstruction]], and posts its own in a NEPA repository searchable by region, program and project type [[femaRepo]].",
+        "FEMA may adopt other agencies' [EAs](/for/nepa-environmental-assessment) and EISs [[femaInstruction]], and posts its own in a NEPA repository searchable by region, program and project type [[femaRepo]].",
       ],
     },
   ],

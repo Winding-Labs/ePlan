@@ -4,7 +4,7 @@ import type { GuidePath } from "../paths";
 // (pages/environmental-impact-statement.ts); doeEaList (pages/doe-nepa.ts);
 // exCeqanet (pages/ceqa-exemptions.ts); ceqIfr, ceqProcedures, usdaFinal,
 // usda1b4, usda1b5, usc4336a, usc4336e, doeProcedures (shared NEPA sources).
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 const READ = "2026-10-02";
 
@@ -90,14 +90,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/nepa-examples",
-  parent: "/for/nepa",
-  family: "tools",
-  name: "NEPA examples",
   title: "EIS Examples, EAs and CE Memos to Model On",
   description:
-    "EIS examples, EAs with FONSIs and CE decision memos from 2024 to 2026, where each type is published, and how to pick a precedent for your NEPA document.",
+    "Real EIS, EA and CE decision memo examples from 2024 to 2026, where each is published, and how to pick a precedent.",
   eyebrow: "NEPA examples",
   h1: "EIS examples, environmental assessments and CE records: real NEPA documents to model a draft on",
   primaryKeyword: "eis examples",
@@ -109,12 +106,12 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "EA Modeled on a Precedent",
   answer:
-    "EIS examples are environmental impact statements agencies have filed for real projects; planners use them, along with environmental assessments (EAs) and categorical exclusion (CE) records, as models for new NEPA documents. EPA's database holds the EISs [[eisEpaDatabase]]; EAs and CE records stay on the preparing agency's site [[eisBlmEplanning]].",
+    "EIS examples are [environmental impact statements](/for/environmental-impact-statement) agencies have filed for real projects; planners use them, along with [environmental assessments](/for/nepa-environmental-assessment) (EAs) and [categorical exclusion](/for/nepa-categorical-exclusion) (CE) records, as models for new NEPA documents. EPA's database holds the EISs [[eisEpaDatabase]]; EAs and CE records stay on the preparing agency's site [[eisBlmEplanning]].",
   glance: [
     {
       label: "EISs",
       value:
-        "EPA's EIS database (records since 1987, PDFs since October 2012) and agency lists such as DOE's [[eisEpaDatabase]] [[eisDoeEisList]]",
+        "EPA's [EIS database](/for/eis-database) (records since 1987, PDFs since October 2012) and agency lists such as DOE's [[eisEpaDatabase]] [[eisDoeEisList]]",
     },
     {
       label: "EAs and CE records",
@@ -134,7 +131,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       label: "California",
       value:
-        "CEQAnet also carries some NEPA documents sent to the State Clearinghouse [[exCeqanet]]",
+        "[CEQAnet](/for/ceqanet) also carries some NEPA documents sent to the State Clearinghouse [[exCeqanet]]",
     },
   ],
   hero: {

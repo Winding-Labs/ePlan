@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 /**
  * /for/ceqa — the CEQA hub page.
@@ -176,13 +176,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/ceqa",
-  family: "ceqa",
-  name: "CEQA",
   title: "CEQA: California Environmental Quality Act Guide",
   description:
-    "What CEQA is, who it applies to, the CEQA process and its documents from exemption to EIR, the lead agency, where documents are filed and the Guidelines.",
+    "What CEQA is, who it applies to, its process from exemption to EIR, the lead agency, and where CEQA documents are filed.",
   eyebrow: "CEQA",
   h1: "CEQA: the California Environmental Quality Act, step by step",
   primaryKeyword: "ceqa",
@@ -207,7 +205,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       label: "Filed with",
       value:
-        "The State Clearinghouse (CEQAnet) and the county clerk [[ceqaPrc21152]] [[ceqaSch]]",
+        "The State Clearinghouse ([CEQAnet](/for/ceqanet)) and the county clerk [[ceqaPrc21152]] [[ceqaSch]]",
     },
     {
       label: "Deadline",
@@ -348,7 +346,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "CEQA documents, in order",
     intro:
-      "The documents a CEQA review can produce, following the three steps [[ceqaGuide15002]]. Many projects stop at the first or second step. [CEQA exemptions](/for/ceqa-exemptions), the [initial study](/for/ceqa-initial-study) and the [EIR](/for/ceqa-environmental-impact-report) each have their own guide.",
+      "The documents a CEQA review can produce, following the three steps [[ceqaGuide15002]]. Many projects stop at the first or second step. [CEQA exemptions](/for/ceqa-exemptions), the [initial study](/for/ceqa-initial-study) and the [EIR](/for/ceqa-environmental-impact-report) each have their own guide. When a federal agency also acts on the project, see [CEQA and NEPA](/for/ceqa-and-nepa) for joint documents. Other states have similar laws, including [New York's SEQR](/for/new-york-seqr) and [Washington's SEPA](/for/washington-sepa).",
     items: [
       {
         title: "Notice of exemption",

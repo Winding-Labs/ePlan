@@ -3,7 +3,7 @@ import type { GuidePath } from "../paths";
 // fhwa771117, fhwaFinal (sources.ts); eisFhwa771115, eisFhwa771123,
 // eisFhwa771124, eisFhwa771138 (pages/environmental-impact-statement.ts);
 // jointCfr771109 (pages/ceqa-and-nepa.ts).
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 const READ = "2026-10-02";
 
@@ -68,14 +68,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/fhwa-nepa",
-  parent: "/for/nepa",
-  family: "agency",
-  name: "FHWA NEPA",
   title: "FHWA NEPA: 23 CFR 771 CEs, EAs and EISs",
   description:
-    "FHWA NEPA under 23 CFR part 771 as finalized in 2026: FHWA and FTA categorical exclusions, programmatic CE agreements, NEPA assignment, EA and EIS steps.",
+    "FHWA NEPA under 23 CFR part 771: FHWA and FTA categorical exclusions, CE agreements, NEPA assignment, EAs and EISs.",
   eyebrow: "FHWA and FTA",
   h1: "FHWA NEPA: 23 CFR 771 categorical exclusions, EAs and EISs",
   primaryKeyword: "fhwa nepa",
@@ -88,7 +85,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "CE Determination",
   answer:
-    "FHWA NEPA is the Federal Highway Administration's NEPA process under 23 CFR part 771, the procedures it shares with FRA and FTA, finalized September 1, 2026 [[fhwaFinal]]. Each action is a categorical exclusion (CE), listed for FHWA in 23 CFR 771.117, an environmental assessment (EA) or an environmental impact statement (EIS) [[eisFhwa771115]] [[fhwa771117]].",
+    "FHWA NEPA is the Federal Highway Administration's NEPA process under 23 CFR part 771, the procedures it shares with FRA and FTA, finalized September 1, 2026 [[fhwaFinal]]. Each action is a [categorical exclusion](/for/nepa-categorical-exclusion) (CE), listed for FHWA in 23 CFR 771.117, an [environmental assessment](/for/nepa-environmental-assessment) (EA) or an [environmental impact statement](/for/environmental-impact-statement) (EIS) [[eisFhwa771115]] [[fhwa771117]].",
   glance: [
     {
       label: "Prepared by",
@@ -214,7 +211,7 @@ export const entry: GuideEntry<GuidePath> = {
       heading:
         "FHWA categorical exclusions: the (c) and (d) lists in 23 CFR 771.117",
       paragraphs: [
-        "Actions on the (d) list, such as new rest areas or changes in access control, qualify only after FHWA approves the applicant's documentation, directly or under a programmatic agreement. Any CE needs further study if unusual circumstances arise: significant impacts, substantial controversy, effects on Section 4(f) or Section 106 properties, or inconsistency with environmental laws [[fhwa771117]]. Final design, property acquisition and construction wait until the action is classified as a CE [[fhwa771113]].",
+        "Actions on the (d) list, such as new rest areas or changes in access control, qualify only after FHWA approves the applicant's documentation, directly or under a programmatic agreement. Any CE needs further study if unusual circumstances arise: significant impacts, substantial controversy, effects on Section 4(f) or [Section 106](/for/section-106) properties, or inconsistency with environmental laws [[fhwa771117]]. Final design, property acquisition and construction wait until the action is classified as a CE [[fhwa771113]].",
         "Modernization, safety and bridge CEs on the (c) list move to (d) if they need more than minor right-of-way, a Coast Guard bridge permit or work outside a Corps general permit, or have an adverse effect on historic properties, a more than de minimis Section 4(f) use or likely adverse effects on listed species [[fhwa771117]]. Examples from the (c) list:",
       ],
       bullets: [
@@ -249,7 +246,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "FHWA CE determination outline: what to document",
     intro:
-      "Part 771 has no CE form; a programmatic agreement sets how a State DOT documents its determinations [[fhwa771117]]. This outline follows what part 771 asks a documented CE to show.",
+      "Part 771 has no CE form; a programmatic agreement sets how a State DOT documents its determinations [[fhwa771117]]. This outline follows what part 771 asks a documented CE to show. Section 4(f) binds every DOT agency; see [FAA NEPA](/for/faa-nepa) for airports.",
     items: [
       {
         title: "Project description and termini",

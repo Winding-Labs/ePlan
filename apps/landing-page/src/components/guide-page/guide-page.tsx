@@ -28,7 +28,8 @@ import {
 import { comparisonRows, guideBenefits } from "@/consts/guides/shared";
 import type { GuideEntry, ToolComparisonRow } from "@/consts/guides/types";
 import { HOME_TABS } from "@/consts/showcase-tabs";
-import { orderCitations, stripCitations } from "@/lib/citations";
+import { brand } from "@/lib/brand";
+import { guideLinks, orderCitations, stripCitations } from "@/lib/citations";
 import { buildPageMetadata, toAbsoluteUrl } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { CitedText } from "./cited-text";
@@ -172,12 +173,38 @@ export function GuidePage({ path }: GuidePageProps) {
         }}
       />
 
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: page.h1,
+          description: page.description,
+          mainEntityOfPage: toAbsoluteUrl(page.path),
+          image: toAbsoluteUrl(brand.ogImage),
+          // Every source was read on this date; the page was written from them.
+          datePublished: GUIDE_SOURCES_READ_ON,
+          dateModified: GUIDE_SOURCES_READ_ON,
+          author: {
+            "@type": "Organization",
+            name: brand.name,
+            url: toAbsoluteUrl("/"),
+          },
+          publisher: {
+            "@type": "Organization",
+            name: brand.name,
+            logo: { "@type": "ImageObject", url: toAbsoluteUrl(brand.logo) },
+          },
+          citation: sourceKeys.map((key) => SOURCES[key].url),
+        }}
+      />
+
       <GuideHeader
         page={page}
         crumbs={crumbs}
         benefits={guideBenefits(page.document)}
         sourceCount={sourceKeys.length}
         sourcesReadOn={formatDate(GUIDE_SOURCES_READ_ON)}
+        sourcesReadOnIso={GUIDE_SOURCES_READ_ON}
         numberOf={numberOf}
       />
 
@@ -399,12 +426,19 @@ function SourcesSection({ sourceKeys }: { sourceKeys: string[] }) {
   );
 }
 
-// Same-family pages first, then the rest, so a CEQA reader sees CEQA guides.
+// The guides this page links to in its copy first (its topic cluster), then
+// same-family pages, then the rest.
 function RelatedGuides({ current }: { current: GuideEntry<GuidePath> }) {
   const others = GUIDES.filter((page) => page.path !== current.path);
+  const linked = new Set(guideLinks(citedTexts(current)));
   const related = [
-    ...others.filter((page) => page.family === current.family),
-    ...others.filter((page) => page.family !== current.family),
+    ...others.filter((page) => linked.has(page.path)),
+    ...others.filter(
+      (page) => !linked.has(page.path) && page.family === current.family,
+    ),
+    ...others.filter(
+      (page) => !linked.has(page.path) && page.family !== current.family,
+    ),
   ].slice(0, 6);
 
   return (

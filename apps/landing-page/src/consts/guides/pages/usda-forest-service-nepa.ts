@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 /**
  * /for/usda-forest-service-nepa — the Forest Service under USDA's 7 CFR 1b.
@@ -45,14 +45,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/usda-forest-service-nepa",
-  parent: "/for/nepa",
-  family: "agency",
-  name: "Forest Service NEPA",
   title: "Forest Service NEPA: 7 CFR 1b and Decision Memos",
   description:
-    "Forest Service NEPA under USDA's 7 CFR 1b: what replaced 36 CFR 220, how CE decision memos (FANECs) work, and 36 CFR 218 objections and the SOPA.",
+    "Forest Service NEPA under USDA's 7 CFR 1b: categorical exclusions, decision memos (FANECs) and 36 CFR 218 objections.",
   eyebrow: "Forest Service",
   h1: "Forest Service NEPA under 7 CFR 1b: decision memos, objections and the SOPA",
   primaryKeyword: "forest service nepa",
@@ -66,7 +63,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Decision Memo",
   answer:
-    "Forest Service NEPA is how the U.S. Forest Service assesses the environmental effects of proposed actions on national forests and grasslands before deciding [[usfsNepaPage]]. It runs on USDA's NEPA regulations at 7 CFR 1b, which replaced the rescinded 36 CFR 220 [[usdaFinal]] [[ceqProcedures]], and projects decided with an EA or EIS can draw objections under 36 CFR 218 [[usfsPart218]] [[usfsNepaPage]].",
+    "Forest Service NEPA is how the U.S. Forest Service assesses the environmental effects of proposed actions on national forests and grasslands before deciding [[usfsNepaPage]]. It runs on USDA's [NEPA regulations](/for/nepa-regulations) at 7 CFR 1b, which replaced the rescinded 36 CFR 220 [[usdaFinal]] [[ceqProcedures]], and projects decided with an [EA](/for/nepa-environmental-assessment) or [EIS](/for/environmental-impact-statement) can draw objections under 36 CFR 218 [[usfsPart218]] [[usfsNepaPage]].",
   glance: [
     {
       label: "Regulations",
@@ -192,7 +189,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "USDA NEPA regulations: what replaced 36 CFR 220",
       paragraphs: [
-        "USDA replaced seven agency NEPA regulations, including the Forest Service's 36 CFR part 220, with department-wide rules at 7 CFR part 1b: an interim final rule of July 3, 2025, made final on April 3, 2026. Part 220's categorical exclusions moved into part 1b, now numbered 7 CFR 1b.4(c)(19)-(29) and (d)(26)-(47) [[usdaFinal]].",
+        "USDA replaced seven agency NEPA regulations, including the Forest Service's 36 CFR part 220, with department-wide rules at 7 CFR part 1b: an interim final rule of July 3, 2025, made final on April 3, 2026. Part 220's [categorical exclusions](/for/nepa-categorical-exclusion) moved into part 1b, now numbered 7 CFR 1b.4(c)(19)-(29) and (d)(26)-(47) [[usdaFinal]].",
         "Part 1b replaces the Forest Service's determination of NEPA adequacy with reliance on existing analysis at 7 CFR 1b.9(e)(8) [[usdaFinal]] [[eisUsda1b9]]. The Forest Service notes that its NEPA pages are under review, so check the date on any Forest Service guidance [[usfsNepaPage]].",
       ],
     },

@@ -4,9 +4,21 @@ import { join } from "node:path";
 import { PLANS } from "@wildfires-org/turboplan-billing/types";
 
 import { guideLinks, orderCitations, stripCitations } from "@/lib/citations";
-import { DESCRIPTION_MAX_LENGTH, TITLE_MAX_LENGTH } from "@/lib/seo";
-import { GUIDE_LINKS } from "../guide-links";
-import { GUIDE_PATHS, GUIDES, guideSlug, SOURCES } from "./index";
+import {
+  DESCRIPTION_MAX_LENGTH,
+  DESCRIPTION_MAX_PX,
+  snippetWidthPx,
+  TITLE_MAX_LENGTH,
+} from "@/lib/seo";
+import {
+  GUIDE_FAMILIES,
+  GUIDE_NAV,
+  GUIDE_PATHS,
+  GUIDES,
+  getGuide,
+  guideSlug,
+  SOURCES,
+} from "./index";
 import {
   comparisonRows,
   MANUAL_COMPARISON_BASE,
@@ -171,9 +183,45 @@ describe("guide pages", () => {
     });
   });
 
-  it("links only real guide pages (or the /for index) from the footer", () => {
-    GUIDE_LINKS.forEach((link) => {
-      expect(["/for", ...GUIDE_PATHS]).toContain(link.href);
+  it("names every registered page in the nav, under a family the footer lists", () => {
+    expect(Object.keys(GUIDE_NAV).sort()).toEqual([...GUIDE_PATHS].sort());
+    const families = GUIDE_FAMILIES.map((group) => group.family);
+    GUIDE_PATHS.forEach((path) => {
+      expect(families).toContain(GUIDE_NAV[path].family);
+    });
+  });
+
+  // Internal linking (Serpie internal-link-builder, topical clusters): every
+  // guide gets contextual links from other guides' copy, not only the footer,
+  // and each family hub links every page in its family.
+  it("links every guide from at least two other guides' copy", () => {
+    const inbound = new Map<string, Set<string>>();
+    GUIDES.forEach((page) => {
+      guideLinks(pageCopy(page)).forEach((href) => {
+        if (href !== page.path) {
+          inbound.set(href, (inbound.get(href) ?? new Set()).add(page.path));
+        }
+      });
+    });
+    const thin = GUIDE_PATHS.filter(
+      (path) => (inbound.get(path)?.size ?? 0) < 2,
+    );
+    expect(thin).toEqual([]);
+  });
+
+  it("links every page in a family from that family's hub", () => {
+    const hubs = {
+      nepa: "/for/nepa",
+      ceqa: "/for/ceqa",
+      state: "/for/state-environmental-review",
+    } as const;
+    Object.entries(hubs).forEach(([family, hub]) => {
+      const linked = new Set(guideLinks(pageCopy(getGuide(hub))));
+      const unlinked = GUIDES.filter(
+        (page) =>
+          page.family === family && page.path !== hub && !linked.has(page.path),
+      ).map((page) => page.path);
+      expect(unlinked).toEqual([]);
     });
   });
 
@@ -191,6 +239,15 @@ describe("guide pages", () => {
         DESCRIPTION_MAX_LENGTH,
       );
     });
+  });
+
+  // Character count is not what truncates a snippet; rendered width is
+  // (SEOmator flagged every guide description at 2026-10-02).
+  it("keeps every description within the width Google shows", () => {
+    const wide = GUIDES.filter(
+      (page) => snippetWidthPx(page.description) > DESCRIPTION_MAX_PX,
+    ).map((page) => `${page.path} ${snippetWidthPx(page.description)}px`);
+    expect(wide).toEqual([]);
   });
 
   it("gives each page its own primary keyword, in its title and H1", () => {

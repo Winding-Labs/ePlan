@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 /**
  * /for/ceqa-and-nepa — when CEQA and NEPA both apply.
@@ -72,14 +72,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/ceqa-and-nepa",
-  parent: "/for/ceqa",
-  family: "ceqa",
-  name: "CEQA and NEPA",
   title: "CEQA and NEPA: Joint EIR/EIS and Key Differences",
   description:
-    "When CEQA and NEPA both apply, how they differ, which documents match, and how to prepare a joint EIS/EIR in California, cited to current law.",
+    "When CEQA and NEPA both apply, how the two reviews differ, which documents match, and how to prepare a joint EIR/EIS.",
   eyebrow: "CEQA and NEPA",
   h1: "CEQA and NEPA: when both apply and how to prepare one joint document",
   primaryKeyword: "ceqa and nepa",
@@ -91,7 +88,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "Joint CEQA/NEPA Document",
   answer:
-    "CEQA and NEPA both apply when a California state or local agency acts on a project that a federal agency also carries out, finances or approves [[jointGuide15220]]. The agencies can then work from one document: the federal EIS or FONSI if it will be ready first, or a joint EIR-EIS or negative declaration-FONSI [[jointGuide15221]] [[jointGuide15222]].",
+    "CEQA and [NEPA](/for/nepa) both apply when a California state or local agency acts on a project that a federal agency also carries out, finances or approves [[jointGuide15220]]. The agencies can then work from one document: the federal [EIS](/for/environmental-impact-statement) or FONSI if it will be ready first, or a joint EIR-EIS or negative declaration-FONSI [[jointGuide15221]] [[jointGuide15222]].",
   glance: [
     {
       label: "CEQA basis",
@@ -111,7 +108,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       label: "Deadlines, NEPA vs CEQA",
       value:
-        "EIS 2 years, EA 1 year; private-project EIR 1 year, negative declaration 180 days [[usc4336a]] [[ceqaGuide15108]] [[ceqaGuide15107]]",
+        "EIS 2 years, EA 1 year; private-project [EIR](/for/ceqa-environmental-impact-report) 1 year, negative declaration 180 days [[usc4336a]] [[ceqaGuide15108]] [[ceqaGuide15107]]",
     },
   ],
   hero: {
@@ -224,7 +221,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "Using an EIS, EA or FONSI for CEQA",
       paragraphs: [
-        "When an EIS or FONSI will be finished first and meets the CEQA Guidelines, state and local agencies should use it instead of preparing their own [[jointGuide15221]]; for an EIR, the statute says to use the EIS whenever possible [[jointPrc21083dot7]]. NEPA doesn't require separate discussion of mitigation or growth-inducing impacts, so add them first [[jointGuide15221]].",
+        "When an EIS or FONSI will be finished first and meets the [CEQA Guidelines](/for/ceqa), state and local agencies should use it instead of preparing their own [[jointGuide15221]]; for an EIR, the statute says to use the EIS whenever possible [[jointPrc21083dot7]]. NEPA doesn't require separate discussion of mitigation or growth-inducing impacts, so add them first [[jointGuide15221]].",
         "If the federal agency circulated the document as broadly as state law requires, the lead agency need not recirculate it; it gives notice that it will use it [[jointGuide15225]]. The matching documents:",
       ],
       bullets: [

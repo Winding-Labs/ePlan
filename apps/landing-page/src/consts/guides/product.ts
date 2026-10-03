@@ -1,17 +1,15 @@
 import { HOME_DRAFT_MOCK } from "@/consts/draft-mocks";
 import type { GuidePath } from "./paths";
 import { PRICING_FAQ, PRICING_SUMMARY, PRODUCT_EXAMPLES } from "./shared";
-import type { GuideEntry } from "./types";
+import type { GuideContent } from "./types";
 
-const nepaSoftware: GuideEntry<GuidePath> = {
+const nepaSoftware: GuideContent<GuidePath> = {
   path: "/for/nepa-software",
-  name: "NEPA software",
   title: "NEPA Software: AI for Environmental Review",
   description:
-    "ePlan drafts scoping letters, CE decision memos and EAs from a reference document and marks every fact it could not confirm. People review and decide.",
+    "ePlan is NEPA software that drafts scoping letters, CE decision memos and EAs from a reference document, for your team to review.",
   eyebrow: "NEPA software",
   h1: "NEPA software that drafts the document and marks what to check",
-  family: "product",
   primaryKeyword: "nepa software",
   secondaryKeywords: [
     "nepa ai",
@@ -20,7 +18,7 @@ const nepaSoftware: GuideEntry<GuidePath> = {
   ],
   document: "NEPA Document",
   answer:
-    "ePlan is NEPA software, or environmental review software, for agency staff and environmental consultants. Describe a project and it drafts the scoping letter, categorical exclusion decision memo or environmental assessment from a reference document, marking every fact it could not confirm. Your team reviews, edits and signs; ePlan does not make NEPA determinations.",
+    "ePlan is NEPA software, or environmental review software, for agency staff and environmental consultants. Describe a project and it drafts the scoping letter, categorical exclusion decision memo or [environmental assessment](/for/nepa-environmental-assessment) from a reference document, marking every fact it could not confirm. Your team reviews, edits and signs; ePlan does not make NEPA determinations.",
   sections: [
     {
       heading: "What NEPA software has to keep up with",
@@ -32,7 +30,7 @@ const nepaSoftware: GuideEntry<GuidePath> = {
       heading: "What ePlan does",
       paragraphs: ["One workspace per project:"],
       bullets: [
-        "Research: reads your uploads, finds candidate categorical exclusions, and references past decisions and documents, each cited.",
+        "Research: reads your uploads, finds candidate [categorical exclusions](/for/nepa-categorical-exclusion), and references past decisions and documents, each cited.",
         "Drafting: location and purpose filled in; every citation or detail it can't confirm marked for your team.",
         "Planning: a Gantt of milestones and tasks, from botany surveys to GIS boundaries.",
         "Collaboration: comments and an activity timeline; partners submit project applications, and public projects get a comment page.",
@@ -47,7 +45,8 @@ const nepaSoftware: GuideEntry<GuidePath> = {
   ],
   outline: {
     heading: "What to check in any NEPA software",
-    intro: "Questions worth asking before you pilot a tool, ePlan included.",
+    intro:
+      "Questions worth asking before you pilot a tool, ePlan included. For other tools, see [AI tools for NEPA compared](/for/nepa-ai-tools).",
     items: [
       {
         title: "Sources you can check",
@@ -82,7 +81,8 @@ const nepaSoftware: GuideEntry<GuidePath> = {
   glance: [
     {
       label: "Drafts",
-      value: "Scoping letters, CE decision memos, EAs and CEQA documents",
+      value:
+        "[Scoping letters](/for/nepa-scoping-letter), CE decision memos, EAs and CEQA documents",
     },
     {
       label: "Reads",
@@ -129,20 +129,18 @@ const nepaSoftware: GuideEntry<GuidePath> = {
   ],
 };
 
-const compareAiTools: GuideEntry<GuidePath> = {
+const compareAiTools: GuideContent<GuidePath> = {
   path: "/for/nepa-ai-tools",
-  name: "AI tools for NEPA",
   title: "AI Tools for NEPA Review Compared (2026)",
   description:
-    "PNNL's PermitAI, NEPATEC, Radial Spatial, Transect, PermitFlow and ePlan compared from their own public pages: who each is for and what it does.",
+    "AI tools for NEPA compared from their own pages: PermitAI, NEPATEC, Radial Spatial, Transect, PermitFlow and ePlan.",
   eyebrow: "Compare",
   h1: "AI tools for NEPA review, compared",
-  family: "product",
   primaryKeyword: "ai tools for nepa",
   secondaryKeywords: ["permitai", "nepatec", "nepa ai"],
   document: "NEPA Document",
   answer:
-    "AI tools for NEPA are still few. PNNL's DOE-funded PermitAI offers search, comment and drafting tools, several in beta for federal users [[permitai]] [[permitaiApps]]; NEPATEC is PNNL's open dataset of NEPA documents [[nepatec2]]. Radial Spatial's NEPA AI predicts review pathways from location [[radial]]. Transect screens sites [[transect]]; PermitFlow handles construction permits [[permitflow]]. ePlan drafts scoping letters, CE memos and EAs.",
+    "AI tools for NEPA are still few. PNNL's DOE-funded PermitAI offers search, comment and drafting tools, several in beta for federal users [[permitai]] [[permitaiApps]]; NEPATEC is PNNL's open dataset of NEPA documents [[nepatec2]]. Radial Spatial's NEPA AI predicts review pathways from location [[radial]]. Transect screens sites [[transect]]; PermitFlow handles construction permits [[permitflow]]. [ePlan](/for/nepa-software) drafts scoping letters, CE memos and EAs.",
   tools: [
     {
       name: "PermitAI",
@@ -220,7 +218,8 @@ const compareAiTools: GuideEntry<GuidePath> = {
   ],
   outline: {
     heading: "Questions to ask any NEPA AI tool",
-    intro: "Use these on every tool above, ePlan included.",
+    intro:
+      "Use these on every tool above, ePlan included. Filed EISs are public in [EPA's EIS database](/for/eis-database), and [NEPA examples](/for/nepa-examples) shows where agencies post EAs and CE records.",
     items: [
       {
         title: "Which documents does it produce?",

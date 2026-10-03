@@ -1,5 +1,5 @@
 import type { GuidePath } from "../paths";
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 // Reused source keys (defined in sources.ts): ceqIfr, ceqFinal,
 // ceqProcedures, usc4332, usc4336, usc4336a, usc4336c, usc4336e, fra2023,
@@ -63,14 +63,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/nepa-regulations",
-  parent: "/for/nepa",
-  family: "nepa",
-  name: "NEPA regulations",
   title: "NEPA Regulations in 2026: Where the Rules Live",
   description:
-    "NEPA regulations after CEQ's rules were rescinded in 2025: the amended statute, agency NEPA procedures, Seven County, FAST-41 and the SPEED Act.",
+    "Where NEPA regulations live after CEQ's rules were removed: agency procedures, the 2023 limits, Seven County and FAST-41.",
   eyebrow: "NEPA regulations",
   h1: "NEPA regulations in 2026: what replaced CEQ's rules",
   primaryKeyword: "nepa regulations",
@@ -85,7 +82,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "NEPA Procedures Memo",
   answer:
-    "NEPA regulations are the rules federal agencies follow to carry out the National Environmental Policy Act. Since CEQ's government-wide rules were removed in 2025 [[ceqIfr]] [[ceqFinal]], each agency applies the statute through its own NEPA procedures [[usc4332]] [[ceqProcedures]], and courts review its choices with substantial deference [[sevenCounty]].",
+    "NEPA regulations are the rules federal agencies follow to carry out the [National Environmental Policy Act](/for/nepa). Since CEQ's government-wide rules were removed in 2025 [[ceqIfr]] [[ceqFinal]], each agency applies the statute through its own NEPA procedures [[usc4332]] [[ceqProcedures]], and courts review its choices with substantial deference [[sevenCounty]].",
   glance: [
     {
       label: "CEQ regulations",
@@ -225,10 +222,10 @@ export const entry: GuideEntry<GuidePath> = {
         "The agency taking the action applies its own procedures, developed in consultation with CEQ [[usc4332]]; CEQ's directory lists each agency's procedures and NEPA contact [[ceqProcedures]]. When several agencies participate, they choose a lead agency and, where practicable, share one document [[usc4336a]]. Where the main rules sit now:",
       ],
       bullets: [
-        "USDA, including the Forest Service and Rural Development: 7 CFR part 1b [[usdaFinal]]",
-        "Interior, including BLM: a Departmental Handbook holds most procedures; 43 CFR part 46 is partly rescinded [[doiFinal]]",
-        "DOE: 10 CFR part 1021 keeps older categorical exclusions; the rest is in guidance revised July 13, 2026 [[doe1021]] [[doeProcedures]]",
-        "FHWA, FRA and FTA: 23 CFR part 771, for documents prepared or accepted after July 3, 2025 [[fhwaFinal]]",
+        "USDA, including the [Forest Service](/for/usda-forest-service-nepa) and Rural Development: 7 CFR part 1b [[usdaFinal]]",
+        "Interior, including BLM: a Departmental Handbook holds most procedures; [43 CFR part 46](/for/interior-blm-nepa) is partly rescinded [[doiFinal]]",
+        "DOE: [10 CFR part 1021](/for/doe-nepa) keeps older categorical exclusions; the rest is in guidance revised July 13, 2026 [[doe1021]] [[doeProcedures]]",
+        "FHWA, FRA and FTA: [23 CFR part 771](/for/fhwa-nepa), for documents prepared or accepted after July 3, 2025 [[fhwaFinal]]",
         "Army: 32 CFR part 651 was rescinded; Department of Defense-wide procedures now guide its process [[army651]]",
       ],
     },

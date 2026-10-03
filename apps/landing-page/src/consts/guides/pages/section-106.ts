@@ -1,6 +1,6 @@
 import type { GuidePath } from "../paths";
 // /for/section-106. Cites only the sources defined below.
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 const READ = "2026-10-02";
 
@@ -65,14 +65,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/section-106",
-  parent: "/for/nepa",
-  family: "federal",
-  name: "Section 106",
   title: "Section 106: NHPA Review Steps & 36 CFR 800",
   description:
-    "What Section 106 of the NHPA requires, the 36 CFR part 800 steps, SHPO and tribal consultation, how it runs with NEPA and the ACHP's 2026 rule proposal.",
+    "What Section 106 of the NHPA requires: the 36 CFR part 800 steps, SHPO and tribal consultation, and how it runs with NEPA.",
   eyebrow: "Section 106",
   h1: "Section 106 review: the NHPA process, step by step",
   primaryKeyword: "section 106",
@@ -238,14 +235,14 @@ export const entry: GuideEntry<GuidePath> = {
     {
       heading: "Section 106 review and NEPA: 36 CFR 800.8",
       paragraphs: [
-        "Agencies should coordinate Section 106 with NEPA and consider historic properties early; an adverse effect does not by itself require an EIS. An agency may instead use its EA or EIS process in place of 36 CFR 800.3 through 800.6 if it notifies the SHPO/THPO and the ACHP in advance and meets 800.8(c), including binding mitigation commitments [[s106Cfr8008]].",
+        "Agencies should coordinate Section 106 with [NEPA](/for/nepa) and consider historic properties early; an adverse effect does not by itself require an EIS. An agency may instead use its EA or EIS process in place of 36 CFR 800.3 through 800.6 if it notifies the SHPO/THPO and the ACHP in advance and meets 800.8(c), including binding mitigation commitments [[s106Cfr8008]].",
       ],
     },
   ],
   outline: {
     heading: "Section 106 consultation letter: what to include",
     intro:
-      "This outline follows what 36 CFR part 800 asks for when an agency initiates consultation [[s106Cfr8003]] and the documentation a finding needs [[s106Cfr80011]]. Check whether your SHPO or THPO uses its own form.",
+      "This outline follows what 36 CFR part 800 asks for when an agency initiates consultation [[s106Cfr8003]] and the documentation a finding needs [[s106Cfr80011]]. Check whether your SHPO or THPO uses its own form. A [categorical exclusion](/for/nepa-categorical-exclusion) does not end Section 106 review, [ESA section 7](/for/esa-section-7) consultation often runs alongside it, and [HUD](/for/hud-environmental-review) and [FEMA](/for/fema-ehp) cover both in their environmental reviews.",
     items: [
       {
         title: "Undertaking and federal involvement",

@@ -3,7 +3,7 @@ import type { GuidePath } from "../paths";
 // doeProcedures (the July 13, 2026 DOE NEPA Implementing Procedures), doe1021
 // (sources.ts); regsDoeIfr (pages/nepa-regulations.ts); eisDoeEisList
 // (pages/environmental-impact-statement.ts).
-import type { GuideEntry, Source } from "../types";
+import type { GuideContent, Source } from "../types";
 
 const READ = "2026-10-02";
 
@@ -39,14 +39,11 @@ export const sources = {
   },
 } satisfies Record<string, Source>;
 
-export const entry: GuideEntry<GuidePath> = {
+export const entry: GuideContent<GuidePath> = {
   path: "/for/doe-nepa",
-  parent: "/for/nepa",
-  family: "agency",
-  name: "DOE NEPA",
   title: "DOE NEPA: 10 CFR 1021, Procedures and CXs",
   description:
-    "DOE NEPA in 2026: what stays in 10 CFR 1021, the July 2026 DOE NEPA procedures, categorical exclusions including B5.26, and posted CX determinations.",
+    "DOE NEPA in 2026: what stays in 10 CFR 1021, the DOE NEPA procedures, categorical exclusions and CX determinations.",
   eyebrow: "Department of Energy",
   h1: "DOE NEPA: 10 CFR 1021, the 2026 procedures and CX determinations",
   primaryKeyword: "doe nepa",
@@ -58,7 +55,7 @@ export const entry: GuideEntry<GuidePath> = {
   ],
   document: "CX Determination",
   answer:
-    "DOE NEPA is how the Department of Energy considers the reasonably foreseeable environmental effects of its proposals, including funding and authorizations for applicants, before it decides [[doeProcedures]]. 10 CFR 1021 now holds only DOE's excepted actions, its existing categorical exclusions and related requirements; the rest is in the DOE NEPA Implementing Procedures, last revised July 13, 2026 [[regsDoeIfr]] [[doeProcedures]].",
+    "DOE NEPA is how the Department of Energy considers the reasonably foreseeable environmental effects of its proposals, including funding and authorizations for applicants, before it decides [[doeProcedures]]. 10 CFR 1021 now holds only DOE's excepted actions, its existing [categorical exclusions](/for/nepa-categorical-exclusion) and related requirements; the rest is in the DOE NEPA Implementing Procedures, last revised July 13, 2026 [[regsDoeIfr]] [[doeProcedures]].",
   glance: [
     {
       label: "CX determination",
@@ -72,7 +69,7 @@ export const entry: GuideEntry<GuidePath> = {
     {
       label: "EA limits",
       value:
-        "75 pages, 1 year; ends in a FONSI or a decision to prepare an EIS [[doeProcedures]]",
+        "75 pages, 1 year; ends in a FONSI or a decision to prepare an [EIS](/for/environmental-impact-statement) [[doeProcedures]]",
     },
     {
       label: "EIS limits",
@@ -184,7 +181,7 @@ export const entry: GuideEntry<GuidePath> = {
       heading: "10 CFR 1021 and the DOE NEPA procedures: what each holds",
       paragraphs: [
         "Since July 3, 2025, 10 CFR part 1021 holds appendix A, routine actions excepted from NEPA review; appendix B, DOE's categorical exclusions as of then; related requirements; and an emergency provision [[regsDoeIfr]] [[doe1021]]. Everything else, including exclusions added or adopted since, is in the procedures, which DOE describes as guidance developed with CEQ, not a regulation [[doeProcedures]].",
-        "DOE first decides whether NEPA applies; CERCLA response actions and Presidential permits for cross-border transmission lines, for example, are not subject to it. If NEPA applies, DOE uses a categorical exclusion where one fits. Otherwise it may rely on an existing document, or it prepares an EA when a significant effect is unlikely or unknown and an EIS when one is likely [[doeProcedures]].",
+        "DOE first decides whether NEPA applies; CERCLA response actions and Presidential permits for cross-border transmission lines, for example, are not subject to it. If NEPA applies, DOE uses a categorical exclusion where one fits. Otherwise it may rely on an existing document, or it prepares an [EA](/for/nepa-environmental-assessment) when a significant effect is unlikely or unknown and an EIS when one is likely [[doeProcedures]].",
       ],
     },
     {
@@ -212,7 +209,7 @@ export const entry: GuideEntry<GuidePath> = {
   outline: {
     heading: "Categorical exclusion determination: what DOE's form records",
     intro:
-      "These elements follow a September 2026 posted determination [[doeCxExample]], with the findings from DOE's procedures [[doeProcedures]]. Use your office's current form.",
+      "These elements follow a September 2026 posted determination [[doeCxExample]], with the findings from DOE's procedures [[doeProcedures]]. Use your office's current form. DOE's procedures are among the [agency NEPA procedures](/for/nepa-regulations) that replaced CEQ's rules in 2025.",
     items: [
       {
         title: "Proposed action title and office",
