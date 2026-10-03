@@ -263,6 +263,40 @@ const nextConfig: NextConfig = {
         destination,
         permanent: true,
       })),
+      // Google Ads display paths (eplan.ai/nepa/categorical): the URL an ad
+      // shows, which a searcher may type. Each one is the `path` of a group in
+      // ash's ads-daily launch/eplan.json and lands on that group's guide.
+      // /nepa/scoping-letter, /nepa/regulations, /ceqa/initial-study and
+      // /ceqa/exemptions are display paths too, already redirected above.
+      ...[
+        ["/nepa/categorical", "/for/nepa-categorical-exclusion"],
+        ["/nepa/assessment", "/for/nepa-environmental-assessment"],
+        ["/nepa/documents", "/for/nepa"],
+        ["/nepa/eis", "/for/environmental-impact-statement"],
+        ["/nepa/process", "/for/nepa"],
+        ["/nepa/software", "/for/nepa-software"],
+        ["/nepa/ai-tools", "/for/nepa-ai-tools"],
+        ["/ceqa/documents", "/for/ceqa"],
+        ["/ceqa/and-nepa", "/for/ceqa-and-nepa"],
+        ["/ceqa/eir", "/for/ceqa-environmental-impact-report"],
+        ["/section-106/review", "/for/section-106"],
+        ["/hud/part-58", "/for/hud-environmental-review"],
+        ["/esa/section-7", "/for/esa-section-7"],
+        ["/new-york/seqr", "/for/new-york-seqr"],
+        ["/washington/sepa", "/for/washington-sepa"],
+        ["/massachusetts/mepa", "/for/massachusetts-mepa"],
+        ["/usda/forest-service", "/for/usda-forest-service-nepa"],
+        ["/interior/blm", "/for/interior-blm-nepa"],
+        ["/fhwa/nepa", "/for/fhwa-nepa"],
+        ["/doe/nepa", "/for/doe-nepa"],
+        ["/faa/nepa", "/for/faa-nepa"],
+        ["/fema/ehp", "/for/fema-ehp"],
+        ["/nepa-ceqa/documents", "/"],
+      ].map(([source, destination]) => ({
+        source,
+        destination,
+        permanent: true,
+      })),
       // Specific rule must precede the wildcard below so it wins.
       {
         source: "/catalog/org",
