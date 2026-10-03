@@ -38,11 +38,7 @@ const loadWithEnv = async (env: Record<string, string | undefined>) => {
 // The sitemap asks the public API for the catalog. By default it answers
 // with empty lists; tests that need catalog URLs install their own answers.
 const CATALOG_API = {
-  organizations: [{ id: "org-1", slug: "usfs" }],
-  "offices?organizationId=org-1": {
-    items: [{ slug: "eldorado-nf" }],
-    total: 1,
-  },
+  organizations: [{ slug: "usfs" }],
   projects: [
     {
       slug: "caldor-fire-restoration",
@@ -68,11 +64,7 @@ const mockPublicApi = (answers: Record<string, unknown> | "down") => {
       throw new Error("connect ECONNREFUSED");
     }
     const path = String(input).split("/api/public/")[1] ?? "";
-    const empty = path.startsWith("templates")
-      ? { templates: [] }
-      : path.startsWith("offices")
-        ? { items: [], total: 0 }
-        : [];
+    const empty = path.startsWith("templates") ? { templates: [] } : [];
     const body = answers[path] ?? empty;
     return new Response(JSON.stringify(body), { status: 200 });
   });
@@ -218,7 +210,7 @@ describe("sitemap", () => {
     expect(await sitemap()).toEqual([]);
   });
 
-  it("adds every public organization, office, project and template", async () => {
+  it("adds every public organization, project and template", async () => {
     mockPublicApi(CATALOG_API);
     const { sitemap } = await loadWithEnv({
       NEXT_PUBLIC_LANDING_URL: "https://example.test",
@@ -230,10 +222,13 @@ describe("sitemap", () => {
     expect(urls).toEqual(
       expect.arrayContaining([
         "https://example.test/projects/usfs",
-        "https://example.test/projects/usfs/eldorado-nf",
         "https://example.test/projects/usfs/eldorado-nf/caldor-fire-restoration",
         "https://example.test/projects/usfs/eldorado-nf/templates/fuel-break-ce",
       ]),
+    );
+    // Office pages are noindex, so they stay out of the sitemap.
+    expect(urls).not.toContain(
+      "https://example.test/projects/usfs/eldorado-nf",
     );
     expect(
       entries.find((entry) => entry.url.endsWith("caldor-fire-restoration"))

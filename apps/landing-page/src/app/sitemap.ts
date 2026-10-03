@@ -9,7 +9,7 @@ import { routing } from "@/utils/routing";
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
 // Home, the guides, the catalog index, the legal pages and the docs come from
-// the build. Public organizations, offices, projects and project templates
+// the build. Public organizations, projects and project templates
 // come from the public API on each request, so the sitemap follows the
 // catalog without a deploy.
 export const dynamic = "force-dynamic";

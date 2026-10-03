@@ -4,8 +4,6 @@ import { routing } from "@/utils/routing";
 
 type Slugged = { slug: string };
 
-type PublicOrganization = Slugged & { id: string };
-
 type PublicCatalogEntry = Slugged & {
   office: Slugged;
   organization: Slugged;
@@ -41,49 +39,31 @@ const getPublic = async <T>(path: string): Promise<T | null> => {
 };
 
 /**
- * Every public organization, office, project and project template, for the
- * sitemap. Their lists render client-side, so without this crawlers had no
- * way to find them. A failed API call drops only its own part.
+ * Every public organization, project and project template, for the sitemap.
+ * Their lists render client-side, so without this crawlers had no way to find
+ * them. Offices are left out: their pages are noindex (THIN_PAGE_ROBOTS), and
+ * a noindex URL in a sitemap is a conflicting signal Search Console reports as
+ * an error. Crawlers still reach them through the organization pages, which
+ * server-render the office list. A failed API call drops only its own part.
  */
 export const getCatalogSitemapPaths = async (): Promise<
   CatalogSitemapPath[]
 > => {
   const [organizations, projects, templates] = await Promise.all([
-    getPublic<PublicOrganization[]>("organizations"),
+    getPublic<Slugged[]>("organizations"),
     getPublic<PublicCatalogEntry[]>("projects"),
     getPublic<{ templates: PublicCatalogEntry[] }>(
       `templates?limit=${TEMPLATE_PAGE_SIZE}`,
     ),
   ]);
 
-  const officesByOrganization = await Promise.all(
-    (organizations ?? []).map(async (organization) => ({
-      organization,
-      offices:
-        (
-          await getPublic<{ items: Slugged[] }>(
-            `offices?organizationId=${encodeURIComponent(organization.id)}`,
-          )
-        )?.items ?? [],
-    })),
-  );
-
   return [
-    ...officesByOrganization.flatMap(({ organization, offices }) => [
-      {
-        path: routing.catalogOrganization({
-          organizationSlug: organization.slug,
-        }),
-        priority: 0.6,
-      },
-      ...offices.map((office) => ({
-        path: routing.catalogOffice({
-          organizationSlug: organization.slug,
-          officeSlug: office.slug,
-        }),
-        priority: 0.4,
-      })),
-    ]),
+    ...(organizations ?? []).map((organization) => ({
+      path: routing.catalogOrganization({
+        organizationSlug: organization.slug,
+      }),
+      priority: 0.6,
+    })),
     ...(projects ?? []).map((project) => ({
       path: routing.catalogProject({
         organizationSlug: project.organization.slug,
