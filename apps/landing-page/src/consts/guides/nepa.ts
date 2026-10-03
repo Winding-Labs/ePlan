@@ -58,7 +58,7 @@ const nepaProcess: GuideContent<GuidePath> = {
   outline: {
     heading: "NEPA documentation, in order",
     intro:
-      "The documents a review can produce, following CEQ's January 2026 process chart [[ceqFlowchart]]. Many actions stop at the first or second step. Most reviews start with a [scoping letter](/for/nepa-scoping-letter), and past documents for the same kind of action are in [NEPA examples](/for/nepa-examples). ePlan's [NEPA software](/for/nepa-software) drafts these documents, and [AI tools for NEPA](/for/nepa-ai-tools) compares the alternatives.",
+      "The documents a review can produce, following CEQ's January 2026 process chart [[ceqFlowchart]]. Many actions stop at the first or second step. Most reviews start with a [scoping letter](/for/nepa-scoping-letter), and past documents for the same kind of action are in [NEPA examples](/for/nepa-examples). ePlan's [NEPA software](/for/nepa-software) drafts these documents, and [AI tools for NEPA](/for/nepa-ai-tools) compares the alternatives. NEPA is the federal [environmental impact assessment](/for/environmental-impact-assessment) process [[stateCeqList]]; our guides to [environmental permitting](/for/environmental-permitting) and [environmental planning](/for/environmental-planning) cover the permits and planning work around it.",
     items: [
       {
         title: "Proposed action, purpose and need",

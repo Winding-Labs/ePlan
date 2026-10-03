@@ -53,6 +53,21 @@ export const GUIDE_NAV: Record<GuidePath, GuideNav> = {
     family: "nepa",
     parent: "/for/nepa",
   },
+  "/for/environmental-impact-assessment": {
+    name: "Environmental impact assessment",
+    family: "nepa",
+    parent: "/for/nepa",
+  },
+  "/for/environmental-permitting": {
+    name: "Environmental permitting",
+    family: "nepa",
+    parent: "/for/nepa",
+  },
+  "/for/environmental-planning": {
+    name: "Environmental planning",
+    family: "nepa",
+    parent: "/for/nepa",
+  },
   "/for/ceqa": { name: "CEQA", family: "ceqa" },
   "/for/ceqa-initial-study": {
     name: "Initial study",

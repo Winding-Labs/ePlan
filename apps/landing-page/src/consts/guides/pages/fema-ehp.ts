@@ -127,7 +127,7 @@ export const entry: GuideContent<GuidePath> = {
   ],
   document: "EHP Review Narrative",
   answer:
-    "FEMA EHP review is FEMA's environmental planning and historic preservation review of the projects it funds, including Public Assistance and Hazard Mitigation grants, under NEPA and other federal environmental and historic preservation laws [[femaEhpGuidance]] [[femaPappg]] [[femaHmaGuide]]. Each project gets a statutory exclusion, a [categorical exclusion](/for/nepa-categorical-exclusion), an EA or an EIS, and the review must be complete before funds are released [[femaInstruction]] [[femaEhpGuidance]].",
+    "FEMA EHP review is FEMA's [environmental planning](/for/environmental-planning) and historic preservation review of the projects it funds, including Public Assistance and Hazard Mitigation grants, under NEPA and other federal environmental and historic preservation laws [[femaEhpGuidance]] [[femaPappg]] [[femaHmaGuide]]. Each project gets a statutory exclusion, a [categorical exclusion](/for/nepa-categorical-exclusion), an EA or an EIS, and the review must be complete before funds are released [[femaInstruction]] [[femaEhpGuidance]].",
   glance: [
     {
       label: "Procedures",

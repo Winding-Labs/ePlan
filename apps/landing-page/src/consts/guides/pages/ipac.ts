@@ -195,7 +195,7 @@ export const entry: GuideContent<GuidePath> = {
       heading: "Critical habitat and NWI wetlands in an IPaC report",
       paragraphs: [
         "The species list covers listed, proposed and candidate species, experimental populations and species listed for similarity of appearance [[esaIpac]]. For each, the report says whether final or proposed critical habitat exists and whether your location overlaps it; effects to critical habitat must be analyzed with the species [[ipacResourceList]].",
-        "Wetlands come from the National Wetlands Inventory (NWI), which may be out of date; the report says a site visit should confirm their extent and that impacts may be regulated under Clean Water Act Section 404 [[ipacResourceList]]. NWI maps a biological definition of wetlands that may not match Clean Water Act boundaries, so check with the Army Corps regulatory office [[ipacNwiLimits]].",
+        "Wetlands come from the National Wetlands Inventory (NWI), which may be out of date; the report says a site visit should confirm their extent and that impacts may be regulated under [Clean Water Act Section 404](/for/environmental-permitting) [[ipacResourceList]]. NWI maps a biological definition of wetlands that may not match Clean Water Act boundaries, so check with the Army Corps regulatory office [[ipacNwiLimits]].",
       ],
     },
     {

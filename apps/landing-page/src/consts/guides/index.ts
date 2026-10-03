@@ -8,7 +8,10 @@ import * as ceqaInitialStudy from "./pages/ceqa-initial-study";
 import * as ceqanet from "./pages/ceqanet";
 import * as doeNepa from "./pages/doe-nepa";
 import * as eisDatabase from "./pages/eis-database";
+import * as environmentalImpactAssessment from "./pages/environmental-impact-assessment";
 import * as environmentalImpactStatement from "./pages/environmental-impact-statement";
+import * as environmentalPermitting from "./pages/environmental-permitting";
+import * as environmentalPlanning from "./pages/environmental-planning";
 import * as esaSection7 from "./pages/esa-section-7";
 import * as faaNepa from "./pages/faa-nepa";
 import * as femaEhp from "./pages/fema-ehp";
@@ -40,6 +43,9 @@ export { GUIDE_SOURCES_READ_ON } from "./sources";
 const PAGE_MODULES = [
   environmentalImpactStatement,
   nepaRegulations,
+  environmentalImpactAssessment,
+  environmentalPermitting,
+  environmentalPlanning,
   ceqa,
   ceqaInitialStudy,
   ceqaExemptions,
