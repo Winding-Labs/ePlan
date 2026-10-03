@@ -189,7 +189,9 @@ export function Hero({ content = HOME_HERO }: HeroProps) {
             <div className="flex flex-col items-center gap-[18px]">
               {/* Eyebrow — synced with heading index */}
               <div className="flex h-[28px] items-center justify-center">
-                <AnimatePresence mode="wait">
+                {/* initial={false}: the first eyebrow renders visible (it is
+                    in the static HTML); only later rotations animate. */}
+                <AnimatePresence mode="wait" initial={false}>
                   <motion.span
                     key={slide.eyebrow}
                     initial={

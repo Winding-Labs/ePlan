@@ -1,6 +1,6 @@
 # eplan.ai: SEO, ad landing pages and speed, in fix-pack rounds (2026-10-02)
 
-Status: **Round 1 shipped** (#37, released to eplan.ai in #41 on 2026-10-02 with #40). **Round 2 in review** (branch `feat/seo-fixpack-2`).
+Status: **Round 1 shipped** (#37, released to eplan.ai in #41 on 2026-10-02 with #40). **Round 2 merged** (#43, develop). **Round 3 in review** (`feat/seo-fixpack-3`).
 Builds on `2026-10-02-seo-ads-analytics-audit.md` (technical SEO basics, shipped in
 #34) and `2026-10-02-analytics-master-pattern.md` (tracking, #34). This plan covers
 what those leave open outside the page system, which dash-0b owns (#35/#36): legal
@@ -128,7 +128,23 @@ Moved to Round 3:
 - **404 page title** reuses the home title.
 - **Hero eyebrow chip** starts at `opacity: 0`.
 
-### Round 3: ads ↔ live pages, citation claim, operator steps
+### Round 3 (done on `feat/seo-fixpack-3`): reveals without JavaScript, catalog sitemap, 404 title
+
+- `ScrollReveal` is a CSS scroll-driven animation, so content is visible in the HTML and without JS. The hero eyebrow uses `initial={false}`.
+- The sitemap is per-request, adding public orgs, offices, projects and templates (301 URLs on staging data, up from 55).
+- The 404 page has its own title.
+- Lighthouse (home, DevTools mobile, local Worker) compared with Round 2:
+
+  | Metric | Round 2 | Round 3 |
+  |---|---|---|
+  | Performance score | 59 | 63 |
+  | Speed Index | 6.8 s | 4.9 s |
+  | TBT | 130 ms | 110 ms |
+  | LCP | 17.0 s | 17.0 s |
+
+  LCP is unchanged because it is the hero showcase's auto-rotating caption. Each tab's caption paints for the first time as the carousel advances, so lab LCP keeps updating; field LCP stops at the first input. Owner call: start auto-advance only after a scroll or interaction, or accept the lab number.
+
+### Round 4: ads ↔ live pages, citation claim, operator steps
 
 - Re-run the ads ↔ page check (`ads-landing-match`: every ash spec headline against
   its final URL's live text) on eplan.ai. dash-0b moved the 27 live ads to `/for/<slug>`

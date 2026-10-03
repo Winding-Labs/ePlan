@@ -35,8 +35,56 @@ const loadWithEnv = async (env: Record<string, string | undefined>) => {
   };
 };
 
+// The sitemap asks the public API for the catalog. By default it answers
+// with empty lists; tests that need catalog URLs install their own answers.
+const CATALOG_API = {
+  organizations: [{ id: "org-1", slug: "usfs" }],
+  "offices?organizationId=org-1": {
+    items: [{ slug: "eldorado-nf" }],
+    total: 1,
+  },
+  projects: [
+    {
+      slug: "caldor-fire-restoration",
+      office: { slug: "eldorado-nf" },
+      organization: { slug: "usfs" },
+      updatedAt: "2026-09-01T00:00:00.000Z",
+    },
+  ],
+  "templates?limit=500": {
+    templates: [
+      {
+        slug: "fuel-break-ce",
+        office: { slug: "eldorado-nf" },
+        organization: { slug: "usfs" },
+      },
+    ],
+  },
+} as const;
+
+const mockPublicApi = (answers: Record<string, unknown> | "down") => {
+  jest.spyOn(global, "fetch").mockImplementation(async (input) => {
+    if (answers === "down") {
+      throw new Error("connect ECONNREFUSED");
+    }
+    const path = String(input).split("/api/public/")[1] ?? "";
+    const empty = path.startsWith("templates")
+      ? { templates: [] }
+      : path.startsWith("offices")
+        ? { items: [], total: 0 }
+        : [];
+    const body = answers[path] ?? empty;
+    return new Response(JSON.stringify(body), { status: 200 });
+  });
+};
+
+beforeEach(() => {
+  mockPublicApi({});
+});
+
 afterEach(() => {
   process.env = originalEnv;
+  jest.restoreAllMocks();
 });
 
 describe("buildPageMetadata", () => {
@@ -137,7 +185,7 @@ describe("sitemap", () => {
       NEXT_PUBLIC_LANDING_URL: "https://example.test",
     });
 
-    const urls = sitemap().map((entry) => entry.url);
+    const urls = (await sitemap()).map((entry) => entry.url);
 
     expect(urls).toEqual(
       expect.arrayContaining([
@@ -158,14 +206,53 @@ describe("sitemap", () => {
     expect(urls).not.toContain("https://example.test/projects/templates");
     expect(new Set(urls).size).toBe(urls.length);
     // Moved pages (308) stay out of the sitemap.
-    expect(urls.some((url) => url.includes("/templates"))).toBe(false);
+    expect(
+      urls.some((url) => url.startsWith("https://example.test/templates")),
+    ).toBe(false);
     expect(urls.some((url) => url.includes("/checkout"))).toBe(false);
   });
 
   it("is empty when the site URL is unknown", async () => {
     const { sitemap } = await loadWithEnv({});
 
-    expect(sitemap()).toEqual([]);
+    expect(await sitemap()).toEqual([]);
+  });
+
+  it("adds every public organization, office, project and template", async () => {
+    mockPublicApi(CATALOG_API);
+    const { sitemap } = await loadWithEnv({
+      NEXT_PUBLIC_LANDING_URL: "https://example.test",
+    });
+
+    const entries = await sitemap();
+    const urls = entries.map((entry) => entry.url);
+
+    expect(urls).toEqual(
+      expect.arrayContaining([
+        "https://example.test/projects/usfs",
+        "https://example.test/projects/usfs/eldorado-nf",
+        "https://example.test/projects/usfs/eldorado-nf/caldor-fire-restoration",
+        "https://example.test/projects/usfs/eldorado-nf/templates/fuel-break-ce",
+      ]),
+    );
+    expect(
+      entries.find((entry) => entry.url.endsWith("caldor-fire-restoration"))
+        ?.lastModified,
+    ).toBe("2026-09-01T00:00:00.000Z");
+    expect(new Set(urls).size).toBe(urls.length);
+  });
+
+  it("still lists the static pages when the public API is down", async () => {
+    mockPublicApi("down");
+    jest.spyOn(console, "error").mockImplementation(() => {});
+    const { sitemap } = await loadWithEnv({
+      NEXT_PUBLIC_LANDING_URL: "https://example.test",
+    });
+
+    const urls = (await sitemap()).map((entry) => entry.url);
+
+    expect(urls).toContain("https://example.test/for/nepa");
+    expect(urls.some((url) => url.includes("/projects/usfs"))).toBe(false);
   });
 });
 
