@@ -139,6 +139,27 @@ export const snippetWidthPx = (text: string): number =>
       1000,
   );
 
+/**
+ * A description cut to what a result snippet shows (DESCRIPTION_MAX_PX), at a
+ * word boundary, with an ellipsis. Catalog pages pass the project's own
+ * description, which can run past 600 characters.
+ */
+export const clampDescription = (text: string): string => {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  if (snippetWidthPx(normalized) <= DESCRIPTION_MAX_PX) {
+    return normalized;
+  }
+  let clamped = "";
+  for (const word of normalized.split(" ")) {
+    const next = clamped ? `${clamped} ${word}` : word;
+    if (snippetWidthPx(`${next}…`) > DESCRIPTION_MAX_PX) {
+      break;
+    }
+    clamped = next;
+  }
+  return `${clamped.replace(/[\s,;:.–—-]+$/, "")}…`;
+};
+
 export const isProductionSite = (siteUrl: URL | undefined): boolean =>
   siteUrl?.origin === PRODUCTION_ORIGIN;
 
@@ -201,6 +222,7 @@ export const buildPageMetadata = ({
   const isBranded = title.includes(brand.name);
   const socialTitle = isBranded ? title : `${title} | ${brand.name}`;
   const hasSiteUrl = Boolean(getSiteUrl());
+  description = clampDescription(description);
 
   return {
     title: isBranded ? { absolute: title } : title,

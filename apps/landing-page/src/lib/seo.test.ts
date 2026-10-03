@@ -127,6 +127,36 @@ describe("buildPageMetadata", () => {
   });
 });
 
+describe("clampDescription", () => {
+  it("cuts a long description to the snippet width at a word boundary", async () => {
+    const { seo } = await loadWithEnv({});
+    const long = Array.from(
+      { length: 60 },
+      (_, index) => `restoration${index},`,
+    ).join("\n  ");
+
+    const clamped = seo.clampDescription(long);
+
+    expect(seo.snippetWidthPx(clamped)).toBeLessThanOrEqual(
+      seo.DESCRIPTION_MAX_PX,
+    );
+    expect(clamped).toMatch(/restoration\d+…$/);
+    expect(clamped).not.toContain("\n");
+    expect(
+      seo.buildPageMetadata({ title: "T", description: long, path: "/p" })
+        .description,
+    ).toBe(clamped);
+  });
+
+  it("leaves a description that fits unchanged", async () => {
+    const { seo } = await loadWithEnv({ NEXT_PUBLIC_APP_NAME: "ePlan.ai" });
+
+    expect(seo.clampDescription(seo.SITE_DESCRIPTION)).toBe(
+      seo.SITE_DESCRIPTION,
+    );
+  });
+});
+
 describe("robots", () => {
   it("allows crawling and points to the sitemap on https://eplan.ai", async () => {
     const { robots } = await loadWithEnv({
